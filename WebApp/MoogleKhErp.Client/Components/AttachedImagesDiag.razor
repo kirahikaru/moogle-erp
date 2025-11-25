@@ -1,0 +1,201 @@
+﻿@using System.Net
+<MudDialog Class="moog-crud-muddiag" Style="width:50%; margin:0px; background-color:#F7F7F7;" >
+    <TitleContent>
+        <MudText Typo="Typo.h6" Class="lang-en">
+            IMAGES
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudCard Outlined="true" Style="padding: 8px; border:0px; background-color: #F7F7F7;">
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.Add" Size="Size.Small" Color="Color.Primary" OnClick="OnItemAddClicked" Style="padding:2px 8px">
+                Add
+            </MudButton>
+            <MudDataGrid Class="main-pg-datagrid mt-2" T="AttachedImage" Items="@Images" Dense="true" Hover="true" FixedHeader="true" Striped="true" 
+                         ColumnResizeMode="ResizeMode.Container" Height="calc(100vh - 500px)" ReadOnly="false"
+                         StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges"
+                         EditTrigger="DataGridEditTrigger.Manual" EditMode="DataGridEditMode.Cell" >
+                <Columns>
+                    <TemplateColumn Title="Status" HeaderClass="mud-datagrid-hdr" HeaderStyle=@(DataGridHdrStyle) CellClass="mud-datagrid-cell" CellStyle="text-align:center" Editable="false" Context="rowData">
+                        <CellTemplate>
+                            @if (rowData.Item.Id == 0)
+                            {
+                                <MudIcon Icon="@Icons.Material.Rounded.AddPhotoAlternate" Color="Color.Primary" />
+                            }
+                            else if (rowData.Item.IsDeleted)
+                            {
+                                <MudIcon Icon="@Icons.Material.Rounded.Delete" Color="Color.Error" />
+                            }
+                            else if(rowData.Item.Id > 0)
+                            {
+                                <MudIcon Icon="@Icons.Material.Rounded.CheckCircle" Color="Color.Success" />
+                            }
+                        </CellTemplate>
+                    </TemplateColumn>
+                    <PropertyColumn Property="x => x.OrderNo" Title="No." HeaderClass="mud-datagrid-hdr" HeaderStyle=@(DataGridHdrStyle) CellClass="mud-datagrid-cell" CellStyle="text-align:right" Editable="false" Sortable="false" Filterable="false">
+                    </PropertyColumn>
+                    <PropertyColumn Property="x => x.ObjectName" Title="Name" HeaderClass="mud-datagrid-hdr" HeaderStyle=@(DataGridHdrStyle+";min-width:350px") CellClass="mud-datagrid-cell" Context="rowData">
+                        <EditTemplate>
+                            <MudTextField @bind-Value="rowData.Item.ObjectName" Required="true" ReadOnly=@IsViewMode For="@(() => rowData.Item.ObjectName)"
+                                          Class="moog-mud-textfield" />
+                        </EditTemplate>
+                    </PropertyColumn>
+                    <PropertyColumn Property="x => x.ImageFilename" Title="Filename" HeaderClass="mud-datagrid-hdr" HeaderStyle=@(DataGridHdrStyle + ";min-width:350px") CellClass="mud-datagrid-cell" Context="rowData">
+                        <EditTemplate>
+                            <MudTextField @bind-Value="rowData.Item.ImageFilename" Required="true" ReadOnly=@IsViewMode For="@(() => rowData.Item.ImageFilename)"
+                                          Class="moog-mud-textfield" />
+                        </EditTemplate>
+                    </PropertyColumn>
+                    <PropertyColumn Property="x => x.ImageUrl" Title="Image URL" HeaderClass="mud-datagrid-hdr" HeaderStyle=@(DataGridHdrStyle+";min-width:500px") CellClass="mud-datagrid-cell" 
+                        Context="rowData">
+                        <EditTemplate>
+                            <MudTextField @bind-Value="rowData.Item.ImageUrl" ReadOnly=@IsViewMode For="@(() => rowData.Item.ImageUrl)"
+                                          Class="moog-mud-textfield" AdornmentIcon="@Icons.Material.Rounded.Link" Adornment="Adornment.Start" />
+                        </EditTemplate>
+                    </PropertyColumn>
+                </Columns>
+            </MudDataGrid>
+            @if (_errorList.Count != 0)
+            {
+                @foreach (string key in _errorList.Keys)
+                {
+                    <MudAlert Severity="Severity.Warning" Dense="true" Class="my-2">@_errorList[key]</MudAlert>
+                }
+            }
+        </MudCard>
+        <MudCardActions>
+            <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Style="width:100%;">
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.CheckCircle" Size="Size.Small" Color="Color.Primary" OnClick="Confirm">
+                    Confirm
+                </MudButton>
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.Cancel" Size="Size.Small" Color="Color.Dark" OnClick="Cancel">
+                    Cancel
+                </MudButton>
+            </MudStack>
+        </MudCardActions>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+
+    [Parameter]
+    public bool IsViewMode { get; set; }
+
+    [Parameter]
+    public required List<AttachedImage> Images { get; set; }
+
+    [Parameter]
+    public User? LoggedInUser { get; set; }
+    readonly string DataGridHdrStyle = "font-weight:700; background-color:var(--ssv-pharma-blue); color:#FFFFFF; border-right:1px solid #FFFFFF; padding-inline-start: 10px; padding-inline-end:5px; line-height:100%; padding-top:4px; padding-bottom:4px";
+
+    Dictionary<string, string> _errorList = new();
+
+    #region PAGE LIFECYCLE EVENTS
+    protected override void OnInitialized()
+    {
+
+    }
+    #endregion
+
+    //========================================================================================================
+    // UI FUNCTIONS
+    //========================================================================================================
+    // *IMPORTANT!* this is to prevent ENTER key press in edit form from trigger saving data
+    // events
+    void StartedEditingItem(AttachedImage item)
+    {
+
+    }
+
+    void CanceledEditingItem(AttachedImage item)
+    {
+
+    }
+
+    void CommittedItemChanges(AttachedImage item)
+    {
+
+    }
+
+    void OnItemAddClicked()
+    {
+        Images.Add(new()
+        {
+            OrderNo = Images.Count+1
+        });
+    }
+    //========================================================================================================
+    // <END> UI FUNCTIONS
+    //========================================================================================================
+    private void Confirm()
+    {
+        ValidateBeforeCommit();
+
+        if (_errorList.Count > 0)
+            return;
+
+        MudDialog!.Close(DialogResult.Ok<List<AttachedImage>>(Images, Images.GetType()));
+    }
+
+    private void InvalidSaveClick(EditContext editContext)
+    {
+        //string text = "";
+    }
+
+    private void ValidateBeforeCommit()
+    {
+        _errorList.Clear();
+
+        foreach (AttachedImage img in Images)
+        {
+            if (string.IsNullOrEmpty(img.ObjectName))
+                _errorList.Add($"img-{img.OrderNo!.Value:#,##0}-NameRequired", $"Image #{img.OrderNo!.Value:#,##0} name is required.");
+
+            if (string.IsNullOrEmpty(img.ImageFilename))
+                _errorList.Add($"img-{img.OrderNo!.Value:#,##0}-FileNameRequired", $"Image #{img.OrderNo!.Value:#,##0} file is required.");
+
+            if (string.IsNullOrEmpty(img.ImageUrl))
+                _errorList.Add($"img-{img.OrderNo!.Value:#,##0}-MissingUrl", $"Image #{img.OrderNo!.Value:#,##0} URL is required.");
+            else
+            {
+                HttpClient httpClnt = new HttpClient()
+                {
+                    BaseAddress = new Uri(img.ImageUrl!)
+                };
+            }
+
+            // HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create("url");
+            // request.Method = "HEAD";
+
+            // bool exists;
+            // try
+            // {
+            //     request.GetResponse();
+            //     exists = true;
+            // }
+            // catch
+            // {
+            //     exists = false;
+            // }
+        }
+    }
+
+    private void Cancel()
+    {
+
+        for (int i=0; i<Images.Count; i++)
+        {
+            if (Images[i].IsDeleted) continue;
+
+            if (Images[i].Id == 0 && (string.IsNullOrEmpty(Images[i].ImageUrl) || string.IsNullOrEmpty(Images[i].ObjectName)))
+            {
+                Images[i].IsDeleted = true;
+            }
+        }
+
+        Images.RemoveAll(x => x.Id == 0 && x.IsDeleted == true);
+
+        MudDialog!.Close(DialogResult.Cancel());
+    }
+}

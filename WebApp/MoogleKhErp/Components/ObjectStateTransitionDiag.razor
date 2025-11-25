@@ -1,0 +1,139 @@
+﻿<MudDialog Class="moog-crud-muddiag" Style="width:50%; margin:0px; background-color:#F7F7F7;">
+    <TitleContent>
+        <MudText Typo="Typo.h6" Class="lang-en">
+            STATE TRANSITION
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudCard Outlined="true" Style="padding: 8px; border:0px; background-color: #F7F7F7;">
+            @if (TransitionDetail is not null)
+            {
+                <MudGrid Spacing="2">
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.body1">You are about to update state of this object. Please confirm.</MudText>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
+                            <MudText Typo="Typo.body1">Action: </MudText>
+                            <MudChip Label="true" T="string" Size="MudBlazor.Size.Small" Class="ml-2" Style=@("font-weight:bold;" + _actionStyleList[TransitionDetail!.ActionCode!])>
+                                @(TransitionDetail!.ActionText!.ToUpper())
+                            </MudChip>
+                            <MudText Typo="Typo.body1">Object State movement: </MudText>
+                            <MudChip Label="true" T="string" Size="MudBlazor.Size.Small" Class="ml-2" Style=@("font-weight:bold;" + _stateStyleList[TransitionDetail!.CurrentState!])>
+                                @(TransitionDetail!.CurrentStateText!.ToUpper())
+                            </MudChip>
+                            <MudIcon Icon="fas fa-arrow-right" />
+                            <MudChip Label="true" T="string" Size="MudBlazor.Size.Small" Class="ml-2" Style=@($"font-weight:bold;" + _stateStyleList[TransitionDetail!.TargetState!])>
+                                @(TransitionDetail!.TargetStateText!.ToUpper())
+                            </MudChip>
+                        </MudStack>
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudDatePicker Label="Effective Date" @bind-Date="TransitionDetail.EffectiveDate" DateFormat="dd-MMM-yyyy" Clearable="true" Placeholder="Effective Date" ShrinkLabel="true" Class="moog-mud-datepicker" />
+                    </MudItem>
+                    <MudItem xs="9">
+                        
+                    </MudItem>
+                    <MudItem xs="12">
+                        @if (TransitionDetail.ActionCode.Is(ObjectStateActions.LEND_OUT, ObjectStateActions.LOSE, ObjectStateActions.GIVEN_OTHER, ObjectStateActions.SELL, ObjectStateActions.BROKE))
+                        {
+                            <MudTextField @bind-Value="TransitionDetail.TransitionRemark" Label="Remark" Placeholder="Remark..." ShrinkLabel="true" Clearable="true" For="@(() => TransitionDetail.TransitionRemark)"
+                                          Lines="8" Class="moog-mud-textfield textarea" />
+                        }
+                        else
+                        {
+                            <MudTextField @bind-Value="TransitionDetail.TransitionRemark" Label="Remark" Placeholder="Remark..." ShrinkLabel="true" Clearable="true" For="@(() => TransitionDetail.TransitionRemark)"
+                                          Lines="8" Class="moog-mud-textfield textarea" />
+                        }
+                    </MudItem>
+                </MudGrid>
+            }
+            @if (errorList.Any())
+            {
+                <div class="validation-error-panel mt-4">
+                    <ul>
+                        @foreach (string key in errorList.Keys)
+                        {
+                            <li>@errorList[key]</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </MudCard>
+        <MudCardActions>
+            <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Style="width:100%;">
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.SaveAs" Size="Size.Small" Color="Color.Primary" OnClick="Confirm">
+                    Confirm
+                </MudButton>
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.SaveAs" Size="Size.Small" Color="Color.Default" OnClick="Cancel">
+                    Cancel
+                </MudButton>
+            </MudStack>
+            
+        </MudCardActions>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+
+    [Parameter]
+    public ObjectStateTransitionDetail? TransitionDetail { get; set; }
+
+    [Parameter]
+    public User? LoggedInUser { get; set; }
+
+    WorkflowApprovalHistory? approvalHistory;
+
+    private List<DropDownListItem> destinationUserList = new();
+    private int destinationUserCount = 0;
+    Dictionary<string, string> _stateStyleList = ObjectStates.GetLightStyles();
+    Dictionary<string, string> _actionStyleList = ObjectStateActions.GetLightStyles();
+    //private string title = "";
+    private Dictionary<string, string> errorList = new();
+
+    #region PAGE LIFECYCLE EVENTS
+    protected override void OnInitialized()
+    {
+        
+    }
+    #endregion
+
+    //========================================================================================================
+    // UI FUNCTIONS
+    //========================================================================================================
+    // *IMPORTANT!* this is to prevent ENTER key press in edit form from trigger saving data
+
+    
+    //========================================================================================================
+    // <END> UI FUNCTIONS
+    //========================================================================================================
+    private void Confirm()
+    {
+        ValidateBeforeCommit();
+
+        if (errorList.Count() > 0)
+            return;
+
+        MudDialog!.Close(DialogResult.Ok<ObjectStateTransitionDetail>(this.TransitionDetail!, this.TransitionDetail!.GetType()));
+    }
+
+    private void InvalidSaveClick(EditContext editContext)
+    {
+        //string text = "";
+    }
+
+    private void ValidateBeforeCommit()
+    {
+        errorList.Clear();
+
+        if (TransitionDetail!.ActionCode.Is(ObjectStateActions.LEND_OUT, ObjectStateActions.LOSE, ObjectStateActions.GIVEN_OTHER, ObjectStateActions.SELL, ObjectStateActions.BROKE) && string.IsNullOrEmpty(TransitionDetail!.TransitionRemark))
+            errorList.Add("Remark_Required", "Detail is required.");
+    }
+
+    private void Cancel()
+    {
+        MudDialog!.Close(DialogResult.Cancel());
+    }
+}

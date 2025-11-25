@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="Dapper" />
+    <Using Include="Dapper.Contrib.Extensions" />
+    <Using Include="DataLayer.AuxComponents.Extensions" />
+    <Using Include="DataLayer.Infrastructure" />
+    <Using Include="DataLayer.Models" />
+    <Using Include="DataLayer.Models.SystemCore" />
+    <Using Include="Microsoft.Data.SqlClient" />
+    <Using Include="System.ComponentModel" />
+    <Using Include="System.ComponentModel.DataAnnotations" />
+    <Using Include="System.Data" />
+    <Using Include="System.Globalization" />
+    <Using Include="System.Text" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Finance\NonPersistent\" />
+    <Folder Include="Repos\Music\interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
+    <PackageReference Include="Dapper.SqlBuilder" Version="2.1.66" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="9.0.11" />
+    <PackageReference Include="MongoDB.Driver" Version="3.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Npgsql" Version="9.0.4" />
+    <PackageReference Include="Z.Dapper.Plus" Version="9.0.0" />
+  </ItemGroup>
+
+</Project>

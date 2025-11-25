@@ -1,0 +1,171 @@
+﻿@page "/fin/cust-indiv/main"
+@using DataLayer.AuxComponents.Extensions
+@inherits MainPageBase<Customer>
+<MudPaper Class="moog-pg-banner mt-3 px-3 py-4" Elevation="1">
+    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+        <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
+		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
+				   StartIcon="material-symbols-rounded/add_circle" OnClick="@(args => PerformCRUC(CRUDCModes.CREATE))">
+            Add New
+        </MudButton>
+    </MudStack>
+</MudPaper>
+<MudPaper Class="mt-3 pa-3 overflow-y-auto rounded-lg" Elevation="1" Height="calc(100vh - 165px)">
+    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None" Spacing="2">
+        <MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="moog-mud-form-field bordered"
+                      AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
+                      Placeholder="Search text here..." HelperText="<Search input instruction here>"
+                      @bind-Value="SearchText" OnKeyDown="OnSearchTextBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
+		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-btn-base"
+				   StartIcon="material-symbols-rounded/search" OnClick="OnSearchClicked">Search</MudButton>
+    </MudStack>
+	<MudDataGrid Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage="50" Elevation="0"
+                 ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple"
+				 Class="mt-2 moog-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" 
+				 T="Customer">
+		<Columns>
+			<PropertyColumn Title="ID" Property="x => x.ObjectCode"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
+			<PropertyColumn Title="Name" Property="x => x.ObjectName" 
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
+			<PropertyColumn Title="Date of Birth" Property="x => x.PersonBirthDateText"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
+			<PropertyColumn Title="Gender" Property="x => x.PersonGenderText"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
+			<PropertyColumn Title="Age" Property="x => x.PersonAgeText"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
+			<TemplateColumn Title="Status" Sortable="false" Filterable="false"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="text-align:center" Context="rowData">
+				<CellTemplate>
+					@* @(ObjectStates.GetDisplayText(rowData.Item.ObjectState).ToUpper()) *@
+					<MudChip Size="Size.Small" T="string" Class=@_statusCssClass[rowData.Item.Status!] >
+						@(CustomerStatuses.GetDisplayText(rowData.Item.Status).ToUpper())
+					</MudChip>
+				</CellTemplate>
+			</TemplateColumn>
+			<TemplateColumn Title="Action" Sortable="false" Filterable="false" 
+                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" 
+							HeaderStyle="width:200px; max-width:130px; justify-items:center" CellStyle="padding-inline-end:4px; padding-inline-start:4px">
+				<CellTemplate>
+					<MudStack Row="true" Spacing="1">
+						<MudIconButton Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
+						<MudIconButton Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
+						<MudIconButton Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
+						<MudIconButton Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(args => DeleteRecord(context.Item))" />
+					</MudStack>
+				</CellTemplate>
+			</TemplateColumn>
+		</Columns>
+		<PagerContent>
+			<MudDataGridPager T="Customer" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
+		</PagerContent>
+    </MudDataGrid>
+</MudPaper>
+
+@code {
+	#region UI VARIABLES
+
+	Dictionary<string, string> _statusCssClass = new() {
+		{ ObjectStates.BNIB, "status-chip-pink-light" },
+		{ CustomerStatuses.ACTIVE, "status-chip-green-light" },
+		{ CustomerStatuses.PENDING_ACTIVATION, "status-chip-amber-light"},
+		{ CustomerStatuses.INACTIVE, "status-chip-blue-gray-light"},
+		{ CustomerStatuses.TERMINATED, "status-chip-blue-gray-light"},
+	};
+
+	List<DropdownSelectItem> _custStatusList = CustomerStatuses.GetForDropdown();
+
+	#endregion
+
+	#region PAGE LIFECYCLE FUNCTIONS
+	public override Task SetParametersAsync(ParameterView parameters)
+	{
+		UrlPrefix = "/fin/cust-indiv";
+		SearchParamName = "custIndivSearchParam";
+		return base.SetParametersAsync(parameters);
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		HeaderTitle = "Customer (Individual)";
+		await Task.CompletedTask;
+	}
+	#endregion
+
+	#region UI FUNCTIONS
+	#endregion
+
+	#region UI BASE FUNCTIONS
+	protected override async Task<GridData<Customer>> ServerDataFunc(GridState<Customer> gridState)
+	{
+		if (IsSearching) return new GridData<Customer>
+		{
+			Items = [],
+			TotalItems = 0
+		};
+
+		try
+		{
+			IsSearching = true;
+			int totalItemCount = 0;
+			List<SqlFilterCond> filters = [];
+			SqlFilterCond sqlFilterCond = new()
+			{
+				FieldName = "CustomerType",
+				FilterOperator ="="
+            };
+			sqlFilterCond.Parameters.Add("@CustomerType", CustomerTypes.INDIVIDUAL, System.Data.DbType.AnsiString);
+            filters.Add(sqlFilterCond);
+
+			//if (gridState.SortDefinitions.Count > 0)
+			//{
+			//	var firstSort = gridState.SortDefinitions.First();
+			//	result = firstSort.Descending
+			//		? result.OrderByDescending(firstSort.SortFunc).ToList()
+			//		: result.OrderBy(firstSort.SortFunc).ToList();
+			//}
+
+			if (gridState.FilterDefinitions.Any())
+			{
+				//var filterFunctions = gridState.FilterDefinitions.Select(x => x.GenerateFilterFunction());
+				//result = result
+				//	.Where(x => filterFunctions.All(f => f(x)))
+				//	.ToList();
+			}
+			else
+			{
+				var result = await Uow.Customers.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, filters);
+				MainDataList = result.Value;
+				totalItemCount = result.Key;
+			}
+
+			//var totalNumberOfFilteredItems = result.Count;
+
+			//result = result
+			//	.Skip(gridState.StartIndex)
+			//	.Take(gridState.Count)
+			//	.ToList();
+
+			return new GridData<Customer>
+			{
+				Items = MainDataList,
+				TotalItems = totalItemCount
+			};
+		}
+		catch (Exception ex)
+		{
+			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
+
+			return new GridData<Customer>
+			{
+				Items = [],
+				TotalItems = 0
+			};
+		}
+		finally
+		{
+			IsSearching = false;
+		}
+	}
+    #endregion
+}

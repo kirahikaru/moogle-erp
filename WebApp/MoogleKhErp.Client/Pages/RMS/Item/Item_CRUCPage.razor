@@ -1,0 +1,590 @@
+﻿@page "/rms/item/{CRUCMode}"
+@page "/rms/item/{CRUCMode}/{id:int}"
+@using MoogleKhErp.Client.Components
+
+@inherits CRUCPageBase<Item>
+
+@if (CurrentObject != null && CurrentEditContext != null)
+{
+    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" >
+        <DataAnnotationsValidator />
+        <MudPaper Class="moog-pg-banner mt-3" Elevation="1">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="0">
+                    <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
+                    @if (CRUCMode == CRUDCModes.READ)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Success" Class=@($"status-chip-tiny") T="string" Style="margin-top:-5px">View</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.UPDATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">Update</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CREATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CLONE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New (Clone)</MudChip>
+                    }
+                </MudStack>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="2">
+                    @if (IsViewMode)
+                    {
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base moog-btn-gray" Color="Color.Dark"
+                                   Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/close">
+                            Close
+                        </MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
+                                   Disabled=@IsSaving OnClick="@(() => Save(false))" StartIcon="material-symbols-rounded/save_as">
+                            Save
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
+                                   Disabled=@IsSaving OnClick="@(() => Save(true))" StartIcon="material-symbols-rounded/save">
+                            Save & Close
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base moog-btn-gray" Color="Color.Default"
+                                   Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/cancel">
+                            Cancel
+                        </MudButton>
+                    }
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+        <MudTabs Color="Color.Primary" Class="mt-3 moog-cruc-pg-mudtab" ActiveTabClass="moog-cruc-pg-mudtab-active" PanelClass="moog-cruc-pg-mudtab-panel" TabHeaderClass="moog-cruc-pg-mudtab-header" TabPanelClass="moog-cruc-pg-mudtab-tab-panel"
+                 Style="height:calc(100vh - 185px);">
+            <MudTabPanel Icon="material-symbols-rounded/home" Text="Main">
+                <MudPaper Class="rounded-0" Elevation="1" Height="calc(100vh - 220px)" Style="overflow-y: auto;">
+                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" StretchItems="StretchItems.All" Spacing="1">
+                        <MudGrid Spacing="3" Class="pa-3">
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                              Label="Name" @ref=_mtfObjName
+                                              @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" />
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered lang-kh"
+                                              Label="Name (Kh)" Placeholder="ឈ្មោះខ្មែរ"
+                                              @bind-Value="CurrentObject!.ObjectNameKh" For="@(() => CurrentObject!.ObjectNameKh)"  />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true" 
+                                              Label="ID" 
+                                              @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" Style="text-transform:uppercase" />
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                                             PopoverClass="moog-ui-combo-box-popover"
+                                             Label="Category" T="int?"
+                                             ToStringFunc="@(e => (e is null || e!.Value < 0) ? "" : _itemCategoryList.SingleOrDefault<DropdownSelectItem>(x => x.Id == e)?.Value)"
+                                             @bind-Value="CurrentObject!.ItemCategoryId" For="@(() => CurrentObject!.ItemCategoryId)">
+                                    @foreach (var ctg in _itemCategoryList)
+                                    {
+                                        <MudComboBoxItem T="int?" Value="@ctg.Id" Text="@ctg.Value">@ctg.Value</MudComboBoxItem>
+                                    }
+                                </MudComboBox>
+                            </MudItem>
+                            <MudItem xs="4">
+                                @* <MudSelect T="string" Label="Made In" Dense="true" Margin="Margin.Dense" ShrinkLabel="true" Clearable="true" @bind-Value="CurrentObject!.MfgCountryCode" For="@(() => CurrentObject!.MfgCountryCode)"
+                                           AdornmentIcon="material-symbols-rounded/flag" Adornment="Adornment.Start"
+                                           Class="moog-mud-select">
+                                    @foreach (var cty in _countryList)
+                                    {
+                                        <MudSelectItem T="string" Value="@cty.ObjectCode">@cty.ObjectName</MudSelectItem>
+                                    }
+                                </MudSelect> *@
+                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                                             PopoverClass="moog-ui-combo-box-popover"
+                                             Label="Made In" T="string" 
+                                             @bind-Value="@CurrentObject.MfgCountryCode" @bind-Text=@_selectedCountryName
+                                             ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _countryList.SingleOrDefault<DropDownListItem>(x => x.ObjectCode == e)?.ObjectName)">
+                                    <ChildContent>
+                                        @foreach (var cty in _countryList)
+                                        {
+                                            <MudComboBoxItem T="string" Value="@cty.ObjectCode" Text="@cty.ObjectName">@cty.ObjectName</MudComboBoxItem>
+                                        }
+                                    </ChildContent>
+                                </MudComboBox>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-autocomplete" FullWidth="true" PopoverClass="moog-ui-autocomplete-popover"
+                                                 CoerceText="true" CoerceValue="true" DebounceInterval="300"
+                                                 Label="Brand" T="string"
+                                                 @bind-Value="CurrentObject!.Brand" For="@(() => CurrentObject!.Brand)"
+                                                 SearchFunc="@SearchBrandName" />
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              Label="Model" 
+                                              @bind-Value="CurrentObject!.Model" For="@(() => CurrentObject!.Model)" />
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudStack Row="true" Spacing="0">
+                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                                  AdornmentIcon="material-symbols-rounded/confirmation_number" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                                  Label="MPN"
+                                                  @bind-Value="CurrentObject!.MPN" For="@(() => CurrentObject!.MPN)" />
+                                    <MudTooltip Text="An MPN, or manufacturer part number is a manufacturer-assigned, unique, alphanumeric value that is used to identify a product among other products from the same manufacturer."
+                                                Placement="Placement.Bottom" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="true" ShowOnHover="false" ShowOnFocus="false">
+                                        <MudIcon Icon="material-symbols-rounded/info" Size="Size.Small" Color="Color.Primary" />
+                                    </MudTooltip>
+                                </MudStack>
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudStack Row="true" Spacing="0">
+                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                                  AdornmentIcon="material-symbols-rounded/confirmation_number" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                                  Label="SKU"
+                                                  @bind-Value="CurrentObject!.SKU" For="@(() => CurrentObject!.SKU)" />
+                                    <MudTooltip Text="A Stock-Keeping Unit (SKU) is a scannable bar code, most often seen printed on product labels in a retail store."
+                                                Placement="Placement.Bottom" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="true" ShowOnHover="false" ShowOnFocus="false">
+                                        <MudIcon Icon="material-symbols-rounded/info" Size="Size.Small" Color="Color.Primary" />
+                                    </MudTooltip>
+                                </MudStack>
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              Label="Barcode"
+                                              @bind-Value="CurrentObject!.Barcode" For="@(() => CurrentObject!.Barcode)" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudStack Row="true" Spacing="0">
+                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                                  AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                                  Label="EAN"MaxLength="13"
+                                                  @bind-Value="CurrentObject!.EAN" For="@(() => CurrentObject!.EAN)" />
+                                    <MudTooltip Text="European Article Number. Here we refer to EAN-13."
+                                                Placement="Placement.Bottom" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="true" ShowOnHover="false" ShowOnFocus="false">
+                                        <MudIcon Icon="material-symbols-rounded/info" Size="Size.Small" Color="Color.Primary" />
+                                    </MudTooltip>
+                                </MudStack>
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudStack Row="true" Spacing="0" >
+                                    <MudTextField ReadOnly=@IsViewMode ShrinkLabel="true" Clearable="true" Class="moog-mud-form-field bordered" Required="false"
+                                                  AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
+                                                  Label="ISBN" HelperTextOnFocus="false" MaxLength="13"
+                                                  @bind-Value="CurrentObject!.ISBN" For="@(() => CurrentObject!.ISBN)" />
+                                    <MudTooltip Text="International Standard Book Number is a numeric commercial book identifier that is intended to be unique. Can input ISBN-13 or ISBN-10 without the dash."
+                                                Placement="Placement.Bottom" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="true" ShowOnHover="false" ShowOnFocus="false" >
+                                        <MudIcon Icon="material-symbols-rounded/info" Size="Size.Small" Color="Color.Primary" />
+                                    </MudTooltip>
+                                </MudStack>
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudStack Row="true" Spacing="0" >
+                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                                  AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                                  Label="UPC"
+                                                  @bind-Value="CurrentObject!.UPC" For="@(() => CurrentObject!.UPC)" />
+                                    <MudTooltip Text="Universal Product Code is a barcode symbology that is widely used worldwide for tracking trade items in stores. UPC consists of 12 digits that are uniquely assigned to each trade item."
+                                                Placement="Placement.Bottom" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="true" ShowOnHover="false" ShowOnFocus="false">
+                                        <MudIcon Icon="material-symbols-rounded/info" Size="Size.Small" Color="Color.Primary" />
+                                    </MudTooltip>
+                                </MudStack>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              Label="Info Link"
+                                              @bind-Value="CurrentObject!.InfoLink" For="@(() => CurrentObject!.InfoLink)" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              Label="Purchase Link"
+                                              @bind-Value="CurrentObject!.PurchaseLink" For="@(() => CurrentObject!.PurchaseLink)" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false" 
+                                              Label="Short Name" Placeholder="Short Name for receipt printing purpose due to limited character"
+                                              @bind-Value="CurrentObject!.ShortName" For="@(() => CurrentObject!.ShortName)" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              Label="Short Name (Kh)" Placeholder="Short Name for receipt printing purpose due to limited character"
+                                              @bind-Value="CurrentObject!.ShortNameKh" For="@(() => CurrentObject!.ShortNameKh)" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-select" PopoverClass="moog-ui-select-popover"
+                                           Label="Item Unit" T="string"
+                                           Value="@CurrentObject!.UnitCode" ValueChanged="OnItemUnitChanged">
+                                    @foreach (var uom in _itemUnitList)
+                                    {
+                                        <MudSelectItem T="string" Value="@uom.ObjectCode">@uom.NameWithSymbol</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+                            <MudItem xs="7">
+                                <MudStack Row=true Spacing="2" Justify="Justify.FlexStart">
+                                    <MudSelect ReadOnly=@IsViewMode ShrinkLabel="true" Clearable="true" Class="moog-mud-form-field bordered moog-ui-select" PopoverClass="moog-ui-select-popover"
+                                               Label="Size Unit" T="string"
+                                               Value="@CurrentObject!.DimensionUnitCode" For="(() => CurrentObject.DimensionUnitCode)" ValueChanged="OnDimensionUnitChanged">
+                                        @foreach (var uom in _dimensionUnitList)
+                                        {
+                                            <MudSelectItem T="string" Value="@uom.ObjectCode">@uom.NameWithSymbol</MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                    <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                     Adornment="Adornment.End" AdornmentText="@_dimensionUnitSymbol"
+                                                     Label="Height" T="decimal?" Placeholder="Height"
+                                                     @bind-Value="CurrentObject!.DimensionHeight" For="(() => CurrentObject.DimensionHeight)"
+                                                     Step="0.1M" Format="#,##0.##" />
+                                    <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                     Adornment="Adornment.End" AdornmentText="@_dimensionUnitSymbol"
+                                                     Label="Length" Placeholder="Length" T="decimal?"
+                                                     @bind-Value="CurrentObject!.DimensionLength" For="(() => CurrentObject.DimensionLength)"
+                                                     Step="0.1M" Format="#,##0.##" />
+                                    <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                     Adornment="Adornment.End" AdornmentText="@_dimensionUnitSymbol"
+                                                     Label="Width" Placeholder="Width" T="decimal?"
+                                                     @bind-Value="CurrentObject!.DimensionWidth" For="(() => CurrentObject.DimensionWidth)" 
+                                                     Step="0.1M" Format="#,##0.##" />
+                                </MudStack>
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudStack Row=true Spacing="2" Justify="Justify.FlexStart">
+                                    <MudSelect ReadOnly=@IsViewMode ShrinkLabel="true" Clearable="true" Class="moog-mud-form-field bordered moog-ui-select" PopoverClass="moog-ui-select-popover"
+                                               Label="Weight Unit" T="string"
+                                               Value="@CurrentObject!.WeightUnitCode" ValueChanged="OnWeightUnitChanged"
+                                               For="(() => CurrentObject.WeightUnitCode)">
+                                        @foreach (var wt in _weightUnitList)
+                                        {
+                                            <MudSelectItem T="string" Value="@wt.ObjectCode">@wt.NameWithSymbol</MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                    <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                     AdornmentText="@_weightUnitSymbol" Adornment="Adornment.End"
+                                                     Label="Weight" Placeholder="Weight" T="decimal?"
+                                                     @bind-Value="CurrentObject!.ItemWeight" For="(() => CurrentObject.ItemWeight)" 
+                                                     Step="0.1M" Format="#,##0.##" />
+                                </MudStack>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Lines="8"
+                                              Label="Item Description" Placeholder="Description..." 
+                                              @bind-Value="CurrentObject!.Description" For="@(() => CurrentObject!.Description)" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Lines="8"
+                                              Label="Item Content" Placeholder="Content..."
+                                              @bind-Value="CurrentObject!.ContentDesc" For="@(() => CurrentObject!.ContentDesc)" />
+                            </MudItem>
+                        </MudGrid>
+                        <MudPaper MinWidth="500px" MaxWidth="500px" MaxHeight="1000px" MinHeight="500px" Class="pa-2" Elevation="0" >
+                            <MudCarousel Class="mud-full-width" ShowArrows="false" ShowBullets="true" BulletsPosition="Position.End" EnableSwipeGesture="true" AutoCycle="false" TData="object" Style="min-height:540px">
+                                <BulletTemplate Context="selected">
+                                    <div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon" style="padding:8px">
+                                        <span class="mud-icon-button-label">
+                                            <MudIcon Icon="@(selected ? "fas fa-image" : "far fa-image")" Color=@(selected? Color.Primary: Color.Default) Size="Size.Medium" />
+                                        </span>
+                                    </div>
+                                </BulletTemplate>
+                                <ChildContent>
+                                    @if (_images.Count > 0)
+                                    {
+                                        foreach (AttachedImage img in _images)
+                                        {
+                                            <MudCarouselItem Transition="Transition.Slide" Color="Color.Default">
+                                                <div class="d-flex">
+                                                    <MudImage Src="@img.ImageUrl" Width="500" Elevation="0" />
+                                                </div>
+                                            </MudCarouselItem>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <MudCarouselItem Transition="Transition.Slide" Color="Color.Default">
+                                            <MudImage Src="\image\no_img_available.jpg" Width="500" Elevation="0" />
+                                        </MudCarouselItem>
+                                    }
+                                </ChildContent>
+                            </MudCarousel>
+                            <MudTooltip Text="Update Images" Arrow="true" Color="Color.Default">
+                                <MudFab StartIcon="fas fa-images" Size="Size.Small" Color="Color.Primary" DropShadow="false" OnClick="OnUpdateImageClicked" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudStack>
+                </MudPaper>
+                <MudPaper Height="26px" Elevation="1"
+                          Style="padding:0px; background-color:var(--material-blue-gray-50); border-top-left-radius:0px; border-top-right-radius:0px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1" Style="height:100%; padding: 0px 10px">
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)">Created by </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@CurrentObject!.CreatedUser</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">@CurrentObject!.CreatedUser</MudChip> *@
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)"> on </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@(CurrentObject!.CreatedDateTimeText)</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">
+                                @(CurrentObject!.CreatedDateTime is null ? " - " : CurrentObject!.CreatedDateTime!.Value.ToString("dd-MMM-yyyy HH:mm:ss"))
+                            </MudChip> *@
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)">| Last modified by </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@CurrentObject!.ModifiedUser</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">@CurrentObject!.ModifiedUser</MudChip> *@
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)"> on </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@(CurrentObject!.ModifiedDateTimeText)</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">
+                                @(CurrentObject!.ModifiedDateTime is null ? " - " : CurrentObject!.ModifiedDateTime!.Value.ToString("dd-MMM-yyyy HH:mm:ss"))
+                            </MudChip> *@
+                    </MudStack>
+                </MudPaper>
+            </MudTabPanel>
+            <MudTabPanel Icon="@Icons.Material.Rounded.Info" Text="Other Info" Style="height:100%">
+                <MudDataGrid Class="main-pg-datagrid mt-2" T="ItemSupplier" Items="CurrentObject!.Suppliers" Dense="true" Hover="true" FixedHeader="true" Striped="true" 
+			                ColumnResizeMode="ResizeMode.Container" Height="calc(100vh - 270px)" >
+		            <Columns>
+                        <PropertyColumn Property="x => x.Supplier!.ObjectName" Title="Phone Line 1" HeaderClass="mud-datagrid-hdr" HeaderStyle=@DataGridHdrStyle CellClass="mud-datagrid-cell" />
+                        <TemplateColumn Title="Phone Line 1" HeaderClass="mud-datagrid-hdr" Sortable="false" Filterable="false" HeaderStyle=@DataGridHdrStyle
+                                        CellClass="mud-datagrid-cell" Context="rowData">
+                            <CellTemplate>
+                                @if (@rowData.Item.Supplier != null)
+                                {
+                                    <MudText Typo="Typo.body1">@rowData.Item.Supplier.PhoneLine1</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.body1">-</MudText>
+                                }
+                            </CellTemplate>
+                        </TemplateColumn>
+                        <TemplateColumn Title="Phone Line 2" HeaderClass="mud-datagrid-hdr" Sortable="false" Filterable="false" HeaderStyle=@DataGridHdrStyle
+                                        CellClass="mud-datagrid-cell" Context="rowData">
+                            <CellTemplate>
+                                @if (@rowData.Item.Supplier != null)
+                                {
+                                    <MudText Typo="Typo.body1">@rowData.Item.Supplier.PhoneLine1</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.body1">-</MudText>
+                                }
+                            </CellTemplate>
+                        </TemplateColumn>
+		            </Columns>
+                </MudDataGrid>
+            </MudTabPanel>
+        </MudTabs>
+    </EditForm>
+}
+
+@code {
+
+    #region UI PARAM
+    List<DropdownSelectItem> _itemCategoryList = [];
+    List<DropDownListItem> _countryList = [];
+    List<DropdownSelectItem> _merchantList = [];
+    IEnumerable<DropdownSelectItem> _medCompList = [];
+    IEnumerable<string> _brandList = [];
+    MudTextField<string>? _mtfObjName;
+    List<AttachedImage> _images = [];
+    string? _selectedCountryName;
+    string? _dimensionUnitSymbol;
+    string? _weightUnitSymbol;
+    string? _itemUnitSymbol;
+
+    List<UnitOfMeasure> _dimensionUnitList = [];
+    List<UnitOfMeasure> _weightUnitList = [];
+    List<UnitOfMeasure> _itemUnitList = [];
+    List<DropdownSelectItem> _currencyList = [];
+
+    public readonly string DataGridHdrStyle = "font-weight:700; background-color:var(--ssv-pharma-blue); color:#FFFFFF; border-right:1px solid #FFFFFF; padding-inline-start: 10px; padding-inline-end:5px; line-height:100%; padding-top:4px; padding-bottom:4px";
+    #endregion
+
+    #region PAGE LIFECYCLE FUNCTIONS
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        UrlPrefix = "/rms/item";
+        return base.SetParametersAsync(parameters);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        switch (CRUCMode)
+        {
+            case CRUDCModes.READ:
+                {
+                    CurrentObject = await Uow.Items.GetFullAsync(Id);
+                    IsViewMode = true;
+                }
+                break;
+            case CRUDCModes.CREATE:
+                {
+                    CurrentObject = new();
+                }
+                break;
+            case CRUDCModes.UPDATE:
+                CurrentObject = await Uow.Items.GetFullAsync(Id);
+                break;
+            case CRUDCModes.CLONE:
+                {
+                    var tempObj = await Uow.Items.GetAsync(Id);
+                    CurrentObject = tempObj!.DeepClone();
+                    CurrentObject!.Id = 0;
+                    CurrentObject!.ObjectCode = String.Empty;
+                }
+                break;
+        }
+
+        CurrentEditContext = new EditContext(CurrentObject!);
+
+        if (CurrentObject != null && CurrentObject.Id > 0)
+            _images = await Uow.AttachedImages.GetByLinkedObjectAsync(CurrentObject.Id, CurrentObject.GetType().Name);
+
+        await PopulatedUIControls();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (_mtfObjName != null && !IsViewMode)
+                await _mtfObjName!.FocusAsync();
+        }
+    }
+    #endregion
+
+    #region UI FUNCTIONS
+    async Task<IEnumerable<string>> SearchBrandName(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        if (string.IsNullOrEmpty(value))
+            return _brandList;
+        else
+            return _brandList.Where(x => x.Contains(value, StringComparison.OrdinalIgnoreCase));
+    }
+
+    async Task OnUpdateImageClicked()
+    {
+        DialogParameters<AttachedImagesDiag> param = new();
+        param.Add(x => x.Images, _images);
+
+        var diagOptions = new DialogOptions
+        {
+            BackdropClick = false,
+            CloseButton = true,
+            CloseOnEscapeKey = false,
+            MaxWidth = MaxWidth.Large,
+            Position = DialogPosition.Center
+        };
+
+        var dialog = await MudDialogSvc.ShowAsync<AttachedImagesDiag>($"IMAGE(S)", param, diagOptions);
+        var result = await dialog.Result;
+    }
+
+    void OnDimensionUnitChanged(string value)
+    {
+        CurrentObject!.DimensionUnitCode = value;
+
+        if (!string.IsNullOrEmpty(value))
+        {
+            _dimensionUnitSymbol = _dimensionUnitList.SingleOrDefault<UnitOfMeasure>(x => x.ObjectCode == value)?.UnitSymbol;
+        }
+        else
+        {
+            _dimensionUnitSymbol = "";
+        }
+    }
+
+    void OnWeightUnitChanged(string value)
+    {
+        CurrentObject!.WeightUnitCode = value;
+
+        if (!string.IsNullOrEmpty(value))
+        {
+            _weightUnitSymbol = _weightUnitList.SingleOrDefault<UnitOfMeasure>(x => x.ObjectCode == value)?.UnitSymbol;
+        }
+        else
+        {
+            _weightUnitSymbol = "";
+        }
+    }
+
+    void OnItemUnitChanged(string value)
+    {
+        CurrentObject!.UnitCode = value;
+
+        if (!string.IsNullOrEmpty(value))
+        {
+            _itemUnitSymbol = _itemUnitList.SingleOrDefault<UnitOfMeasure>(x => x.ObjectCode == value)?.UnitSymbol;
+        }
+        else
+        {
+            _itemUnitSymbol = "";
+        }
+    }
+    #endregion
+
+    #region DB UPDATE FUNCTIONS
+    protected override async Task ValidatePreSave()
+    {
+        InvalidMsgList.Clear();
+
+        bool isDuplicated = await Uow.Items.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+
+        if (isDuplicated)
+        {
+            InvalidMsgList.Add("ObjectCode_Duplicate", $"Record with ObjectCode='{CurrentObject.ObjectCode}' is already existed.");
+        }
+
+        if (((CurrentObject.RetailUnitPrice ?? 0) > 0 || (CurrentObject.WholeSaleUnitPrice ?? 0) > 0) && string.IsNullOrEmpty(CurrentObject.CurrencyCode))
+            InvalidMsgList.Add("PriceNotNull_CurrencyNull", "'Retail/Wholesale Price' requires currency to be specified.");
+    }
+
+    protected override Task PreSaveProcessing()
+    {
+        CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
+        return base.PreSaveProcessing();
+    }
+
+    protected override async Task<bool> SaveAndCommitProcessing()
+    {
+        DateTime timestamp = DateTime.Now;
+
+        if (CurrentObject!.Id == 0)   //CREATE
+        {
+            CurrentObject!.CreatedUser = AuditTrailUser;
+            CurrentObject!.ModifiedUser = AuditTrailUser;
+            CurrentObject!.CreatedDateTime = timestamp;
+            CurrentObject!.ModifiedDateTime = timestamp;
+
+            int objId = await Uow.Items.InsertFullAsync(CurrentObject!);
+
+            if (objId > 0)
+            {
+                CurrentObject!.Id = objId;
+                return true;
+            }
+            else return false;
+        }
+        else    // UPDATE
+        {
+            CurrentObject!.ModifiedUser = AuditTrailUser;
+            CurrentObject!.ModifiedDateTime = timestamp;
+
+            return await Uow.Items.UpdateFullAsync(CurrentObject!);
+        }
+    }
+    #endregion
+
+    #region INTERNAL FUNCTIONS
+    async Task PopulatedUIControls()
+    {
+        _brandList = await Uow.Brands.GetAllBrandNamesAsync();
+        _countryList = await Uow.Countries.GetForDropdownSelect1Async();
+        _itemCategoryList = await Uow.ItemCategories.GetForDropdownSelectAsync();
+        _merchantList = await Uow.Merchants.GetForDropdownSelectAsync();
+
+        _dimensionUnitList = await Uow.UoMs.GetByTypeAsync(UnitOfMeasureTypes.LENGTH);
+        _weightUnitList = await Uow.UoMs.GetByTypeAsync(UnitOfMeasureTypes.MASS);
+        _itemUnitList = await Uow.UoMs.GetByTypeAsync(UnitOfMeasureTypes.RETAIL_ITEM);
+        _currencyList = await Uow.Currencies.GetForDropdownSelect1Async(null);
+        
+    }
+    #endregion
+}

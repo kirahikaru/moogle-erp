@@ -1,0 +1,36 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
+MinimumVisualStudioVersion = 16.0.0.0
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "CoreLibrary\DataLayer\DataLayer.csproj", "{5899FA24-1820-72B7-4671-7C3EE8035F2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoogleKhErp", "WebApp\MoogleKhErp\MoogleKhErp.csproj", "{EE4F389B-287C-AC06-238B-703A6B673636}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoogleKhErp.Client", "WebApp\MoogleKhErp.Client\MoogleKhErp.Client.csproj", "{059B068A-52BC-8D0C-7693-0887D306DCD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5899FA24-1820-72B7-4671-7C3EE8035F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5899FA24-1820-72B7-4671-7C3EE8035F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5899FA24-1820-72B7-4671-7C3EE8035F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5899FA24-1820-72B7-4671-7C3EE8035F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE4F389B-287C-AC06-238B-703A6B673636}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE4F389B-287C-AC06-238B-703A6B673636}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE4F389B-287C-AC06-238B-703A6B673636}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE4F389B-287C-AC06-238B-703A6B673636}.Release|Any CPU.Build.0 = Release|Any CPU
+		{059B068A-52BC-8D0C-7693-0887D306DCD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{059B068A-52BC-8D0C-7693-0887D306DCD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{059B068A-52BC-8D0C-7693-0887D306DCD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{059B068A-52BC-8D0C-7693-0887D306DCD0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1F7DBF70-DC46-4045-A3CD-8CE4E23137BB}
+	EndGlobalSection
+EndGlobal

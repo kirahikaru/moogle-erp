@@ -1,6 +1,4 @@
-﻿using DataLayer.Models.SystemCore.NonPersistent;
-
-namespace DataLayer.Models;
+﻿namespace DataLayer.Models;
 
 public class AuditObject
 {

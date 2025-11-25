@@ -1,4 +1,4 @@
-﻿using DataLayer.Models.SystemCore;
+﻿using DataLayer.Models.SysCore;
 using System.Reflection;
 
 namespace DataLayer.Repos;

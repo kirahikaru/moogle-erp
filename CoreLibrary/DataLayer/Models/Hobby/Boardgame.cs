@@ -1,6 +1,5 @@
 ﻿using DataLayer.GlobalConstant;
 using DataLayer.Models.HomeInventory;
-using DataLayer.Models.SystemCore.NonPersistent;
 
 namespace DataLayer.Models.Hobby;
 

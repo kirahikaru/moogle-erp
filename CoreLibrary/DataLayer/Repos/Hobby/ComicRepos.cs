@@ -7,6 +7,6 @@ public interface IComicRepos : IBaseRepos<Comic>
 
 }
 
-public class ComicRepos(IConnectionFactory connectionFactory) : BaseRepos<Comic>(connectionFactory, Comic.DatabaseObject), IComicRepos
+public class ComicRepos(IDbContext dbContext) : BaseRepos<Comic>(dbContext, Comic.DatabaseObject), IComicRepos
 {
 }

@@ -465,7 +465,7 @@ public static class DropdownDataSystems
             HEALTH_MANAGEMENT_SYSTEM => "DataLayer.Models.HMS",
             HOME_INVENTORY_MANAGEMENT => "DataLayer.Models.HomeInventory",
             PHARMACY_MANAGEMENT_SYSTEM => "DataLayer.Models.Pharmacy",
-            SYSTEM_CORE => "DataLayer.Models.SystemCore",
+            SYSTEM_CORE => "DataLayer.Models.SysCore",
             _ => "?"
         };
     }

@@ -7,6 +7,6 @@ public interface IMusicArtistRepos : IBaseRepos<MusicArtist>
 
 }
 
-public class MusicArtistRepos(IConnectionFactory connectionFactory) : BaseRepos<MusicArtist>(connectionFactory, MusicArtist.DatabaseObject), IMusicArtistRepos
+public class MusicArtistRepos(IDbContext dbContext) : BaseRepos<MusicArtist>(dbContext, MusicArtist.DatabaseObject), IMusicArtistRepos
 {
 }

@@ -1,5 +1,4 @@
 ﻿using DataLayer.Models.Hobby;
-using DataLayer.Models.SystemCore.NonPersistent;
 
 namespace DataLayer.Repos.Hobby;
 
@@ -20,7 +19,7 @@ public interface IBoardgameContentItemRepos : IBaseRepos<BoardgameContentItem>
 	Task<List<BoardgameContentItem>> GetByBoardgameAsync(int boardgameId);
 }
 
-public class BoardgameContentItemRepos(IConnectionFactory connectionFactory) : BaseRepos<BoardgameContentItem>(connectionFactory, BoardgameContentItem.DatabaseObject), IBoardgameContentItemRepos
+public class BoardgameContentItemRepos(IDbContext dbContext) : BaseRepos<BoardgameContentItem>(dbContext, BoardgameContentItem.DatabaseObject), IBoardgameContentItemRepos
 {
 	public async Task<List<BoardgameContentItem>> SearchAsync(
         int pgSize = 0, int pgNo = 0,
@@ -75,7 +74,7 @@ public class BoardgameContentItemRepos(IConnectionFactory connectionFactory) : B
                                     $"SELECT t.* FROM {DbObject.MsSqlTable} t INNER JOIN pg p ON p.Id=t.Id /**leftjoin**/ /**orderby**/").RawSql;
         }
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         var result = (await cn.QueryAsync<BoardgameContentItem>(sql, param)).AsList();
 
@@ -119,7 +118,7 @@ public class BoardgameContentItemRepos(IConnectionFactory connectionFactory) : B
 
         string sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**lefjoin**/ /**where**/").RawSql;
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         decimal recordCount = await cn.ExecuteScalarAsync<int>(sql, param);
         int pageCount = (int)Math.Ceiling(recordCount / (pgSize == 0 ? 1 : pgSize));
@@ -140,7 +139,7 @@ public class BoardgameContentItemRepos(IConnectionFactory connectionFactory) : B
         string sql = $"SELECT * FROM {DbObject.MsSqlTable} WHERE IsDeleted=0 AND BoardgameId=@BoardgameId";
         var param = new { BoardgameId = boardgameId };
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         List<BoardgameContentItem> dataList = (await cn.QueryAsync<BoardgameContentItem>(sql, param)).AsList();
 

@@ -1,5 +1,4 @@
 ﻿using DataLayer.Models.HomeInventory;
-using DataLayer.Models.SystemCore.NonPersistent;
 
 namespace DataLayer.Repos.HomeInventory;
 
@@ -24,7 +23,7 @@ public interface IMerchantRepos : IBaseRepos<Merchant>
 	Task<List<DropDownListItem>> GetValidParentAsync(int objectId, string objectCode, int? includingId);
 }
 
-public class MerchantRepos(IConnectionFactory connectionFactory) : BaseRepos<Merchant>(connectionFactory, Merchant.DatabaseObject), IMerchantRepos
+public class MerchantRepos(IDbContext dbContext) : BaseRepos<Merchant>(dbContext, Merchant.DatabaseObject), IMerchantRepos
 {
 	public async Task<Merchant?> GetFullAsync(int id)
     {
@@ -35,7 +34,7 @@ public class MerchantRepos(IConnectionFactory connectionFactory) : BaseRepos<Mer
         sbSql.LeftJoin($"{Address.MsSqlTable} addr ON addr.Id=t.AddressId");
         sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} khAddr ON khAddr.Id=t.CambodiaAddressId");
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
         string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
         var data = (await cn.QueryAsync<Merchant, Merchant, Address, CambodiaAddress, Merchant>(sql,
@@ -131,7 +130,7 @@ public class MerchantRepos(IConnectionFactory connectionFactory) : BaseRepos<Mer
                   $"SELECT t.* FROM {DbObject.MsSqlTable} t INNER JOIN pg p ON p.Id=t.Id /**orderby**/").RawSql;
         }
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         var dataList = (await cn.QueryAsync<Merchant>(sql, param)).AsList();
 
@@ -204,7 +203,7 @@ public class MerchantRepos(IConnectionFactory connectionFactory) : BaseRepos<Mer
 
 		string sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         decimal recordCount = await cn.ExecuteScalarAsync<int>(sql, param);
         int pageCount = (int)Math.Ceiling(recordCount / (pgSize == 0 ? 1 : pgSize));
@@ -249,7 +248,7 @@ public class MerchantRepos(IConnectionFactory connectionFactory) : BaseRepos<Mer
 
         sbSql.OrderBy("t.ObjectName ASC");
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
         var sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 
         return (await cn.QueryAsync<DropDownListItem>(sql, param)).AsList();

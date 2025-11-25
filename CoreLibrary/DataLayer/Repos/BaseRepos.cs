@@ -1,16 +1,15 @@
 ﻿//using DapperExtensions;
-using DataLayer.Models.SystemCore.NonPersistent;
+using DataLayer.Models.SysCore.NonPersistent;
 using System.Data.Common;
 using System.Reflection;
 using System.Resources;
-using System.Runtime.CompilerServices;
 
 namespace DataLayer.Repos;
 public interface IBaseRepos<TEntity> where TEntity : AuditObject
 {
 	// warning CA1716: Rename virtual/interface member IBaseRepos<TEntity>.Get(int) so that it no longer conflicts with the reserved language keyword 'Get'. Using a reserved keyword as the name of a virtual/interface member makes it harder for consumers in other languages to override/implement the member.
 
-	IConnectionFactory ConnectionFactory { get; }
+	IDbContext DbContext { get; }
 
 	TEntity? Get(int id);
 	TEntity? GetByCode(string objectCode);
@@ -50,23 +49,24 @@ public interface IBaseRepos<TEntity> where TEntity : AuditObject
 	Task<List<TEntity>> SearchAsync(int pgSize = 0, int pgNo = 0, string? objectCode = null, string? objectName = null);
 	Task<DataPagination> GetSearchPaginationAsync(int pgSize = 0, string? objectCode = null, string? objectName = null);
 
-	Task<string?> GetRunningNumberAsync(DbConnection cn, RunNumGenParam rngParam, IDbTransaction? tran = null);
+	Task<string?> GetRunningNumberAsync(IDbConnection cn, RunNumGenParam rngParam, IDbTransaction? tran = null);
 }
 
-public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseObj dbObj) : IBaseRepos<TEntity> where TEntity : AuditObject
+public class BaseRepos<TEntity>(IDbContext dbContext, DatabaseObj dbObj) : IBaseRepos<TEntity> where TEntity : AuditObject
 {
-    private readonly IConnectionFactory _connectionFactory = connectionFactory;
+    private readonly IDbContext _dbContext = dbContext;
     private readonly DatabaseObj _dbObj = dbObj;
     internal IEnumerable<PropertyInfo> ObjectProperties = typeof(TEntity).GetProperties().Where(x => !x.PropertyType.FullName!.StartsWith("DataLayerCore", StringComparison.OrdinalIgnoreCase));
     internal ResourceManager _errMsgResxMngr = new ResourceManager("ErrorMessages", Assembly.GetExecutingAssembly());
 
-	public IConnectionFactory ConnectionFactory => _connectionFactory;
+
+	public IDbContext DbContext => _dbContext;
     public DatabaseObj DbObject => _dbObj;
 
 	#region SYNCRONOUS METHODS
 	public TEntity? Get(int id)
     {
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
 		return cn.Get<TEntity?>(id);
 
@@ -80,14 +80,14 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 		DynamicParameters param = new();
 		string sql;
 
-        if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
+        if (DbContext.DbType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
         {
             sbSql.Where("t.IsDeleted=0");
             sbSql.Where("LOWER(t.ObjectCode)=LOWER(@ObjectCode)");
             param.Add("@ObjectCode", objectCode, DbType.AnsiString);
             sql = sbSql.AddTemplate($"SELECT * FROM {_dbObj.MsSqlTable} t /**where**/").RawSql;
         }
-        else if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.POSTGRESQL))
+        else if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
         {
             sbSql.Where("t.is_deleted=false");
             sbSql.Where("LOWER(t.object_code)=LOWER(@obj_code)");
@@ -97,21 +97,21 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         else
             throw new NotImplementedException();
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         return cn.QuerySingleOrDefault<TEntity?>(sql, param);
     }
 
     public virtual List<TEntity> GetAll()
     {
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         return cn.GetAll<TEntity>().AsList();
     }
 
     public int Insert(TEntity entity)
     {
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 		return (int)cn.Insert(entity);
         //string insSql = GenerateInsertQuery();
         //return cn.QuerySingle<int>(insSql, entity);
@@ -119,7 +119,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
     public bool Update(TEntity entity)
     {
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
         //string updateQuery = GenerateUpdateQuery();
         //int updCount = cn.Execute(updateQuery, entity);
         //bool isUpdated = cn.Update(entity);
@@ -135,7 +135,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         string sql = "";
 		DateTime khTimestamp = DateTime.UtcNow.AddHours(7);
 
-		if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
+		if (DbContext.DbType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
 		{
             sbSql.Set("IsDeleted=1");
 			sbSql.Set("ModifiedUser=@ModifiedUser");
@@ -148,7 +148,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
 			sql = sbSql.AddTemplate($"UPDATE {DbObject.MsSqlTable} /**set**/ /**where**/").RawSql;
 		}
-		else if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.POSTGRESQL))
+		else if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
 		{
 			sbSql.Set("is_deleted=true");
 			sbSql.Set("modified_user=@modified_user");
@@ -164,7 +164,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 		else
 			throw new NotImplementedException();
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         int rowAffected = cn.Execute(sql, param);
 
@@ -175,18 +175,18 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
     {
         string sql = "";
 
-        if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
+        if (DbContext.DbType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
         {
             sql = $"DELETE FROM {DbObject.MsSqlTable} WHERE Id=@Id";
         }
-        else if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.POSTGRESQL))
+        else if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
         {
             sql = $"DELETE FROM {DbObject.PgTable} WHERE id=@Id";
         }
         else
             throw new NotImplementedException();
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         int rowAffected = cn.Execute(sql, new { Id = id });
         return rowAffected;
@@ -198,7 +198,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 		SqlBuilder sbSql = new();
         string sql = "";
 
-        if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
+        if (DbContext.DbType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
         {
             sbSql.Where("t.IsDeleted=0");
             sbSql.Where("t.Id<>@Id");
@@ -209,7 +209,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
 			sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 		}
-		else if (ConnectionFactory.DatabaseType == DatabaseTypes.POSTGRESQL)
+		else if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
 		{
 			sbSql.Where("t.is_deleted=false");
 			sbSql.Where("t.id<>@id");
@@ -221,7 +221,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 			sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.PgTable} t /**where**/").RawSql;
 		}
 
-		using var cn = ConnectionFactory.GetDbConnection()!;
+		using var cn = DbContext.DbCxn;
 
         return cn.ExecuteScalar<int>(sql, param) > 0;
     }
@@ -232,7 +232,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         DynamicParameters param = new();
         string sql = "";
 
-		if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
+		if (DbContext.DbType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
 		{
 			sbSql.Where("t.IsDeleted=0");
 			sbSql.Where("t.Id<>@Id");
@@ -243,7 +243,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
 			sql = sbSql.AddTemplate($"SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 		}
-		else if (ConnectionFactory.DatabaseType == DatabaseTypes.POSTGRESQL)
+		else if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
 		{
 			sbSql.Where("t.is_deleted=false");
 			sbSql.Where("t.id<>@id");
@@ -255,7 +255,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 			sql = sbSql.AddTemplate($"SELECT t.id FROM {DbObject.PgTable} t /**where**/").RawSql;
 		}
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         int id = cn.ExecuteScalar<int>(sql, param);
         return id;
@@ -265,7 +265,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
     #region ASYNCHRONOUS METHODS
     public async Task<TEntity?> GetAsync(int id)
     {
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         return await cn.GetAsync<TEntity>(id);
     }
@@ -275,12 +275,12 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         SqlBuilder sbSql = new();
         DynamicParameters param = new();
 		string sql = "";
-		if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
+		if (DbContext.DbType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
         {
             sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} WHERE IsDeleted=0 AND Id IN @IdList").RawSql;
 			param.Add("@IdList", idList);
 		}
-		else if (ConnectionFactory.DatabaseType == DatabaseTypes.POSTGRESQL)
+		else if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
         {
 			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.PgTable} WHERE is_deleted=false AND id IN @id_list").RawSql;
 			param.Add("@id_list", idList);
@@ -290,7 +290,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
             throw new NotImplementedException();
         }
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         return (await cn.QueryAsync<TEntity>(sql, param)).AsList();
     }
@@ -301,14 +301,14 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 		DynamicParameters param = new();
 		string sql;
 
-		if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
+		if (DbContext.DbType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
 		{
 			sbSql.Where("t.IsDeleted=0");
 			sbSql.Where("LOWER(t.ObjectCode)=LOWER(@ObjectCode)");
 			param.Add("@ObjectCode", objectCode, DbType.AnsiString);
 			sql = sbSql.AddTemplate($"SELECT * FROM {_dbObj.MsSqlTable} t /**where**/").RawSql;
 		}
-		else if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.POSTGRESQL))
+		else if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
 		{
 			sbSql.Where("t.is_deleted=false");
 			sbSql.Where("LOWER(t.object_code)=LOWER(@obj_code)");
@@ -318,7 +318,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 		else
 			throw new NotImplementedException();
 
-		using var cn = ConnectionFactory.GetDbConnection()!;
+		using var cn = DbContext.DbCxn;
 
         return (await cn.QuerySingleOrDefaultAsync<TEntity>(sql, param));
     }
@@ -327,11 +327,11 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
     {
         string sql = "";
 
-		if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
+		if (DbContext.DbType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
 		{
 			sql = $"SELECT * FROM {DbObject.MsSqlTable} WHERE IsDeleted=0";
 		}
-		else if (ConnectionFactory.DatabaseType == DatabaseTypes.POSTGRESQL)
+		else if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
 		{
 			sql = $"SELECT * FROM {DbObject.PgTable} WHERE is_deleted=false";
 		}
@@ -340,7 +340,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 			throw new NotImplementedException();
 		}
 
-		using var cn = ConnectionFactory.GetDbConnection()!;
+		using var cn = DbContext.DbCxn;
 
         return (await cn.QueryAsync<TEntity>(sql)).AsList();
     }
@@ -349,11 +349,11 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
     {
         string sql;
 
-        if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
+        if (DbContext.DbType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
         {
 			sql = $"SELECT COUNT(*) FROM {DbObject.MsSqlTable} WHERE IsDeleted=0";
 		}
-		else if (ConnectionFactory.DatabaseType == DatabaseTypes.POSTGRESQL)
+		else if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
 		{
 			sql = $"SELECT COUNT(*) FROM {DbObject.PgTable} WHERE is_deleted=false";
 			
@@ -365,7 +365,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
 		
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         return (await cn.ExecuteScalarAsync<int>(sql)) / pageSize;
     }
@@ -375,7 +375,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
         //string insSql = GenerateInsertQuery();
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
         
         //int insCount = await cn.ExecuteAsync(insSql, entity);
         return await cn.InsertAsync(entity);
@@ -385,11 +385,11 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
     {
         //string updateQuery = GenerateUpdateQuery();
 
-        //using var cn = ConnectionFactory.GetDbConnection()!;
+        //using var cn = DbContext.DbCxn;
         //int updCount = await cn.ExecuteAsync(updateQuery, entity);
         //return updCount;
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
         return await cn.UpdateAsync(entity);
     }
 
@@ -400,7 +400,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 		string sql = "";
 		DateTime khTimestamp = DateTime.UtcNow.AddHours(7);
 
-		if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
+		if (DbContext.DbType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
 		{
 			sbSql.Set("IsDeleted=1");
 			sbSql.Set("ModifiedUser=@ModifiedUser");
@@ -413,7 +413,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
 			sql = sbSql.AddTemplate($"UPDATE {DbObject.MsSqlTable} /**set**/ /**where**/").RawSql;
 		}
-		else if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.POSTGRESQL))
+		else if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
 		{
 			sbSql.Set("is_deleted=true");
 			sbSql.Set("modified_user=@modified_user");
@@ -429,7 +429,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 		else
 			throw new NotImplementedException();
 
-		using var cn = ConnectionFactory.GetDbConnection()!;
+		using var cn = DbContext.DbCxn;
         
         int rowAffected = await cn.ExecuteAsync(sql, param);
         return rowAffected;
@@ -439,18 +439,18 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
     {
         string sql;
 
-        if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
+        if (DbContext.DbType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
         {
 			sql = $"DELETE FROM {DbObject.MsSqlTable} WHERE Id=@Id";
 		}
-        else if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.POSTGRESQL))
+        else if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
         {
 			sql = $"DELETE FROM {DbObject.PgTable} WHERE id=@Id";
 		}
         else
 			throw new NotImplementedException();
 
-		using var cn = ConnectionFactory.GetDbConnection()!;
+		using var cn = DbContext.DbCxn;
         
         int rowAffected = await cn.ExecuteAsync(sql, new { Id = id });
         return rowAffected;
@@ -461,7 +461,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         SqlBuilder sbSql = new();
         DynamicParameters param = new();
         string sql = "";
-        if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
+        if (DbContext.DbType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
 		{
 			sbSql.Where("t.IsDeleted=0");
 			sbSql.Where("t.Id<>@Id");
@@ -473,7 +473,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 			sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTableName} t /**where**/").RawSql;
 
 		}
-        else if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.POSTGRESQL))
+        else if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
 		{
 			sbSql.Where("t.is_deleted=false");
 			sbSql.Where("t.id<>@id");
@@ -486,7 +486,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         else
             throw new NotImplementedException();
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         return (await cn.ExecuteScalarAsync<int>(sql, param)) > 0;
     }
@@ -497,7 +497,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 		DynamicParameters param = new();
 		string sql = "";
 
-		if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
+		if (DbContext.DbType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
 		{
 			sbSql.Where("t.IsDeleted=0");
 			sbSql.Where("t.Id<>@Id");
@@ -508,7 +508,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
 			sql = sbSql.AddTemplate($"SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 		}
-		else if (ConnectionFactory.DatabaseType == DatabaseTypes.POSTGRESQL)
+		else if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
 		{
 			sbSql.Where("t.is_deleted=false");
 			sbSql.Where("t.id<>@id");
@@ -520,7 +520,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 			sql = sbSql.AddTemplate($"SELECT t.id FROM {DbObject.PgTable} t /**where**/").RawSql;
 		}
 
-		using var cn = ConnectionFactory.GetDbConnection()!;
+		using var cn = DbContext.DbCxn;
 
         int id = await cn.ExecuteScalarAsync<int>(sql, param);
         return id;
@@ -530,7 +530,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
     {
         SqlBuilder sbSql = new();
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
         
         List<DropdownSelectItem> result = new();
         DynamicParameters param = new();
@@ -538,7 +538,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
 		
 
-        if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.POSTGRESQL))
+        if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
         {
 			sbSql.Select("t.id");
 			sbSql.Select("t.object_code as \"key\"");
@@ -571,7 +571,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
 			sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.PgTable} t /**where**/ /**orderby**/").RawSql;
 		}
-        else if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
+        else if (DbContext.DbType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
         {
 			sbSql.Select("t.Id");
 			sbSql.Select("'Key'=t.ObjectCode");
@@ -618,7 +618,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
     public virtual List<string> GetSearchOrderbBy()
     {
-		return ConnectionFactory.DatabaseType switch
+		return DbContext.DbType switch
 		{
 			DatabaseTypes.POSTGRESQL => ["t.object_name ASC"],
 			DatabaseTypes.AZURE_SQL or DatabaseTypes.MSSQL => ["t.ObjectName ASC"],
@@ -651,7 +651,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         DynamicParameters param = new();
 		string sql;
 
-		if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
+		if (DbContext.DbType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
         {
 			sbSql.Where("t.IsDeleted=0");
 
@@ -700,7 +700,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 					$"SELECT * FROM {DbObject.MsSqlTable} t WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
 			}
 		}
-		else if (ConnectionFactory.DatabaseType == DatabaseTypes.POSTGRESQL)
+		else if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
         {
 			sbSql.Where("t.is_deleted=false");
 
@@ -750,7 +750,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 		else
             throw new NotImplementedException();
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         var dataList = (await cn.QueryAsync<TEntity>(sql, param)).AsList();
 
@@ -768,7 +768,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         string sql;
 
 
-        if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
+        if (DbContext.DbType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
         {
             sbSql.Where("t.IsDeleted=0");
 
@@ -801,7 +801,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
             sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
         }
-        else if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.POSTGRESQL))
+        else if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
 		{
 			sbSql.Where("t.is_deleted=false");
 
@@ -837,7 +837,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         else
             throw new NotImplementedException();
 
-        using var cn = _connectionFactory.DbConnection!;
+        using var cn = DbContext.DbCxn;
 
 		decimal recordCount = await cn.ExecuteScalarAsync<int>(sql, param);
 		int pageCount = (int)(Math.Ceiling(recordCount / (pgSize == 0 ? 1 : pgSize)));
@@ -864,7 +864,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         SqlBuilder sbSql = new();
         string sql;
 
-		if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
+		if (DbContext.DbType.Is(DatabaseTypes.AZURE_SQL, DatabaseTypes.MSSQL))
 		{
 			sbSql.Where("t.IsDeleted=0");
 
@@ -899,7 +899,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 					$"SELECT t.* FROM {DbObject.MsSqlTable} t INNER JOIN pg p ON p.Id=t.Id /**orderby**/").RawSql;
 			}
 		}
-		else if (ConnectionFactory.DatabaseType == DatabaseTypes.POSTGRESQL)
+		else if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
 		{
 			sbSql.Where("t.is_deleted=false");
 
@@ -936,7 +936,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 		else
 			throw new NotImplementedException();
 
-		using var cn = ConnectionFactory.GetDbConnection()!;
+		using var cn = DbContext.DbCxn;
 
         var dataList = (await cn.QueryAsync<TEntity>(sql, param)).AsList();
 
@@ -954,7 +954,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         SqlBuilder sbSql = new();
         string sql;
 
-        if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
+        if (DbContext.DbType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
         {
 			sbSql.Where("t.IsDeleted=0");
 
@@ -974,7 +974,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
 
 			sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 		}
-        else if (ConnectionFactory.DatabaseType.Is(DatabaseTypes.POSTGRESQL))
+        else if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
         {
 			sbSql.Where("t.is_deleted=false");
 
@@ -997,7 +997,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
         else
             throw new NotImplementedException();
         
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
 		decimal recordCount = await cn.ExecuteScalarAsync<int>(sql, param);
 		int pageCount = (int)(Math.Ceiling(recordCount / (pgSize == 0 ? 1 : pgSize)));
@@ -1014,7 +1014,7 @@ public class BaseRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseOb
     }
 
     #region INTERNAL FUNCTIONS
-    public async Task<string?> GetRunningNumberAsync(DbConnection cn, RunNumGenParam rngParam, IDbTransaction? tran = null)
+    public async Task<string?> GetRunningNumberAsync(IDbConnection cn, RunNumGenParam rngParam, IDbTransaction? tran = null)
     {
         #region RUNNING NUMBER GENERATION
         SqlBuilder sbSqlRngCounter = new();

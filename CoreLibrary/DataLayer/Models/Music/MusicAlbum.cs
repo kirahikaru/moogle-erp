@@ -1,6 +1,6 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.Library;
-using DataLayer.Models.SystemCore.NonPersistent;
+using DataLayer.Models.LIB;
+using DataLayer.Models.SysCore.NonPersistent;
 
 namespace DataLayer.Models.Music;
 

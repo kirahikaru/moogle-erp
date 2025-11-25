@@ -1,5 +1,4 @@
 ﻿using DataLayer.Models.HomeInventory;
-using DataLayer.Models.SystemCore.NonPersistent;
 
 namespace DataLayer.Repos.HomeInventory;
 
@@ -11,7 +10,7 @@ public interface IOwnedItemCategoryRepos : IBaseRepos<OwnedItemCategory>
 	Task<List<BasicObjectSelectListItem>> GetValidParentAsync(int objectId, string objectCode, int? includingId = null);
 }
 
-public class OwnedItemCategoryRepos(IConnectionFactory connectionFactory) : BaseRepos<OwnedItemCategory>(connectionFactory, OwnedItemCategory.DatabaseObject), IOwnedItemCategoryRepos
+public class OwnedItemCategoryRepos(IDbContext dbContext) : BaseRepos<OwnedItemCategory>(dbContext, OwnedItemCategory.DatabaseObject), IOwnedItemCategoryRepos
 {
 	public async Task<List<OwnedItemCategory>> GetChildrenAsync(int objId, string hierarchyPath, bool getOnlyDirectChild = true)
     {
@@ -36,7 +35,7 @@ public class OwnedItemCategoryRepos(IConnectionFactory connectionFactory) : Base
 
         string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         List<OwnedItemCategory> dataList = (await cn.QueryAsync<OwnedItemCategory>(sql, param)).AsList();
         return dataList;
@@ -75,7 +74,7 @@ public class OwnedItemCategoryRepos(IConnectionFactory connectionFactory) : Base
 
         sbSql.OrderBy("t.ObjectName ASC");
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
         var sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
         List<DropDownListItem> dataList = (await cn.QueryAsync<DropDownListItem>(sql, param)).ToList();
         return dataList;
@@ -108,7 +107,7 @@ public class OwnedItemCategoryRepos(IConnectionFactory connectionFactory) : Base
 
         string sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         List<BasicObjectSelectListItem> result = (await cn.QueryAsync<BasicObjectSelectListItem>(sql, param)).AsList();
 

@@ -1,4 +1,4 @@
-﻿using DataLayer.Repos.SystemCore;
+﻿using DataLayer.Repos.SysCore;
 using Microsoft.Extensions.Options;
 using System.Text.RegularExpressions;
 

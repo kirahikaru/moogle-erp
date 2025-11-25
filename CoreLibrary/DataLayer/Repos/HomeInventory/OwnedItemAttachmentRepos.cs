@@ -6,6 +6,6 @@ public interface IOwnedItemAttachmentRepos : IBaseRepos<OwnedItemAttachment>
 
 }
 
-public class OwnedItemAttachmentRepos(IConnectionFactory connectionFactory) : BaseRepos<OwnedItemAttachment>(connectionFactory, OwnedItemAttachment.DatabaseObject), IOwnedItemAttachmentRepos
+public class OwnedItemAttachmentRepos(IDbContext dbContext) : BaseRepos<OwnedItemAttachment>(dbContext, OwnedItemAttachment.DatabaseObject), IOwnedItemAttachmentRepos
 {
 }

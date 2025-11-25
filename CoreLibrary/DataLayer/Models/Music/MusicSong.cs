@@ -1,6 +1,6 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
 using DataLayer.GlobalConstant;
-using DataLayer.Models.SystemCore.NonPersistent;
+using DataLayer.Models.SysCore.NonPersistent;
 
 namespace DataLayer.Models.Music;
 [Table("[mdb].[MusicSong]")]

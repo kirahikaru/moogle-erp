@@ -1,0 +1,20 @@
+﻿namespace DataLayer.Repos.FIN;
+
+public interface ICustomerChangeHistoryRepos : IBaseRepos<CustomerChangeHistory>
+{
+	Task<List<CustomerChangeHistory>> GetByCustomerAsync(int customerId);
+}
+
+public class CustomerChangeHistoryRepos(IDbContext dbContext) : BaseRepos<CustomerChangeHistory>(dbContext, CustomerChangeHistory.DatabaseObject), ICustomerChangeHistoryRepos
+{
+	public async Task<List<CustomerChangeHistory>> GetByCustomerAsync(int customerId)
+    {
+        string sql = $"SELECT * FROM {DbObject.MsSqlTable} t WHERE t.IsDeleted=0 AND t.CustomerId=@CustomerId ORDER BY t.CreeatedDateTime DESC";
+
+        using var cn = DbContext.DbCxn;
+
+        var dataList = (await cn.QueryAsync<CustomerChangeHistory>(sql, new { CustomerId = customerId })).AsList();
+
+        return dataList;
+    }
+}

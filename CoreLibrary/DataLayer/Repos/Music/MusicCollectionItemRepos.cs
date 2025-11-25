@@ -8,6 +8,6 @@ public interface IMusicCollectionItemRepos : IBaseRepos<MusicCollectionItem>
 }
 
 
-public class MusicCollectionItemRepos(IConnectionFactory connectionFactory) : BaseRepos<MusicCollectionItem>(connectionFactory, MusicCollectionItem.DatabaseObject), IMusicCollectionItemRepos
+public class MusicCollectionItemRepos(IDbContext dbContext) : BaseRepos<MusicCollectionItem>(dbContext, MusicCollectionItem.DatabaseObject), IMusicCollectionItemRepos
 {
 }

@@ -1,6 +1,5 @@
 ﻿using DataLayer.Models.Hobby;
 using DataLayer.Models.HomeInventory;
-using DataLayer.Models.SystemCore.NonPersistent;
 using System.Text.RegularExpressions;
 
 namespace DataLayer.Repos.Hobby;
@@ -56,7 +55,7 @@ public interface IBoardgameRepos : IBaseRepos<Boardgame>
 	Task<List<DropdownSelectItem>> GetExistingEditionListAsync();
 }
 
-public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Boardgame>(connectionFactory, Boardgame.DatabaseObject), IBoardgameRepos
+public class BoardgameRepos(IDbContext dbContext) : BaseRepos<Boardgame>(dbContext, Boardgame.DatabaseObject), IBoardgameRepos
 {
 	public async Task<Boardgame?> GetFullAsync(int id)
     {
@@ -71,7 +70,7 @@ public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Bo
 
 		string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         var data = (await cn.QueryAsync<Boardgame, Merchant, Boardgame, UnitOfMeasure, UnitOfMeasure, Boardgame>(sql,
                                     (bg, m, mbg, su, pu) =>
@@ -101,7 +100,7 @@ public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Bo
 
     public async Task<int> InsertOrUpdateFullAsync(Boardgame obj)
     {
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
         // <!IMPORTANT> Connection required to be open before calling BeginTransaction() function
         if (cn.State != ConnectionState.Open) cn.Open();
         using var tran = cn.BeginTransaction();
@@ -190,7 +189,7 @@ public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Bo
     {
         string sql = $"SELECT * FROM {DbObject.MsSqlTable} t WHERE t.IsDeleted=0 AND t.IsExpansion=1 AND t.MainBoardGameId=@MainBoardGameId";
 
-		using var cn = ConnectionFactory.GetDbConnection()!;
+		using var cn = DbContext.DbCxn;
         var dataList = (await cn.QueryAsync<Boardgame>(sql, new { MainBoardGameId = boardgameId })).AsList();
 
         return dataList;
@@ -272,7 +271,7 @@ public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Bo
 				$"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
 		}
 
-		using var cn = ConnectionFactory.GetDbConnection()!;
+		using var cn = DbContext.DbCxn;
 
 		var dataList = await cn.QueryAsync<Boardgame, Merchant, Boardgame, UnitOfMeasure, Boardgame>(sql,
 										(b, m, mbg, su) => {
@@ -342,7 +341,7 @@ public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Bo
                 $"SELECT t.*, m.*, mb.*, su.* FROM {DbObject.MsSqlTable} t INNER JOIN pg p ON p.Id=t.Id /**leftjoin**/ /**orderby**/").RawSql;
         }
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         var dataList = (await cn.QueryAsync<Boardgame, Merchant, Boardgame, UnitOfMeasure, Boardgame>(sql,
                                     (bg, merchant, mbg, su) =>
@@ -385,7 +384,7 @@ public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Bo
 
         string sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         decimal recordCount = await cn.ExecuteScalarAsync<int>(sql, param);
         int pageCount = (int)Math.Ceiling(recordCount / (pgSize == 0 ? 1 : pgSize));
@@ -585,7 +584,7 @@ public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Bo
                   $"SELECT t.*, m.*, mb.*, s.* FROM {DbObject.MsSqlTable} t INNER JOIN pg p ON p.Id=t.Id /**leftjoin**/ /**orderby**/").RawSql;
         }
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         List<Boardgame> result = (await cn.QueryAsync<Boardgame, Merchant, Boardgame, UnitOfMeasure, Boardgame>(sql,
                                         (b, m, mbg, su) => {
@@ -763,7 +762,7 @@ public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Bo
 
         string sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         decimal recordCount = await cn.ExecuteScalarAsync<int>(sql, param);
         int pageCount = (int)Math.Ceiling(recordCount / (pgSize == 0 ? 1 : pgSize));
@@ -811,7 +810,7 @@ public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Bo
         else
             return [];
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         var dataList = (await cn.QueryAsync<DropdownSelectItem>(sql, param)).AsList();
 
@@ -822,7 +821,7 @@ public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Bo
     {
         string sql = $"SELECT 'Key'=UPPER(REPLACE(t.VersionDesc,' ','-')), 'Value'=t.VersionDesc FROM (SELECT DISTINCT VersionDesc FROM {Boardgame.MsSqlTable} WHERE IsDeleted=0 AND VersionDesc IS NOT NULL) t";
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
         var dataList = (await cn.QueryAsync<DropdownSelectItem>(sql)).AsList();
         return dataList;
     }
@@ -830,7 +829,7 @@ public class BoardgameRepos(IConnectionFactory connectionFactory) : BaseRepos<Bo
     public async Task<List<DropdownSelectItem>> GetExistingEditionListAsync()
     {
         string sql = $"SELECT 'Key'=UPPER(REPLACE(t.EditionDesc,' ','-')), 'Value'=t.EditionDesc FROM (SELECT DISTINCT EditionDesc FROM {Boardgame.MsSqlTable} WHERE IsDeleted=0 AND ISNULL(EditionDesc,'')<>'') t";
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
         var dataList = (await cn.QueryAsync<DropdownSelectItem>(sql)).AsList();
         return dataList;
     }

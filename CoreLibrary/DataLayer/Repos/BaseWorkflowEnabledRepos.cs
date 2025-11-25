@@ -1,5 +1,5 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.SystemCore.NonPersistent;
+using DataLayer.Models.SysCore.NonPersistent;
 using System.Reflection;
 
 namespace DataLayer.Repos;
@@ -10,7 +10,7 @@ public interface IBaseWorkflowEnabledRepos<TEntity> : IBaseRepos<TEntity> where 
 	Task<int> TransitWorkflowAsync(TEntity entity, User fromUser, User toUser, string workflowAction, string workflowRemark = "");
 }
 
-public class BaseWorkflowEnabledRepos<TEntity>(IConnectionFactory connectionFactory, DatabaseObj dbObj) : BaseRepos<TEntity>(connectionFactory, dbObj), IBaseWorkflowEnabledRepos<TEntity> where TEntity : AuditObject
+public class BaseWorkflowEnabledRepos<TEntity>(IDbContext dbContext, DatabaseObj dbObj) : BaseRepos<TEntity>(dbContext, dbObj), IBaseWorkflowEnabledRepos<TEntity> where TEntity : AuditObject
 {
     public virtual async Task<int> SaveAndTransitWorkflowAsync(TEntity entity, User fromUser, User toUser, string workflowAction, string workflowRemark = "")
     {
@@ -66,7 +66,7 @@ public class BaseWorkflowEnabledRepos<TEntity>(IConnectionFactory connectionFact
 
         //var insWfCmd = QueryGenerator.GenerateInsertQuery(typeof(WorkflowHistory), WorkflowHistory.DatabaseObject);
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         // <!IMPORTANT> Connection required to be open before calling BeginTransaction() function
         if (cn.State != ConnectionState.Open) cn.Open();
@@ -213,7 +213,7 @@ public class BaseWorkflowEnabledRepos<TEntity>(IConnectionFactory connectionFact
 
         //var insWfCmd = QueryGenerator.GenerateInsertQuery(typeof(WorkflowHistory), "[dbo].[WorkflowHistory]");
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         // <!IMPORTANT> Connection required to be open before calling BeginTransaction() function
         if (cn.State != ConnectionState.Open) cn.Open();

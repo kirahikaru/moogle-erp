@@ -1,7 +1,7 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
 using DataLayer.GlobalConstant;
-using DataLayer.Models.SystemCore;
-using DataLayer.Models.SystemCore.NonPersistent;
+using DataLayer.Models.SysCore;
+using DataLayer.Models.SysCore.NonPersistent;
 
 namespace DataLayer.Models.HomeInventory;
 

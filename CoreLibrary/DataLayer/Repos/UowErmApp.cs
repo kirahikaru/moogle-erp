@@ -1,14 +1,15 @@
-﻿using DataLayer.Models.Retail;
+﻿using DataLayer.Models.RMS;
 using DataLayer.Repos.EventManagement;
-using DataLayer.Repos.Finance;
-using DataLayer.Repos.Hospital;
+using DataLayer.Repos.FIN;
+using DataLayer.Repos.HMS;
 using DataLayer.Repos.HomeInventory;
-using DataLayer.Repos.Pharmacy;
+using DataLayer.Repos.PMS;
 using Microsoft.Extensions.Options;
 using DataLayer.Repos.Hobby;
-using DataLayer.Repos.SystemCore;
-using DataLayer.Repos.Library;
-using DataLayer.Repos.Retail;
+using DataLayer.Repos.SysCore;
+using DataLayer.Repos.LIB;
+using DataLayer.Repos.RMS;
+using DataLayer.Repos.Event;
 
 namespace DataLayer.Repos;
 

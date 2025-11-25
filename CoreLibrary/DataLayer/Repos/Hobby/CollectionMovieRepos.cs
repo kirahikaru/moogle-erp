@@ -7,6 +7,6 @@ public interface ICollectionMovieRepos : IBaseRepos<CollectionMovie>
 
 }
 
-public class CollectionMovieRepos(IConnectionFactory connectionFactory) : BaseRepos<CollectionMovie>(connectionFactory, CollectionMovie.DatabaseObject), ICollectionMovieRepos
+public class CollectionMovieRepos(IDbContext dbContext) : BaseRepos<CollectionMovie>(dbContext, CollectionMovie.DatabaseObject), ICollectionMovieRepos
 {
 }

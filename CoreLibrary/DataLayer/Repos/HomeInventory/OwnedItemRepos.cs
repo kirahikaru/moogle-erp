@@ -1,5 +1,4 @@
 ﻿using DataLayer.Models.HomeInventory;
-using DataLayer.Models.SystemCore.NonPersistent;
 using System.Text.RegularExpressions;
 
 namespace DataLayer.Repos.HomeInventory;
@@ -57,7 +56,7 @@ public interface IOwnedItemRepos : IBaseRepos<OwnedItem>
 		List<string>? manufactureCountryList = null);
 }
 
-public class OwnedItemRepos(IConnectionFactory connectionFactory) : BaseRepos<OwnedItem>(connectionFactory, OwnedItem.DatabaseObject), IOwnedItemRepos
+public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbContext, OwnedItem.DatabaseObject), IOwnedItemRepos
 {
 	public async Task<OwnedItem?> GetFullAsync(int id)
     {
@@ -72,7 +71,7 @@ public class OwnedItemRepos(IConnectionFactory connectionFactory) : BaseRepos<Ow
 
         var sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         var dataList = (await cn.QueryAsync<OwnedItem, OwnedItemCategory, Merchant, Country, OwnedItem>(
                                     sql,(oi, oic, m, c) => {
@@ -103,7 +102,7 @@ public class OwnedItemRepos(IConnectionFactory connectionFactory) : BaseRepos<Ow
         var sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
         var param = new { OwnedItemCategoryId = ownedItemCategoryId };
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         List<OwnedItem> dataList = (await cn.QueryAsync<OwnedItem>(sql, param)).AsList();
 
@@ -120,7 +119,7 @@ public class OwnedItemRepos(IConnectionFactory connectionFactory) : BaseRepos<Ow
         var sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
         var param = new { MerchantObjectCode = new DbString { Value = merchantCode, IsAnsi = true } };
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         List<OwnedItem> dataList = (await cn.QueryAsync<OwnedItem>(sql, param)).AsList();
 
@@ -198,7 +197,7 @@ public class OwnedItemRepos(IConnectionFactory connectionFactory) : BaseRepos<Ow
                 $"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
         }
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         List<OwnedItem> result = (await cn.QueryAsync<OwnedItem, OwnedItemCategory, Merchant, Country, OwnedItem>(sql,
                                         (oi, oic, m, cty) =>
@@ -258,7 +257,7 @@ public class OwnedItemRepos(IConnectionFactory connectionFactory) : BaseRepos<Ow
 
         string sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t LEFT JOIN {OwnedItemCategory.MsSqlTable} oic ON oic.Id=t.OwnedItemCategoryId /**where**/").RawSql;
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         decimal recordCount = await cn.ExecuteScalarAsync<int>(sql, param);
         int pageCount = (int)Math.Ceiling(recordCount / (pgSize == 0 ? 1 : pgSize));
@@ -344,7 +343,7 @@ public class OwnedItemRepos(IConnectionFactory connectionFactory) : BaseRepos<Ow
 				$"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
 		}
 
-		using var cn = ConnectionFactory.GetDbConnection()!;
+		using var cn = DbContext.DbCxn;
 
 		var dataList = await cn.QueryAsync<OwnedItem, OwnedItemCategory, Merchant, Country, OwnedItem>(sql,
 										(oi, oic, m, cty) =>
@@ -568,7 +567,7 @@ public class OwnedItemRepos(IConnectionFactory connectionFactory) : BaseRepos<Ow
                 $"SELECT t.*, oic.*, m.*, cty.* FROM {DbObject.MsSqlTable} t INNER JOIN pg p ON p.Id=t.Id /**leftjoin**/ /**orderby**/").RawSql;
         }
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         List<OwnedItem> result = (await cn.QueryAsync<OwnedItem, OwnedItemCategory, Merchant, Country, OwnedItem>(sql, 
                                         (oi, oic, m, cty) => 
@@ -771,7 +770,7 @@ public class OwnedItemRepos(IConnectionFactory connectionFactory) : BaseRepos<Ow
 
         string sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 
-        using var cn = ConnectionFactory.GetDbConnection()!;
+        using var cn = DbContext.DbCxn;
 
         decimal recordCount = await cn.ExecuteScalarAsync<int>(sql, param);
         int pageCount = (int)Math.Ceiling(recordCount / (pgSize == 0 ? 1 : pgSize));

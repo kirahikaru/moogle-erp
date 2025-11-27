@@ -1,6 +1,6 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
 using DataLayer.AuxComponents.Extensions;
-using DataLayer.Models.SystemCore.NonPersistent;
+using DataLayer.Models.SysCore.NonPersistent;
 using DataLayer.Repos;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
@@ -33,7 +33,7 @@ public class CRUCPageBase<T> : ComponentBase
 	public UserSessionInfo? LoggedInUser { get; set; }
 
 	[CascadingParameter(Name = "SystemModulePermissions")]
-	public List<SystemModulePermission> SystemModulePermissions { get; set; }
+	public List<SysModPerm> SystemModulePermissions { get; set; }
 
 	protected AppModulePermission ModulePermission { get; set; }
 

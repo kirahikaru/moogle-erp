@@ -1,5 +1,8 @@
 ﻿@page "/him/boardgame/main"
-@inherits MainPageBase<Boardgame>
+
+@using MoogHobby = DataLayer.Models.Hobby
+
+@inherits MainPageBase<MoogHobby.Boardgame>
 <MudPaper Class="moog-pg-banner mt-3 px-3 py-4" Elevation="1">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
@@ -22,7 +25,7 @@
                  ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple"
                  Class="mt-2 moog-mud-datagrid main-pg"
                  @ref="MainDataGrid" ServerData="ServerDataFunc"
-                 T="Boardgame">
+				 T="MoogHobby.Boardgame">
         <Columns>
             <TemplateColumn Title="Name"
                             HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell" Context="rowData">
@@ -97,7 +100,7 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="Boardgame" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
+			<MudDataGridPager T="MoogHobby.Boardgame" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
 		</PagerContent>
     </MudDataGrid>
 </MudPaper>
@@ -149,9 +152,9 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<Boardgame>> ServerDataFunc(GridState<Boardgame> gridState)
+	protected override async Task<GridData<MoogHobby.Boardgame>> ServerDataFunc(GridState<MoogHobby.Boardgame> gridState)
 	{
-		if (IsSearching) return new GridData<Boardgame>
+		if (IsSearching) return new GridData<MoogHobby.Boardgame>
 		{
 			Items = [],
 			TotalItems = 0
@@ -184,7 +187,7 @@
 			MainDataList = result.Value;
 			totalItemCount = result.Key;
 
-			return new GridData<Boardgame>
+			return new GridData<MoogHobby.Boardgame>
 			{
 				Items = MainDataList,
 				TotalItems = totalItemCount
@@ -194,7 +197,7 @@
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
 
-			return new GridData<Boardgame>
+			return new GridData<MoogHobby.Boardgame>
 			{
 				Items = [],
 				TotalItems = 0

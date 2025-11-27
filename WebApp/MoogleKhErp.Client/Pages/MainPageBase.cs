@@ -1,7 +1,7 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
 using DataLayer.AuxComponents.Extensions;
 using DataLayer.Models;
-using DataLayer.Models.SystemCore.NonPersistent;
+using DataLayer.Models.SysCore.NonPersistent;
 using DataLayer.Repos;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;

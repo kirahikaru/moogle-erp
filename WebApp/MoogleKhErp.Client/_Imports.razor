@@ -14,27 +14,37 @@
 @using MudExtensions
 @using Toolbelt.Blazor.HotKeys2
 
-@using DataLayer.Models.HomeInventory
-@using DataLayer.Models.Library
-@using DataLayer.Models.Retail
-@using DataLayer.Models.Pharmacy
-@using DataLayer.Models.Finance
-@using DataLayer.Models.Hospital
-@using DataLayer.Models
-@using DataLayer.GlobalConstant
-@using DataLayer.Models.Hobby
-@using Force.DeepCloner
-
-
-
-
-@using DataLayer.AuxComponents.Extensions
-@using System.Text
-@using DataLayer.Models.SystemCore
-@using DataLayer.Models.SystemCore.NonPersistent;
-
 @using CurrieTechnologies.Razor.SweetAlert2
+
+@using DataLayer.Models
+@using DataLayer.Models.SysCore
+@using DataLayer.Models.EMS
+@using DataLayer.Models.FIN
+@using DataLayer.Models.HMS
+@using DataLayer.Models.HomeInventory
+@using DataLayer.Models.LIB
+@using DataLayer.Models.Music
+@using DataLayer.Models.PMS
+@using DataLayer.Models.RMS
+
+@using DataLayer.Repos.SysCore
+@using DataLayer.Repos.EMS
+@using DataLayer.Repos.FIN
+@using DataLayer.Repos.HMS
+@using DataLayer.Repos.Hobby
+@using DataLayer.Repos.HomeInventory
+@using DataLayer.Repos.LIB
+@using DataLayer.Repos.Music
+@using DataLayer.Repos.PMS
+@using DataLayer.Repos.RMS
+
+@using DataLayer.Models.SysCore.NonPersistent
+@using DataLayer.AuxComponents.Extensions
+
 
 @inject IDialogService MudDialogSvc
 @inject IWebAssemblyHostEnvironment WebHostEnv
+
+@using MoogleKhErp.Client.Components
+@using Force.DeepCloner
 

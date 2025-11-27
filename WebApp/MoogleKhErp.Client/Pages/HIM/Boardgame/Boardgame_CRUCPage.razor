@@ -2,8 +2,9 @@
 @page "/him/boardgame/{CRUCMode}/{id:int}"
 @using MoogleKhErp.Client.Components
 
+@using MoogHobby = DataLayer.Models.Hobby
 
-@inherits CRUCPageBase<Boardgame>
+@inherits CRUCPageBase<MoogHobby.Boardgame>
 
 @if (CurrentObject != null && CurrentEditContext != null)
 {

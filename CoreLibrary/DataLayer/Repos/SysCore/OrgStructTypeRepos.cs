@@ -112,46 +112,54 @@ public class OrgStructTypeRepos(IDbContext dbContext) : BaseRepos<OrgStructType>
 
         return dataList;
 	}
-
+	
 	public override async Task<KeyValuePair<int, IEnumerable<OrgStructType>>> SearchNewAsync(
-		int pgSize = 0, int pgNo = 0, string? searchText = null,
+		int pgSize = 0,
+		int pgNo = 0,
+		string? searchText = null,
 		IEnumerable<SqlSortCond>? sortConds = null,
 		IEnumerable<SqlFilterCond>? filterConds = null,
 		List<int>? excludeIdList = null)
 	{
-		DynamicParameters param = new();
+		if (pgNo < 0 && pgSize < 0)
+			throw new ArgumentOutOfRangeException(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
+
 		SqlBuilder sbSql = new();
+		DynamicParameters param = new();
 
 		sbSql.Where("t.IsDeleted=0");
 
 		#region Form Search Conditions
 		if (!string.IsNullOrEmpty(searchText))
 		{
-			if (searchText.StartsWith("id:"))
+			if (searchText.StartsWith("id:", StringComparison.OrdinalIgnoreCase))
 			{
-				sbSql.Where("UPPER(t.ObjectCode) LIKE '%'+@SearchText+'%'");
-				param.Add("@SearchText", searchText.Replace("id:", "", StringComparison.CurrentCultureIgnoreCase), DbType.AnsiString);
+				sbSql.Where("UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
+				param.Add("@SearchText", searchText.Replace("id:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
+			}
+			else if (searchText.StartsWith("code:", StringComparison.OrdinalIgnoreCase))
+			{
+				sbSql.Where("UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
+				param.Add("@SearchText", searchText.Replace("code:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
 			}
 			else
 			{
-				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%')");
+				sbSql.Where("UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
 				param.Add("@SearchText", searchText, DbType.AnsiString);
 			}
 		}
 
-		if (excludeIdList != null && excludeIdList.Count != 0)
+		sbSql.LeftJoin($"{OrgStructType.MsSqlTable} pr ON pr.Id=t.ParentId");
+
+		if (excludeIdList != null && excludeIdList.Count > 0)
 		{
 			sbSql.Where("t.Id NOT IN @ExcludeIdList");
 			param.Add("@ExcludeIdList", excludeIdList);
 		}
 		#endregion
 
-		sbSql.LeftJoin($"{OrgStructType.MsSqlTable} pr ON pr.Id=t.ParentId");
-
-		foreach (string order in GetSearchOrderbBy())
-		{
-			sbSql.OrderBy(order);
-		}
+		foreach (string orderByClause in GetSearchOrderbBy())
+			sbSql.OrderBy(orderByClause);
 
 		string sql;
 
@@ -163,24 +171,29 @@ public class OrgStructTypeRepos(IDbContext dbContext) : BaseRepos<OrgStructType>
 		{
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
+
 			sql = sbSql.AddTemplate(
-				$";WITH pg AS (SELECT Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
+				$";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
 				$"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
 		}
 
 		using var cn = DbContext.DbCxn;
 
-		var dataList = await cn.QueryAsync<OrgStructType, OrgStructType, OrgStructType>(
-				sql, (obj, parent) =>
-				{
-					obj.Parent = parent;
-					
-					return obj;
-				}, param, splitOn: "Id");
+		var dataList = await cn.QueryAsync<OrgStructType, OrgStructType, OrgStructType>(sql, (obj, pr) =>
+		{
+			obj.Parent = pr;
+			return obj;
+		}, param, splitOn: "Id");
 
-		string sqlCount = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
-		int dataCount = await cn.ExecuteScalarAsync<int>(sqlCount, param);
-		return new(dataCount, dataList);
+		string countSql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
+		int count = await cn.ExecuteScalarAsync<int>(countSql, param);
+
+		return new KeyValuePair<int, IEnumerable<OrgStructType>>(count, dataList);
+	}
+
+	public override List<string> GetSearchOrderbBy()
+	{
+		return ["t.OrgLevel ASC", "t.ObjectName ASC"];
 	}
 
 	public async override Task<List<OrgStructType>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null)

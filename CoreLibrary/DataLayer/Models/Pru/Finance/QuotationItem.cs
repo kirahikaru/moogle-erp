@@ -1,5 +1,4 @@
 ﻿using DataLayer.Models.Pru.IT;
-using DataLayer.Models.SysCore.NonPersistent;
 
 namespace DataLayer.Models.Pru.Finance;
 

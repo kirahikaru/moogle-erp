@@ -26,7 +26,6 @@
   <ItemGroup>
     <Folder Include="Models\FIN\NonPersistent\" />
     <Folder Include="Repos\Music\interfaces\" />
-    <Folder Include="Repos\Pru\" />
   </ItemGroup>
 
   <ItemGroup>

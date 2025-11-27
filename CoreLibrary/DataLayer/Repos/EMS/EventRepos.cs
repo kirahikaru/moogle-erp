@@ -1,11 +1,9 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.Event;
-using DataLayer.Models.Event.NonPersistent;
-using DataLayer.Models.Finance;
-using DataLayer.Models.SysCore.NonPersistent;
+using DataLayer.Models.EMS;
+using DataLayer.Models.EMS.NonPersistent;
 using static Dapper.SqlMapper;
 
-namespace DataLayer.Repos.Event;
+namespace DataLayer.Repos.EMS;
 
 public interface IEventRepos : IBaseRepos<Event>
 {

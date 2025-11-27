@@ -1,6 +1,4 @@
-﻿using DataLayer.Models.SystemCore.NonPersistent;
-
-namespace DataLayer.Models.SystemCore.ManyToManyLink;
+﻿namespace DataLayer.Models.SysCore.ManyToManyLink;
 
 [Table("[dbo].[RolePermission]")]
 public class RolePermission : AuditObject

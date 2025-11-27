@@ -1,8 +1,4 @@
-﻿using DataLayer.AuxComponents.DataAnnotations;
-using DataLayer.GlobalConstant;
-using DataLayer.Models.FIN;
-using DataLayer.Models.SysCore;
-using DataLayer.Models.SystemCore.NonPersistent;
+﻿using DataLayer.GlobalConstant;
 
 namespace DataLayer.Models.RMS;
 

@@ -120,7 +120,6 @@ public static class VendorStatuses
 	}
 }
 
-
 public static class AssetStates
 {
     public const string BRAND_NEW = "BRAND-NEW";
@@ -340,6 +339,42 @@ public static class InvoiceWFStatuses
 			new DropdownSelectItem { Key = REJECTED, Value = GetDisplayText(REJECTED) },
 			new DropdownSelectItem { Key = APPROVED, Value = GetDisplayText(APPROVED) },
 			new DropdownSelectItem { Key = COMPLETE, Value = GetDisplayText(COMPLETE) },
+			];
+	}
+}
+
+public static class PruDepartments
+{
+	public const string Actuary = "Actuary";
+	public const string Finance = "Finance";
+	public const string Marketing = "Marketing";
+	public const string TechOps = "Technology & Operation";
+	public const string OpsTech_Tech = "Technology & Operation | Technology";
+	public const string OpsTech_Ops = "Technology & Operation | Operation";
+	public const string LegalRiskCompliance = "Legal, Risk & Compliance";
+	public const string RiskCompliance = "Risk & Compliance";
+	public const string LegalGR = "Legal & Goverment Relation";
+	public const string HumanResource = "Human Resource";
+	public const string SaleDist = "Sale & Distribution";
+	public const string CEOOffice = "CEO Office";
+
+	/// <summary>
+	/// Obsolete department
+	/// It has been merged into Operation and become Technology & Operation Department on 1-Nov-2025
+	/// </summary>
+	public const string TED = "Transformation & Effeciency";
+
+	public static IEnumerable<string> GetAll()
+	{
+		return [
+			Actuary, Finance, Marketing, TechOps, OpsTech_Ops, OpsTech_Tech, LegalRiskCompliance, RiskCompliance, LegalGR, HumanResource, SaleDist, CEOOffice
+			];
+	}
+
+	public static IEnumerable<string> GetLatest()
+	{
+		return [
+			Actuary, Finance, Marketing, TechOps, OpsTech_Ops, OpsTech_Tech, LegalRiskCompliance, RiskCompliance, LegalGR, HumanResource, SaleDist, CEOOffice
 			];
 	}
 }

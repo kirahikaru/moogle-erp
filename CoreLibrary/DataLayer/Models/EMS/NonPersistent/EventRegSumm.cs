@@ -1,4 +1,4 @@
-﻿namespace DataLayer.Models.Event.NonPersistent;
+﻿namespace DataLayer.Models.EMS.NonPersistent;
 
 /// <summary>
 /// Event Registration Summary

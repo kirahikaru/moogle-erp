@@ -625,7 +625,7 @@ public class UserRepos(IDbContext dbContext) : BaseRepos<User>(dbContext, User.D
 
 				sqlCount = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 			}
-            else if (ConnectionFactory.DatabaseType == DatabaseTypes.POSTGRESQL)
+            else if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
             {
 				param.Add("@pg_size", pgSize);
 				param.Add("@pg_no", pgNo);

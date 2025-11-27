@@ -9,6 +9,8 @@ public class ObjectStateTransitionDetail
     public string? ActionCode { get; set; }
 	public string? ActionText { get; set; }
 	public string? CurrentState{ get; set; }
+    public string? ObjectClassName { get; set; }
+    public string? ObjectFieldName { get; set; }
     public string? CurrentStateText { get; set; }
     public string? TargetState { get; set; }
 	public string? TargetStateText { get; set; }

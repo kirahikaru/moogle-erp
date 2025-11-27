@@ -1,0 +1,96 @@
+﻿@using DataLayer.Repos
+@inject IUowPruIT Uow
+
+<MudDialog TitleClass="cust-mud-diag-title" ContentClass="cust-mud-diag-content" ActionsClass="cust-mud-diag-action">
+    <TitleContent>
+        State Change Confirmation
+    </TitleContent>
+    <DialogContent>
+        @if (TransitionDetail != null)
+        {
+            <MudPaper Height="100%" Width="100%" Elevation="0">
+                <MudItem>
+                    Please review and confirm below object state transition update below
+                </MudItem>
+                <MudItem>
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
+                        <MudText Typo="Typo.body1">Update Object State from </MudText>
+                        @if (!string.IsNullOrEmpty(TransitionDetail!.CurrentState))
+                        {
+                            <MudChip T="string" Size="Size.Medium">@TransitionDetail!.CurrentStateText!.ToUpper()</MudChip>
+                        }
+                        else
+                        {
+                            <MudSelect T="ObjectStateConfig" @bind-Value=_fromState Clearable="true" ReadOnly="true" Dense="true" Class="form-field-base">
+                                @foreach (ObjectStateConfig state in _validStateList)
+                                {
+                                    <MudSelectItem T="ObjectStateConfig" Value=@state>@state.ObjectName</MudSelectItem>
+                                }
+                            </MudSelect>
+                        }
+                        <MudText Typo="Typo.body1"> to </MudText>
+                        @if (!string.IsNullOrEmpty(TransitionDetail!.TargetState))
+                        {
+                            <MudChip T="string" Size="Size.Medium">@TransitionDetail!.CurrentStateText!.ToUpper()</MudChip>
+                        }
+                        else
+                        {
+                            <MudSelect T="ObjectStateConfig" @bind-Value=_toState Clearable="true" Dense="true" Class="form-field-base">
+                                @foreach (ObjectStateConfig state in _validStateList)
+                                {
+                                    @if (string.IsNullOrEmpty(state.ValidSourceObjectStates) || state.ValidSourceObjectStates!.Contains(TransitionDetail!.CurrentState ?? "???"))
+                                    {
+                                        <MudSelectItem T="ObjectStateConfig" Value=@state>@state.ObjectName</MudSelectItem>
+                                    }
+                                }
+                            </MudSelect>
+                        }
+                        <MudText Typo="Typo.body1"> to </MudText>
+                        <MudDatePicker @bind-Date=TransitionDetail!.EffectiveDate DateFormat="dd-MMM-yyyy" />
+                    </MudStack>
+                </MudItem>
+            </MudPaper>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Rounded.CheckCircle" >Confirm</MudButton>
+        <MudButton Color="Color.Dark" Size="Size.Small" StartIcon="@Icons.Material.Rounded.Cancel" OnClick="Cancel">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+    ObjectStateConfig? _fromState;
+    ObjectStateConfig? _toState;
+    IEnumerable<ObjectStateConfig> _stateList = [];
+    IEnumerable<DropdownSelectItem> _validNextStateList = [];
+
+    [Parameter]
+    public ObjectStateTransitionDetail? TransitionDetail { get; set; }
+
+    IEnumerable<ObjectStateConfig> _validStateList = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (TransitionDetail != null)
+        {
+
+            _stateList = await Uow.ObjectStateConfigs.GetAsync(TransitionDetail!.ObjectClassName!, TransitionDetail!.ObjectFieldName!);
+
+            if (TransitionDetail!.EffectiveDate is null)
+                TransitionDetail!.EffectiveDate = DateTime.Today;
+        }
+        await Task.CompletedTask;
+    }
+
+    private void Confirm()
+    {
+        MudDialog!.Close<ObjectStateTransitionDetail>(TransitionDetail!);
+    }
+
+    private void Cancel()
+    {
+        MudDialog!.Cancel();
+    }
+}

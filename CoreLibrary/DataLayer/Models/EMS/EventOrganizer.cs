@@ -1,6 +1,4 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.SysCore;
-using DataLayer.Models.SystemCore.NonPersistent;
 
 namespace DataLayer.Models.EMS;
 

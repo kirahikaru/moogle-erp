@@ -1,6 +1,6 @@
-﻿using DataLayer.Models.Event;
+﻿using DataLayer.Models.EMS;
 
-namespace DataLayer.Repos.Event;
+namespace DataLayer.Repos.EMS;
 public interface IEventOrganizerRoleRepos : IBaseRepos<EventOrganizerRole>
 {
 

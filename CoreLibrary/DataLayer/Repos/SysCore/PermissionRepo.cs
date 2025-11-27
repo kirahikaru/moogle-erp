@@ -1,4 +1,6 @@
-﻿namespace DataLayer.Repos.SysCore;
+﻿using DataLayer.Models.SysCore.ManyToManyLink;
+
+namespace DataLayer.Repos.SysCore;
 
 public interface IPermissionRepos : IBaseRepos<Permission>
 {

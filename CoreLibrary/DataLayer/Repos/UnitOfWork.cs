@@ -47,6 +47,7 @@ public interface IUnitOfWork : IDisposable
 	IMessageLogRepos MessageLogs { get; }
 	IMsngrConvoHistoryRepos MsngrConvoHistories { get; }
 	INotificationRepos Notifications { get; }
+    IObjectStateConfigRepos ObjectStateConfigs { get; }
 	IObjectStateHistoryRepos ObjectStateHistories { get; }
 	IObjectStatusAuditTrailRepos ObjectStatusAuditTrails { get; }
 	IOccupationRepos Occupations { get; }
@@ -102,7 +103,7 @@ public interface IUnitOfWork : IDisposable
 	ISysLangLocalizationRepos SysLangLocalizations { get; }
 	IUoMRepos UoMs { get; }
 	IUserRepos Users { get; }
-	IUserLocationHistoryRepos UserLocationHistories { get; }
+	IUserLocHistoryRepos UserLocHistories { get; }
 	IUserRoleRepos UserRoles { get; }
 
     /// <summary>
@@ -117,15 +118,15 @@ public interface IUnitOfWork : IDisposable
 	IProductCategoryRepos ProductCategories { get; set; }
     #endregion
 
-    IConnectionFactory Connection { get; }
+    IDbContext DbContext { get; }
 }
 
 public class UnitOfWork : IUnitOfWork
 {
     protected readonly string _appName;
-    protected readonly IConnectionFactory _connectionFactory;
+    protected readonly IDbContext _dbContext;
 
-    public IConnectionFactory Connection => _connectionFactory;
+    public IDbContext DbContext => _dbContext;
 
     /// <summary>
     /// 
@@ -134,7 +135,7 @@ public class UnitOfWork : IUnitOfWork
     /// <param name="appName"></param>
     /// <param name="datasebType">Default to MS SQL</param>
     /// <exception cref="Exception"></exception>
-    public UnitOfWork(IOptionsMonitor<DatabaseConfig> dbConfigs, string appName, string datasebType = DatabaseTypes.MSSQL)
+    public UnitOfWork(IOptionsMonitor<DatabaseConfig> dbConfigs, string appName, string dbType = DatabaseTypes.MSSQL)
     {
         #region CONNECTION INITIALIZATION
         string appNamePattern = @"^[a-zA-Z0-9-._]{1,}$";
@@ -147,92 +148,103 @@ public class UnitOfWork : IUnitOfWork
 
         _appName = appName;
 
-        List<DatabaseConfig> dbConfigList = [];
+        DbContext? dbContext = null;
 
-        DatabaseConfig mongoDbConfig = dbConfigs.Get($"{_appName}MongoDbConnection");
-
-        if (!string.IsNullOrEmpty(mongoDbConfig.DatabaseType) && !string.IsNullOrEmpty(mongoDbConfig.ServerUrl))
-            dbConfigList.Add(mongoDbConfig);
-
-        DatabaseConfig azureSqlDbConfig = dbConfigs.Get($"{_appName}SqlConnection");
-
-        if (!string.IsNullOrEmpty(azureSqlDbConfig.DatabaseType) && !string.IsNullOrEmpty(azureSqlDbConfig.ServerUrl))
-            dbConfigList.Add(azureSqlDbConfig);
-
-        DatabaseConfig ibmDb2DbConfig = dbConfigs.Get($"{_appName}IbmDb2Connection");
-
-        if (!string.IsNullOrEmpty(ibmDb2DbConfig.DatabaseType) && !string.IsNullOrEmpty(ibmDb2DbConfig.ServerUrl))
-            dbConfigList.Add(ibmDb2DbConfig);
-
-        DatabaseConfig posgreSqlDbConfig = dbConfigs.Get($"{_appName}PostgreSqlConnection");
-
-        if (!string.IsNullOrEmpty(posgreSqlDbConfig.DatabaseType) && !string.IsNullOrEmpty(posgreSqlDbConfig.ServerUrl))
-            dbConfigList.Add(posgreSqlDbConfig);
-
-        _connectionFactory = new ConnectionFactory(dbConfigList, datasebType);
+        switch (dbType)
+        {
+            case DatabaseTypes.MSSQL:
+                {
+					DatabaseConfig sqlDbConfig = dbConfigs.Get($"{_appName}SqlConnection");
+                    if (!string.IsNullOrEmpty(sqlDbConfig.DatabaseType) && !string.IsNullOrEmpty(sqlDbConfig.ServerUrl) && sqlDbConfig.DatabaseType == DatabaseTypes.MSSQL)
+                        dbContext = new DbContext(sqlDbConfig);
+				}
+                break;
+			case DatabaseTypes.AZURE_SQL:
+				{
+					DatabaseConfig sqlDbConfig = dbConfigs.Get($"{_appName}SqlConnection");
+					if (!string.IsNullOrEmpty(sqlDbConfig.DatabaseType) && !string.IsNullOrEmpty(sqlDbConfig.ServerUrl) && sqlDbConfig.DatabaseType == DatabaseTypes.AZURE_SQL)
+						dbContext = new DbContext(sqlDbConfig);
+				}
+				break;
+			case DatabaseTypes.POSTGRESQL:
+				{
+					DatabaseConfig sqlDbConfig = dbConfigs.Get($"{_appName}PostgreSqlConnection");
+					if (!string.IsNullOrEmpty(sqlDbConfig.DatabaseType) && !string.IsNullOrEmpty(sqlDbConfig.ServerUrl) && sqlDbConfig.DatabaseType == DatabaseTypes.AZURE_SQL)
+						dbContext = new DbContext(sqlDbConfig);
+				}
+                break;
+            default:
+                throw new Exception($"Database type '{dbType}' is not supported.");
+		}
         #endregion
 
-        #region CORE - Application Core
-        Accounts = new AccountRepos(_connectionFactory);
-        Addresses = new AddressRepos(_connectionFactory);
-        AttachedImages = new AttachedImageRepos(_connectionFactory);
-        BusinessEntities = new BusinessEntityRepos(_connectionFactory);
-        BusinessSectors = new BusinessSectorRepos(_connectionFactory);
-        Calendars = new CalendarRepos(_connectionFactory);
-        CambodiaAddresses = new CambodiaAddressRepos(_connectionFactory);
-        CambodiaCommunes = new CambodiaCommuneRepos(_connectionFactory);
-        CambodiaDistricts = new CambodiaDistrictRepos(_connectionFactory);
-        CambodiaProvinces = new CambodiaProvinceRepos(_connectionFactory);
-        CambodiaVillages = new CambodiaVillageRepos(_connectionFactory);
-		CambodiaCtyStructs = new CambodiaCtyStructRepos(_connectionFactory);
-        Contacts = new ContactRepos(_connectionFactory);
-        ContactPhones = new ContactPhoneRepos(_connectionFactory);
-        Countries = new CountryRepos(_connectionFactory);
-        Credentials = new CredentialRepos(_connectionFactory);
-        //Databases = new DatabaseRepos(_connectionFactory);
-        Documents = new DocumentRepos(_connectionFactory);
-        DocumentTypes = new DocumentTypeRepos(_connectionFactory);
-        DocumentTemplates = new DocumentTemplateRepos(_connectionFactory);
-        DropdownDataLists = new DropdownDataListRepos(_connectionFactory);
-        EduFieldOfStudies = new EduFieldOfStudyRepos(_connectionFactory);
-        EduQuals = new EduQualRepos(_connectionFactory);
-        Industries = new IndustryRepos(_connectionFactory);
-        Locations = new LocationRepos(_connectionFactory);
-        LocationTypes = new LocationTypeRepos(_connectionFactory);
-        LoginHistories = new LoginHistoryRepos(_connectionFactory);
-        MasterSettings = new MasterSettingRepos(_connectionFactory);
-        MessageLogs = new MessageLogRepos(_connectionFactory);
-        MsngrConvoHistories = new MsngrConvoHistoryRepos(_connectionFactory);
-        Notifications = new NotificationRepos(_connectionFactory);
-        ObjectStateHistories = new ObjectStateHistoryRepos(_connectionFactory);
-        ObjectStatusAuditTrails = new ObjectStatusAuditTrailRepos(_connectionFactory);
-        Occupations = new OccupationRepos(_connectionFactory);
-        OccupationCategories = new OccupationCategoryRepos(_connectionFactory);
-        OccupationIndustries = new OccupationIndustryRepos(_connectionFactory);
-        Orgs = new OrgRepos(_connectionFactory);
-        OrgBranches = new OrgBranchRepos(_connectionFactory);
-        OrgStructs = new OrgStructRepos(_connectionFactory);
-		OrgStructTypes = new OrgStructTypeRepos(_connectionFactory);
-		Permissions = new PermissionRepo(_connectionFactory);
-        Persons = new PersonRepos(_connectionFactory);
-        ProductCategories = new ProductCategoryRepos(_connectionFactory);
-        RolePermissions = new RolePermissionRepos(_connectionFactory);
-        Roles = new RoleRepos(_connectionFactory);
-        RunNumGenerators = new RunNumGeneratorRepos(_connectionFactory);
-        RunNumGenCounters = new RunNumGenCounterRepos(_connectionFactory);
-        SysLangLocalizations = new SysLangLocalizationRepos(_connectionFactory);
-        SysRunNums = new SysRunNumRepos(_connectionFactory);
-        SysObjDocTypes = new SysObjDocTypeRepos(_connectionFactory);
-        TelCoExtensions = new TelCoExtensionRepos(_connectionFactory);
-        TermAndConditions = new TermAndConditionRepos(_connectionFactory);
-        UoMs = new UoMRepos(_connectionFactory);
-        UserNotifs = new UserNotifRepos(_connectionFactory);
-        UserLocationHistories = new UserLocatinoHistoryRepos(_connectionFactory);
-        UserRoles = new UserRoleRepos(_connectionFactory);
-        Users = new UserRepos(_connectionFactory);
-        UserRoles = new UserRoleRepos(_connectionFactory);
-        WorkflowConfigs = new WorkflowConfigRepos(_connectionFactory);
-        WorkflowHistories = new WorkflowHistoryRepos(_connectionFactory);
+        if (dbContext is null)
+            throw new Exception($"Cannot initialize database connection for application '{_appName}' with database type '{dbType}'");
+        else
+            _dbContext = dbContext;
+
+		#region CORE - Application Core
+		Accounts = new AccountRepos(DbContext);
+        Addresses = new AddressRepos(DbContext);
+        AttachedImages = new AttachedImageRepos(DbContext);
+        BusinessEntities = new BusinessEntityRepos(DbContext);
+        BusinessSectors = new BusinessSectorRepos(DbContext);
+        Calendars = new CalendarRepos(DbContext);
+        CambodiaAddresses = new CambodiaAddressRepos(DbContext);
+        CambodiaCommunes = new CambodiaCommuneRepos(DbContext);
+        CambodiaDistricts = new CambodiaDistrictRepos(DbContext);
+        CambodiaProvinces = new CambodiaProvinceRepos(DbContext);
+        CambodiaVillages = new CambodiaVillageRepos(DbContext);
+		CambodiaCtyStructs = new CambodiaCtyStructRepos(DbContext);
+        Contacts = new ContactRepos(DbContext);
+        ContactPhones = new ContactPhoneRepos(DbContext);
+        Countries = new CountryRepos(DbContext);
+        Credentials = new CredentialRepos(DbContext);
+        //Databases = new DatabaseRepos(DbContext);
+        Documents = new DocumentRepos(DbContext);
+        DocumentTypes = new DocumentTypeRepos(DbContext);
+        DocumentTemplates = new DocumentTemplateRepos(DbContext);
+        DropdownDataLists = new DropdownDataListRepos(DbContext);
+        EduFieldOfStudies = new EduFieldOfStudyRepos(DbContext);
+        EduQuals = new EduQualRepos(DbContext);
+        Industries = new IndustryRepos(DbContext);
+        Locations = new LocationRepos(DbContext);
+        LocationTypes = new LocationTypeRepos(DbContext);
+        LoginHistories = new LoginHistoryRepos(DbContext);
+        MasterSettings = new MasterSettingRepos(DbContext);
+        MessageLogs = new MessageLogRepos(DbContext);
+        MsngrConvoHistories = new MsngrConvoHistoryRepos(DbContext);
+        Notifications = new NotificationRepos(DbContext);
+		ObjectStateConfigs = new ObjectStateConfigRepos(DbContext);
+		ObjectStateHistories = new ObjectStateHistoryRepos(DbContext);
+        ObjectStatusAuditTrails = new ObjectStatusAuditTrailRepos(DbContext);
+        Occupations = new OccupationRepos(DbContext);
+        OccupationCategories = new OccupationCategoryRepos(DbContext);
+        OccupationIndustries = new OccupationIndustryRepos(DbContext);
+        Orgs = new OrgRepos(DbContext);
+        OrgBranches = new OrgBranchRepos(DbContext);
+        OrgStructs = new OrgStructRepos(DbContext);
+		OrgStructTypes = new OrgStructTypeRepos(DbContext);
+		Permissions = new PermissionRepo(DbContext);
+        Persons = new PersonRepos(DbContext);
+        ProductCategories = new ProductCategoryRepos(DbContext);
+        RolePermissions = new RolePermissionRepos(DbContext);
+        Roles = new RoleRepos(DbContext);
+        RunNumGenerators = new RunNumGeneratorRepos(DbContext);
+        RunNumGenCounters = new RunNumGenCounterRepos(DbContext);
+        SysLangLocalizations = new SysLangLocalizationRepos(DbContext);
+        SysRunNums = new SysRunNumRepos(DbContext);
+        SysObjDocTypes = new SysObjDocTypeRepos(DbContext);
+        TelCoExtensions = new TelCoExtensionRepos(DbContext);
+        TermAndConditions = new TermAndConditionRepos(DbContext);
+        UoMs = new UoMRepos(DbContext);
+        UserNotifs = new UserNotifRepos(DbContext);
+        UserLocHistories = new UserLocHistoryRepos(DbContext);
+        UserRoles = new UserRoleRepos(DbContext);
+        Users = new UserRepos(DbContext);
+        UserRoles = new UserRoleRepos(DbContext);
+        WorkflowConfigs = new WorkflowConfigRepos(DbContext);
+        WorkflowHistories = new WorkflowHistoryRepos(DbContext);
         #endregion
     }
 
@@ -270,7 +282,8 @@ public class UnitOfWork : IUnitOfWork
     public IMessageLogRepos MessageLogs { get; }
     public IMsngrConvoHistoryRepos MsngrConvoHistories { get; }
     public INotificationRepos Notifications { get; }
-    public IObjectStateHistoryRepos ObjectStateHistories { get; }
+	public IObjectStateConfigRepos ObjectStateConfigs { get; }
+	public IObjectStateHistoryRepos ObjectStateHistories { get; }
     public IObjectStatusAuditTrailRepos ObjectStatusAuditTrails { get; }
     public IOccupationRepos Occupations { get; }
     public IOccupationCategoryRepos OccupationCategories { get; }
@@ -289,7 +302,7 @@ public class UnitOfWork : IUnitOfWork
     public ITelCoExtensionRepos TelCoExtensions { get; }
     public ITermAndConditionRepos TermAndConditions { get; }
     public IUoMRepos UoMs { get; }
-    public IUserLocationHistoryRepos UserLocationHistories { get; }
+    public IUserLocHistoryRepos UserLocHistories { get; }
     public IUserNotifRepos UserNotifs { get; }
     public IUserRepos Users { get; }
     public IUserRoleRepos UserRoles { get; }
@@ -302,7 +315,7 @@ public class UnitOfWork : IUnitOfWork
     {
         try
         {
-            using var cn = Connection.GetDbConnection()!;
+            using var cn = DbContext.DbCxn;
 
             if (cn.State == ConnectionState.Open)
             {
@@ -348,7 +361,7 @@ public class UnitOfWork : IUnitOfWork
     void IDisposable.Dispose()
     {
         // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        _connectionFactory.Dispose();
+        //_connectionFactory.Dispose();
         Dispose(true);
         // TODO: uncomment the following line if the finalizer is overridden above.
         GC.SuppressFinalize(this);

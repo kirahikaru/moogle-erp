@@ -1,7 +1,6 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
 using DataLayer.GlobalConstant;
 using DataLayer.Models.RMS;
-using DataLayer.Models.SystemCore.NonPersistent;
 
 namespace DataLayer.Models.PMS;
 

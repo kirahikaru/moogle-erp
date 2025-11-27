@@ -1,8 +1,6 @@
-﻿using Pru_GC=DataLayer.GlobalConstant.Pru;
-using DataLayer.Models.SysCore.NonPersistent;
-using DataLayer.Models.Pru.Finance;
+﻿using Pru_GC = DataLayer.GlobalConstant.Pru;
 
-namespace DataLayer.Models;
+namespace DataLayer.Models.Pru.Finance;
 
 [DisplayName("Quotation")]
 [Table("[dbo].[Quotation]")]

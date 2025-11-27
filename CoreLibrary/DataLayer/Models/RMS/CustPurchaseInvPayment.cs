@@ -1,6 +1,4 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.Finance;
-using DataLayer.Models.SystemCore.NonPersistent;
 
 namespace DataLayer.Models.RMS;
 

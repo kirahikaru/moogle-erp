@@ -1,6 +1,5 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.Event;
-using DataLayer.Models.SystemCore.NonPersistent;
+using DataLayer.Models.EMS;
 using System.Text.RegularExpressions;
 
 namespace DataLayer.Repos.EMS;
@@ -89,7 +88,7 @@ public interface IEventInvitRepos : IBaseRepos<EventInvitation>
 		string? grouping = null);
 }
 
-public class EventInvitationRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(dbContext, EventInvitation.DatabaseObject), IEventInvitationRepos
+public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(dbContext, EventInvitation.DatabaseObject), IEventInvitRepos
 {
 	public async Task<EventInvitation?> GetFullAsync(int id)
     {

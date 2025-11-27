@@ -1,6 +1,4 @@
-﻿using DataLayer.AuxComponents.Extensions;
-using DataLayer.GlobalConstant;
-using DataLayer.Models.SystemCore.NonPersistent;
+﻿using DataLayer.GlobalConstant;
 
 namespace DataLayer.Models.FIN;
 

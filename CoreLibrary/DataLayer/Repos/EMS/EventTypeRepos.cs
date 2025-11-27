@@ -1,7 +1,6 @@
-﻿using DataLayer.Models.EventManagement;
-using DataLayer.Models.SystemCore.NonPersistent;
+﻿using DataLayer.Models.EMS;
 
-namespace DataLayer.Repos.EventManagement;
+namespace DataLayer.Repos.EMS;
 
 public interface IEventTypeRepos : IBaseRepos<EventType>
 {

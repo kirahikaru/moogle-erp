@@ -1,9 +1,8 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.Event;
-using DataLayer.Models.SystemCore.NonPersistent;
+using DataLayer.Models.EMS;
 using System.Text.RegularExpressions;
 
-namespace DataLayer.Repos.Event;
+namespace DataLayer.Repos.EMS;
 
 public interface IEventRegistrationRepos : IBaseRepos<EventRegistration>
 {

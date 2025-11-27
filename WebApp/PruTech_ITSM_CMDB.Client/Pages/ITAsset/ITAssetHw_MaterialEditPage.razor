@@ -1,0 +1,677 @@
+﻿@page "/material/itasset/hardware/cruc/{CRUCMode}"
+@page "/material/itasset/hardware/cruc/{CRUCMode}/{id:int}"
+@using System.Globalization
+@using Force.DeepCloner
+
+@* @rendermode InteractiveAuto*@
+@inject IDialogService MudDiagSvc
+@inherits CRUCPageBase<ITAsset>
+
+@if (CurrentObject != null && CurrentEditContext != null)
+{
+    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" >
+        <DataAnnotationsValidator />
+        <MudPaper Class="px-4 py-3 rounded" Width="100%" Elevation="0" Square="true" Style="background-color:var(--pru-cyan-tw-50); border: solid 1px var(--pru-cyan-tw-400)">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                <div style="color:var(--pru-cyan-default); font-size:28px;">
+                    <span style="font-weight:800">@HeaderTitle</span>
+                    <span style="font-weight:400"> | Hardware</span>
+                    @if (CRUCMode == CRUDCModes.READ)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Success" Class=@($"status-chip-tiny") T="string" Style="margin-top:-5px">View</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.UPDATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">Update</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CREATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CLONE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New (Clone)</MudChip>
+                    }
+                </div>
+                <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd">
+                    @if(!IsViewMode)
+                    {
+                        <MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/save_as" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="pru-btn-base"
+                                   OnClick="@(() => Save())">Save</MudButton>
+                        <MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/save" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="pru-btn-base"
+                            OnClick="@(() => Save(true))">Save & Close</MudButton>
+                        <MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/cancel" Size="Size.Small" Color="Color.Secondary" DropShadow="false" Class="pru-btn-base"
+                            OnClick="Cancel">Cancel</MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.Close" Size="Size.Small" Color="Color.Default" OnClick="Cancel">Close</MudButton>
+                    }
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+        <MudTabs Class="mud-tab-main-pru-edit-pg mt-3">
+            <MudTabPanel Text="Main" Icon="@Icons.Material.Rounded.Home" Class="mud-tab-pru-edit-pg" Style="min-width:120px">
+                <MudPaper Class="px-4 pt-2 pb-5 overflow-y-scroll" Height="100%" Width="100%">
+                    <MudGrid Spacing="2" Justify="Justify.SpaceEvenly">
+                        <MudItem xs="8">
+                            <MudTextField @bind-Value=CurrentObject!.ObjectName Label="Asset Name" MaxLength="255" ReadOnly="@IsViewMode" Required="true" Class="form-field-base required"
+                            For="@(() => CurrentObject.ObjectName)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudTextField @bind-Value=CurrentObject!.ObjectCode Label="Asset ID" MaxLength="80" Readonly="@IsViewMode" Required="true" Class="form-field-base required"
+                            For="@(() => CurrentObject.ObjectCode)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudSelect Label="Asset Type" T="string" Value=CurrentObject!.AssetType Clearable="true" ReadOnly="true" Required="true" Dense="true" Class="form-field-base required" ValueChanged="OnAssetTypeChanged"
+                            For="@(() => CurrentObject.AssetType)" OnlyValidateIfDirty="true">
+                                @foreach (DropdownSelectItem assetType in _assetTypeList)
+                                {
+                                    <MudSelectItem Value=@assetType.Key>@assetType.Value</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="4">
+                            @if (!string.IsNullOrEmpty(CurrentObject!.AssetType))
+                            {
+                                <MudSelect Label="Category" T="string" Value=CurrentObject!.CategoryCode ValueChanged="OnCategoryChanged" Clearable="true" ReadOnly="@IsViewMode" Dense="true" Class="form-field-base"
+                                For="@(() => CurrentObject.CategoryCode)" OnlyValidateIfDirty="true">
+                                    @foreach (DropdownSelectItem ctg in _categoryList)
+                                    {
+                                        <MudSelectItem Value=@ctg.Key>@ctg.Value</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            }
+                        </MudItem>
+                        <MudItem xs="4">
+                            @if (!string.IsNullOrEmpty(CurrentObject!.CategoryCode))
+                            {
+                                <MudSelect Label="Sub-Category" @bind-Value=CurrentObject!.SubCategory Clearable="true" ReadOnly="@IsViewMode" Dense="true" Class="form-field-base"
+                                For="@(() => CurrentObject.SubCategory)" OnlyValidateIfDirty="true">
+                                    @foreach (DropdownSelectItem ctg in _subCategoryList)
+                                    {
+                                        <MudSelectItem Value=@ctg.Value>@ctg.Value</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            }
+                        </MudItem>
+                        <MudItem xs="2">
+                            @* <MudChip T="string" Size="Size.Medium" Class="@(!string.IsNullOrEmpty(@CurrentObject!.AssetState) ? _stateCssClassList[@CurrentObject.AssetState!] : "status-chip-default-dark")">
+                                @CurrentObject!.AssetStateText
+                            </MudChip>
+                            @if (!IsViewMode && CurrentObject!.Id > 0)
+                            {
+                                <MudTooltip Text="Update Asset State">
+                                    <MudIconButton Icon="@Icons.Material.Rounded.PlayCircle" Size="Size.Small" OnClick="OnAssetStateClicked" />
+                                </MudTooltip>
+                            } *@
+                            <MudSelect Label="Asset State" T="string" @bind-Value=CurrentObject!.AssetState Clearable="true" ReadOnly="@IsViewMode" Required="true" Dense="true" Class="form-field-base required"
+                            For="@(() => CurrentObject.AssetState)" OnlyValidateIfDirty="true">
+                                @foreach (DropdownSelectItem assetState in _assetStateList)
+                                {
+                                    <MudSelectItem Value=@assetState.Key>@assetState.Value</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="2">
+                            @* <MudChip T="string" Size="Size.Medium" Class="@(!string.IsNullOrEmpty(@CurrentObject!.LifeCycleStatus) ? _statusCssClassList[@CurrentObject.LifeCycleStatus!] : "status-chip-default-dark")">
+                                @CurrentObject!.LifeCycleStatusText
+                            </MudChip>
+                            @if (!IsViewMode && CurrentObject!.Id > 0)
+                            {
+                                <MudTooltip Text="Update Asset Life Cycle">
+                                    <MudIconButton Icon="@Icons.Material.Rounded.PlayCircle" Size="Size.Small" OnClick="OnLifeCycleStatusClicked" />
+                                </MudTooltip>
+                            } *@
+                            <MudSelect Label="Life Cycle Status" T="string" @bind-Value=CurrentObject!.LifeCycleStatus Clearable="true" ReadOnly="@IsViewMode" Required="true" Dense="true" Class="form-field-base required"
+                            For="@(() => CurrentObject.LifeCycleStatus)" OnlyValidateIfDirty="true">
+                                @foreach (DropdownSelectItem lifeCycleStatus in _assetLifeCycleList)
+                                {
+                                    <MudSelectItem Value=@lifeCycleStatus.Key>@lifeCycleStatus.Value</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTextField @bind-Value=CurrentObject!.ProductName Label="Product Name" MaxLength="255" ReadOnly="@IsViewMode" Required="true" Class="form-field-base required"
+                            For="@(() => CurrentObject.ProductName)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField @bind-Value=CurrentObject!.Manufacturer Label="Manufacturer/Brand" MaxLength="255" ReadOnly="@IsViewMode" Required="true" Class="form-field-base"
+                            For="@(() => CurrentObject.Manufacturer)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField @bind-Value=CurrentObject!.SerialNo Label="Serial No." MaxLength="50" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.SerialNo)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTextField @bind-Value=CurrentObject!.SpecSummary Label="Spec Summary" MaxLines="25" Lines=4 MaxLength="1000" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject!.SpecSummary)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField @bind-Value=CurrentObject!.SvcDeskTicketNo Label="Svc Desk Ticket#" MaxLength="50" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.SvcDeskTicketNo)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField @bind-Value=CurrentObject!.RequestUserID Label="Requestor Staff ID" MaxLength="50" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.RequestUserID)" OnlyValidateIfDirty="true" AdornmentIcon="@Icons.Material.Rounded.AssignmentInd" Adornment="Adornment.Start" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField @bind-Value=CurrentObject!.RequestUserName Label="Requested By" MaxLength="150" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.RequestUserName)" OnlyValidateIfDirty="true"
+                            AdornmentIcon="@Icons.Material.Rounded.Person" Adornment="Adornment.Start" />
+                        </MudItem>
+                        <MudItem xs="3">
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField @bind-Value=CurrentObject!.PRRefNo Label="PR#" MaxLength="25" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.PRRefNo)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField @bind-Value=CurrentObject!.PORefNo Label="PO#" MaxLength="25" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.PORefNo)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField @bind-Value=CurrentObject!.QuoteRefNo Label="Quote #" MaxLength="25" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.QuoteRefNo)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField @bind-Value=CurrentObject!.InvoiceRefNo Label="Invoice #" MaxLength="25" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.InvoiceRefNo)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudDatePicker Label="Purchased Date" @bind-Date=@CurrentObject.PurchaseDate DateFormat="dd-MMM-yyyy" For="@(() => CurrentObject.PurchaseDate)" Clearable="true" Editable="true" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudNumericField @bind-Value=CurrentObject!.PurchaseCost Label="Purchased Cost" Step=".1M" Format="#,##0.00" Min="0" HideSpinButtons="true" ReadOnly=@IsViewMode Culture="@CultureInfo.GetCultureInfo("en-US")"
+                            For="@(() => CurrentObject.PurchaseCost)" OnlyValidateIfDirty="true" AdornmentIcon="@Icons.Material.Rounded.AttachMoney" Adornment="Adornment.Start" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudNumericField @bind-Value=CurrentObject!.PurchaseTax Label="VAT" Step=".1M" Min="0" Format="#,##0.00" HideSpinButtons="true" ReadOnly=@IsViewMode Culture="@CultureInfo.GetCultureInfo("en-US")" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudSelect Label="Supplier/Vendor" @bind-Value=CurrentObject!.VendorID Clearable="true" ReadOnly="@IsViewMode" For="@(() => CurrentObject.VendorID)" OnlyValidateIfDirty="true">
+                                @foreach (DropdownSelectItem vendor in _vendorList)
+                                {
+                                    <MudSelectItem Value=@vendor.Key>@vendor.Value</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField @bind-Value=CurrentObject!.CurrentUserID Label="Employee ID" MaxLength="25" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.CurrentUserID)" OnlyValidateIfDirty="true" AdornmentIcon="@Icons.Material.Rounded.AssignmentInd" Adornment="Adornment.Start" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudTextField @bind-Value=CurrentObject!.CurrentUserName Label="Employee Name" MaxLength="25" ReadOnly="@IsViewMode" Class="form-field-base"
+                            AdornmentIcon="@Icons.Material.Rounded.Person" Adornment="Adornment.Start" For="@(() => CurrentObject.CurrentUserName)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudTextField @bind-Value=CurrentObject!.CurrentUserDept Label="Employee Department" MaxLength="25" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.CurrentUserDept)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTextField @bind-Value=CurrentObject!.CurrentUsagePurpose Label="Usage Purpose" MaxLength="255" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.CurrentUsagePurpose)" OnlyValidateIfDirty="true" MaxLines="25" Lines="4" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTextField @bind-Value=CurrentObject!.Remark Label="Remark" MaxLength="255" ReadOnly="@IsViewMode" Class="form-field-base"
+                            For="@(() => CurrentObject.Remark)" OnlyValidateIfDirty="true" MaxLines="25" Lines="4" />
+                        </MudItem>
+                        @if (CurrentObject.ServerInfo != null)
+                        {
+                            <MudItem xs="2">
+                                <MudSelect Label="Environment" T="string" @bind-Value=CurrentObject!.ServerInfo.Env Clearable="true" ReadOnly="@IsViewMode" Dense="true" Class="form-field-base"
+                                For="@(() => CurrentObject!.ServerInfo.Env)" OnlyValidateIfDirty="true">
+                                    @foreach (string env in _envList)
+                                    {
+                                        <MudSelectItem Value=@env >@env</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudSelect Label="Zone" T="string" @bind-Value=CurrentObject!.ServerInfo.ZoneType Clearable="true" ReadOnly="@IsViewMode" Dense="true" Class="form-field-base"
+                                For="@(() => CurrentObject!.ServerInfo.ZoneType)" OnlyValidateIfDirty="true">
+                                    @foreach (string zone in _zoneList)
+                                    {
+                                        <MudSelectItem Value=@zone>@zone</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField @bind-Value=CurrentObject!.ServerInfo.AppName Label="Application" Readonly="@IsViewMode" Class="form-field-base"
+                                For="@(() => CurrentObject.ServerInfo.AppName)" OnlyValidateIfDirty="true" />
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudTextField @bind-Value=CurrentObject!.ServerInfo.OwnerName Label="Owner" Readonly="@IsViewMode" Class="form-field-base"
+                                For="@(() => CurrentObject.ServerInfo.OwnerName)" OnlyValidateIfDirty="true" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudTextField @bind-Value=CurrentObject!.ServerInfo.OS Label="Operating System" Readonly="@IsViewMode" Class="form-field-base"
+                                For="@(() => CurrentObject.ServerInfo.OS)" OnlyValidateIfDirty="true" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField @bind-Value=CurrentObject!.ServerInfo.IPAddr Label="IP Address" Readonly="@IsViewMode" Class="form-field-base" Mask="ipv4Mask" HelperText="@ipv4Mask.Mask"
+                                For="@(() => CurrentObject.ServerInfo.IPAddr)" OnlyValidateIfDirty="true" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField @bind-Value=CurrentObject!.ServerInfo.Domain Label="Domain Name" Readonly="@IsViewMode" Class="form-field-base" 
+                                For="@(() => CurrentObject.ServerInfo.Domain)" OnlyValidateIfDirty="true" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudSwitchM3 @bind-Value=CurrentObject.ServerInfo.IsActive Color="@(CurrentObject.ServerInfo.IsActive ? Color.Success : Color.Default)" ReadOnly=@IsViewMode ThumbIcon="@Icons.Material.Filled.Done" Size="Size.Small" >Active?</MudSwitchM3>
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudSwitchM3 @bind-Value=CurrentObject.ServerInfo.SCCMClientInd Color="@(CurrentObject.ServerInfo.SCCMClientInd ? Color.Success : Color.Default)" ReadOnly=@IsViewMode ThumbIcon="@Icons.Material.Filled.Done" Size="Size.Small">SCCM Client</MudSwitchM3>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value=CurrentObject!.ServerInfo.UsagePurpose Label="Usage Purpose" MaxLength="255" ReadOnly="@IsViewMode" Class="form-field-base"
+                                For="@(() => CurrentObject.ServerInfo.UsagePurpose)" OnlyValidateIfDirty="true" MaxLines="25" Lines="4" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField @bind-Value=CurrentObject!.ServerInfo.Remark Label="Server Remark" MaxLength="255" ReadOnly="@IsViewMode" Class="form-field-base"
+                                For="@(() => CurrentObject.ServerInfo.Remark)" OnlyValidateIfDirty="true" MaxLines="25" Lines="4" />
+                            </MudItem>
+                        }
+                    </MudGrid>
+                    @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
+                    {
+                        <div class="ml-4 mt-4">
+                            <ValidationSummary />
+                            @foreach (string key in InvalidMsgList.Keys)
+                            {
+                                <MudAlert Severity="Severity.Warning">@InvalidMsgList[key]</MudAlert>
+                            }
+                        </div>
+                    }
+                </MudPaper>
+            </MudTabPanel>
+            <MudTabPanel Text="History" Icon="@Icons.Material.Rounded.History" Class="mud-tab-pru-edit-pg" Style="min-width:120px">
+                <MudPaper Class="px-4 pt-2 pb-5" Height="100%" Width="100%">
+                    <MudStack Spacing="2" Justify=Justify.FlexStart Class="mt-3">
+                        @if (!IsViewMode)
+                        {
+                            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Rounded.AddCircle" Size="Size.Small" Color="Color.Info"
+                            Disabled=@(_tempItemToAdd != null) OnClick="AddItem" Style="padding:2px 6px; max-width:160px">
+                                Add Audit Trail
+                            </MudButton>
+                        }
+                        <MudDataGrid Class="main-pg-datagrid mt-2" @ref=@_auditTrailDataGrid T="ITAssetAuditTrail" Items="CurrentObject!.AuditTrails" Dense="true" Hover="true" FixedHeader="true" Striped="true" ReadOnly=@IsViewMode
+                        StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges"
+                        EditTrigger="DataGridEditTrigger.Manual" EditDialogOptions=@(new (){ BackdropClick=false, MaxWidth=MaxWidth.Medium, FullWidth=true }) ColumnResizeMode="ResizeMode.Container" >
+                            <Columns>
+                                <PropertyColumn Property="x => x.RequestDate" Title="Request Date" Format="dd-MMM-yyyy" HeaderClass="pru-mud-datagrid-hdr main-pg" HeaderStyle=@_dataGridHdrStyle CellClass="pru-mud-datagrid-cell" Context="i" >
+                                    <EditTemplate>
+                                        <MudDatePicker Label="Request Date" @bind-Date=@i.Item.RequestDate DateFormat="dd-MMM-yyyy" Clearable="true" Editable="true" For="@(() => i.Item.RequestDate)" />
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <PropertyColumn Property="x => x.EffectiveDate" Title="Effective Date" Format="dd-MMM-yyyy" HeaderClass="pru-mud-datagrid-hdr main-pg" HeaderStyle=@_dataGridHdrStyle CellClass="pru-mud-datagrid-cell" Context="i">
+                                    <EditTemplate>
+                                        <MudStack Row="true" Spacing="2">
+                                            <MudDatePicker Label="Effective Date" @bind-Date=@i.Item.EffectiveDate DateFormat="dd-MMM-yyyy" Clearable="true" Editable="true" For="@(() => i.Item.EffectiveDate)" />
+                                            <MudDatePicker Label="Till Date" @bind-Date=@i.Item.EffTillDate DateFormat="dd-MMM-yyyy" Clearable="true" Editable="true" For="@(() => i.Item.EffTillDate)" />
+                                        </MudStack>
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <PropertyColumn Property="x => x.ActionDesc" Title="Action" HeaderClass="pru-mud-datagrid-hdr main-pg" HeaderStyle=@_dataGridHdrStyle CellClass="pru-mud-datagrid-cell" Context="i" >
+                                    <EditTemplate>
+                                        <MudTextField @bind-Value=i.Item.ActionDesc Label="Action" MaxLength="255" Readonly="@IsViewMode" Required="true" Clearable="true" Class="form-field-base required"
+                                        For="@(() => i.Item.ActionDesc)" OnlyValidateIfDirty="true" />
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <PropertyColumn Property="x => x.ActionUser" Title="Action By" HeaderClass="pru-mud-datagrid-hdr main-pg" HeaderStyle=@_dataGridHdrStyle CellClass="pru-mud-datagrid-cell" Context="i">
+                                    <EditTemplate>
+                                        <MudTextField @bind-Value=i.Item.ActionUser Label="Action By" MaxLength="255" Readonly="@IsViewMode" Required="true" Clearable="true" Class="form-field-base required"
+                                        For="@(() => i.Item.ActionUser)" OnlyValidateIfDirty="true" />
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <PropertyColumn Property="x => x.CurrentUserID" Title="User Staff ID" HeaderClass="pru-mud-datagrid-hdr main-pg" HeaderStyle=@_dataGridHdrStyle CellClass="pru-mud-datagrid-cell" Context="i">
+                                    <EditTemplate>
+                                        <MudTextField @bind-Value=i.Item.CurrentUserID Label="User Employee ID" MaxLength="255" Readonly="@IsViewMode" Clearable="true" Class="form-field-base"
+                                        For="@(() => i.Item.CurrentUserID)" OnlyValidateIfDirty="true" />
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <PropertyColumn Property="x => x.CurrentUserName" Title="User Name" HeaderClass="pru-mud-datagrid-hdr main-pg" HeaderStyle=@_dataGridHdrStyle CellClass="pru-mud-datagrid-cell" Context="i">
+                                    <EditTemplate>
+                                        <MudTextField @bind-Value=i.Item.CurrentUserName Label="User Name" MaxLength="255" Readonly="@IsViewMode" Clearable="true" Class="form-field-base"
+                                        For="@(() => i.Item.CurrentUserName)" OnlyValidateIfDirty="true" />
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <PropertyColumn Property="x => x.CurrentUserFunc" Title="Function" HeaderClass="pru-mud-datagrid-hdr main-pg" HeaderStyle=@_dataGridHdrStyle CellClass="pru-mud-datagrid-cell" Context="i">
+                                    <EditTemplate>
+                                        <MudTextField @bind-Value=i.Item.CurrentUserFunc Label="Function Name" MaxLength="255" Readonly="@IsViewMode" Clearable="true" Class="form-field-base"
+                                        For="@(() => i.Item.CurrentUserFunc)" OnlyValidateIfDirty="true" />
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <PropertyColumn Property="x => x.CurrentUserDept" Title="Department" HeaderClass="pru-mud-datagrid-hdr main-pg" HeaderStyle=@_dataGridHdrStyle CellClass="pru-mud-datagrid-cell" Context="i">
+                                    <EditTemplate>
+                                        <MudTextField @bind-Value=i.Item.CurrentUserDept Label="Department Name" MaxLength="255" Readonly="@IsViewMode" Clearable="true" Class="form-field-base"
+                                        For="@(() => i.Item.CurrentUserDept)" OnlyValidateIfDirty="true" />
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <PropertyColumn Property="x => x.Remark" Title="Remark" HeaderClass="pru-mud-datagrid-hdr main-pg" HeaderStyle=@_dataGridHdrStyle CellClass="pru-mud-datagrid-cell" Context="i">
+                                    <EditTemplate>
+                                        <MudTextField @bind-Value=i.Item.Remark Label="Remark" MaxLines="25" Lines=4 MaxLength="1000" ReadOnly="@IsViewMode" Class="form-field-base"
+                                        For="@(() => i.Item.Remark)" OnlyValidateIfDirty="true" />
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <TemplateColumn Hidden=@IsViewMode Title="Action" HeaderStyle=@_dataGridHdrStyle CellClass="pru-mud-datagrid-cell d-flex justify-end" Context="i">
+                                    <CellTemplate>
+                                        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@i.Actions.StartEditingItemAsync" />
+                                        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" Color="Color.Error" OnClick="@(() => RemoveItem(i.Item))" />
+                                    </CellTemplate>
+                                </TemplateColumn>
+                            </Columns>
+                        </MudDataGrid>
+                    </MudStack>
+                </MudPaper>
+            </MudTabPanel>
+        </MudTabs>
+    </EditForm>
+}
+
+
+@code {
+    #region UI PARAM
+    string _dataGridHdrStyle = "font-weight:700; background-color:var(--pru-gray-default); color:#FFFFFF; border-right:1px solid #FFFFFF; padding-inline-start: 10px; padding-inline-end:5px; line-height:100%; padding-top:4px; padding-bottom:4px";
+    IEnumerable<DropdownSelectItem> _assetTypeList = AssetTypes.GetForDropdownList();
+    IEnumerable<DropdownSelectItem> _assetStateList = AssetStates.GetForDropdownList();
+    IEnumerable<DropdownSelectItem> _assetLifeCycleList = AssetLifeCycleStatuses.GetForDropdownList();
+    IEnumerable<DropdownSelectItem> _categoryList = Enumerable.Empty<DropdownSelectItem>();
+    IEnumerable<DropdownSelectItem> _subCategoryList = Enumerable.Empty<DropdownSelectItem>();
+    IEnumerable<DropdownSelectItem> _vendorList = Enumerable.Empty<DropdownSelectItem>();
+    ITAssetAuditTrail? _tempItemToAdd;
+    MudDataGrid<ITAssetAuditTrail> _auditTrailDataGrid = new();
+    IEnumerable<string> _envList = ["DEV", "UAT", "PRD", "SIT"];
+    IEnumerable<string> _zoneList = ["Azure", "On-Prem"];
+
+    PatternMask ipMask = new PatternMask("###.###.###.###")
+        {
+            MaskChars = new[] { new MaskChar('#', @"[0-9]") }
+        };
+
+    IMask ipv4Mask = RegexMask.IPv4();
+
+    Dictionary<string, string> _statusCssClassList = new()
+        {
+            { "", "" },
+            { AssetLifeCycleStatuses.IN_STOCK, "status-chip-success-light" },
+            { AssetLifeCycleStatuses.IN_USE, "status-chip-success-light" },
+            { AssetLifeCycleStatuses.WRITTEN_OFF, "status-chip-obsolete-light" },
+            { AssetLifeCycleStatuses.PENDING_WRITE_OFF, "status-chip-pending-light" },
+            { AssetLifeCycleStatuses.PENDING_TERMINATION, "status-chip-pending-light" },
+        };
+
+    Dictionary<string, string> _stateCssClassList = new()
+    {
+        { "", "" },
+        { AssetStates.BRAND_NEW, "status-chip-success-light" },
+        { AssetStates.USED_GOOD, "status-chip-success-light" },
+        { AssetStates.USED_POOR, "status-chip-obsolete-light" },
+        { AssetStates.USED_ESR, "status-chip-pending-light" },
+        { AssetStates.EOL, "status-chip-obsolete-light" },
+        { AssetStates.BROKEN_UNREPAIRABLE, "status-chip-pending-light" },
+        { AssetStates.NA, "status-chip-pending-light" }
+    };
+    #endregion
+
+    #region PAGE LIFECYCLE FUNCTIONS
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        UrlPrefix = "/itasset/hardware";
+
+        return base.SetParametersAsync(parameters);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        switch(CRUCMode)
+        {
+            case CRUCModes.READ:
+                {
+                    CurrentObject = await Uow.ITAssets.GetFullAsync(Id);
+                    IsViewMode = true;
+                }
+                break;
+            case CRUCModes.CREATE:
+                {
+                    CurrentObject = new();
+                    CurrentObject!.AssetType = AssetTypes.Hardware;
+                }
+                break;
+            case CRUCModes.UPDATE:
+                CurrentObject = await Uow.ITAssets.GetFullAsync(Id);
+                break;
+            case CRUCModes.CLONE:
+                {
+                    var tempObj = await Uow.ITAssets.GetAsync(Id);
+                    CurrentObject = tempObj.DeepClone();
+                    CurrentObject!.Id = 0;
+                    CurrentObject!.ObjectCode = String.Empty;
+                    CurrentObject!.AssetType = AssetTypes.Hardware;
+                } break;
+        }
+
+        CurrentEditContext = new EditContext(CurrentObject!);
+
+        HeaderTitle = ObjectDisplayName;
+
+        _vendorList = await Uow.Vendors.GetForDropdownSelectAsync();
+        _categoryList = await Uow.ITAssetCategories.GetForDropdownAsync(CurrentObject!.AssetType!);
+
+        if (!string.IsNullOrEmpty(CurrentObject!.AssetType))
+        {
+            _categoryList = await Uow.ITAssetCategories.GetForDropdownAsync(CurrentObject!.AssetType);
+
+            if (!string.IsNullOrEmpty(CurrentObject!.CategoryCode))
+            {
+                _subCategoryList = await Uow.ITAssetCategories.GetForDropdownAsync(CurrentObject!.AssetType, CurrentObject!.CategoryCode);
+            }
+        }
+    }
+    #endregion
+
+    #region UI FUNCTIONS
+    private async Task OnAssetTypeChanged(string assetType)
+    {
+        CurrentObject!.AssetType = assetType;
+
+        if (!string.IsNullOrEmpty(assetType))
+        {
+            CurrentObject!.CategoryCode = null;
+            CurrentObject!.CategoryName = null;
+            CurrentObject!.SubCategory = null;
+            _categoryList = await Uow.ITAssetCategories.GetForDropdownAsync(assetType, string.Empty);
+        }
+        else
+        {
+            CurrentObject!.CategoryCode = null;
+            CurrentObject!.CategoryName = null;
+            CurrentObject!.SubCategory = null;
+            _categoryList = Enumerable.Empty<DropdownSelectItem>();
+        }
+    }
+
+    private async Task OnCategoryChanged(string categoryCode)
+    {
+        if (!string.IsNullOrEmpty(categoryCode))
+        {
+            CurrentObject!.CategoryCode = categoryCode;
+            CurrentObject!.CategoryName = _categoryList.FirstOrDefault(x => x.Key == categoryCode)?.Value;
+            CurrentObject!.SubCategory = null;
+            _subCategoryList = await Uow.ITAssetCategories.GetForDropdownAsync(CurrentObject.AssetType!, categoryCode);
+
+            if (categoryCode == "SERVER")
+            {
+                if (CurrentObject!.ServerInfo == null)
+                    CurrentObject!.ServerInfo = new();
+
+                CurrentObject!.ServerInfo.IsDeleted = false;
+            }
+            else if (CurrentObject!.ServerInfo != null)
+            {
+                if (CurrentObject!.ServerInfo.Id == 0)
+                    CurrentObject!.ServerInfo = null;
+                else
+                    CurrentObject!.ServerInfo.IsDeleted = true;
+            }
+        }
+        else
+        {
+            CurrentObject!.CategoryCode = null;
+            CurrentObject!.CategoryName = null;
+            CurrentObject!.SubCategory = null;
+
+            if (CurrentObject!.ServerInfo != null && CurrentObject!.ServerInfo.Id == 0)
+            {
+                CurrentObject!.ServerInfo = null;
+            }
+
+            _categoryList = Enumerable.Empty<DropdownSelectItem>();
+        }
+    }
+
+    private async Task OnAssetStateClicked()
+    {
+        ObjectStateTransitionDetail objStd = new();
+        objStd.CurrentState = CurrentObject!.AssetState;
+        objStd.CurrentStateText = CurrentObject!.AssetStateText;
+        objStd.ObjectClassName = CurrentObject.GetType().Name;
+        objStd.ObjectFieldName = nameof(CurrentObject.AssetState);
+        var diagParam = new DialogParameters<ObjectStateTransitDiag>();
+        diagParam.Add(x => x.TransitionDetail, objStd);
+        var diag = await MudDiagSvc.ShowAsync<ObjectStateTransitDiag>();
+        var result = await diag.Result;
+
+        if (!result!.Canceled)
+        {
+
+        }
+    }
+
+    private async Task OnLifeCycleStatusClicked()
+    {
+        ObjectStateTransitionDetail objStd = new();
+        objStd.CurrentState = CurrentObject!.LifeCycleStatus;
+        objStd.CurrentStateText = CurrentObject!.LifeCycleStatusText;
+        objStd.ObjectClassName = CurrentObject.GetType().Name;
+        objStd.ObjectFieldName = nameof(CurrentObject.LifeCycleStatus);
+
+        var diagParam = new DialogParameters<ObjectStateTransitDiag>();
+        diagParam.Add(x => x.TransitionDetail, objStd);
+
+        var diag = await MudDiagSvc.ShowAsync<ObjectStateTransitDiag>("Update Life Cycle Status", diagParam);
+        var result = await diag.Result;
+
+        if (!result!.Canceled)
+        {
+
+        }
+    }
+
+    void AddItem()
+    {
+        _tempItemToAdd = new ITAssetAuditTrail();
+        CurrentObject!.AuditTrails.Add(_tempItemToAdd);
+        _auditTrailDataGrid.SetEditingItemAsync(_tempItemToAdd);
+    }
+
+    void RemoveItem(ITAssetAuditTrail i)
+    {
+        DateTime dateToRemove = i.RequestDate!.Value;
+        string actionToRemove = i.ActionDesc!;
+
+        if (i.Id > 0)
+        {
+            //#TODO# NOT YET IMPLEMENTED
+        }
+        else
+        {
+            CurrentObject!.AuditTrails.Remove(i);
+        }
+    }
+
+    void StartedEditingItem(ITAssetAuditTrail item)
+    {
+
+    }
+
+    void CanceledEditingItem(ITAssetAuditTrail item)
+    {
+        if (_tempItemToAdd != null)
+        {
+            // CurrentObject!.AuditTrails.RemoveAt(CurrentObject!.AuditTrails.FindIndex(x => x.OrderNo == item.OrderNo));
+            _tempItemToAdd = null;
+        }
+    }
+
+    void CommittedItemChanges(ITAssetAuditTrail item)
+    {
+        _tempItemToAdd = null;
+    }
+    #endregion
+
+    #region UPDATE FUNCTIONS
+    protected override async Task PreSaveProcessing()
+    {
+        CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
+        await Task.CompletedTask;
+    }
+
+    protected override async Task ValidatePreSave()
+    {
+        InvalidMsgList.Clear();
+
+        bool isDuplicated = await Uow.ITAssets.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+
+        if (isDuplicated)
+        {
+            InvalidMsgList.Add("ObjectCode_Duplicate", $"Asset with ID='{CurrentObject.ObjectCode}' is already existed.");
+        }
+    }
+
+    protected override async Task<bool> SaveAndCommitProcessing()
+    {
+        DateTime timestamp = DateTime.Now;
+
+        // if (CurrentObject!.Id == 0)   //create
+        // {
+        //     CurrentObject!.CreatedUser = AuditTrailUser;
+        //     CurrentObject!.ModifiedUser = AuditTrailUser;
+        //     CurrentObject!.CreatedDateTime = timestamp;
+        //     CurrentObject!.ModifiedDateTime = timestamp;
+
+        //     int objId = await Uow.ITAssets.InsertAsync(CurrentObject!);
+
+        //     if (objId > 0)
+        //     {
+        //         CurrentObject!.Id = objId;
+        //         return true;
+        //     }
+        //     else
+        //         return false;
+        // }
+        // else    // update
+        // {
+        //     CurrentObject!.ModifiedUser = AuditTrailUser;
+        //     CurrentObject!.ModifiedDateTime = DateTime.Now;
+
+        //     bool isupdated = await Uow.ITAssets.UpdateAsync(CurrentObject!);
+        //     return isupdated;
+        // }
+
+        if (CurrentObject!.Id == 0)
+        {
+            CurrentObject!.CreatedUser = AuditTrailUser;
+            CurrentObject!.CreatedDateTime = timestamp;
+        }
+
+        CurrentObject!.ModifiedUser = AuditTrailUser;
+        CurrentObject!.ModifiedDateTime = timestamp;
+
+        int objId = await Uow.ITAssets.InsertOrUpdateFullAsync(CurrentObject!);
+        return objId > 0;
+    }
+    #endregion
+
+    #region INTERNAL FUNCTION
+    #endregion
+}

@@ -1,5 +1,4 @@
-﻿using DataLayer.Models.RMS;
-using DataLayer.Repos.EventManagement;
+﻿using DataLayer.Repos.EMS;
 using DataLayer.Repos.FIN;
 using DataLayer.Repos.HMS;
 using DataLayer.Repos.HomeInventory;
@@ -9,7 +8,6 @@ using DataLayer.Repos.Hobby;
 using DataLayer.Repos.SysCore;
 using DataLayer.Repos.LIB;
 using DataLayer.Repos.RMS;
-using DataLayer.Repos.Event;
 
 namespace DataLayer.Repos;
 
@@ -17,7 +15,7 @@ public interface IUowErmApp : IUnitOfWork
 {
 	#region EMS - Event Management System
 	IEventRepos Events { get; }
-	IEventInvitationRepos EventInvitations { get; }
+	IEventInvitRepos EventInvitations { get; }
 	IEventOrganizerRepos EventOrganizers { get; }
 	IEventOrganizerRoleRepos EventOrganizerRoles { get; }
 
@@ -114,95 +112,95 @@ public class UowErmApp : UnitOfWork, IUowErmApp
     public UowErmApp(IOptionsMonitor<DatabaseConfig> dbConfigs) : base(dbConfigs, "ERMApp")
     {
         #region EMS - Event Management System
-        Events = new EventRepos(_connectionFactory);
-        EventOrganizers = new EventOrganizerRepos(_connectionFactory);
-        EventOrganizerRoles = new EventOrganizerRoleRepos(_connectionFactory);
-        EventInvitations = new EventInvitationRepos(_connectionFactory);
-        EventResgistrations = new EventRegistrationRepos(_connectionFactory);
-        EventTypes = new EventTypeRepos(_connectionFactory);
+        Events = new EventRepos(DbContext);
+        EventOrganizers = new EventOrganizerRepos(DbContext);
+        EventOrganizerRoles = new EventOrganizerRoleRepos(DbContext);
+        EventInvitations = new EventInvitRepos(DbContext);
+        EventResgistrations = new EventRegistrationRepos(DbContext);
+        EventTypes = new EventTypeRepos(DbContext);
         #endregion
 
         #region FIN - Finance
-        Banks = new BankRepos(_connectionFactory);
-        Currencies = new CurrencyRepos(_connectionFactory);
-        Customers = new CustomerRepos(_connectionFactory);
-        ExchangeRates = new ExchangeRateRepos(_connectionFactory);
-        Invoices = new InvoiceRepos(_connectionFactory);
-        InvoiceItems = new InvoiceItemRepos(_connectionFactory);
-        Taxes = new TaxRepos(_connectionFactory);
-        TaxRates = new TaxRateRepos(_connectionFactory);
+        Banks = new BankRepos(DbContext);
+        Currencies = new CurrencyRepos(DbContext);
+        Customers = new CustomerRepos(DbContext);
+        ExchangeRates = new ExchangeRateRepos(DbContext);
+        Invoices = new InvoiceRepos(DbContext);
+        InvoiceItems = new InvoiceItemRepos(DbContext);
+        Taxes = new TaxRepos(DbContext);
+        TaxRates = new TaxRateRepos(DbContext);
         #endregion
 
         #region HOME - Home Inventory
-        Boardgames = new BoardgameRepos(_connectionFactory);
-        BoardgameContentItems = new BoardgameContentItemRepos(_connectionFactory);
-        Merchants = new MerchantRepos(_connectionFactory);
-        OwnedItems = new OwnedItemRepos(_connectionFactory);
-        OwnedItemCategories = new OwnedItemCategoryRepos(_connectionFactory);
-        OwnedItemAttachments = new OwnedItemAttachmentRepos(_connectionFactory);
+        Boardgames = new BoardgameRepos(DbContext);
+        BoardgameContentItems = new BoardgameContentItemRepos(DbContext);
+        Merchants = new MerchantRepos(DbContext);
+        OwnedItems = new OwnedItemRepos(DbContext);
+        OwnedItemCategories = new OwnedItemCategoryRepos(DbContext);
+        OwnedItemAttachments = new OwnedItemAttachmentRepos(DbContext);
         #endregion
 
         #region HMS - Healthcare Management System
-        Doctors = new DoctorRepos(_connectionFactory);
-        HealthcareFacilities = new HealthcareFacilityRepos(_connectionFactory);
-        Illnesses = new IllnessRepos(_connectionFactory);
-        MedicalExams = new MedicalExamRepos(_connectionFactory);
-        MedicalAppointments = new MedicalAppointmentRepos(_connectionFactory);
-        MedicalPrescriptions = new MedicalPrescriptionRepos(_connectionFactory);
-        MedicalPrescriptionItems = new MedicalPrescriptionItemRepos(_connectionFactory);
-        MedicalTests = new MedicalTestRepos(_connectionFactory);
-        MedicalTestTypes = new MedicalTestTypeRepos(_connectionFactory);
-        Patients = new PatientRepos(_connectionFactory);
+        Doctors = new DoctorRepos(DbContext);
+        HealthcareFacilities = new HealthcareFacilityRepos(DbContext);
+        Illnesses = new IllnessRepos(DbContext);
+        MedicalExams = new MedicalExamRepos(DbContext);
+        MedicalAppointments = new MedicalAppointmentRepos(DbContext);
+        MedicalPrescriptions = new MedicalPrescriptionRepos(DbContext);
+        MedicalPrescriptionItems = new MedicalPrescriptionItemRepos(DbContext);
+        MedicalTests = new MedicalTestRepos(DbContext);
+        MedicalTestTypes = new MedicalTestTypeRepos(DbContext);
+        Patients = new PatientRepos(DbContext);
         #endregion
 
         #region HRM - Human Resource Management 
-        Employees = new EmployeeRepos(_connectionFactory);
+        Employees = new EmployeeRepos(DbContext);
 
         #endregion
 
         #region LIB - Library
-        BookCategories = new BookCategoryRepos(_connectionFactory);
-        BookGenres = new BookGenreRepos(_connectionFactory);
-        BookPurchaseHistories = new BookPurchaseHistoryRepos(_connectionFactory);
-        Books = new BookRepos(_connectionFactory);
-        UserBooks = new UserBookRepos(_connectionFactory);
+        BookCategories = new BookCategoryRepos(DbContext);
+        BookGenres = new BookGenreRepos(DbContext);
+        BookPurchaseHistories = new BookPurchaseHistoryRepos(DbContext);
+        Books = new BookRepos(DbContext);
+        UserBooks = new UserBookRepos(DbContext);
         #endregion
 
         #region PMS - Pharmacy Management System
-        Medicines = new MedicineRepos(_connectionFactory);
-        MedicalEquipments = new MedicalEquipmentRepos(_connectionFactory);
-        MedicineCompositions = new MedicineCompositionRepos(_connectionFactory);
-        MedicalCompositions = new MedicalCompositionRepos(_connectionFactory);
+        Medicines = new MedicineRepos(DbContext);
+        MedicalEquipments = new MedicalEquipmentRepos(DbContext);
+        MedicineCompositions = new MedicineCompositionRepos(DbContext);
+        MedicalCompositions = new MedicalCompositionRepos(DbContext);
         #endregion
 
         #region RMS - Retail Management System
-        Brands = new BrandRepos(_connectionFactory);
-        CustomerPurchaseInvoices = new CustPurchaseInvoiceRepos(_connectionFactory);
-        CustPurchaseInvItems = new CustPurchaseInvItemRepos(_connectionFactory);
-        CustomerPurchaseOrders = new CustPurchaseOrderRepos(_connectionFactory);
-        CustomerPurchaseOrderItems = new CustPurchaseOrderItemRepos(_connectionFactory);
-        CustomerPurchaseInvoicePayments = new CustPurchaseInvPaymentRepos(_connectionFactory);
-        DeliveryOptions = new DeliveryOptionRepos(_connectionFactory);
-        Gs1CompanyPrefixes = new Gs1CompanyPrefixRepos(_connectionFactory);
-        InventoryCheckIns = new InventoryCheckInRepos(_connectionFactory);
-        InventoryCheckInItems = new InventoryCheckInItemRepos(_connectionFactory);
-        InventoryCheckOuts = new InventoryCheckOutRepos(_connectionFactory);
-        InventoryCheckOutItems = new InventoryCheckOutItemRepos(_connectionFactory);
-        Items = new ItemRepos(_connectionFactory);
-        ItemCategories = new ItemCategoryRepos(_connectionFactory);
-        ItemPriceHistories = new ItemPriceHistoryRepos(_connectionFactory);
-        ItemVariations = new ItemVariationRepos(_connectionFactory);
-        ItemStockBalances = new ItemStockBalanceRepos(_connectionFactory);
-        ItemSuppliers = new ItemSupplierRepos(_connectionFactory);
-        Manufacturers = new ManufacturerRepos(_connectionFactory);
-        Orders = new OrderRepos(_connectionFactory);
-        OrderItems = new OrderItemRepos(_connectionFactory);
-        Receipts = new ReceiptRepos(_connectionFactory);
-        ReceiptItems = new ReceiptItemRepos(_connectionFactory);
-        RetailOtherCharges = new RetailOtherChargeRepos(_connectionFactory);
-        RetailTaxItems = new RetailTaxItemRepos(_connectionFactory);
-        Suppliers = new SupplierRepos(_connectionFactory);
-        SupplierBranches = new SupplierBranchRepos(_connectionFactory);
+        Brands = new BrandRepos(DbContext);
+        CustomerPurchaseInvoices = new CustPurchaseInvoiceRepos(DbContext);
+        CustPurchaseInvItems = new CustPurchaseInvItemRepos(DbContext);
+        CustomerPurchaseOrders = new CustPurchaseOrderRepos(DbContext);
+        CustomerPurchaseOrderItems = new CustPurchaseOrderItemRepos(DbContext);
+        CustomerPurchaseInvoicePayments = new CustPurchaseInvPaymentRepos(DbContext);
+        DeliveryOptions = new DeliveryOptionRepos(DbContext);
+        Gs1CompanyPrefixes = new Gs1CompanyPrefixRepos(DbContext);
+        InventoryCheckIns = new InventoryCheckInRepos(DbContext);
+        InventoryCheckInItems = new InventoryCheckInItemRepos(DbContext);
+        InventoryCheckOuts = new InventoryCheckOutRepos(DbContext);
+        InventoryCheckOutItems = new InventoryCheckOutItemRepos(DbContext);
+        Items = new ItemRepos(DbContext);
+        ItemCategories = new ItemCategoryRepos(DbContext);
+        ItemPriceHistories = new ItemPriceHistoryRepos(DbContext);
+        ItemVariations = new ItemVariationRepos(DbContext);
+        ItemStockBalances = new ItemStockBalanceRepos(DbContext);
+        ItemSuppliers = new ItemSupplierRepos(DbContext);
+        Manufacturers = new ManufacturerRepos(DbContext);
+        Orders = new OrderRepos(DbContext);
+        OrderItems = new OrderItemRepos(DbContext);
+        Receipts = new ReceiptRepos(DbContext);
+        ReceiptItems = new ReceiptItemRepos(DbContext);
+        RetailOtherCharges = new RetailOtherChargeRepos(DbContext);
+        RetailTaxItems = new RetailTaxItemRepos(DbContext);
+        Suppliers = new SupplierRepos(DbContext);
+        SupplierBranches = new SupplierBranchRepos(DbContext);
         #endregion
     }
 
@@ -210,7 +208,7 @@ public class UowErmApp : UnitOfWork, IUowErmApp
     public IEventRepos Events { get; }
     public IEventOrganizerRepos EventOrganizers { get; }
     public IEventOrganizerRoleRepos EventOrganizerRoles { get; }
-    public IEventInvitationRepos EventInvitations { get; }
+    public IEventInvitRepos EventInvitations { get; }
     public IEventRegistrationRepos EventResgistrations { get; }
     public IEventTypeRepos EventTypes { get; }
     #endregion

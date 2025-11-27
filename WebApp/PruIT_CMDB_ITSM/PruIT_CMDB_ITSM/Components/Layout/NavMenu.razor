@@ -1,0 +1,99 @@
+﻿
+<MudNavMenu>
+    <MudNavLink Href="" Class="pru-mud-nav-item-l1" Match="NavLinkMatch.All" Icon="material-symbols-rounded/home" IconColor="Color.Primary">
+        Home
+    </MudNavLink>
+    <MudNavGroup Title="Finance" Expanded="true" Icon="material-symbols-rounded/account_balance" IconColor="Color.Primary" Class="pru-mud-nav-grp-l1">
+        <MudNavLink Href="/fin/budget-item/main" Icon="material-symbols-rounded/account_balance_wallet" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
+            Budget Item
+        </MudNavLink>
+        <MudNavLink Href="/fin/expense-item/main" Icon="material-symbols-rounded/payment_arrow_down" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
+            Expense Item
+        </MudNavLink>
+        <MudNavLink Href="/fin/quotation/main" Icon="material-symbols-rounded/request_quote" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
+            Quotation
+        </MudNavLink>
+        <MudNavLink Href="/fin/po/main" Icon="material-symbols-rounded/order_approve" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
+            Purchase Order
+        </MudNavLink>
+        <MudNavLink Href="/fin/invoice/main" Icon="material-symbols-rounded/receipt_long" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
+            Invoice
+        </MudNavLink>
+    </MudNavGroup>
+    <MudNavGroup Title="IT Assets" Expanded="true" Icon="material-symbols-rounded/warehouse" IconColor=@Color.Primary Class="pru-mud-nav-grp-l1">
+        <MudNavLink Href="/itasset/hardware/main" Icon="material-symbols-rounded/home_storage" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
+            IT Asset (Hardware)
+        </MudNavLink>
+        <MudNavLink Href="/itasset/software/main" Icon="material-symbols-rounded/card_membership" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
+            IT Asset (Software)
+        </MudNavLink>
+        <MudNavLink Href="/itasset/cloud/main" Icon="material-symbols-rounded/desktop_cloud" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">IT Asset (Cloud)</MudNavLink>
+        <MudNavLink Href="/itasset/prulico365/main" Icon="material-symbols-rounded/browse" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
+            Pru O365 License
+        </MudNavLink>
+    </MudNavGroup>
+    <MudNavGroup Title="Cloud CMDB" Expanded="true" Icon="material-symbols-rounded/cloud" IconColor=@Color.Primary Class="pru-mud-nav-grp-l1">
+        <MudNavLink Href="/it/pru-core-project/main" Icon="material-symbols-rounded/home_storage" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
+            PruCORE Projects
+        </MudNavLink>
+        <MudNavLink Href="/it/infra-stack/main" Icon="material-symbols-rounded/deployed_code" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
+            Infra Stack (appref)
+        </MudNavLink>
+        <MudNavLink Href="/it/cmdb-app-map/main" Icon="material-symbols-rounded/home_storage" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
+            CMDB to App
+        </MudNavLink>
+    </MudNavGroup>
+    <MudNavLink Href="/vendor/main" Class="pru-mud-nav-item-l1" Icon="material-symbols-rounded/store" Match="NavLinkMatch.Prefix" IconColor="Color.Primary">
+        Vendor
+    </MudNavLink>
+    <MudNavLink Href="/hr/employee/main" Class="pru-mud-nav-item-l1" Icon="material-symbols-rounded/people" Match="NavLinkMatch.Prefix" IconColor="Color.Primary">
+        Employee
+    </MudNavLink>
+    <MudNavLink Href="/server/main" Class="pru-mud-nav-item-l1" Icon="material-symbols-rounded/storage" Match="NavLinkMatch.Prefix" Disabled="true">
+        Servers
+    </MudNavLink>
+    <MudNavGroup Icon="material-symbols-rounded/settings" Title="Settings" Expanded="false" Disabled="true" Class="pru-mud-nav-grp-l1">
+        <MudNavLink Href="/users" Match="NavLinkMatch.Prefix">Users</MudNavLink>
+        <MudNavLink Href="/security" Match="NavLinkMatch.Prefix">Security</MudNavLink>
+    </MudNavGroup>
+    <MudNavGroup Title="Core Setup" Expanded="true" Icon="material-symbols-rounded/warehouse" IconColor=@Color.Primary Class="pru-mud-nav-grp-l1">
+        <MudNavLink Href="/core/org-struct-type/main" Class="pru-mud-nav-item-l1" Icon="material-symbols-rounded/people" Match="NavLinkMatch.Prefix" IconColor="Color.Primary">
+            Organization Structure Type
+        </MudNavLink>
+        <MudNavLink Href="/core/org-struct/main" Class="pru-mud-nav-item-l1" Icon="material-symbols-rounded/people" Match="NavLinkMatch.Prefix" IconColor="Color.Primary">
+            Organization Structure
+        </MudNavLink>
+    </MudNavGroup>
+    <MudNavLink Href="/about" Match="NavLinkMatch.Prefix" Disabled="true">About</MudNavLink>
+</MudNavMenu>
+
+@* <div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">PruIT_CMDB_ITSM</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="nav flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="counter">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="weather">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+            </NavLink>
+        </div>
+    </nav>
+</div> *@
+

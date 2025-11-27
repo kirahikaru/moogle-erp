@@ -1,0 +1,334 @@
+﻿@page "/it/infra-stack/cruc/{CRUCMode}"
+@page "/it/infra-stack/cruc/{CRUCMode}/{id:int}"
+
+@* @rendermode InteractiveAuto*@
+@inject IDialogService MudDiagSvc
+@inherits CRUCPageBase<PruCoreInfraStack>
+
+@if (CurrentObject != null && CurrentEditContext != null)
+{
+    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy">
+        <DataAnnotationsValidator />
+        <MudPaper Class="px-4 py-3 rounded" Width="100%" Elevation="0" Square="true" Style="background-color:var(--pru-cyan-tw-50); border: solid 1px var(--pru-cyan-tw-400)">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                <div style="color:var(--pru-cyan-default); font-size:28px;">
+                    <span style="font-weight:800">@HeaderTitle</span>
+                    @if (CRUCMode == CRUDCModes.READ)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Success" Class=@($"status-chip-tiny") T="string" Style="margin-top:-5px">View</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.UPDATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">Update</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CREATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CLONE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New (Clone)</MudChip>
+                    }
+                </div>
+                <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd">
+                    @if (!IsViewMode)
+                    {
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Primary" StartIcon="material-symbols-rounded/save_as" Class="pru-btn-base"
+                                   OnClick="@(() => Save())">Save</MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Primary" StartIcon="material-symbols-rounded/save" Class="pru-btn-base"
+                                   OnClick="@(() => Save(true))">Save & Close</MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Secondary" StartIcon="material-symbols-rounded/cancel" Class="pru-btn-base"
+                                   OnClick="Cancel">Cancel</MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Default" StartIcon="material-symbols-rounded/close" OnClick="Cancel">Close</MudButton>
+                    }
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+        <MudTabs Class="pru-mud-tab cruc-pg mt-3" Elevation="0">
+            <MudTabPanel Text="Main" Icon="material-symbols-rounded/home" Class="pru-mud-tab-panel" Style="min-width:120px">
+                <MudPaper Class="px-4 pt-2 pb-5 overflow-y-auto" Height="calc(100vh - 210px)" Width="100%" Elevation="0" Style="position:relative">
+                    <MudGrid Spacing="2" Justify="Justify.SpaceEvenly">
+                        <MudItem xs="2">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
+                                          Label="Stack (appref)" Placeholder="appref" MaxLength="6"
+                                          @bind-Value=CurrentObject!.ObjectCode For="@(() => CurrentObject.ObjectCode)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="8">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
+                                          Label="Name" MaxLength="255"
+                                          @bind-Value=CurrentObject!.ObjectName For="@(() => CurrentObject.ObjectName)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="false"
+                                          Label="Project" Placeholder="PRJ" MaxLength="3"
+                                          @bind-Value=CurrentObject!.ProjectCode For="@(() => CurrentObject.ProjectCode)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
+                                          Label="App ID" Placeholder="App ID"
+                                          @bind-Value=CurrentObject!.AppID For="@(() => CurrentObject.AppID)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
+                                          Label="App Name" Placeholder="App Name"
+                                          @bind-Value=CurrentObject!.AppName For="@(() => CurrentObject.AppName)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
+                                          Label="Actual Desc" Placeholder="Actual Name" 
+                                          @bind-Value=CurrentObject!.ActualDesc For="@(() => CurrentObject.ActualDesc)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered"
+                                          Label="Azure LBU" MaxLength="10"
+                                          @bind-Value=CurrentObject!.AzureLBU For="@(() => CurrentObject.AzureLBU)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered"
+                                          Label="LBU" MaxLength="10"
+                                          @bind-Value=CurrentObject!.LBU For="@(() => CurrentObject.LBU)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" FullWidth="true"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchEnv"
+                                             AdornmentIcon="@Icons.Material.Rounded.KeyboardArrowDown"
+                                             Label="Environment" T="string"
+                                             @bind-Value=CurrentObject!.Env For="@(() => CurrentObject!.Env)" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" FullWidth="true"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchStage"
+                                             AdornmentIcon="@Icons.Material.Rounded.KeyboardArrowDown"
+                                             Label="Stage" T="string"
+                                             @bind-Value=CurrentObject!.Stage For="@(() => CurrentObject!.Stage)" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" FullWidth="true" Required="true"
+                                       AdornmentIcon="@Icons.Material.Rounded.KeyboardArrowDown"
+                                       Label="Status"
+                                       @bind-Value=CurrentObject!.Status For="@(() => CurrentObject.Status)" OnlyValidateIfDirty="true">
+                                @foreach (string status in _statusList)
+                                {
+                                    <MudSelectItem Value=@status>@status</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Lines=4
+                                          Label="Remark"
+                                          @bind-Value=CurrentObject!.Remark For="@(() => CurrentObject!.Remark)" OnlyValidateIfDirty="true"
+                                          MaxLines="25" MaxLength="1000" />
+                        </MudItem>
+                        
+                        @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
+                        {
+                            <MudItem xs="12" Class="pt-10">
+                                @foreach (string msg in CurrentEditContext.GetValidationMessages())
+                                {
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@msg</MudAlert>
+                                }
+                                @foreach (string key in InvalidMsgList.Keys)
+                                {
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                }
+                            </MudItem>
+                        }
+                    </MudGrid>
+                    @if (Id > 0)
+                    {
+                        <MudStack Row="true" Class="px-2 py-1" AlignItems="AlignItems.Center" Spacing="1" Style="position:absolute; bottom:0; left:0; right:0; background-color:var(--pru-red-tw-50)">
+                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)">Created By</MudText>
+                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@CurrentObject.CreatedUser</MudText>
+                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)">on</MudText>
+                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@(CurrentObject.CreatedDateTime.HasValue? CurrentObject.CreatedDateTime!.Value.ToString("dd-MMM-yyyy hh:mm:ss tt") : " - ")</MudText>
+                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)"> | Last Modified By</MudText>
+                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@CurrentObject.ModifiedUser</MudText>
+                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)">on</MudText>
+                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@(CurrentObject.ModifiedDateTime.HasValue? CurrentObject.ModifiedDateTime!.Value.ToString("dd-MMM-yyyy hh:mm:ss tt") : " - ")</MudText>
+                        </MudStack>
+                    }
+                </MudPaper>
+            </MudTabPanel>
+            <MudTabPanel Text="History" Icon="material-symbols-rounded/history" Class="pru-mud-tab-panel" Style="min-width:120px">
+                <MudPaper Class="px-4 pt-2 pb-5 overflow-y-auto" Height="calc(100vh - 210px)" Width="100%" Elevation="0" Style="position:relative">
+                </MudPaper>
+            </MudTabPanel>
+        </MudTabs>
+    </EditForm>
+}
+
+
+@code {
+    #region UI PARAM
+    IEnumerable<string> _lbuIDList = ["PCLA", "PMLI", "PLAL"];
+
+
+    AggregateDefinition<InvoiceItem> _itemAggr = new AggregateDefinition<InvoiceItem>
+    {
+        Type = AggregateType.Sum,
+        NumberFormat = "N2",
+        DisplayFormat = "{value}"
+    };
+
+    AggregateDefinition<ExpenseItem> _expAggr = new AggregateDefinition<ExpenseItem>
+    {
+        Type = AggregateType.Sum,
+        NumberFormat = "N2",
+        DisplayFormat = "{value}"
+    };
+
+    MudTextField<string>? _mudTxtAppRef;
+
+    IEnumerable<string> _statusList = [
+        "Active","Decommissioned"];
+
+    IEnumerable<string> _envList = [
+    "nprd", "prod"
+    ];
+
+    IEnumerable<string> _stageList = [
+    "dev", "uat", "prd", "sit", "vdi", "phb"
+    ];
+
+    
+    #endregion
+
+    #region PAGE LIFECYCLE FUNCTIONS
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        UrlPrefix = "/it/infra-stack";
+
+        return base.SetParametersAsync(parameters);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        switch (CRUCMode)
+        {
+            case CRUCModes.READ:
+                {
+                    CurrentObject = await Uow.InfraStacks.GetAsync(Id);
+                    IsViewMode = true;
+                }
+                break;
+            case CRUCModes.CREATE:
+                {
+                    CurrentObject = new();
+                }
+                break;
+            case CRUCModes.UPDATE:
+                CurrentObject = await Uow.InfraStacks.GetAsync(Id);
+                break;
+            case CRUCModes.CLONE:
+                {
+                    var tempObj = await Uow.InfraStacks.GetAsync(Id);
+                    CurrentObject = tempObj.DeepClone();
+                    CurrentObject!.Id = 0;
+                    CurrentObject!.ObjectCode = null;
+                }
+                break;
+        }
+
+        CurrentEditContext = new EditContext(CurrentObject!);
+
+        HeaderTitle = ObjectDisplayName;
+
+        await PopulateUIControl();
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            CurrentHotKeyContext = HotKeys.CreateContext()
+            .Add(Code.Escape, CancelHotkeyPressed, new() { Exclude = Exclude.None })
+            .Add(ModCode.Ctrl, Code.S, SaveHotKeyPressed, new() { Exclude = Exclude.None })
+            .Add(ModCode.Ctrl | ModCode.Shift, Code.S, SaveAndCloseHotKeyPressed, new() { Exclude = Exclude.None });
+
+            _mudTxtAppRef?.FocusAsync();
+        }
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+    #endregion
+
+    #region UI FUNCTIONS
+    private async Task<IEnumerable<string>> SearchEnv(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _envList;
+        }
+
+        return _envList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchStage(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _stageList;
+        }
+
+        return _stageList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    #endregion
+
+    #region UPDATE FUNCTIONS
+    protected override async Task PreSaveProcessing()
+    {
+        await Task.CompletedTask;
+    }
+
+    protected override async Task ValidatePreSave()
+    {
+        InvalidMsgList.Clear();
+
+        bool hasExisting = await Uow.InfraStacks.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+
+        if (hasExisting)
+        {
+            InvalidMsgList.Add("ObjectCode_Duplicate", $"Infra Stack {CurrentObject!.ObjectCode!} already exists.");
+        }
+    }
+
+    protected override async Task<bool> SaveAndCommitProcessing()
+    {
+        DateTime timestamp = DateTime.Now;
+
+        if (CurrentObject!.Id == 0)
+        {
+            CurrentObject!.CreatedUser = AuditTrailUser;
+            CurrentObject!.CreatedDateTime = timestamp;
+        }
+
+        CurrentObject!.ModifiedUser = AuditTrailUser;
+        CurrentObject!.ModifiedDateTime = timestamp;
+
+        int objId = await Uow.InfraStacks.InsertOrUpdateFullAsync(CurrentObject!);
+        return objId > 0;
+    }
+    #endregion
+
+    #region INTERNAL FUNCTION
+    async Task PopulateUIControl()
+    {
+        await Task.CompletedTask;
+    }
+    #endregion
+}

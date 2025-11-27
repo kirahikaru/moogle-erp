@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
 
-namespace TechAdminERP.Static;
+namespace PruTech_ITSM_CMDB.Client.Static;
 
 [ExcludeFromCodeCoverage]
 public static class PruColors

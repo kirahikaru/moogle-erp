@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace TechAdminERP.Client.NonPersitentObjs;
+namespace PruTech_ITSM_CMDB.Client.NonPersistentObjs;
 
 [JsonObject]
 public class QuickSearchParam

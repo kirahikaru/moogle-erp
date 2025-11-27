@@ -1,0 +1,279 @@
+﻿@page "/core/org-struct-type/main"
+@using DataLayer.AuxComponents.Extensions
+@using PruIT_CMDB_ITSM.Client.Pages
+@* @rendermode InteractiveAuto *@
+
+@inject SweetAlertService Swal
+@inherits MainPageBase<OrgStructType>
+
+<MudPaper Class="px-4 py-3 rounded" Width="100%" Elevation="0" Square="true" Style="background-color:#FFFDE7; border: solid 1px var(--pru-gray-tw-100)">
+	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+		<div style="color:var(--pru-red-default); font-size:28px;">
+			<span style="font-weight:800">@HeaderTitle</span>
+		</div>
+		<MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/add_circle" Size="Size.Small" Color="Color.Primary" Class="pru-btn-base" DropShadow="false" OnClick="@(args => CreateOrEditRecord(0))">Add New</MudButton>
+	</MudStack>
+</MudPaper>
+<MudPaper Class="pa-3 mt-3 rounded overflow-y-auto" Width="100%" Elevation="0" Square="true" Height="calc(100vh - 170px)">
+	<!-- SEARCH / FILTER INPUT AREA ---------------------------->
+	<MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
+		<MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="pru-mud-form-field bordered"
+					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
+					  Placeholder="Search text here..." HelperText="<Search input instruction here>" Style="padding: 2px 0px 2px 0px"
+					  @bind-Value="SearchText" OnKeyDown="OnSearchBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
+		<MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/search" Size="Size.Small" Color="Color.Primary" DropShadow="false" OnClick="OnSearchClicked" Class="pru-btn-base">Search</MudButton>
+	</MudStack>
+	<!-- DATA RESULT DISPLAY AREA ------------------------------>
+	<MudDataGrid Class="mt-2 pru-mud-datagrid main-pg" ServerData="ServerDataFunc" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage=@PageSize
+					 ColumnResizeMode="ResizeMode.Container" Elevation="0" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true"
+					 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row"
+				 @ref="MainDataGrid" T="OrgStructType">
+		<Columns>
+			<PropertyColumn Property="x => x.ObjectName" Title="Name" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+			<PropertyColumn Property="x => x.ObjectCode" Title="ID" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" Sortable="false"/>
+			<PropertyColumn Property="x => x.OrgLevel" Title="Level" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" Sortable="false"
+							HeaderStyle="min-width:20px; max-width:20px" CellStyle="text-align:right" />
+			<PropertyColumn Property="x => x.ParentName" Title="Parent" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+			<PropertyColumn Property="x => x.HierarchyPath" Title="Hierarchy Path" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
+			<TemplateColumn Title="Action" HeaderClass="pru-mud-datagrid-hdr main-pg" Sortable="false" Filterable="false" StickyRight="true"
+							CellClass="pru-mud-datagrid-cell" HeaderStyle="max-width:130px; width:130px; justify-items:center"
+							CellStyle="padding-inline-end:4px; padding-inline-start:4px">
+				<CellTemplate>
+					<MudStack Row="true" Spacing="1">
+						<MudIconButton Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
+						<MudIconButton Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
+						<MudIconButton Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
+						<MudIconButton Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
+					</MudStack>
+				</CellTemplate>
+			</TemplateColumn>
+		</Columns>
+		<PagerContent>
+			<MudDataGridPager T="OrgStructType" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] {10, 30, 50, 80, 100}" />
+		</PagerContent>
+	</MudDataGrid>
+</MudPaper>
+
+@code {
+
+	#region UI PARAM
+	Dictionary<string, string> _statusCssClassList = new()
+		{
+			{ "", "" },
+			{ EmployeeStatuses.ACTIVE, "status-chip-success-light" },
+			{ EmployeeStatuses.DRAFT, "status-chip-success-light" },
+			{ EmployeeStatuses.RESIGNED, "status-chip-obsolete-light" },
+			{ EmployeeStatuses.BLACKLIST, "status-chip-pending-light" },
+			{ EmployeeStatuses.INVALID, "status-chip-pending-light" },
+		};
+
+	#endregion
+
+	#region PAGE LIFECYCLE EVENTS
+	public override Task SetParametersAsync(ParameterView parameters)
+	{
+		UrlPrefix = "/core/org-struct-type";
+		SearchParamName = "orgStructTypeParam";
+
+		return base.SetParametersAsync(parameters);
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (LoggedInUser != null)
+		{
+			CurrentAppModPerm.UserId = LoggedInUser.UserId;
+			CurrentAppModPerm.CanCreate = true;
+			CurrentAppModPerm.CanRead = true;
+			CurrentAppModPerm.CanUpdate = true;
+			CurrentAppModPerm.CanDelete = true;
+			CurrentAppModPerm.ModuleName = typeof(OrgStructType).Name;
+		}
+		else
+		{
+			CurrentAppModPerm.CanCreate = true;
+			CurrentAppModPerm.CanRead = true;
+			CurrentAppModPerm.CanUpdate = true;
+			CurrentAppModPerm.CanDelete = true;
+		}
+
+		//=== SHORTCUT KEYS INITIALIZATION ================================================
+		// CurrentHotKeyContext = ToolBeltHotKeys.CreateContext()
+		// 	.Add(ModCode.Alt, Code.N, CreateRecord, new() { Exclude = Exclude.None })
+		// 	.Add(ModCode.Ctrl, Code.S, SearchHotKeyPressed, new() { Exclude = Exclude.None })
+		// 	.Add(ModCode.Alt, Code.V, QuickViewHotKeyPressed, new() { Exclude = Exclude.None })
+		// 	.Add(ModCode.Ctrl, Code.E, EditRecordHotKeyPressed, new() { Exclude = Exclude.None })
+		// 	.Add(ModCode.Ctrl, Code.A, OnAdvSearchPanelHotKeyPressed, new() { Exclude = Exclude.None })
+		// 	.Add(ModCode.Ctrl, Code.R, ClearAdvancedSearchFilterHotKeyPressed, new() { Exclude = Exclude.None });
+
+		//=== LOAD SAVED SEARCH PARAMETERS ================================================
+		PopuplateSearchFilters();
+		await Task.CompletedTask;
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await UITextBoxSearch!.FocusAsync();
+		}
+		await LoadSavedSearchFilters();
+	}
+	#endregion
+
+	protected override async Task<GridData<OrgStructType>> ServerDataFunc(GridState<OrgStructType> gridState)
+	{
+		if (IsSearching) return new GridData<OrgStructType>
+			{
+				Items = [],
+				TotalItems = 0
+			};
+
+		try
+		{
+			IsSearching = true;
+			int totalItemCount = 0;
+			//if (gridState.SortDefinitions.Count > 0)
+			//{
+			//	var firstSort = gridState.SortDefinitions.First();
+			//	result = firstSort.Descending
+			//		? result.OrderByDescending(firstSort.SortFunc).ToList()
+			//		: result.OrderBy(firstSort.SortFunc).ToList();
+			//}
+
+			if (gridState.FilterDefinitions.Any())
+			{
+				//var filterFunctions = gridState.FilterDefinitions.Select(x => x.GenerateFilterFunction());
+				//result = result
+				//	.Where(x => filterFunctions.All(f => f(x)))
+				//	.ToList();
+			}
+			else
+			{
+				// KeyValuePair<int, IEnumerable<ITAsset>> result = await Uow.ITAssets.HardwareSearchAsync(0, 0, SearchText, null, null, null);
+				KeyValuePair<int, IEnumerable<OrgStructType>> result = await Uow.OrgStructTypes.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, null, null);
+				MainDataList = result.Value;
+				totalItemCount = result.Key;
+			}
+
+			//var totalNumberOfFilteredItems = result.Count;
+
+			//result = result
+			//	.Skip(gridState.StartIndex)
+			//	.Take(gridState.Count)
+			//	.ToList();
+
+			return new GridData<OrgStructType>
+				{
+					Items = MainDataList,
+					TotalItems = totalItemCount
+				};
+		}
+		catch (Exception ex)
+		{
+			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
+			return new GridData<OrgStructType>
+				{
+					Items = [],
+					TotalItems = 0
+				};
+		}
+		finally
+		{
+			IsSearching = false;
+		}
+	}
+
+	#region UI FUNCTIONS
+	protected async ValueTask QuickViewHotKeyPressed()
+	{
+		await Task.CompletedTask;
+	}
+	#endregion
+
+	#region CRUD FUNCTIONS
+	private async Task DeleteRecord(OrgStructType objToDelete)
+	{
+		if (objToDelete == null)
+		{
+			await Swal.FireAsync(new SweetAlertOptions
+				{
+					Title = "Object not selected",
+					Text = "No object selected to be deleted. Please try again",
+					Icon = SweetAlertIcon.Warning,
+					ShowConfirmButton = false,
+					Timer = 1500
+				});
+		}
+		else
+		{
+			SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+				{
+					Title = "Delete Confiramtion",
+					Text = $"Are you sure you want to delete the following '{objToDelete.ObjectName} ({objToDelete.ObjectCode})' record? ",
+
+					ShowCancelButton = true,
+					ShowConfirmButton = true,
+					ConfirmButtonText = "Yes, Confirmed",
+					CancelButtonText = "Cancel"
+				});
+
+			if (!string.IsNullOrEmpty(result.Value))
+			{
+				try
+				{
+					int delCount = await Uow.OrgStructTypes.DeleteAsync(objToDelete.Id, AuditTrailUser);
+
+					if (delCount > 0)
+					{
+						await MainDataGrid!.ReloadServerData();
+						StateHasChanged();
+						await Swal.FireAsync(new SweetAlertOptions
+							{
+								Title = "Success",
+								Text = "Record successfully deleted",
+								Icon = SweetAlertIcon.Success,
+								ShowConfirmButton = false,
+								Timer = 1500
+							});
+					}
+					else
+					{
+						await Swal.FireAsync(new SweetAlertOptions
+							{
+								Title = "Failure",
+								Text = "Application failed to form deletion of the record. The record may have been no longer available in system database.",
+								Icon = SweetAlertIcon.Warning,
+								ShowConfirmButton = true,
+								ConfirmButtonText = "OK"
+							});
+					}
+				}
+				catch
+				{
+					await Swal.FireAsync(new SweetAlertOptions
+						{
+							Title = "Error",
+							Text = "Application encountered error while trying to process the operation. Please try again. If the problem still persists, please contact your technical support.",
+							Icon = SweetAlertIcon.Error,
+							ShowConfirmButton = true,
+							ConfirmButtonText = "OK"
+						});
+				}
+			}
+		}
+	}
+	#endregion
+
+	#region INTERNAL FUNCTIONS
+	public async ValueTask EditRecordHotKeyPressed()
+	{
+		await Task.CompletedTask;
+	}
+
+	private void PopuplateSearchFilters()
+	{
+
+	}
+	#endregion
+}

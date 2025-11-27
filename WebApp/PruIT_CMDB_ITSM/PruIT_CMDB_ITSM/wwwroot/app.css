@@ -1,0 +1,446 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Reddit+Mono:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+:root {
+    --pru-red-default: #ED1B2E;
+    --pru-red-tw-50:#fff1f2;
+    --pru-red-tw-100:#ffdfe2;
+    --pru-red-tw-200:#ffc5ca;
+    --pru-red-tw-300:#ff9da6;
+    --pru-red-tw-400:#ff6573;
+    --pru-red-tw-500:#ff3446;
+    --pru-red-tw-600:#ed1b2e;
+    --pru-red-tw-700:#c70e1f;
+    --pru-red-tw-800:#a4101d;
+    --pru-red-tw-900:#88141e;
+    --pru-red-tw-950:#4a050b;
+
+    --pru-red-lighter: #FBD1D5;
+    --pru-red-light: #F8A4AB;
+    --pru-red-dark: #F47682;
+    --pru-red-darker: #B80E1E;
+    --pru-red-darkest: #7A0A14;
+
+    --pru-gray-default: #687379;
+    --pru-gray-lighter: #E0E3E5;
+    --pru-gray-light: #C2C7CA;
+    --pru-gray-dark: #A3ABB0;
+    --pru-gray-darker: #4E565B;
+    --pru-gray-darkest: #343A3C;
+    --pru-gray-tw-50: #f5f6f6;
+    --pru-gray-tw-100: #e5e7e8;
+    --pru-gray-tw-200: #cdd2d4;
+    --pru-gray-tw-300: #aab2b6;
+    --pru-gray-tw-400: #808b90;
+    --pru-gray-tw-500: #687379;
+    --pru-gray-tw-600: #565e64;
+    --pru-gray-tw-700: #4a5054;
+    --pru-gray-tw-800: #414549;
+    --pru-gray-tw-900: #393d40;
+    --pru-gray-tw-950: #242628;
+
+    --pru-cyan-default: #5CB8B2;
+    --pru-cyan-tw-50: #f3faf9;
+    --pru-cyan-tw-100: #d6f1ee;
+    --pru-cyan-tw-200: #ace3db;
+    --pru-cyan-tw-300: #7acec6;
+    --pru-cyan-tw-400: #5cb8b2;
+    --pru-cyan-tw-500: #359792;
+    --pru-cyan-tw-600: #287977;
+    --pru-cyan-tw-700: #246160;
+    --pru-cyan-tw-800: #214e4e;
+    --pru-cyan-tw-900: #1f4242;
+
+    --pru-dark-gray-default: #687379;
+    --pru-dark-gray-lighter: #E0E3E5;
+    --pru-dark-gray-light: #C2C7CA;
+    --pru-dark-gray-dark: #A3ABB0;
+    --pru-dark-gray-darker: #4E565B;
+    --pru-dark-gray-darkest: #343A3C;
+
+    --pru-navy-default: #1B365D;
+    --pru-navy-lighter: #C3D4ED;
+    --pru-navy-light: #86A9DC;
+    --pru-navy-dark: #4A7ECA;
+    --pru-navy-darker: #142846;
+    --pru-navy-darkest: #1B365D;
+
+    --pru-yellow-default: #F2C737;
+    --pru-yellow-lighter: #FCF4D7;
+    --pru-yellow-light: #FAE9AF;
+    --pru-yellow-dark: #F7DD87;
+    --pru-yellow-darker: #D1A40E;
+    --pru-yellow-darkest: #8B6D09;
+
+    --pru-yellow-default: #F2C737;
+    --pru-yellow-lighter: #FCF4D7;
+    --pru-yellow-light: #FAE9AF;
+    --pru-yellow-dark: #F7DD87;
+    --pru-yellow-darker: #D1A40E;
+    --pru-yellow-darkest: #8B6D09; 
+
+    --vic-green-50: #f1fcf5;
+    --vic-green-100: #defae9;
+    --vic-green-200: #bef4d4;
+    --vic-green-300: #8ce9b3;
+    --vic-green-400: #52d688;
+    --vic-green-500: #2aba66;
+    --vic-green-600: #1d9c52;
+    --vic-green-700: #1b7a43;
+    --vic-green-800: #1a6138;
+    --vic-green-900: #175031;
+    --vic-green-950: #072c18;
+    --vic-orange-50: #fff9ec;
+    --vic-orange-100: #fff2d3;
+    --vic-orange-200: #ffe1a5;
+    --vic-orange-300: #ffca6d;
+    --vic-orange-400: #ffa732;
+    --vic-orange-500: #ff8c0a;
+    --vic-orange-600: #ef6c00;
+    --vic-orange-700: #cc5302;
+    --vic-orange-800: #a1400b;
+    --vic-orange-900: #82370c;
+    --vic-orange-950: #461904;
+    --vic-gray-50: #f5f6f6;
+    --vic-gray-100: #e4e7e9;
+    --vic-gray-200: #ccd2d5;
+    --vic-gray-300: #a9b3b7;
+    --vic-gray-400: #7e8c92;
+    --vic-gray-500: #637177;
+    --vic-gray-600: #555f65;
+    --vic-gray-700: #4e565b;
+    --vic-gray-800: #414649;
+    --vic-gray-900: #393d40;
+    --vic-gray-950: #232629;
+
+    --material-yellow-50: #FFFDE7;
+    --material-yellow-100: #FFF9C4;
+    --material-yellow-200: #FFF59D;
+    --material-yellow-300: #FFF176;
+    --material-yellow-400: #FFEE58;
+    --material-yellow-500: #FFEB3B;
+    --material-yellow-600: #FDD835;
+    --material-yellow-700: #FBC02D;
+    --material-yellow-800: #F9A825;
+    --material-yellow-900: #F57F17;
+    --material-yellow-A100: #FFFF8D;
+    --material-yellow-A200: #FFFF00;
+    --material-yellow-A400: #FFEA00;
+    --material-yellow-A700: #FFD600;
+
+    --material-light-blue-50: #E1F5FE;
+    --material-light-blue-100: #B3E5FC;
+    --material-light-blue-200: #81D4FA;
+    --material-light-blue-300: #4FC3F7;
+    --material-light-blue-400: #29B6F6;
+    --material-light-blue-500: #03A9F4;
+    --material-light-blue-600: #039BE5;
+    --material-light-blue-700: #0288D1;
+    --material-light-blue-800: #0277BD;
+    --material-light-blue-900: #01579B;
+    --material-light-blue-A100: #80D8FF;
+    --material-light-blue-A200: #40C4FF;
+    --material-light-blue-A400: #00B0FF;
+    --material-light-blue-A700: #0091EA;
+
+    --google-red: #DB4437;
+    --google-blue: #4285F4;
+    --google-yellow: #F4B400;
+    --google-green: #0F9D58;
+    --telegram-blue: #24A1DE;
+
+    --fiserv-orange: #fb6400;
+
+    --kh-flag-red: #E00025;
+    --kh-flag-blue:#032EA1;
+    --la-flag-red: #CE1126;
+    --la-flag-blue: #002868;
+    --mm-flag-red: #43B02A;
+    --mm-flag-green:#FFCD00;
+    --mm-flag-yellow:#EE2737;
+}
+
+html, body {
+
+}
+
+a, .btn-link {
+    color: #006bb7;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.content {
+    padding-top: 1.1rem;
+}
+
+h1:focus {
+    outline: none;
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid #e50000;
+}
+
+.validation-message {
+    color: #e50000;
+}
+
+.blazor-error-boundary {
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
+    padding: 1rem 1rem 1rem 3.7rem;
+    color: white;
+}
+
+    .blazor-error-boundary::after {
+        content: "An error has occurred."
+    }
+
+.darker-border-checkbox.form-check-input {
+    border-color: #929292;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+
+/*
+<weight > : Use a value from 100 to 1000
+<uniquifier > : Use a unique and descriptive class name
+*/
+
+/*#region FONTS */
+.dm-sans-100 {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+}
+
+.dm-sans-200 {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.dm-sans-300 {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.dm-sans-400 {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.dm-sans-500 {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+.dm-sans-600 {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+.dm-sans-700 {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.dm-sans-800 {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+}
+
+.dm-sans-900 {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 900;
+    font-style: normal;
+}
+
+.reddit-mono-100 {
+    font-family: "Reddit Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.reddit-mono-300 {
+    font-family: "Reddit Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.reddit-mono-400 {
+    font-family: "Reddit Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.reddit-mono-500 {
+    font-family: "Reddit Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.reddit-mono-600 {
+    font-family: "Reddit Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.reddit-mono-700 {
+    font-family: "Reddit Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.reddit-mono-800 {
+    font-family: "Reddit Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+}
+
+.reddit-mono-900 {
+    font-family: "Reddit Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 900;
+    font-style: normal;
+}
+
+.open-sans-100 {
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+/*#endregion*/
+
+
+/*#region STATUS CHIP*/
+.status-chip-success-dark {
+    color: #FFFFFF;
+    background-color: #2ABA66;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0px;
+}
+
+.status-chip-success-light {
+    color: var(--vic-green-600);
+    background-color: var(--vic-green-100);
+    border: solid 1px var(--vic-green-500);
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0px;
+    border-radius:6px !important;
+}
+
+
+.status-chip-default-dark {
+    color: #FFFFFF;
+    background-color: #757575;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0px;
+}
+
+.status-chip-obsolete-dark {
+    color: #FFFFFF;
+    background-color: var(--pru-dark-gray-darker);
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0px;
+}
+
+.status-chip-obsolete-light {
+    color: var(--vic-gray-600);
+    background-color: var(--vic-gray-100);
+    border: solid 1px var(--vic-gray-500);
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0px;
+    border-radius: 6px !important;
+}
+
+.status-chip-pending-dark {
+    color: #FFFFFF;
+    background-color: var(--vic-orange-500);
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0px;
+}
+
+.status-chip-pending-light {
+    color: var(--vic-orange-600);
+    background-color: var(--vic-orange-100);
+    border: solid 1px var(--vic-orange-500);
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0px;
+    border-radius: 6px !important;
+}
+
+.status-chip-new-light {
+    color: var(--material-yellow-700);
+    background-color: var(--material-yellow-50);
+    border: solid 1px var(--material-yellow-700);
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0px;
+    border-radius: 6px !important;
+}
+
+.status-chip-progress-light {
+    color: var(--material-light-blue-700);
+    background-color: var(--material-light-blue-50);
+    border: solid 1px var(--material-light-blue-700);
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0px;
+    border-radius: 6px !important;
+}
+/*#endregion*/

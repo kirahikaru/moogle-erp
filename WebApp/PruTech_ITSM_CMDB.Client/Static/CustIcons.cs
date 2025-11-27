@@ -1,4 +1,4 @@
-﻿namespace TechAdminERP.Components.Static;
+﻿namespace PruTech_ITSM_CMDB.Client.Static;
 
 public class CustIcons
 {

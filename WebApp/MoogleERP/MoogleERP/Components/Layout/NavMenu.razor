@@ -1,0 +1,252 @@
+﻿<MudNavMenu Color="Color.Inherit" Margin="Margin.Dense" Style="overflow-x:hidden;">
+    <MudNavGroup Title="Home Inventory" Icon="fas fa-warehouse" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="moog-nav-grp-l1" Expanded=true>
+        <MudNavLink Href="/him/boardgame/main" Icon="fas fa-chess-board" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            My Boardgame
+        </MudNavLink>
+        <MudNavLink Href="/him/my-stuff/main" Icon="fas fa-list-ul" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            My Item
+        </MudNavLink>
+        <MudNavGroup Title="Admin & Setting" Icon="fas fa-tools" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="vic-nav-group-lv1">
+            <MudNavLink Href="/him/my-stuff-category/main" Icon="fas fa-layer-group" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+                Item Category
+            </MudNavLink>
+            <MudNavLink Href="/him/merchant/main" Icon="fas fa-store" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+                Merchant
+            </MudNavLink>
+        </MudNavGroup>
+    </MudNavGroup>
+    <MudNavGroup Title="Event" Icon="fas fa-book-reader" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="moog-nav-grp-l1">
+        <MudNavLink Href="/ems/event/main" Icon="fas fa-calendar-day" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Event
+        </MudNavLink>
+        <MudNavLink Href="/ems/event-type/main" Icon=@Icons.Material.Rounded.Celebration Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Event Type
+        </MudNavLink>
+        <MudNavLink Href="/ems/event-invitation/main" Icon="fas fa-calendar-plus" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Invitation
+        </MudNavLink>
+        <MudNavLink Href="/ems/event-registration/main" Icon="fas fa-calendar-check" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Registration
+        </MudNavLink>
+    </MudNavGroup>
+    <MudNavGroup Title="Library" Icon="fas fa-book-reader" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="moog-nav-grp-l1">
+        <MudNavLink Href="/lib/book/main" Icon="fas fa-book" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Book
+        </MudNavLink>
+        <MudNavLink Href="/lib/book-purchase-history/main" Icon="fa fa-th-list" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Book Purchased History
+        </MudNavLink>
+        <MudNavLink Href="/lib/user-book/main" Icon="fas fa-bookmark" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            My Book
+        </MudNavLink>
+        <MudNavGroup Title="Admin & Setting" Icon="fas fa-tools" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="vic-nav-group-lv1">
+            <MudNavLink Href="/lib/book-category/main" Icon="fas fa-layer-group" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+                Category
+            </MudNavLink>
+            <MudNavLink Href="/lib/book-genre/main" Icon="fas fa-layer-group" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+                Genre
+            </MudNavLink>
+        </MudNavGroup>
+    </MudNavGroup>
+    <MudNavGroup Title="HMS" Icon="fas fa-hospital-alt" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="moog-nav-grp-l1">
+        <MudNavLink Href="/hms/patient/main" Icon="fas fa-hospital-user" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Patient
+        </MudNavLink>
+        <MudNavLink Href="/hms/doctor/main" Icon="fas fa-user-md" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Doctor
+        </MudNavLink>
+        <MudNavLink Href="/hms/medical-appointment/main" Icon="far fa-calendar-alt" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Appointment
+        </MudNavLink>
+        <MudNavLink Href="/hms/medical-exam/main" Icon="fas fa-notes-medical" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Medical Exam
+        </MudNavLink>
+        <MudNavGroup Title="Admin & Setting" Icon="fas fa-tools" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="vic-nav-group-lv1">
+            <MudNavLink Href="/hms/healthcare-facility/main" Icon="far fa-hospital" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+                Healthcare Facility
+            </MudNavLink>
+            <MudNavLink Href="/hms/medical-test/main" Icon="fas fa-book-medical" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+                Test
+            </MudNavLink>
+            <MudNavLink Href="/hms/medical-test-type/main" Icon="fas fa-file-medical" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+                Test Type
+            </MudNavLink>
+        </MudNavGroup>
+    </MudNavGroup>
+    <MudNavGroup Title="Pharmacy" Icon="fas fa-clinic-medical" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="moog-nav-grp-l1" Expanded=true>
+        <MudNavLink Href="/pms/medicine/main" Icon="fas fa-pills" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Medicine
+        </MudNavLink>
+        <MudNavGroup Title="Admin & Setting" Icon="fas fa-tools" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="vic-nav-group-lv1">
+            <MudNavLink Href="/pms/med-comp/main" Icon="fas fa-mortar-pestle" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+                Medical Composition
+            </MudNavLink>
+        </MudNavGroup>
+    </MudNavGroup>
+    <MudNavGroup Title="HRM" Icon="fas fa-users" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="moog-nav-grp-l1" Style="font-weight:800;">
+        <MudNavLink Href="/hrm/employee/main" Icon="fas fa-id-card-alt" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Employee
+        </MudNavLink>
+    </MudNavGroup>
+    <MudNavGroup Title="RMS" Icon="fas fa-shopping-cart" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="moog-nav-grp-l1" Style="font-weight:800;" Expanded=true>
+        <MudNavLink Href="/rms/item/main" Icon="fas fa-boxes" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Item
+        </MudNavLink>
+        <MudNavLink Href="/rms/inventory-check-in/main" Icon="fas fa-boxes" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Inventory (Check-In)
+        </MudNavLink>
+        <MudNavLink Href="/rms/inventory-check-out/main" Icon="fas fa-boxes" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Inventory (Check-Out)
+        </MudNavLink>
+        <MudNavLink Href="/rms/customer-purchase-order/main" Icon="fas fa-shopping-basket" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Customer Purchase Order
+        </MudNavLink>
+        <MudNavLink Href="/rms/customer-purchase-invoice/main" Icon="fas fa-file-invoice" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Customer Purchase Invoice
+        </MudNavLink>
+        <MudNavLink Href="/rms/order/main" Icon="fas fa-receipt" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Order
+        </MudNavLink>
+        <MudNavLink Href="/rms/receipt/main" Icon="fas fa-receipt" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Receipt
+        </MudNavLink>
+        <MudNavGroup Title="Admin & Setting" Icon="fas fa-tools" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="vic-nav-group-lv1">
+            <MudNavLink Href="/rms/item-category/main" Icon="fas fa-layer-group" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+                Category
+            </MudNavLink>
+            <MudNavLink Href="/rms/delivery-option/main" Icon="fas fa-truck-loading" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+                Delivery Option
+            </MudNavLink>
+            <MudNavLink Href="/rms/supplier/main" Icon="fas fa-warehouse" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+                Supplier
+            </MudNavLink>
+        </MudNavGroup>
+    </MudNavGroup>
+    <MudNavGroup Title="Finance" Icon="fas fa-landmark" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="moog-nav-grp-l1">
+        <MudNavLink Href="/fin/bank/main" Icon="fas fa-landmark" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Bank
+        </MudNavLink>
+        <MudNavLink Href="/fin/currency/main" Icon="fas fa-coins" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Currency
+        </MudNavLink>
+        <MudNavLink Href="/fin/exchange-rate/main" Icon="@Icons.Material.Rounded.CurrencyExchange" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Exchange Rate
+        </MudNavLink>
+        <MudNavLink Href="/fin/cust-indiv/main" Icon="fas fa-user-friends" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Customer (Individual)
+        </MudNavLink>
+        <MudNavLink Href="/fin/cust-busn-entity/main" Icon="fas fa-building" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Customer (Entity)
+        </MudNavLink>
+    </MudNavGroup>
+    <MudNavGroup Title="Base Data Setup" Icon="fas fa-tools" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="moog-nav-grp-l1">
+        <MudNavLink Href="/core/business-entity/main" Icon="fas fa-building" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Business Entity
+        </MudNavLink>
+        <MudNavLink Href="/core/business-sector/main" Icon="fas fa-map-marked-alt" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Business Sector
+        </MudNavLink>
+        <MudNavLink Href="/core/kh-cty-struct/main" Icon="fas fa-map-marked-alt" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Cambodia Address Structure
+        </MudNavLink>
+        <MudNavLink Href="/core/cambodia-province/main" Icon="fas fa-map-marked-alt" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Cambodia Province
+        </MudNavLink>
+        <MudNavLink Href="/core/cambodia-district/main" Icon="fas fa-map-marked-alt" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Cambodia District
+        </MudNavLink>
+        <MudNavLink Href="/core/cambodia-commune/main" Icon="fas fa-map-marked-alt" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Cambodia Commune
+        </MudNavLink>
+        <MudNavLink Href="/core/cambodia-village/main" Icon="fas fa-map-marked-alt" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Cambodia Village
+        </MudNavLink>
+        <MudNavLink Href="/core/country/main" Icon="fas fa-globe-asia" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Country
+        </MudNavLink>
+        <MudNavLink Href="/core/dropdown-data/main" Icon="fas fa-globe-asia" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Dropdown Data
+        </MudNavLink>
+        <MudNavLink Href="/core/edu-qual/main" Icon="fas fa-graduation-cap" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Education Qualification
+        </MudNavLink>
+        <MudNavLink Href="/core/edu-fos/main" Icon="fas fa-book-reader" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Field of Study
+        </MudNavLink>
+        <MudNavLink Href="/core/industry/main" Icon="fas fa-industry" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Industry
+        </MudNavLink>
+        <MudNavLink Href="/core/location/main" Icon="fas fa-building" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Location
+        </MudNavLink>
+        <MudNavLink Href="/core/location-type/main" Icon="fas fa-tags" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Location Type
+        </MudNavLink>
+        <MudNavLink Href="/core/occupation/main" Icon="fas fa-briefcase" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Occupation
+        </MudNavLink>
+        <MudNavLink Href="/core/occupation-category/main" Icon="fas fa-th-large" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Occupation Category
+        </MudNavLink>
+        <MudNavLink Href="/core/org-struct/main" Icon="fas fa-address-book" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Organization Structure
+        </MudNavLink>
+        <MudNavLink Href="/core/org-struct-type/main" Icon="fas fa-address-book" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Organization Structure Type
+        </MudNavLink>
+        <MudNavLink Href="/core/person/main" Icon="fas fa-user-friends" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Person
+        </MudNavLink>
+        <MudNavLink Href="/core/uom/main" Icon="fas fa-ruler-vertical" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Unit of Measure
+        </MudNavLink>
+    </MudNavGroup>
+    <MudNavGroup Title="Human Resource" Icon="fas fa-user-shield" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="moog-nav-grp-l1">
+        <MudNavLink Href="/core/employee/main" Icon="fas fa-id-card" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Employee
+        </MudNavLink>
+    </MudNavGroup>
+    <MudNavGroup Title="Access Management" Icon="fas fa-user-shield" IconColor="Color.Inherit" ExpandIcon="fas fa-angle-up" Class="moog-nav-grp-l1">
+        <MudNavLink Href="/core/user/main" Icon="fas fa-user" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            User
+        </MudNavLink>
+        <MudNavLink Href="/core/role/main" Icon="fas fa-user-tag" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            Role
+        </MudNavLink>
+        <MudNavLink Href="/core/sys-mod/main" Icon="fas fa-user-tag" Match="NavLinkMatch.Prefix" IconColor="Color.Inherit" Class="moog-nav-item-l1">
+            System Module
+        </MudNavLink>
+    </MudNavGroup>
+</MudNavMenu>
+
+
+
+@* <div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">MoogleERP</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="nav flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="counter">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="weather">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+            </NavLink>
+        </div>
+    </nav>
+</div> *@

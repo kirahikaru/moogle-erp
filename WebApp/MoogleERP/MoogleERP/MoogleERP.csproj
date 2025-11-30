@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\CoreLibrary\DataLayer\DataLayer.csproj" />
+    <ProjectReference Include="..\MoogleERP.Client\MoogleERP.Client.csproj" />
+    <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="8.3.0" />
+    <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.6.0" />
+    <PackageReference Include="DeepCloner" Version="0.10.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.0" />
+    <PackageReference Include="MudBlazor" Version="8.15.0" />
+    <PackageReference Include="Toolbelt.Blazor.HotKeys2" Version="6.0.1" />
+  </ItemGroup>
+
+</Project>

@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruIT_CMDB_ITSM", "WebApp\P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruIT_CMDB_ITSM.Client", "WebApp\PruIT_CMDB_ITSM\PruIT_CMDB_ITSM.Client\PruIT_CMDB_ITSM.Client.csproj", "{0B813D7C-58C6-45E2-9944-C4D3C51BE8C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoogleERP", "WebApp\MoogleERP\MoogleERP\MoogleERP.csproj", "{FF478C90-F20F-41AC-85E6-4741CC6F8879}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoogleERP.Client", "WebApp\MoogleERP\MoogleERP.Client\MoogleERP.Client.csproj", "{D9E1F6BB-B53D-400D-95FA-EFE6CEAD020C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +42,14 @@ Global
 		{0B813D7C-58C6-45E2-9944-C4D3C51BE8C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B813D7C-58C6-45E2-9944-C4D3C51BE8C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B813D7C-58C6-45E2-9944-C4D3C51BE8C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF478C90-F20F-41AC-85E6-4741CC6F8879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF478C90-F20F-41AC-85E6-4741CC6F8879}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF478C90-F20F-41AC-85E6-4741CC6F8879}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF478C90-F20F-41AC-85E6-4741CC6F8879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9E1F6BB-B53D-400D-95FA-EFE6CEAD020C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9E1F6BB-B53D-400D-95FA-EFE6CEAD020C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9E1F6BB-B53D-400D-95FA-EFE6CEAD020C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9E1F6BB-B53D-400D-95FA-EFE6CEAD020C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

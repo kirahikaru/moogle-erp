@@ -1,0 +1,824 @@
+﻿/*@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Victor+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Delius&family=Hanuman:wght@100..900&family=Reddit+Mono:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@100;300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=family=Barlow + Condensed:ital, wght@0, 100;0, 200;0, 300;0, 400;0, 500;0, 600;0, 700;0, 800;0, 900;1, 100;1, 200;1, 300;1, 400;1, 500;1, 600;1, 700;1, 800;1, 900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+/* Google Dosis Font */
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+/* Google Rajdhani Font */
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Delius&family=Reddit+Mono:wght@200..900&display=swap');
+
+
+:root {
+    --ssv-pharma-blue: #0B83CD;
+    --ssv-pharma-blue-50: #F1F8FE;
+    --ssv-pharma-blue-100: #E1F1FD;
+    --ssv-pharma-blue-200: #BDE2FA;
+    --ssv-pharma-blue-300: #82CCF7;
+    --ssv-pharma-blue-400: #40B3F0;
+    --ssv-pharma-blue-500: #179AE0;
+    --ssv-pharma-blue-600: #0B83CD;
+    --ssv-pharma-blue-700: #0A619A;
+    --ssv-pharma-blue-800: #0C5280;
+    --ssv-pharma-blue-900: #10456A;
+    --ssv-pharma-blue-950: #0B2C46;
+    --ssv-pharma-green: #01A54E;
+    --vic-en-font-size-base: 10pt;
+    --vic-en-font-base: 'Inter', sans-serif;
+    --vic-kh-font-size-base: 12pt;
+    --vic-kh-font-base: "Koh Santepheap", sans-serif;
+    /*PRUDENTIAL THEME COLORS */
+    --pru-red: #ED1B2E;
+    --pru-light-grey: #F7F7F7;
+    --pru-grey: #E5EAEF;
+    --pru-dark: #1F1F1F;
+    --vic-primary: #009EF7;
+    --vic-priamry-active: #0095e8;
+    --vic-success-active: #47be7d;
+    /*#region METRONIC THEME COLORS */
+    --metronic-warning-light: #FFF8DD;
+    --metronic-warning: #FFC700;
+    --metronic-success: #50CD89;
+    --metronic-primary-light: #F1FAFF;
+    --metronic-primary: #009EF7;
+    --metronic-primary-active: #0095E8;
+    --metronic-success-light: #E8FFF3;
+    --metronic-danger: #F1416C;
+    --metronic-danger-light: #FFF5F8;
+    --metronic-gray: #7E8299;
+    --metronic-gray-dark: #3F4254;
+    --metronic-gray-100: #F9F9F9;
+    --metronic-gray-200: #F4F4F4;
+    --metronic-gray-300: #E1E3EA;
+    --metronic-gray-400: #B5B5C3;
+    --metronic-gray-500: #A1A5B7;
+    --metronic-gray-600: #7E8299;
+    --metronic-gray-700: #5E6278;
+    --metronic-gray-800: #3F4254;
+    --metronic-gray-900: #181C32;
+    /*#endregion*/
+    /*#region MATERIAL COLOR PALLETTE */
+    --material-blue-50: #E3F2FD;
+    --material-blue-100: #BBDEFB;
+    --material-blue-200: #90CAF9;
+    --material-blue-300: #64B5F6;
+    --material-blue-400: #42A5F5;
+    --material-blue-500: #2196F3;
+    --material-blue-600: #1E88E5;
+    --material-blue-700: #1976D2;
+    --material-blue-800: #1565C0;
+    --material-blue-900: #0D47A1;
+    --material-blue-A100: #82B1FF;
+    --material-blue-A200: #448AFF;
+    --material-blue-A400: #2979FF;
+    --material-blue-A700: #2962FF;
+    --material-light-blue-50: #E1F5FE;
+    --material-light-blue-100: #B3E5FC;
+    --material-light-blue-200: #81D4FA;
+    --material-light-blue-300: #4FC3F7;
+    --material-light-blue-400: #29B6F6;
+    --material-light-blue-500: #03A9F4;
+    --material-light-blue-600: #039BE5;
+    --material-light-blue-700: #0288D1;
+    --material-light-blue-800: #0277BD;
+    --material-light-blue-900: #01579B;
+    --material-light-blue-A100: #80D8FF;
+    --material-light-blue-A200: #40C4FF;
+    --material-light-blue-A400: #00B0FF;
+    --material-light-blue-A700: #0091EA;
+    --material-gray-50: #FAFAFA;
+    --material-gray-100: #F5F5F5;
+    --material-gray-200: #EEEEEE;
+    --material-gray-300: #E0E0E0;
+    --material-gray-400: #BDBDBD;
+    --material-gray-500: #9E9E9E;
+    --material-gray-600: #757575;
+    --material-gray-700: #616161;
+    --material-gray-800: #424242;
+    --material-gray-900: #212121;
+
+    --material-deep-purple-50: #EDE7F6;
+    --material-deep-purple-100: #D1C4E9;
+    --material-deep-purple-200: #B39DDB;
+    --material-deep-purple-300: #9575CD;
+    --material-deep-purple-400: #7E57C2;
+    --material-deep-purple-500: #673AB7;
+    --material-deep-purple-600: #5E35B1;
+    --material-deep-purple-700: #512DA8;
+    --material-deep-purple-800: #4527A0;
+    --material-deep-purple-900: #311B92;
+    --material-deep-purple-A100: #B388FF;
+    --material-deep-purple-A200: #7C4DFF;
+    --material-deep-purple-A400: #651FFF;
+    --material-deep-purple-A700: #6200EA;
+
+    --material-indigo-50: #E8EAF6;
+    --material-indigo-100: #C5CAE9;
+    --material-indigo-200: #9FA8DA;
+    --material-indigo-300: #7986CB;
+    --material-indigo-400: #5C6BC0;
+    --material-indigo-500: #3F51B5;
+    --material-indigo-600: #3949AB;
+    --material-indigo-700: #303F9F;
+    --material-indigo-800: #283593;
+    --material-indigo-900: #1A237E;
+    --material-indigo-A100: #8C9EFF;
+    --material-indigo-A200: #536DFE;
+    --material-indigo-A400: #3D5AFE;
+    --material-indigo-A700: #304FFE;
+
+
+    --material-blue-gray-50: #ECEFF1;
+    --material-blue-gray-100: #CFD8DC;
+    --material-blue-gray-200: #B0BEC5;
+    --material-blue-gray-300: #90A4AE;
+    --material-blue-gray-400: #78909C;
+    --material-blue-gray-500: #607D8B;
+    --material-blue-gray-600: #546E7A;
+    --material-blue-gray-700: #455A64;
+    --material-blue-gray-800: #37474F;
+    --material-blue-gray-900: #263238;
+
+    --material-brown-50: #EFEBE9;
+    --material-brown-100: #D7CCC8;
+    --material-brown-200: #BCAAA4;
+    --material-brown-300: #A1887F;
+    --material-brown-400: #8D6E63;
+    --material-brown-500: #795548;
+    --material-brown-600: #6D4C41;
+    --material-brown-700: #5D4037;
+    --material-brown-800: #4E342E;
+    --material-brown-900: #3E2723;
+
+    --cust-purple-100: #EDE0FF;
+    --material-amber-50: #FFF8E1;
+    --material-amber-100: #FFECB3;
+    --material-amber-200: #FFE082;
+    --material-amber-300: #FFD54F;
+    --material-amber-400: #FFCA28;
+    --material-amber-500: #FFC107;
+    --material-amber-600: #FFB300;
+    --material-amber-700: #FFA000;
+    --material-amber-800: #FF8F00;
+    --material-amber-900: #FF6F00;
+    --material-amber-A100: #FFE57F;
+    --material-amber-A200: #FFD740;
+    --material-amber-A400: #FFC400;
+    --material-amber-A700: #FFAB00;
+    --material-yellow-50: #FFFDE7;
+    --material-yellow-100: #FFF9C4;
+    --material-yellow-200: #FFF59D;
+    --material-yellow-300: #FFF176;
+    --material-yellow-400: #FFEE58;
+    --material-yellow-500: #FFEB3B;
+    --material-yellow-600: #FDD835;
+    --material-yellow-700: #FBC02D;
+    --material-yellow-800: #F9A825;
+    --material-yellow-900: #F57F17;
+    --material-yellow-A100: #FFFF8D;
+    --material-yellow-A200: #FFFF00;
+    --material-yellow-A400: #FFEA00;
+    --material-yellow-A700: #FFD600;
+    --material-orange-50: #FFF3E0;
+    --material-orange-100: #FFE0B2;
+    --material-orange-200: #FFCC80;
+    --material-orange-300: #FFB74D;
+    --material-orange-400: #FFA726;
+    --material-orange-500: #FF9800;
+    --material-orange-600: #FB8C00;
+    --material-orange-700: #F57C00;
+    --material-orange-800: #EF6C00;
+    --material-orange-900: #E65100;
+    --material-orange-A100: #FFD180;
+    --material-orange-A200: #FFAB40;
+    --material-orange-A400: #FF9100;
+    --material-orange-A700: #FF6D00;
+
+    --material-deep-orange-50: #FBE9E7;
+    --material-deep-orange-100: #FFCCBC;
+    --material-deep-orange-200: #FFAB91;
+    --material-deep-orange-300: #FF8A65;
+    --material-deep-orange-400: #FF7043;
+    --material-deep-orange-500: #FF5722;
+    --material-deep-orange-600: #F4511E;
+    --material-deep-orange-700: #E64A19;
+    --material-deep-orange-800: #D84315;
+    --material-deep-orange-900: #BF360C;
+    --material-deep-orange-A100: #FF9E80;
+    --material-deep-orange-A200: #FF6E40;
+    --material-deep-orange-A400: #FF3D00;
+    --material-deep-orange-A700: #DD2C00;
+
+    --material-lime-50: #F9FBE7;
+    --material-lime-100: #F0F4C3;
+    --material-lime-200: #E6EE9C;
+    --material-lime-300: #DCE775;
+    --material-lime-400: #D4E157;
+    --material-lime-500: #CDDC39;
+    --material-lime-600: #C0CA33;
+    --material-lime-700: #AFB42B;
+    --material-lime-800: #9E9D24;
+    --material-lime-900: #827717;
+    --material-lime-A100: #F4FF81;
+    --material-lime-A200: #EEFF41;
+    --material-lime-A400: #C6FF00;
+    --material-lime-A700: #AEEA00;
+    --material-red-50: #FFEBEE;
+    --material-red-100: #FFCDD2;
+    --material-red-200: #EF9A9A;
+    --material-red-300: #E57373;
+    --material-red-400: #EF5350;
+    --material-red-500: #F44336;
+    --material-red-600: #E53935;
+    --material-red-700: #D32F2F;
+    --material-red-800: #C62828;
+    --material-red-900: #B71C1C;
+    --material-red-A100: #FF8A80;
+    --material-red-A200: #FF5252;
+    --material-red-A400: #FF1744;
+    --material-red-A700: #D50000;
+    --material-light-green-50: #F1F8E9;
+    --material-light-green-100: #DCEDC8;
+    --material-light-green-200: #C5E1A5;
+    --material-light-green-300: #AED581;
+    --material-light-green-400: #9CCC65;
+    --material-light-green-500: #8BC34A;
+    --material-light-green-600: #7CB342;
+    --material-light-green-700: #689F38;
+    --material-light-green-800: #558B2F;
+    --material-light-green-900: #33691E;
+    --material-light-green-A100: #CCFF90;
+    --material-light-green-A200: #B2FF59;
+    --material-light-green-A400: #76FF03;
+    --material-light-green-A700: #64DD17;
+    --material-cyan-50: #E0F7FA;
+    --material-cyan-100: #B2EBF2;
+    --material-cyan-200: #80DEEA;
+    --material-cyan-300: #4DD0E1;
+    --material-cyan-400: #26C6DA;
+    --material-cyan-500: #00BCD4;
+    --material-cyan-600: #00ACC1;
+    --material-cyan-700: #0097A7;
+    --material-cyan-800: #00838F;
+    --material-cyan-900: #006064;
+    --material-cyan-A100: #84FFFF;
+    --material-cyan-A200: #18FFFF;
+    --material-cyan-A400: #00E5FF;
+    --material-cyan-A700: #00B8D4;
+    --material-teal-50: #E0F2F1;
+    --material-teal-100: #B2DFDB;
+    --material-teal-200: #80CBC4;
+    --material-teal-300: #4DB6AC;
+    --material-teal-400: #26A69A;
+    --material-teal-500: #009688;
+    --material-teal-600: #00897B;
+    --material-teal-700: #00796B;
+    --material-teal-800: #00695C;
+    --material-teal-900: #004D40;
+    --material-teal-A100: #A7FFEB;
+    --material-teal-A200: #64FFDA;
+    --material-teal-A400: #1DE9B6;
+    --material-teal-A700: #00BFA5;
+    --material-pink-50: #FCE4EC;
+    --material-pink-100: #F8BBD0;
+    --material-pink-200: #F48FB1;
+    --material-pink-300: #F06292;
+    --material-pink-400: #EC407A;
+    --material-pink-500: #E91E63;
+    --material-pink-600: #D81B60;
+    --material-pink-700: #C2185B;
+    --material-pink-800: #AD1457;
+    --material-pink-900: #880E4F;
+    --material-pink-A100: #FF80AB;
+    --material-pink-A200: #FF4081;
+    --material-pink-A400: #F50057;
+    --material-pink-A700: #C51162;
+    --material-green-50: #E8F5E9;
+    --material-green-100: #C8E6C9;
+    --material-green-200: #A5D6A7;
+    --material-green-300: #81C784;
+    --material-green-400: #66BB6A;
+    --material-green-500: #4CAF50;
+    --material-green-600: #43A047;
+    --material-green-700: #388E3C;
+    --material-green-800: #2E7D32;
+    --material-green-900: #1B5E20;
+    --material-green-A100: #B9F6CA;
+    --material-green-A200: #69F0AE;
+    --material-green-A400: #00E676;
+    --material-green-A700: #00C853;
+    /*#endregion*/
+
+    --telegram-blue: #24A1DE;
+    --facebook-blue: #1877f2;
+    --google-red-old: #EA4335;
+    --google-red: #DB4437;
+    --google-green-old: #34A853; 
+    --google-green: #0F9D58;
+    --google-blue: #4285F4;
+    --google-green: #34A853;
+    --google-allo-yellow: #FBBC05;
+    --google-yellow: #F4B400;
+
+    --google-green-50: #effef6;
+    --google-green-100: #dbfdec;
+    --google-green-200: #b9f9d8;
+    --google-green-300: #82f3bb;
+    --google-green-400: #44e495;
+    --google-green-500: #1bcc76;
+    --google-green-600: #0f9d58;
+    --google-green-700: #11844d;
+    --google-green-800: #13683f;
+    --google-green-900: #115636;
+    --google-green-950: #03301d;
+}
+
+body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+
+/*#region FONT: Bebas Neue*/
+.bebas-neue {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/*#endregion*/
+
+/*#region FONT: Barlow */
+.barlow-condensed-thin {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+
+.barlow-condensed-extralight {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.barlow-condensed-light {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.barlow-condensed-regular {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.barlow-condensed-medium {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.barlow-condensed-semibold {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.barlow-condensed-bold {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.barlow-condensed-extrabold {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+}
+
+.barlow-condensed-black {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+}
+
+.barlow-condensed-thin-italic {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 100;
+    font-style: italic;
+}
+
+.barlow-condensed-extralight-italic {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 200;
+    font-style: italic;
+}
+
+.barlow-condensed-light-italic {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 300;
+    font-style: italic;
+}
+
+.barlow-condensed-regular-italic {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.barlow-condensed-medium-italic {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 500;
+    font-style: italic;
+}
+
+.barlow-condensed-semibold-italic {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.barlow-condensed-bold-italic {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.barlow-condensed-extrabold-italic {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 800;
+    font-style: italic;
+}
+
+.barlow-condensed-black-italic {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 900;
+    font-style: italic;
+}
+
+.barlow-thin {
+    font-family: "Barlow", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+
+.barlow-extralight {
+    font-family: "Barlow", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.barlow-light {
+    font-family: "Barlow", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.barlow-regular {
+    font-family: "Barlow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.barlow-medium {
+    font-family: "Barlow", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.barlow-semibold {
+    font-family: "Barlow", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.barlow-bold {
+    font-family: "Barlow", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.barlow-extrabold {
+    font-family: "Barlow", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+}
+
+.barlow-black {
+    font-family: "Barlow", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+}
+
+.barlow-thin-italic {
+    font-family: "Barlow", sans-serif;
+    font-weight: 100;
+    font-style: italic;
+}
+
+.barlow-extralight-italic {
+    font-family: "Barlow", sans-serif;
+    font-weight: 200;
+    font-style: italic;
+}
+
+.barlow-light-italic {
+    font-family: "Barlow", sans-serif;
+    font-weight: 300;
+    font-style: italic;
+}
+
+.barlow-regular-italic {
+    font-family: "Barlow", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.barlow-medium-italic {
+    font-family: "Barlow", sans-serif;
+    font-weight: 500;
+    font-style: italic;
+}
+
+.barlow-semibold-italic {
+    font-family: "Barlow", sans-serif;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.barlow-bold-italic {
+    font-family: "Barlow", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.barlow-extrabold-italic {
+    font-family: "Barlow", sans-serif;
+    font-weight: 800;
+    font-style: italic;
+}
+
+.barlow-black-italic {
+    font-family: "Barlow", sans-serif;
+    font-weight: 900;
+    font-style: italic;
+}
+
+/*#endregion*/
+
+/*#region FONT: Koh Santepheap */
+.koh-santepheap-thin {
+    font-family: "Koh Santepheap", serif;
+    font-weight: 100;
+    font-style: normal;
+}
+
+.koh-santepheap-light {
+    font-family: "Koh Santepheap", serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.koh-santepheap-regular {
+    font-family: "Koh Santepheap", serif !important;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.koh-santepheap-bold {
+    font-family: "Koh Santepheap", serif !important;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.koh-santepheap-black {
+    font-family: "Koh Santepheap", serif;
+    font-weight: 900;
+    font-style: normal;
+}
+
+/*#endregion*/
+
+/*#region FONT: Hanuman*/
+.hanuman-thin {
+    font-family: "Hanuman", serif;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+}
+
+.hanuman-extra-light {
+    font-family: "Hanuman", serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.hanuman-light {
+    font-family: "Hanuman", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.hanuman-regular {
+    font-family: "Hanuman", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.hanuman-medium {
+    font-family: "Hanuman", serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.hanuman-semi-bold {
+    font-family: "Hanuman", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.hanuman-bold {
+    font-family: "Hanuman", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.hanuman-bold {
+    font-family: "Hanuman", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.hanuman-extra-bold {
+    font-family: "Hanuman", serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+}
+
+.hanuman-black {
+    font-family: "Hanuman", serif;
+    font-optical-sizing: auto;
+    font-weight: 900;
+    font-style: normal;
+}
+
+/*#endregion*/
+
+/*#region FONT: Dosis*/
+.dosis-extralight {
+    font-family: "Dosis", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 200 !important;
+    font-style: normal;
+}
+
+.dosis-light {
+    font-family: "Dosis", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 300 !important;
+    font-style: normal;
+}
+
+.dosis-regular {
+    font-family: "Dosis", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 400 !important;
+    font-style: normal;
+}
+
+.dosis-medium {
+    font-family: "Dosis", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 500 !important;
+    font-style: normal;
+}
+
+.dosis-semibold {
+    font-family: "Dosis", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 600 !important;
+    font-style: normal;
+}
+
+.dosis-bold {
+    font-family: "Dosis", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 700 !important;
+    font-style: normal;
+}
+
+.dosis-extrabold {
+    font-family: "Dosis", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 800 !important;
+    font-style: normal;
+}
+
+/*#endregion*/
+
+/*#region FONT: Rajdhani*/
+.rajdhani-light {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.rajdhani-regular {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.rajdhani-medium {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.rajdhani-semibold {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.rajdhani-bold {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+/*#endregion*/
+
+/*#region FONT: Reddit Mono */
+.reddit-mono-200 {
+  font-family: "Reddit Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.reddit-mono-300 {
+  font-family: "Reddit Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.reddit-mono-400 {
+  font-family: "Reddit Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.reddit-mono-500 {
+  font-family: "Reddit Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.reddit-mono-600 {
+  font-family: "Reddit Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.reddit-mono-700 {
+  font-family: "Reddit Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.reddit-mono-800 {
+  font-family: "Reddit Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.reddit-mono-900 {
+  font-family: "Reddit Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+/*#endregion */

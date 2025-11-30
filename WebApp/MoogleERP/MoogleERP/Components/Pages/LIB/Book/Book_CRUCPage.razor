@@ -1,0 +1,432 @@
+﻿@page "/lib/book/{CRUCMode}"
+@page "/lib/book/{CRUCMode}/{id:int}"
+
+@inherits CRUCPageBase<Book>
+
+@if (CurrentObject != null && CurrentEditContext != null)
+{
+    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" >
+        <DataAnnotationsValidator />
+        <MudPaper Class="moog-pg-banner mt-3" Elevation="1">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="0">
+                    <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
+                    @if (CRUCMode == CRUDCModes.READ)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Success" Class=@($"status-chip-tiny") T="string" Style="margin-top:-5px">View</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.UPDATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">Update</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CREATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CLONE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New (Clone)</MudChip>
+                    }
+                </MudStack>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="2">
+                    @if (IsViewMode)
+                    {
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Default"
+                                   Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/close">
+                            Close
+                        </MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary" StartIcon="material-symbols-rounded/save_as"
+                                   Disabled=@IsSaving OnClick="@(() => Save(false))">
+                            Save
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary" StartIcon="material-symbols-rounded/save"
+                                   Disabled=@IsSaving OnClick="@(() => Save(true))">
+                            Save & Close
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base moog-btn-gray" Color="Color.Default" StartIcon="material-symbols-rounded/cancel"
+                                   Disabled=@IsSaving OnClick="Cancel">
+                            Cancel
+                        </MudButton>
+                    }
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+        <MudTabs Color="Color.Primary" Class="mt-3 moog-cruc-pg-mudtab" ActiveTabClass="moog-cruc-pg-mudtab-active" PanelClass="moog-cruc-pg-mudtab-panel" TabHeaderClass="moog-cruc-pg-mudtab-header" TabPanelClass="moog-cruc-pg-mudtab-tab-panel"
+                 Style="height:calc(100vh - 185px);">
+            <MudTabPanel Icon="material-symbols-rounded/home" Text="Main">
+                <MudPaper Class="rounded-0" Elevation="1" Height="calc(100vh - 220px)" Style="overflow-y: auto;">
+                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" StretchItems="StretchItems.All" Spacing="1">
+                        <MudGrid Spacing="3" Class="pa-3">
+                            <MudItem xs="9">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                              Label="Name"
+                                              @bind-Value="CurrentObject!.Title" For="@(() => CurrentObject!.Title)"
+                                              @ref=_mtfObjName />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                              Style="text-transform:uppercase"
+                                              Label="ID"
+                                              @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" />
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudCheckBox ReadOnly="@IsViewMode" Color="Color.Primary" Class="moog-mud-checkbox" UncheckedIcon="material-symbols-rounded/circle" CheckedIcon="material-symbols-rounded/check_circle"
+                                             IndeterminateIcon="material-symbols-rounded/help" @bind-Value=@_isSeries>
+                                    Series?
+                                </MudCheckBox>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                            Label="Author Name(s)"
+                                            @bind-Value="CurrentObject!.AuthorText" For="@(() => CurrentObject!.AuthorText)" />
+                            </MudItem>
+                            <MudItem xs="5">
+                                @if (_isSeries)
+                                {
+                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                            Label="Series Name"
+                                            @bind-Value="CurrentObject!.SeriesName" For="@(() => CurrentObject!.SeriesName)" />
+                                }
+                            </MudItem>
+                            <MudItem xs="1">
+                                @if (_isSeries)
+                                {
+                                    <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                     Label="Book #" T="decimal?" Step="0.1M"
+                                                     @bind-Value="CurrentObject!.BookNo" For="(() => CurrentObject.BookNo)" />
+                                }
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudSelect ReadOnly=@IsViewMode ShrinkLabel="true" Clearable="true" Class="moog-mud-form-field bordered moog-ui-select" PopoverClass="moog-ui-select-popover"
+                                           Label="Category" T="int?"
+                                           Value="@CurrentObject!.BookCategoryId" ValueChanged="OnBookCategoryChanged" >
+                                    @foreach (var ctg in _bookCategoryList)
+                                    {
+                                        <MudSelectItem T="int?" Value="@ctg.Id" >@ctg.Value</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              Label="Version"
+                                              @bind-Value="CurrentObject!.BookVersion" For="@(() => CurrentObject!.BookVersion)" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              Label="Edition"
+                                              @bind-Value="CurrentObject!.BookEdition" For="@(() => CurrentObject!.BookEdition)" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudSelect ReadOnly=@IsViewMode ShrinkLabel="true" Clearable="true" Class="moog-mud-form-field bordered moog-ui-select" PopoverClass="moog-ui-select-popover"
+                                           Label="Print Format"
+                                           @bind-Value="@CurrentObject!.PrintFormat" >
+                                    @foreach (var ctg in _bookPrintFormatList)
+                                    {
+                                        <MudSelectItem T="string" Value="@ctg.Key">@ctg.Value</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+                            <MudItem xs="1" Style="min-width:110px">
+                                <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                 Label="Published In" 
+                                                 @bind-Value="CurrentObject!.PublishedYear" For="(() => CurrentObject.PublishedYear)" T="int?" Step="1" />
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                 Label="Released In"
+                                                 @bind-Value="CurrentObject!.ReleasedYear" For="(() => CurrentObject.ReleasedYear)" T="int?" Step="1" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              Label="Publisher" 
+                                              @bind-Value="CurrentObject!.PublisherName" For="@(() => CurrentObject!.PublisherName)" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor=Color.Primary
+                                              Label="ISBN-13" MaxLength="13"
+                                              @bind-Value="CurrentObject!.ISBN13" For="@(() => CurrentObject!.ISBN13)" />
+                            </MudItem>
+                            <MudItem xs="2" Style="max-width:170px">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor=Color.Primary
+                                              Label="ISBN-10" MaxLength="10"
+                                              @bind-Value="CurrentObject!.ISBN10" For="@(() => CurrentObject!.ISBN10)" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              Label="Info Link"
+                                              @bind-Value="CurrentObject!.InfoUrl" For="@(() => CurrentObject!.InfoUrl)" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              Label="Purchase Link"
+                                              @bind-Value="CurrentObject!.PurchaseUrl" For="@(() => CurrentObject!.PurchaseUrl)" />
+                            </MudItem>
+                        </MudGrid>
+                        <MudPaper MinWidth="500px" MaxWidth="500px" MaxHeight="1000px" MinHeight="500px" Class="pa-2" Elevation="0">
+                            <MudCarousel Class="mud-full-width" ShowArrows="false" ShowBullets="true" BulletsPosition="Position.End" EnableSwipeGesture="true" AutoCycle="false" TData="object" Style="min-height:540px">
+                                <BulletTemplate Context="selected">
+                                    <div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon" style="padding:8px">
+                                        <span class="mud-icon-button-label">
+                                            <MudIcon Icon="@(selected ? "fas fa-image" : "far fa-image")" Color=@(selected? Color.Primary: Color.Default) Size="Size.Medium" />
+                                        </span>
+                                    </div>
+                                </BulletTemplate>
+                                <ChildContent>
+                                    @if (_images.Count > 0)
+                                    {
+                                        foreach (AttachedImage img in _images)
+                                        {
+                                            <MudCarouselItem Transition="Transition.Slide" Color="Color.Default">
+                                                <div class="d-flex">
+                                                    <MudImage Src="@img.ImageUrl" Width="500" Elevation="0" />
+                                                </div>
+                                            </MudCarouselItem>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <MudCarouselItem Transition="Transition.Slide" Color="Color.Default">
+                                            <MudImage Src="\image\no_img_available.jpg" Width="500" Elevation="0" />
+                                        </MudCarouselItem>
+                                    }
+                                </ChildContent>
+                            </MudCarousel>
+                            <MudTooltip Text="Update Images" Arrow="true" Color="Color.Default">
+                                <MudFab StartIcon="fas fa-images" Size="Size.Small" Color="Color.Primary" DropShadow="false" OnClick="OnUpdateImageClicked" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudStack>
+                </MudPaper>
+                <MudPaper Height="26px" Elevation="1"
+                          Style="padding:0px; background-color:var(--material-blue-gray-50); border-top-left-radius:0px; border-top-right-radius:0px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1" Style="height:100%; padding: 0px 10px">
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)">Created by </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@CurrentObject!.CreatedUser</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">@CurrentObject!.CreatedUser</MudChip> *@
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)"> on </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@(CurrentObject!.CreatedDateTimeText)</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">
+                                @(CurrentObject!.CreatedDateTime is null ? " - " : CurrentObject!.CreatedDateTime!.Value.ToString("dd-MMM-yyyy HH:mm:ss"))
+                            </MudChip> *@
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)">| Last modified by </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@CurrentObject!.ModifiedUser</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">@CurrentObject!.ModifiedUser</MudChip> *@
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)"> on </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@(CurrentObject!.ModifiedDateTimeText)</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">
+                                @(CurrentObject!.ModifiedDateTime is null ? " - " : CurrentObject!.ModifiedDateTime!.Value.ToString("dd-MMM-yyyy HH:mm:ss"))
+                            </MudChip> *@
+                    </MudStack>
+                </MudPaper>
+            </MudTabPanel>
+            <MudTabPanel Icon="@Icons.Material.Rounded.Info" Text="Other Info">
+                    
+            </MudTabPanel>
+        </MudTabs>
+    </EditForm>
+}
+
+@code {
+
+    #region UI PARAM
+    MudTextField<string>? _mtfObjName;
+    List<DropDownListItem> _countryList = [];
+    List<DropdownSelectItem> _merchantList = [];
+
+    List<DropdownSelectItem> _bookCategoryList = [];
+    List<DropdownSelectItem> _bookPrintFormatList = [];
+    bool _isSeries;
+
+    string? _selectedMerchantName;
+
+    string? _selectedCountryName;
+
+    MudDatePicker? _purchaseDatePicker;
+    List<AttachedImage> _images = [];
+
+
+    Dictionary<string, string> _stateIconList = [];
+    Dictionary<string, string> _stateClassList = [];
+    Dictionary<string, string> _stateStyleList = [];
+    Dictionary<string, string> _actionBtnStyles = [];
+    Dictionary<string, string> _nextValidActionList = [];
+    Dictionary<string, string> _actionIconList = [];
+    ObjectStateTransitionDetail? _objStateTranDetail = null;
+    public readonly string DataGridHdrStyle = "font-weight:700; background-color:var(--ssv-pharma-blue); color:#FFFFFF; border-right:1px solid #FFFFFF; padding-inline-start: 10px; padding-inline-end:5px; line-height:100%; padding-top:4px; padding-bottom:4px";
+    #endregion
+
+    #region PAGE LIFECYCLE FUNCTIONS
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        UrlPrefix = "/lib/book";
+
+        _stateClassList = ObjectStates.GetStateThemeClassList();
+        _stateStyleList = ObjectStates.GetLightStyles();
+        _actionIconList = ObjectStateActions.GetActionMaterialIconList();
+        _actionBtnStyles = ObjectStateActions.GetLightStyles();
+        _stateIconList = new()
+        {
+            { ObjectStates.NEW, @Icons.Material.Rounded.FiberNew },
+            { ObjectStates.LOANED, @Icons.Material.Rounded.Warning },
+            { ObjectStates.IN_USE, @Icons.Material.Rounded.CheckCircleOutline },
+            { ObjectStates.BROKEN, @Icons.Material.Rounded.Cancel },
+            { ObjectStates.GIFTED_OTHER, @Icons.Material.Rounded.CardGiftcard },
+            { ObjectStates.BNIB, @Icons.Material.Rounded.OfflineBolt },
+            { ObjectStates.RARELY_USED, @Icons.Material.Rounded.AccessTime },
+            { ObjectStates.SOLD, @Icons.Material.Rounded.AttachMoney },
+            { ObjectStates.WRITTEN_OFF, @Icons.Material.Rounded.ContentPasteOff },
+            { ObjectStates.OTHER, @Icons.Material.Rounded.CheckCircleOutline },
+            { ObjectStates.UNKNOWN, @Icons.Material.Rounded.CheckCircleOutline },
+        };
+
+        return base.SetParametersAsync(parameters);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        switch (CRUCMode)
+        {
+            case CRUDCModes.READ:
+                {
+                    CurrentObject = await Uow.Books.GetFullAsync(Id);
+                    IsViewMode = true;
+                }
+                break;
+            case CRUDCModes.CREATE:
+                {
+                    CurrentObject = new();
+                }
+                break;
+            case CRUDCModes.UPDATE:
+                CurrentObject = await Uow.Books.GetFullAsync(Id);
+                break;
+            case CRUDCModes.CLONE:
+                {
+                    var tempObj = await Uow.Books.GetFullAsync(Id);
+                    CurrentObject = tempObj!.DeepClone();
+                    CurrentObject!.Id = 0;
+                    CurrentObject!.ObjectCode = String.Empty;
+                }
+                break;
+        }
+
+        CurrentEditContext = new EditContext(CurrentObject!);
+
+        if (CurrentObject != null && CurrentObject.Id > 0)
+            _images = await Uow.AttachedImages.GetByLinkedObjectAsync(CurrentObject.Id, CurrentObject.GetType().Name);
+
+        _isSeries = !string.IsNullOrEmpty(CurrentObject!.SeriesName);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (_mtfObjName != null && !IsViewMode)
+                await _mtfObjName!.FocusAsync();
+
+            await PopulatedUIControls();
+        }
+    }
+    #endregion
+
+    #region UI FUNCTIONS
+    void OnBookCategoryChanged(int? value)
+    {
+        CurrentObject!.BookCategoryId = value;
+    }
+
+    async Task OnUpdateImageClicked()
+    {
+        DialogParameters<AttachedImagesDiag> param = new();
+        param.Add(x => x.Images, _images);
+
+        var diagOptions = new DialogOptions
+        {
+            BackdropClick = false,
+            CloseButton = true,
+            CloseOnEscapeKey = false,
+            MaxWidth = MaxWidth.Large,
+            Position = DialogPosition.Center
+        };
+
+        var dialog = await MudDialogSvc.ShowAsync<AttachedImagesDiag>($"IMAGE(S)", param, diagOptions);
+        var result = await dialog.Result;
+    }
+    #endregion
+
+    #region DB UPDATE FUNCTIONS
+    protected override Task PreSaveProcessing()
+    {
+        CurrentObject!.ObjectName = CurrentObject!.Title;
+        CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
+        return base.PreSaveProcessing();
+    }
+
+    protected override async Task<bool> SaveAndCommitProcessing()
+    {
+        DateTime timestamp = DateTime.Now;
+
+        if (CurrentObject!.Id == 0)
+        {
+            CurrentObject!.CreatedUser = AuditTrailUser;
+            CurrentObject!.CreatedDateTime = timestamp;
+        }
+
+        CurrentObject!.ModifiedUser = AuditTrailUser;
+        CurrentObject!.ModifiedDateTime = timestamp;
+
+        int objId = await Uow.Books.InsertOrUpdateFullAsync(CurrentObject!);
+
+        if (objId > 0 && _images.Count != 0)
+        {
+            foreach (AttachedImage img in _images)
+            {
+                if (img.Id == 0 && !img.IsDeleted)
+                {
+                    img.LinkedObjectType = CurrentObject!.GetType().Name;
+                    img.LinkedObjectId = objId;
+                    img.CreatedUser = AuditTrailUser;
+                    img.CreatedDateTime = timestamp;
+                    img.ModifiedUser = AuditTrailUser;
+                    img.ModifiedDateTime = timestamp;
+
+                    int imgId = await Uow.AttachedImages.InsertAsync(img);
+                }
+                else if (img.Id > 0)
+                {
+                    img.ModifiedUser = AuditTrailUser;
+                    img.ModifiedDateTime = timestamp;
+                    bool isImgUpd = await Uow.AttachedImages.UpdateAsync(img);
+                }
+            }
+        }
+
+        return objId > 0;
+    }
+    #endregion
+
+    #region INTERNAL FUNCTIONS
+    async Task PopulatedUIControls()
+    {
+        _countryList = await Uow.Countries.GetForDropdownSelect1Async();
+        _merchantList = await Uow.Merchants.GetForDropdownSelectAsync();
+        _bookCategoryList = await Uow.BookCategories.GetForDropdownSelectAsync();
+        _bookPrintFormatList = BookPrintFormats.GetForDropdownSelect();
+    }
+
+    Task PurchasedDateTodayAsync()
+    {
+        if (_purchaseDatePicker is null) return Task.CompletedTask;
+
+        return _purchaseDatePicker!.GoToDate(DateTime.Today);
+    }
+    #endregion
+}

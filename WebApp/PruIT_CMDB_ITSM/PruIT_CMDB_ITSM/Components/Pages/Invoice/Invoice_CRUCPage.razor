@@ -1,11 +1,7 @@
 ﻿@page "/fin/Invoice/cruc/{CRUCMode}"
 @page "/fin/Invoice/cruc/{CRUCMode}/{id:int}"
-@using System.Globalization
-@using DataLayer.AuxComponents.Extensions
-@using Force.DeepCloner
-
 @* @rendermode InteractiveAuto*@
-@inject IDialogService MudDiagSvc
+
 @inherits CRUCPageBase<Invoice>
 
 @if (CurrentObject != null && CurrentEditContext != null)

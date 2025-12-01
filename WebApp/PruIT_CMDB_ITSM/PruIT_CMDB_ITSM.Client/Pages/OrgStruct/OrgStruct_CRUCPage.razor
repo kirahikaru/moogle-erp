@@ -1,9 +1,10 @@
-﻿@page "/core/org-struct-type/cruc/{CRUCMode}"
-@page "/core/org-struct-type/cruc/{CRUCMode}/{id:int}"
+﻿@page "/core/org-struct/cruc/{CRUCMode}"
+@page "/core/org-struct/cruc/{CRUCMode}/{id:int}"
+
 
 @* @rendermode InteractiveAuto*@
 
-@inherits CRUCPageBase<OrgStructType>
+@inherits CRUCPageBase<OrgStruct>
 
 @if (CurrentObject != null && CurrentEditContext != null)
 {
@@ -52,30 +53,61 @@
                 <MudPaper Class="px-4 pt-2 pb-5 overflow-y-auto" Height="calc(100vh - 210px)" Width="100%" Elevation="0" Style="position:relative">
                     <MudForm Model="@CurrentObject" @ref=@CrucForm @bind-IsValid=@IsValidationPassed @bind-Errors=@MudValidationErrors >
                         <MudGrid Spacing="2" Justify="Justify.SpaceEvenly">
-                            <MudItem xs="8">
+                            <MudItem xs="6">
                                 <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Required="true"
                                               Label="Name"
                                               @bind-Value=CurrentObject!.ObjectName For="@(() => CurrentObject.ObjectName)" 
                                               MaxLength="255" @ref=_uiControlObjectName />
                             </MudItem>
-                            <MudItem xs="1">
-                                <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" 
-                                                 Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Numbers"
-                                                 Label="Level" Format="#,##0" Min="0" Max="999" Step="1"
-                                                 @bind-Value=CurrentObject.OrgLevel For="@(() => CurrentObject.OrgLevel)" OnlyValidateIfDirty="true"
-                                                 Required="true" RequiredError="'Level' is required." />
-                            </MudItem>
-                            <MudItem xs="3">
+                            <MudItem xs="2">
                                 <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" MaxLength="80"
                                               Label="ID"
                                               @bind-Value=CurrentObject!.ObjectCode For="@(() => CurrentObject.ObjectCode)" OnlyValidateIfDirty="true"
                                               Required="true" RequiredError="'ID' is required." />
                             </MudItem>
+                            <MudItem xs="4">
+                                <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" FullWidth="true" Required="true"
+                                           AdornmentIcon="@Icons.Material.Rounded.KeyboardArrowDown"
+                                           Label="Type" T="int?"
+                                           Value="@CurrentObject.OrgStructTypeId" ValueChanged="OnOrgStructTypeChanged"
+                                           For="@(() => CurrentObject!.OrgStructTypeId)" OnlyValidateIfDirty="true">
+                                    @foreach (DropdownSelectItem item in _orgStructTypeList)
+                                    {
+                                        <MudSelectItem T="int?" Value=@item.Id >@item.Value</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Required="false"
+                                              Label="Name (kh)" Placeholder="ឈ្មោះខ្មែរ"
+                                              @bind-Value=CurrentObject!.ObjectNameKh For="@(() => CurrentObject.ObjectNameKh)"
+                                              MaxLength="255" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" FullWidth="true" Required="true"
+                                           AdornmentIcon="@Icons.Material.Rounded.KeyboardArrowDown"
+                                           Label="Default Privacy Level" T="int"
+                                           @bind-Value="@CurrentObject.DefaultPrivacyLevel" For="@(() => CurrentObject!.DefaultPrivacyLevel)"
+                                           OnlyValidateIfDirty="true">
+                                    @foreach (DropdownSelectItem item in _privacyLevelList)
+                                    {
+                                        <MudSelectItem Value=@item.Id>@item.Value</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+                            <MudItem xs="3" >
+                                <MudSwitchM3 ReadOnly=@IsViewMode Class="pru-mud-switch mt-5 ml-2" Color="@(CurrentObject.IsEnabled? Color.Success: Color.Secondary)"
+                                             ThumbIcon="@Icons.Material.Rounded.Check" ThumbOffIcon="@Icons.Material.Rounded.Close" Size="Size.Small" 
+                                             Label="Enabled?"
+                                             @bind-Value="CurrentObject!.IsEnabled" />
+                            </MudItem>
+                            
                             @if (CurrentObject.Id > 0)
                             {
                                 <MudItem xs="12">
-                                    <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                                                 Label="Parent" T="int?"
+                                    <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" PopoverClass="pru-ui-combo-box-popover"
+                                                 Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                                                 Label="Parent" T="int?" 
                                                  Value="@CurrentObject.ParentId" ValueChanged="OnParentChanged"
                                                  ToStringFunc="@(val => val is not null && val > 0 ? _validParentList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == val)?.ObjectName : "-")">
                                         <ChildContent>
@@ -135,6 +167,8 @@
 @code {
     #region UI PARAM
     IEnumerable<DropDownListItem> _validParentList = [];
+    IEnumerable<DropdownSelectItem> _orgStructTypeList = [];
+    IEnumerable<DropdownSelectItem> _privacyLevelList = ConfidentialityLevels.GetForDropdown();
     MudTextField<string>? _uiControlObjectName;
     string _parentHierarchyPath = "";
     #endregion
@@ -142,7 +176,7 @@
     #region PAGE LIFECYCLE FUNCTIONS
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        UrlPrefix = "/core/org-struct-type";
+        UrlPrefix = "/core/org-struct";
 
         return base.SetParametersAsync(parameters);
     }
@@ -153,7 +187,7 @@
         {
             case CRUCModes.READ:
                 {
-                    CurrentObject = await Uow.OrgStructTypes.GetAsync(Id);
+                    CurrentObject = await Uow.OrgStructs.GetFullAsync(Id);
                     IsViewMode = true;
                 }
                 break;
@@ -163,11 +197,11 @@
                 }
                 break;
             case CRUCModes.UPDATE:
-                CurrentObject = await Uow.OrgStructTypes.GetAsync(Id);
+                CurrentObject = await Uow.OrgStructs.GetFullAsync(Id);
                 break;
             case CRUCModes.CLONE:
                 {
-                    var tempObj = await Uow.OrgStructTypes.GetAsync(Id);
+                    var tempObj = await Uow.OrgStructs.GetFullAsync(Id);
                     CurrentObject = tempObj.DeepClone();
                     CurrentObject!.Id = 0;
                     CurrentObject!.ObjectCode = String.Empty;
@@ -192,9 +226,29 @@
                 await _uiControlObjectName.FocusAsync();
         }
     }
+    
     #endregion
 
     #region UI FUNCTIONS
+    void OnOrgStructTypeChanged(int? val)
+    {
+        if (val is null || val <= 0)
+        {
+            CurrentObject!.OrgStructTypeId = null;
+            CurrentObject!.OrgStructTypeCode = null;
+        }
+        else
+        {
+            var item = _orgStructTypeList.SingleOrDefault<DropdownSelectItem>(x => x.Id == val!.Value);
+
+            if (item is not null)
+            {
+                CurrentObject!.OrgStructTypeId = item.Id;
+                CurrentObject!.OrgStructTypeCode = item.Key;
+            }
+        }
+    }
+
     void OnParentChanged(int? val)
     {
         if (val is null || val <= 0)
@@ -235,7 +289,7 @@
     {
         InvalidMsgList.Clear();
 
-        bool isDuplicated = await Uow.OrgStructTypes.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+        bool isDuplicated = await Uow.OrgStructs.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
 
         if (isDuplicated)
         {
@@ -254,7 +308,7 @@
             CurrentObject!.CreatedDateTime = timestamp;
             CurrentObject!.ModifiedDateTime = timestamp;
 
-            int objId = await Uow.OrgStructTypes.InsertAsync(CurrentObject!);
+            int objId = await Uow.OrgStructs.InsertAsync(CurrentObject!);
 
             if (objId > 0)
             {
@@ -270,7 +324,7 @@
             CurrentObject!.ModifiedUser = AuditTrailUser;
             CurrentObject!.ModifiedDateTime = DateTime.Now;
 
-            bool isupdated = await Uow.OrgStructTypes.UpdateAsync(CurrentObject!);
+            bool isupdated = await Uow.OrgStructs.UpdateAsync(CurrentObject!);
             return isupdated;
         }
     }
@@ -280,7 +334,9 @@
     async Task PopulateUIControl()
     {
         if (CurrentObject is not null && CurrentObject!.Id > 0)
-            _validParentList = await Uow.OrgStructTypes.GetValidParentsAsync(CurrentObject.Id, CurrentObject.ObjectCode!, CurrentObject!.OrgLevel, null);
+            _validParentList = await Uow.OrgStructs.GetValidParentsAsync(CurrentObject.Id, CurrentObject.ObjectCode!, CurrentObject!.HierarchyPath!, CurrentObject!.Type!.OrgLevel, null);
+
+        _orgStructTypeList = await Uow.OrgStructTypes.GetForDropdownSelectAsync();
     }
     #endregion
 }

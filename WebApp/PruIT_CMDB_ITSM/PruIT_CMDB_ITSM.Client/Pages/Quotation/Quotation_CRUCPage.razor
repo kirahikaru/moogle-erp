@@ -1,10 +1,8 @@
 ﻿@page "/fin/quotation/cruc/{CRUCMode}"
 @page "/fin/quotation/cruc/{CRUCMode}/{id:int}"
-@using System.Globalization
-@using Force.DeepCloner
 
 @* @rendermode InteractiveAuto*@
-@inject IDialogService MudDiagSvc
+
 @inherits CRUCPageBase<Quotation>
 
 @if (CurrentObject != null && CurrentEditContext != null)

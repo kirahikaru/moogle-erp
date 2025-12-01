@@ -1,10 +1,8 @@
 ﻿@page "/fin/po/cruc/{CRUCMode}"
 @page "/fin/po/cruc/{CRUCMode}/{id:int}"
-@using System.Globalization
-@using Force.DeepCloner
 
 @* @rendermode InteractiveAuto*@
-@inject IDialogService MudDiagSvc
+
 @inherits CRUCPageBase<PurchaseOrder>
 
 @if (CurrentObject != null && CurrentEditContext != null)

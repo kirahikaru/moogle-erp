@@ -1,31 +1,28 @@
-﻿using DataLayer.Models.Pru.IT;
+﻿using Dapper;
+using DataLayer.Models.Pru.IT;
 using static Dapper.SqlMapper;
 
 namespace DataLayer.Repos.Pru.IT;
 
 public interface IITAssetCategoryRepos : IBaseRepos<ITAssetCategory>
 {
-	Task<KeyValuePair<int, IEnumerable<ITAssetCategory>>> SearchAsync(
-		int pgSize = 0,
-		int pgNo = 0,
-		string? searchText = null,
-		IEnumerable<SqlSortCond>? sortConds = null,
-		IEnumerable<SqlFilterCond>? filterConds = null,
-		List<int>? excludeIdList = null);
+	//Task<KeyValuePair<int, IEnumerable<ITAssetCategory>>> SearchAsync(
+	//	int pgSize = 0,
+	//	int pgNo = 0,
+	//	string? searchText = null,
+	//	IEnumerable<SqlSortCond>? sortConds = null,
+	//	IEnumerable<SqlFilterCond>? filterConds = null,
+	//	List<int>? excludeIdList = null);
 
 	Task<IEnumerable<DropdownSelectItem>> GetForDropdownAsync(string assetType, int parentId = 0);
 	Task<IEnumerable<DropdownSelectItem>> GetForDropdownAsync(string assetType, string parentCode);
+
+	Task<IEnumerable<DropDownListItem>> GetValidParentsAsync(int objectId, string objectCode, int? currentParentId);
 }
 
 public class ITAssetCategoryRepos(IDbContext dbContext) : BaseRepos<ITAssetCategory>(dbContext, ITAssetCategory.DatabaseObject), IITAssetCategoryRepos
 {
-	public async Task<KeyValuePair<int, IEnumerable<ITAssetCategory>>> SearchAsync(
-		int pgSize = 0,
-		int pgNo = 0,
-		string? searchText = null,
-		IEnumerable<SqlSortCond>? sortConds = null,
-		IEnumerable<SqlFilterCond>? filterConds = null,
-		List<int>? excludeIdList = null)
+	public override async Task<KeyValuePair<int, IEnumerable<ITAssetCategory>>> SearchNewAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, IEnumerable<SqlSortCond>? sortConds = null, IEnumerable<SqlFilterCond>? filterConds = null, List<int>? excludeIdList = null)
 	{
 		if (pgNo < 0 && pgSize < 0)
 			throw new ArgumentOutOfRangeException(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
@@ -69,6 +66,8 @@ public class ITAssetCategoryRepos(IDbContext dbContext) : BaseRepos<ITAssetCateg
 		}
 		#endregion
 
+		sbSql.LeftJoin($"{DbObject.MsSqlTable} pr ON pr.IsDeleted=0 AND pr.Id=t.ParentId");
+
 		foreach (string orderByClause in GetSearchOrderbBy())
 			sbSql.OrderBy(orderByClause);
 
@@ -85,17 +84,23 @@ public class ITAssetCategoryRepos(IDbContext dbContext) : BaseRepos<ITAssetCateg
 
 			sql = sbSql.AddTemplate(
 				$";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				$"SELECT * FROM {DbObject.MsSqlTable} t WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+				$"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
 		}
 
 		using var cn = DbContext.DbCxn;
 
-		var dataList = (await cn.QueryAsync<ITAssetCategory>(sql, param)).AsList();
+		var dataList = (await cn.QueryAsync<ITAssetCategory, ITAssetCategory, ITAssetCategory>(sql, (obj, pr) =>
+		{
+			obj.Parent = pr;
+			return obj;
+
+		}, param, splitOn:"Id")).AsList();
 
 		string countSql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 		int count = await cn.ExecuteScalarAsync<int>(countSql, param);
 
 		return new KeyValuePair<int, IEnumerable<ITAssetCategory>>(count, dataList);
+
 	}
 
 	public async Task<IEnumerable<DropdownSelectItem>> GetForDropdownAsync(string assetType, int parentId)
@@ -161,5 +166,40 @@ public class ITAssetCategoryRepos(IDbContext dbContext) : BaseRepos<ITAssetCateg
 		string sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
 
 		return await cn.QueryAsync<DropdownSelectItem>(sql, param); ;
+	}
+
+	public async Task<IEnumerable<DropDownListItem>> GetValidParentsAsync(int objectId, string objectCode, int? currentParentId)
+	{
+		SqlBuilder sbSql = new();
+		DynamicParameters param = new();
+
+		sbSql.Select("'ObjectId'=t.Id")
+			.Select("t.ObjectCode")
+			.Select("t.ObjectName")
+			.Select("t.HierarchyPath");
+
+		sbSql.Where("t.IsDeleted=0");
+		sbSql.Where("t.Id<>@Id");
+
+		param.Add("@ObjectCode", objectCode, DbType.AnsiString);
+		param.Add("@Id", objectId);
+
+		if (currentParentId.HasValue)
+		{
+			sbSql.Where("(t.Id=@CurrentParentId OR t.HierarchyPath NOT LIKE @ObjectCode+'>%')");
+			param.Add("@CurrentParentId", currentParentId.Value);
+		}
+		else
+			sbSql.Where("t.HierarchyPath NOT LIKE @ObjectCode+'>%'");
+
+		sbSql.OrderBy("t.HierarchyPath");
+
+		using var cn = DbContext.DbCxn;
+
+		string sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
+
+		var dataList = await cn.QueryAsync<DropDownListItem>(sql, param);
+
+		return dataList;
 	}
 }

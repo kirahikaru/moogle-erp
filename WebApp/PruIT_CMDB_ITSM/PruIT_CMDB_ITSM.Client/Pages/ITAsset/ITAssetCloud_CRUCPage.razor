@@ -1,10 +1,8 @@
 ﻿@page "/itasset/cloud/cruc/{CRUCMode}"
 @page "/itasset/cloud/cruc/{CRUCMode}/{id:int}"
-@using System.Globalization
-@using Force.DeepCloner
 
 @* @rendermode InteractiveAuto*@
-@inject IDialogService MudDiagSvc
+
 @inherits CRUCPageBase<ITAsset>
 
 @if (CurrentObject != null && CurrentEditContext != null)
@@ -65,7 +63,7 @@
                                           @bind-Value=CurrentObject!.ObjectCode For="@(() => CurrentObject.ObjectCode)" OnlyValidateIfDirty="true" MaxLength="80" />
                         </MudItem>
                         <MudItem xs="2">
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" Class="pru-mud-form-field bordered pru-ui-select" Required="true" FullWidth="true"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true" FullWidth="true"
                                         Label="Asset Type" Placeholder="Select asset type"
                                         Value=CurrentObject!.AssetType For="@(() => CurrentObject.AssetType)" ValueChanged="OnAssetTypeChanged" InputId="AssetType" T="string" OnlyValidateIfDirty="true">
                                 @foreach (DropdownSelectItem assetType in _assetTypeList)
@@ -85,7 +83,7 @@
                             </MudSelect>
                         </MudItem>
                         <MudItem xs="4">
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover"
                                        Label="Sub-Category" Placeholder="Select a sub-category"
                                        @bind-Value=CurrentObject!.SubCategory For="@(() => CurrentObject.SubCategory)" OnlyValidateIfDirty="true"
                                        Disabled=@(string.IsNullOrEmpty(CurrentObject!.CategoryCode))>
@@ -105,7 +103,7 @@
                                     <MudIconButton Icon="@Icons.Material.Rounded.PlayCircle" Size="Size.Small" OnClick="OnAssetStateClicked" />
                                 </MudTooltip>
                             } *@
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" Required="true"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true"
                                        Label="Asset State"
                                        T="string" @bind-Value=CurrentObject!.AssetState For="@(() => CurrentObject.AssetState)" OnlyValidateIfDirty="true">
                                 @foreach (DropdownSelectItem assetState in _assetStateList)
@@ -124,7 +122,7 @@
                                     <MudIconButton Icon="@Icons.Material.Rounded.PlayCircle" Size="Size.Small" OnClick="OnLifeCycleStatusClicked" />
                                 </MudTooltip>
                             } *@
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" Required="true"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true"
                                        Label="Life Cycle Status"
                                        T="string" @bind-Value=CurrentObject!.LifeCycleStatus For="@(() => CurrentObject.LifeCycleStatus)" OnlyValidateIfDirty="true">
                                 @foreach (DropdownSelectItem lifeCycleStatus in _assetLifeCycleList)
@@ -211,7 +209,7 @@
                                              @bind-Value=CurrentObject!.PurchaseTax For="@(() => CurrentObject.PurchaseTax)" />
                         </MudItem>
                         <MudItem xs="3">
-                            <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                            <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" PopoverClass="pru-ui-combo-box-popover" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
                                          Label="Vendor/Supplier" T="string"
                                          @bind-Value="@CurrentObject.VendorID" For="@(() => CurrentObject.VendorID)"
                                          ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _vendorList.Single<DropdownSelectItem>(x => x.Key == e)?.Value)">

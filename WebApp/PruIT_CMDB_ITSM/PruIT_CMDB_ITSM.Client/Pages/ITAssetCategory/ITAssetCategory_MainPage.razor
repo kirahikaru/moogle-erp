@@ -1,87 +1,80 @@
-﻿@page "/it/pru-core-project/main"
-@using PruIT_CMDB_ITSM.Client.Pages
+﻿@page "/itasset/category/main"
 
-@rendermode InteractiveServer
+@* @rendermode InteractiveAuto *@
 
-@inherits MainPageBase<PruCoreProject>
+@inherits MainPageBase<ITAssetCategory>
 
-<MudPaper Class="px-4 py-3 rounded" Width="100%" Elevation="0" Square="true" Style="background-color:#FFFF; border: solid 1px var(--pru-gray-tw-100)">
+<MudPaper Class="px-4 py-3 rounded" Width="100%" Elevation="0" Square="true" Style="background-color:#FFFDE7; border: solid 1px var(--pru-gray-tw-100)">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<div style="color:var(--pru-red-default); font-size:28px;">
 			<span style="font-weight:800">@HeaderTitle</span>
-			@* <span style="font-weight:400"> | Software</span> *@
 		</div>
-		<MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/add_circle" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="pru-btn-base" OnClick="@(args => CreateOrEditRecord(0))">Add New</MudButton>
+		<MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/add_circle" Size="Size.Small" Color="Color.Primary" Class="pru-btn-base" DropShadow="false" OnClick="@(args => CreateOrEditRecord(0))">Add New</MudButton>
 	</MudStack>
 </MudPaper>
-
 <MudPaper Class="pa-3 mt-3 rounded overflow-y-auto" Width="100%" Elevation="0" Square="true" Height="calc(100vh - 170px)">
+	<!-- SEARCH / FILTER INPUT AREA ---------------------------->
 	<MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
 		<MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="pru-mud-form-field bordered"
 					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
 					  Placeholder="Search text here..." HelperText="<Search input instruction here>" Style="padding: 2px 0px 2px 0px"
 					  @bind-Value="SearchText" OnKeyDown="OnSearchBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
 		<MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/search" Size="Size.Small" Color="Color.Primary" DropShadow="false" OnClick="OnSearchClicked" Class="pru-btn-base">Search</MudButton>
-		<MudCheckBox Class="pru-mud-checkbox" UncheckedColor="@Color.Secondary" UncheckedIcon="material-symbols-rounded/circle" CheckedIcon="material-symbols-rounded/check_circle"
-					 IndeterminateIcon="material-symbols-rounded/help"
-					 Label="CLM Only"
-					 @bind-Value=@_clmOnly Color="@Color.Secondary" Style="color:var(--pru-gray-default)" />
 	</MudStack>
-    <MudDataGrid Class="mt-2 pru-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage="50" Elevation="0"
-                 ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true"
-                 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" T="PruCoreProject">
-        <Columns>
-            @* <TemplateColumn Title="LBU" StickyLeft="true" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Context="rowData">
-				<CellTemplate>
-					<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
-						<MudImage Src=@(_lbuFlagList[rowData.Item.LBU!]) Height="12" />
-						<MudText Typo="Typo.body1">@rowData.Item.LBU</MudText>
-					</MudStack>
-				</CellTemplate>
-			</TemplateColumn> *@
-            <PropertyColumn Title="Code" Property="x => x.ObjectCode" Sortable="false" StickyLeft="true"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
-			<PropertyColumn Title="Name" Property="x => x.ObjectName" StickyLeft="true"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Title="LBU(s)" Property="x => x.AzureLbuCodes" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
-                            HeaderStyle="width:5000px; max-width:300px" />
-            <PropertyColumn Title="Description" Property="x => x.Description"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Title="Business Function" Property="x => x.BusnFunc"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Filterable="false" />
-            <PropertyColumn Title="Owner" Property="x => x.Owner" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Filterable="false" />
-            <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
-                            HeaderStyle="width:100px; justify-items:center" CellStyle="padding-inline-end:4px; padding-inline-start:4px">
+	<!-- DATA RESULT DISPLAY AREA ------------------------------>
+	<MudDataGrid Class="mt-2 pru-mud-datagrid main-pg" ServerData="ServerDataFunc" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage=@PageSize
+					 ColumnResizeMode="ResizeMode.Container" Elevation="0" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true"
+					 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row"
+				 @ref="MainDataGrid" T="ITAssetCategory">
+		<Columns>
+			<PropertyColumn Property="x => x.ObjectName" Title="Name" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+			<PropertyColumn Property="x => x.ObjectCode" Title="ID" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" Sortable="false"/>
+            <TemplateColumn Title="Parent" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" Sortable="false"
+                            Context="rowData">
                 <CellTemplate>
-                    <MudStack Row="true" Spacing="1">
-                        <MudIconButton Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
-                        <MudIconButton Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
-                        <MudIconButton Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
-                        <MudIconButton Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
-                    </MudStack>
+                    <MudText Typo="Typo.body1">@(rowData.Item.Parent != null ? rowData.Item.Parent.ObjectName : "-")</MudText>
                 </CellTemplate>
             </TemplateColumn>
-	</Columns>
-	<PagerContent>
-		<MudDataGridPager T="PruCoreProject" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] {10, 20, 30, 50, 80, 100}" />
-	</PagerContent>
-</MudDataGrid>
+			<PropertyColumn Property="x => x.HierarchyPath" Title="Hierarchy Path" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
+			<TemplateColumn Title="Action" HeaderClass="pru-mud-datagrid-hdr main-pg" Sortable="false" Filterable="false" StickyRight="true"
+							CellClass="pru-mud-datagrid-cell" HeaderStyle="max-width:130px; width:130px; justify-items:center"
+							CellStyle="padding-inline-end:4px; padding-inline-start:4px">
+				<CellTemplate>
+					<MudStack Row="true" Spacing="1">
+						<MudIconButton Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
+						<MudIconButton Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
+						<MudIconButton Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
+						<MudIconButton Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
+					</MudStack>
+				</CellTemplate>
+			</TemplateColumn>
+		</Columns>
+		<PagerContent>
+			<MudDataGridPager T="ITAssetCategory" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] { 10, 30, 50, 80, 100 }" />
+		</PagerContent>
+	</MudDataGrid>
 </MudPaper>
 
 @code {
 
-	#region UI Param
-	Dictionary<string, string> _lbuFlagList = PruLBUs.GetFlagIconPaths();
-	bool _clmOnly = true;
+	#region UI PARAM
+	Dictionary<string, string> _statusCssClassList = new()
+		{
+			{ "", "" },
+			{ EmployeeStatuses.ACTIVE, "status-chip-success-light" },
+			{ EmployeeStatuses.DRAFT, "status-chip-success-light" },
+			{ EmployeeStatuses.RESIGNED, "status-chip-obsolete-light" },
+			{ EmployeeStatuses.BLACKLIST, "status-chip-pending-light" },
+			{ EmployeeStatuses.INVALID, "status-chip-pending-light" },
+		};
+
 	#endregion
 
 	#region PAGE LIFECYCLE EVENTS
 	public override Task SetParametersAsync(ParameterView parameters)
 	{
-		UrlPrefix = "/it/pru-core-project";
-		SearchParamName = "pruCoreProjectParam";
+		UrlPrefix = "/core/it-asset-ctg";
+		SearchParamName = "itAssetCategoryParam";
 
 		return base.SetParametersAsync(parameters);
 	}
@@ -95,7 +88,7 @@
 			CurrentAppModPerm.CanRead = true;
 			CurrentAppModPerm.CanUpdate = true;
 			CurrentAppModPerm.CanDelete = true;
-			CurrentAppModPerm.ModuleName = typeof(PruCoreProject).Name;
+			CurrentAppModPerm.ModuleName = typeof(ITAssetCategory).Name;
 		}
 		else
 		{
@@ -118,11 +111,20 @@
 		PopuplateSearchFilters();
 		await Task.CompletedTask;
 	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await UITextBoxSearch!.FocusAsync();
+		}
+		await LoadSavedSearchFilters();
+	}
 	#endregion
 
-	protected override async Task<GridData<PruCoreProject>> ServerDataFunc(GridState<PruCoreProject> gridState)
+	protected override async Task<GridData<ITAssetCategory>> ServerDataFunc(GridState<ITAssetCategory> gridState)
 	{
-		if (IsSearching) return new GridData<PruCoreProject>
+		if (IsSearching) return new GridData<ITAssetCategory>
 			{
 				Items = [],
 				TotalItems = 0
@@ -149,25 +151,8 @@
 			}
 			else
 			{
-				List<SqlSortCond> sortConds = [];
-				foreach (SortDefinition<PruCoreProject> sortDef in gridState.SortDefinitions)
-				{
-					sortConds.Add(new SqlSortCond(fieldName: sortDef.SortBy, sortDef.Descending));
-				}
-
-				List<SqlFilterCond> filterConds = [];
-
-				if (_clmOnly)
-				{
-					SqlFilterCond clmSqlCond = new();
-					clmSqlCond.SqlWhereClause = "(t.AzureLbuCodes LIKE '%'+@PCLA+'%' OR t.AzureLbuCodes LIKE '%'+@PLAL+'%' OR AzureLbuCodes LIKE '%'+@PMLI+'%')";
-					clmSqlCond.Parameters.Add("@PCLA", "khlife", System.Data.DbType.AnsiString);
-					clmSqlCond.Parameters.Add("@PMLI", "mmlife", System.Data.DbType.AnsiString);
-					clmSqlCond.Parameters.Add("@PLAL", "lalife", System.Data.DbType.AnsiString);
-					filterConds.Add(clmSqlCond);
-				}
-
-				KeyValuePair<int, IEnumerable<PruCoreProject>> result = await Uow.PruCoreProjects.SearchAsync(MainDataGrid.RowsPerPage, MainDataGrid.CurrentPage + 1, SearchText, sortConds, filterConds, null);
+				// KeyValuePair<int, IEnumerable<ITAsset>> result = await Uow.ITAssets.HardwareSearchAsync(0, 0, SearchText, null, null, null);
+				KeyValuePair<int, IEnumerable<ITAssetCategory>> result = await Uow.ITAssetCategories.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, null, null);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}
@@ -179,7 +164,7 @@
 			//	.Take(gridState.Count)
 			//	.ToList();
 
-			return new GridData<PruCoreProject>
+			return new GridData<ITAssetCategory>
 				{
 					Items = MainDataList,
 					TotalItems = totalItemCount
@@ -188,8 +173,7 @@
 		catch (Exception ex)
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
-
-			return new GridData<PruCoreProject>
+			return new GridData<ITAssetCategory>
 				{
 					Items = [],
 					TotalItems = 0
@@ -209,7 +193,7 @@
 	#endregion
 
 	#region CRUD FUNCTIONS
-	private async Task DeleteRecord(PruCoreProject objToDelete)
+	private async Task DeleteRecord(ITAssetCategory objToDelete)
 	{
 		if (objToDelete == null)
 		{
@@ -239,7 +223,7 @@
 			{
 				try
 				{
-					int delCount = await Uow.PruCoreProjects.DeleteAsync(objToDelete.Id, AuditTrailUser);
+					int delCount = await Uow.OrgStructTypes.DeleteAsync(objToDelete.Id, AuditTrailUser);
 
 					if (delCount > 0)
 					{

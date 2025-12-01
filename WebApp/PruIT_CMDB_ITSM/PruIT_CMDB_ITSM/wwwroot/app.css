@@ -362,85 +362,85 @@ h1:focus {
 
 /*#region STATUS CHIP*/
 .status-chip-success-dark {
-    color: #FFFFFF;
-    background-color: #2ABA66;
+    color: #FFFFFF !important;
+    background-color: #2ABA66 !important;
     font-weight: 500;
     text-transform: uppercase;
-    margin: 0px;
+    margin: 0px !important;
 }
 
 .status-chip-success-light {
-    color: var(--vic-green-600);
-    background-color: var(--vic-green-100);
-    border: solid 1px var(--vic-green-500);
+    color: var(--vic-green-600) !important;
+    background-color: var(--vic-green-100) !important;
+    border: solid 1px var(--vic-green-500) !important;
     font-weight: 500;
     text-transform: uppercase;
-    margin: 0px;
+    margin: 0px !important;
     border-radius:6px !important;
 }
 
 
 .status-chip-default-dark {
-    color: #FFFFFF;
-    background-color: #757575;
+    color: #FFFFFF !important;
+    background-color: #757575 !important;
     font-weight: 500;
     text-transform: uppercase;
-    margin: 0px;
+    margin: 0px !important;
 }
 
 .status-chip-obsolete-dark {
-    color: #FFFFFF;
-    background-color: var(--pru-dark-gray-darker);
+    color: #FFFFFF !important;
+    background-color: var(--pru-dark-gray-darker) !important;
     font-weight: 500;
     text-transform: uppercase;
-    margin: 0px;
+    margin: 0px !important;
 }
 
 .status-chip-obsolete-light {
-    color: var(--vic-gray-600);
-    background-color: var(--vic-gray-100);
-    border: solid 1px var(--vic-gray-500);
+    color: var(--vic-gray-600) !important;
+    background-color: var(--vic-gray-100) !important;
+    border: solid 1px var(--vic-gray-500) !important;
     font-weight: 500;
     text-transform: uppercase;
-    margin: 0px;
+    margin: 0px !important;
     border-radius: 6px !important;
 }
 
 .status-chip-pending-dark {
-    color: #FFFFFF;
-    background-color: var(--vic-orange-500);
+    color: #FFFFFF  !important;
+    background-color: var(--vic-orange-500) !important;
     font-weight: 500;
     text-transform: uppercase;
-    margin: 0px;
+    margin: 0px !important;
 }
 
 .status-chip-pending-light {
-    color: var(--vic-orange-600);
-    background-color: var(--vic-orange-100);
-    border: solid 1px var(--vic-orange-500);
+    color: var(--vic-orange-600) !important;
+    background-color: var(--vic-orange-100) !important;
+    border: solid 1px var(--vic-orange-500) !important;
     font-weight: 500;
     text-transform: uppercase;
-    margin: 0px;
+    margin: 0px !important;
     border-radius: 6px !important;
 }
 
 .status-chip-new-light {
-    color: var(--material-yellow-700);
-    background-color: var(--material-yellow-50);
-    border: solid 1px var(--material-yellow-700);
+    color: var(--material-yellow-700) !important;
+    background-color: var(--material-yellow-50) !important;
+    border: solid 1px var(--material-yellow-700) !important;
     font-weight: 500;
     text-transform: uppercase;
-    margin: 0px;
+    margin: 0px !important;
     border-radius: 6px !important;
 }
 
 .status-chip-progress-light {
-    color: var(--material-light-blue-700);
-    background-color: var(--material-light-blue-50);
-    border: solid 1px var(--material-light-blue-700);
+    color: var(--material-light-blue-700) !important;
+    background-color: var(--material-light-blue-50) !important;
+    border: solid 1px var(--material-light-blue-700) !important;
     font-weight: 500;
     text-transform: uppercase;
-    margin: 0px;
+    margin: 0px !important;
     border-radius: 6px !important;
 }
 /*#endregion*/

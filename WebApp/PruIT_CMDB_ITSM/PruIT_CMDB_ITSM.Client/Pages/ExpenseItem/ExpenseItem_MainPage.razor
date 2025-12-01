@@ -63,6 +63,12 @@
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" CellStyle="text-align:right" />
             <PropertyColumn Property="x => x.TaxAmount" Title="Tax Amount" Format="#,##0" Sortable="false"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" CellStyle="text-align:right" />
+			<PropertyColumn Property="x => x.PurchaseOrderNo" Title="PO#" Sortable="false"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
+			<PropertyColumn Property="x => x.InvoiceCode" Title="Invoice #" Sortable="false"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
+			<PropertyColumn Property="x => x.VendorName" Title="Provider" Sortable="false"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
             <TemplateColumn Title="Action" HeaderClass="pru-mud-datagrid-hdr main-pg" Sortable="false" Filterable="false" StickyRight="true"
                             CellClass="pru-mud-datagrid-cell" CellStyle="padding-inline-end:4px; padding-inline-start:4px">
                 <CellTemplate>
@@ -179,7 +185,7 @@
 			}
 			else
 			{
-				KeyValuePair<int, IEnumerable<ExpenseItem>> result = await Uow.ExpenseItems.SearchAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, null, null);
+				KeyValuePair<int, IEnumerable<ExpenseItem>> result = await Uow.ExpenseItems.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, null, null);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}

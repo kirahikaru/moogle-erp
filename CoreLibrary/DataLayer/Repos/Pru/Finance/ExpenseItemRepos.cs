@@ -7,13 +7,13 @@ public interface IExpenseItemRepos : IBaseRepos<ExpenseItem>
 {
 	Task<IEnumerable<ExpenseItem>> GetByYearAsync(int year);
 
-	Task<KeyValuePair<int, IEnumerable<ExpenseItem>>> SearchAsync(
-		int pgSize = 0,
-		int pgNo = 0,
-		string? searchText = null,
-		IEnumerable<SqlSortCond>? sortConds = null,
-		IEnumerable<SqlFilterCond>? filterConds = null,
-		List<int>? excludeIdList = null);
+	//Task<KeyValuePair<int, IEnumerable<ExpenseItem>>> SearchAsync(
+	//	int pgSize = 0,
+	//	int pgNo = 0,
+	//	string? searchText = null,
+	//	IEnumerable<SqlSortCond>? sortConds = null,
+	//	IEnumerable<SqlFilterCond>? filterConds = null,
+	//	List<int>? excludeIdList = null);
 }
 
 public class ExpenseItemRepos(IDbContext dbContext) : BaseRepos<ExpenseItem>(dbContext, ExpenseItem.DatabaseObject), IExpenseItemRepos
@@ -33,12 +33,11 @@ public class ExpenseItemRepos(IDbContext dbContext) : BaseRepos<ExpenseItem>(dbC
 		return dataList;
 	}
 
-	public async Task<KeyValuePair<int, IEnumerable<ExpenseItem>>> SearchAsync(
-		int pgSize = 0,
-		int pgNo = 0,
-		string? searchText = null,
-		IEnumerable<SqlSortCond>? sortConds = null,
-		IEnumerable<SqlFilterCond>? filterConds = null,
+	public override async Task<KeyValuePair<int, IEnumerable<ExpenseItem>>> SearchNewAsync(
+		int pgSize = 0, int pgNo = 0,
+		string? searchText = null, 
+		IEnumerable<SqlSortCond>? sortConds = null, 
+		IEnumerable<SqlFilterCond>? filterConds = null, 
 		List<int>? excludeIdList = null)
 	{
 		if (pgNo < 0 && pgSize < 0)
@@ -69,7 +68,7 @@ public class ExpenseItemRepos(IDbContext dbContext) : BaseRepos<ExpenseItem>(dbC
 			}
 			else
 			{
-				sbSql.Where("UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
+				sbSql.Where("UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.PurchaseOrderNo) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.InvoiceCode) LIKE '%'+UPPER(@SearchText)+'%'");
 				param.Add("@SearchText", searchText, DbType.AnsiString);
 			}
 		}
@@ -82,6 +81,7 @@ public class ExpenseItemRepos(IDbContext dbContext) : BaseRepos<ExpenseItem>(dbC
 		#endregion
 
 		sbSql.LeftJoin($"{BudgetItem.MsSqlTable} bi ON bi.IsDeleted=0 AND bi.IsCurrent=1 AND bi.AccountCode=t.AccountCode AND bi.ActivityTrackID=t.ActivityTrackID");
+		sbSql.LeftJoin($"{Vendor.MsSqlTable} v ON v.IsDeleted=0 AND v.LBU=t.LBU AND v.ObjectCode=t.VendorID");
 
 		foreach (string orderByClause in GetSearchOrderbBy())
 			sbSql.OrderBy(orderByClause);
@@ -104,9 +104,10 @@ public class ExpenseItemRepos(IDbContext dbContext) : BaseRepos<ExpenseItem>(dbC
 
 		using IDbConnection cn = DbContext.DbCxn;
 
-		var dataList = (await cn.QueryAsync<ExpenseItem, BudgetItem, ExpenseItem>(sql, (ei, bi) =>
+		var dataList = (await cn.QueryAsync<ExpenseItem, BudgetItem, Vendor, ExpenseItem>(sql, (ei, bi, v) =>
 		{
 			ei.BudgetItem = bi;
+			ei.Vendor = v;
 			return ei;
 		}, param: param, splitOn: "Id")).AsList();
 

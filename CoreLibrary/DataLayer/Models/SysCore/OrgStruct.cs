@@ -1,4 +1,6 @@
-﻿namespace DataLayer.Models.SysCore;
+﻿using DataLayer.GlobalConstant;
+
+namespace DataLayer.Models.SysCore;
 
 [Table("OrgStruct"), DisplayName("Orgainzation Structure")]
 public class OrgStruct : AuditObject, IParentChildHierarchyObject
@@ -19,6 +21,11 @@ public class OrgStruct : AuditObject, IParentChildHierarchyObject
 	public static DatabaseObj DatabaseObject => new(SchemaName, MsSqlTableName, PgTableName);
 
 	#region *** DATABASE FIELDS ***
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'ID' is required.")]
+	public new string? ObjectCode { get; set; }
+
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'Name' is required.")]
+	public new string? ObjectName { get; set; }
 	public string? ObjectNameKh { get; set; }
 
 	[Required(ErrorMessage = "'Organization Structure Type' is required.")]
@@ -33,6 +40,7 @@ public class OrgStruct : AuditObject, IParentChildHierarchyObject
 	/// Valid Values > GlobalConstants.ConfidentialityLevels
 	/// </summary>
 	//public int DefaultConfidentialityLevel { get; set; }
+	[Required(ErrorMessage = "'Default Privacy Level' is required.")]
 	public int DefaultPrivacyLevel { get; set; }
 	#endregion
 
@@ -45,12 +53,16 @@ public class OrgStruct : AuditObject, IParentChildHierarchyObject
 	#endregion
 
 	#region *** DYNAMIC PROPERTIES ***
-	[Computed, ReadOnly(true)]
+	[Computed, Write(false), ReadOnly(true)]
 	public string ParentName => Parent != null ? Parent.ObjectName.NonNullValue("-") : "-";
+
+	[Computed, Write(false), ReadOnly(true)]
+	public string OrgStructTypeName => Type != null ? Type.ObjectName.NonNullValue("-") : "-";
 	#endregion
 
 	public OrgStruct()
 	{
 		IsEnabled = true;
+		DefaultPrivacyLevel = ConfidentialityLevels.PUBLIC;
 	}
 }

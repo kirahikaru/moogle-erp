@@ -1,9 +1,9 @@
-﻿@page "/core/org-struct-type/cruc/{CRUCMode}"
-@page "/core/org-struct-type/cruc/{CRUCMode}/{id:int}"
+﻿@page "/itasset/category/cruc/{CRUCMode}"
+@page "/itasset/category/cruc/{CRUCMode}/{id:int}"
 
 @* @rendermode InteractiveAuto*@
 
-@inherits CRUCPageBase<OrgStructType>
+@inherits CRUCPageBase<ITAssetCategory>
 
 @if (CurrentObject != null && CurrentEditContext != null)
 {
@@ -52,24 +52,27 @@
                 <MudPaper Class="px-4 pt-2 pb-5 overflow-y-auto" Height="calc(100vh - 210px)" Width="100%" Elevation="0" Style="position:relative">
                     <MudForm Model="@CurrentObject" @ref=@CrucForm @bind-IsValid=@IsValidationPassed @bind-Errors=@MudValidationErrors >
                         <MudGrid Spacing="2" Justify="Justify.SpaceEvenly">
-                            <MudItem xs="8">
+                            <MudItem xs="6">
                                 <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Required="true"
                                               Label="Name"
                                               @bind-Value=CurrentObject!.ObjectName For="@(() => CurrentObject.ObjectName)" 
                                               MaxLength="255" @ref=_uiControlObjectName />
-                            </MudItem>
-                            <MudItem xs="1">
-                                <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" 
-                                                 Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.Numbers"
-                                                 Label="Level" Format="#,##0" Min="0" Max="999" Step="1"
-                                                 @bind-Value=CurrentObject.OrgLevel For="@(() => CurrentObject.OrgLevel)" OnlyValidateIfDirty="true"
-                                                 Required="true" RequiredError="'Level' is required." />
                             </MudItem>
                             <MudItem xs="3">
                                 <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" MaxLength="80"
                                               Label="ID"
                                               @bind-Value=CurrentObject!.ObjectCode For="@(() => CurrentObject.ObjectCode)" OnlyValidateIfDirty="true"
                                               Required="true" RequiredError="'ID' is required." />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudSelect ReadOnly="@IsViewMode" Clearable="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true" FullWidth="true"
+                                           Label="Asset Type" Placeholder="Select asset type"
+                                           Value=CurrentObject!.AssetType For="@(() => CurrentObject.AssetType)" ValueChanged="OnAssetTypeChanged" InputId="AssetType" T="string" OnlyValidateIfDirty="true">
+                                    @foreach (DropdownSelectItem assetType in _assetTypeList)
+                                    {
+                                        <MudSelectItem Value=@assetType.Key>@assetType.Value</MudSelectItem>
+                                    }
+                                </MudSelect>
                             </MudItem>
                             @if (CurrentObject.Id > 0)
                             {
@@ -135,6 +138,7 @@
 @code {
     #region UI PARAM
     IEnumerable<DropDownListItem> _validParentList = [];
+    IEnumerable<DropdownSelectItem> _assetTypeList = AssetTypes.GetForDropdownList();
     MudTextField<string>? _uiControlObjectName;
     string _parentHierarchyPath = "";
     #endregion
@@ -153,7 +157,7 @@
         {
             case CRUCModes.READ:
                 {
-                    CurrentObject = await Uow.OrgStructTypes.GetAsync(Id);
+                    CurrentObject = await Uow.ITAssetCategories.GetAsync(Id);
                     IsViewMode = true;
                 }
                 break;
@@ -163,11 +167,11 @@
                 }
                 break;
             case CRUCModes.UPDATE:
-                CurrentObject = await Uow.OrgStructTypes.GetAsync(Id);
+                CurrentObject = await Uow.ITAssetCategories.GetAsync(Id);
                 break;
             case CRUCModes.CLONE:
                 {
-                    var tempObj = await Uow.OrgStructTypes.GetAsync(Id);
+                    var tempObj = await Uow.ITAssetCategories.GetAsync(Id);
                     CurrentObject = tempObj.DeepClone();
                     CurrentObject!.Id = 0;
                     CurrentObject!.ObjectCode = String.Empty;
@@ -195,6 +199,14 @@
     #endregion
 
     #region UI FUNCTIONS
+    private async Task OnAssetTypeChanged(string assetType)
+    {
+        if (string.IsNullOrEmpty(assetType))
+            CurrentObject!.AssetType = null;
+        else
+            CurrentObject!.AssetType = assetType;
+    }
+
     void OnParentChanged(int? val)
     {
         if (val is null || val <= 0)
@@ -254,7 +266,7 @@
             CurrentObject!.CreatedDateTime = timestamp;
             CurrentObject!.ModifiedDateTime = timestamp;
 
-            int objId = await Uow.OrgStructTypes.InsertAsync(CurrentObject!);
+            int objId = await Uow.ITAssetCategories.InsertAsync(CurrentObject!);
 
             if (objId > 0)
             {
@@ -270,7 +282,7 @@
             CurrentObject!.ModifiedUser = AuditTrailUser;
             CurrentObject!.ModifiedDateTime = DateTime.Now;
 
-            bool isupdated = await Uow.OrgStructTypes.UpdateAsync(CurrentObject!);
+            bool isupdated = await Uow.ITAssetCategories.UpdateAsync(CurrentObject!);
             return isupdated;
         }
     }
@@ -280,7 +292,7 @@
     async Task PopulateUIControl()
     {
         if (CurrentObject is not null && CurrentObject!.Id > 0)
-            _validParentList = await Uow.OrgStructTypes.GetValidParentsAsync(CurrentObject.Id, CurrentObject.ObjectCode!, CurrentObject!.OrgLevel, null);
+            _validParentList = await Uow.ITAssetCategories.GetValidParentsAsync(CurrentObject.Id, CurrentObject.ObjectCode!, null);
     }
     #endregion
 }

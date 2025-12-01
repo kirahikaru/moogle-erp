@@ -349,11 +349,31 @@ input[type="text" i] {
 }
 
 .pru-ui-select-popover {
-    box-shadow: var(--mud-elevation-3);
+    box-shadow: var(--mud-elevation-3) !important;
+
+    & .mud-list-item-gutters {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    & .mud-list-item {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
 }
 
 .pru-ui-combo-box-popover {
-    box-shadow: var(--mud-elevation-3);
+    box-shadow: var(--mud-elevation-3) !important;
+
+    & .mud-combobox-item {
+        min-height: 36px;
+
+    }
+
+    & .mud-combobox-item-gutters {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 }
 
 /*#region MudDataGrid */

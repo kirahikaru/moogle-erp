@@ -35,7 +35,7 @@ public class CRUCPageBase<T> : ComponentBase, IAsyncDisposable
 	//public required DialogService RadzenDiagSvc { get; set; }
 
 	[Inject]
-	public required SweetAlertService Swal { get; set; }
+	public required SweetAlertService SwAlSvc { get; set; }
 
 	[Inject]
 	public required IUowPruIT Uow { get; set; }
@@ -153,7 +153,7 @@ public class CRUCPageBase<T> : ComponentBase, IAsyncDisposable
 		{
 			await JsRuntime!.InvokeVoidAsync("console.error", ex.GetFullMessage());
 
-			await Swal.FireAsync(new SweetAlertOptions
+			await SwAlSvc.FireAsync(new SweetAlertOptions
 			{
 				Title = "Error Encountered",
 				Text = "System encountered error while trying to save please try again.",
@@ -212,7 +212,7 @@ public class CRUCPageBase<T> : ComponentBase, IAsyncDisposable
 
     public async ValueTask CancelHotkeyPressed()
     {
-        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+        SweetAlertResult result = await SwAlSvc.FireAsync(new SweetAlertOptions
         {
             Title = "Exit Confirmation",
             Text = $"Are you sure you want to cancel current operation and return to main page? Cancellation mean that all your edition will not be saved.",

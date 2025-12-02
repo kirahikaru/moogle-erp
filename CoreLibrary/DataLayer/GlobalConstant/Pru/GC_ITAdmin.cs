@@ -185,6 +185,7 @@ public static class AssetStates
 
 public static class AssetLifeCycleStatuses
 {
+	public const string DRAFT = "DRAFT";
 	public const string IN_USE = "IN-USE";
 	public const string IN_STOCK = "IN-STOCK";
 	public const string PENDING_REVIEW = "PENDING-REVIEW";
@@ -198,8 +199,10 @@ public static class AssetLifeCycleStatuses
 	{
 		return s switch
 		{
+			DRAFT => "Draft",
 			IN_USE => "In-Use",
 			IN_STOCK => "In-Stock",
+			PENDING_REVIEW => "Pending Review",
 			PENDING_WRITE_OFF => "Pending Write-Off",
 			PENDING_TERMINATION => "Pending Termination",
 			TERMINATED => "Terminated",
@@ -212,8 +215,10 @@ public static class AssetLifeCycleStatuses
 	public static IEnumerable<DropdownSelectItem> GetForDropdownList()
 	{
 		return [
+			new DropdownSelectItem { Key = DRAFT, Value = GetDisplayText(DRAFT) },
 			new DropdownSelectItem { Key = IN_STOCK, Value = GetDisplayText(IN_STOCK) },
 			new DropdownSelectItem { Key = IN_USE, Value = GetDisplayText(IN_USE) },
+			new DropdownSelectItem { Key = PENDING_REVIEW, Value = GetDisplayText(PENDING_REVIEW) },
 			new DropdownSelectItem { Key = PENDING_WRITE_OFF, Value = GetDisplayText(PENDING_WRITE_OFF) },
 			new DropdownSelectItem { Key = PENDING_TERMINATION, Value = GetDisplayText(PENDING_TERMINATION) },
 			new DropdownSelectItem { Key = TERMINATED, Value = GetDisplayText(TERMINATED) },

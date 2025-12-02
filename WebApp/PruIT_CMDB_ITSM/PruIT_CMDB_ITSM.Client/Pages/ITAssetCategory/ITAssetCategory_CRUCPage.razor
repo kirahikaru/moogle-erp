@@ -77,7 +77,7 @@
                             @if (CurrentObject.Id > 0)
                             {
                                 <MudItem xs="12">
-                                    <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                                    <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" PopoverClass="pru-ui-combo-box-popover" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
                                                  Label="Parent" T="int?"
                                                  Value="@CurrentObject.ParentId" ValueChanged="OnParentChanged"
                                                  ToStringFunc="@(val => val is not null && val > 0 ? _validParentList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == val)?.ObjectName : "-")">
@@ -146,7 +146,7 @@
     #region PAGE LIFECYCLE FUNCTIONS
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        UrlPrefix = "/core/org-struct-type";
+        UrlPrefix = "/itasset/category";
 
         return base.SetParametersAsync(parameters);
     }
@@ -247,7 +247,7 @@
     {
         InvalidMsgList.Clear();
 
-        bool isDuplicated = await Uow.OrgStructTypes.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+        bool isDuplicated = await Uow.ITAssetCategories.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
 
         if (isDuplicated)
         {

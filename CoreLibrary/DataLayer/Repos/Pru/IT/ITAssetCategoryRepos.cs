@@ -31,8 +31,8 @@ public class ITAssetCategoryRepos(IDbContext dbContext) : BaseRepos<ITAssetCateg
 		DynamicParameters param = new();
 
 		sbSql.Where("t.IsDeleted=0");
-		sbSql.Where("UPPER(ISNULL(t.AssetType,''))=@AssetType");
-		param.Add("@AssetType", "HARDWARE", DbType.AnsiString);
+		//sbSql.Where("UPPER(ISNULL(t.AssetType,''))=@AssetType");
+		//param.Add("@AssetType", "HARDWARE", DbType.AnsiString);
 
 		#region Form Search Conditions
 		if (!string.IsNullOrEmpty(searchText))
@@ -201,5 +201,10 @@ public class ITAssetCategoryRepos(IDbContext dbContext) : BaseRepos<ITAssetCateg
 		var dataList = await cn.QueryAsync<DropDownListItem>(sql, param);
 
 		return dataList;
+	}
+
+	public override List<string> GetSearchOrderbBy()
+	{
+		return ["t.AssetType", "t.ParentCode ASC", "t.ObjectName ASC"];
 	}
 }

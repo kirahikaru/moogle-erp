@@ -1,5 +1,6 @@
 ﻿@page "/itasset/software/cruc/{CRUCMode}"
 @page "/itasset/software/cruc/{CRUCMode}/{id:int}"
+@using System.Threading.Tasks
 
 @* @rendermode InteractiveAuto*@
 @inherits CRUCPageBase<ITAsset>
@@ -62,7 +63,7 @@
                                           @bind-Value=CurrentObject!.ObjectCode For="@(() => CurrentObject.ObjectCode)" OnlyValidateIfDirty="true" MaxLength="80" />
                         </MudItem>
                         <MudItem xs="2">
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" Class="pru-mud-form-field bordered pru-ui-select" Required="true" FullWidth="true"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true" FullWidth="true"
                                        Label="Asset Type" Placeholder="Select asset type"
                                        Value=CurrentObject!.AssetType For="@(() => CurrentObject.AssetType)" ValueChanged="OnAssetTypeChanged" InputId="AssetType" T="string" OnlyValidateIfDirty="true">
                                 @foreach (DropdownSelectItem assetType in _assetTypeList)
@@ -72,7 +73,7 @@
                             </MudSelect>
                         </MudItem>
                         <MudItem xs="4">
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" FullWidth="true"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" FullWidth="true"
                                        Label="Category" InputId="CategoryCode"
                                        T="string" Value=CurrentObject!.CategoryCode ValueChanged="OnCategoryChanged" For="@(() => CurrentObject.CategoryCode)" OnlyValidateIfDirty="true" Disabled=@(string.IsNullOrEmpty(CurrentObject!.AssetType))>
                                 @foreach (DropdownSelectItem ctg in _categoryList)
@@ -82,7 +83,7 @@
                             </MudSelect>
                         </MudItem>
                         <MudItem xs="4">
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover"
                                        Label="Sub-Category" Placeholder="Select a sub-category"
                                        @bind-Value=CurrentObject!.SubCategory For="@(() => CurrentObject.SubCategory)" OnlyValidateIfDirty="true"
                                        Disabled=@(string.IsNullOrEmpty(CurrentObject!.CategoryCode))>
@@ -102,7 +103,7 @@
                                     <MudIconButton Icon="@Icons.Material.Rounded.PlayCircle" Size="Size.Small" OnClick="OnAssetStateClicked" />
                                 </MudTooltip>
                             } *@
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" Required="true"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true"
                                        Label="Asset State"
                                        T="string" @bind-Value=CurrentObject!.AssetState For="@(() => CurrentObject.AssetState)" OnlyValidateIfDirty="true">
                                 @foreach (DropdownSelectItem assetState in _assetStateList)
@@ -121,7 +122,7 @@
                                     <MudIconButton Icon="@Icons.Material.Rounded.PlayCircle" Size="Size.Small" OnClick="OnLifeCycleStatusClicked" />
                                 </MudTooltip>
                             } *@
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" Required="true"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true"
                                        Label="Life Cycle Status"
                                        T="string" @bind-Value=CurrentObject!.LifeCycleStatus For="@(() => CurrentObject.LifeCycleStatus)" OnlyValidateIfDirty="true">
                                 @foreach (DropdownSelectItem lifeCycleStatus in _assetLifeCycleList)
@@ -141,8 +142,8 @@
                                           @bind-Value=CurrentObject!.Manufacturer For="@(() => CurrentObject.Manufacturer)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="3">
-                            <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered"
-                                          Label="Serial No." MaxLength="50"
+                            <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Required="@(CurrentObject!.CategoryCode == "SUBSCRIPTION")"
+                                          Label="Subscription ID" MaxLength="50"
                                           @bind-Value=CurrentObject!.SerialNo For="@(() => CurrentObject.SerialNo)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="12">
@@ -208,7 +209,7 @@
                                              @bind-Value=CurrentObject!.PurchaseTax For="@(() => CurrentObject.PurchaseTax)" />
                         </MudItem>
                         <MudItem xs="3">
-                            <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                            <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" PopoverClass="pru-ui-combo-box-popover" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
                                          Label="Vendor/Supplier" T="string"
                                          @bind-Value="@CurrentObject.VendorID" For="@(() => CurrentObject.VendorID)"
                                          ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _vendorList.Single<DropdownSelectItem>(x => x.Key == e)?.Value)">
@@ -234,7 +235,7 @@
                         </MudItem>
                         <MudItem xs="5">
                             <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered"
-                                          Label="Employee Department" MaxLength="25"
+                                          Label="Employee Department" 
                                           @bind-Value=CurrentObject!.CurrentUserDept For="@(() => CurrentObject.CurrentUserDept)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="12">
@@ -247,6 +248,60 @@
                                           Label="Remark" MaxLength="255" MaxLines="25" Lines="4"
                                           @bind-Value=CurrentObject!.Remark For="@(() => CurrentObject.Remark)" OnlyValidateIfDirty="true" />
                         </MudItem>
+                        <MudItem xs="12">
+
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudDatePicker ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-datepicker" Editable="true"
+                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                           Label="Start Date"
+                                           @bind-Date=@CurrentObject.StartDate DateFormat="dd-MMM-yyyy" For="@(() => CurrentObject.StartDate)" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudDatePicker ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-datepicker" Editable="true"
+                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                           Label="End Date"
+                                           @bind-Date=@CurrentObject.EndDate DateFormat="dd-MMM-yyyy" For="@(() => CurrentObject.EndDate)" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudDatePicker ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-datepicker" Editable="true"
+                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                           Label="Expiry Date"
+                                           @bind-Date=@CurrentObject.ExpiryDate DateFormat="dd-MMM-yyyy" For="@(() => CurrentObject.ExpiryDate)" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudDatePicker ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-datepicker" Editable="true"
+                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                           Label="End-of-Support"
+                                           @bind-Date=@CurrentObject.EOSDate DateFormat="dd-MMM-yyyy" For="@(() => CurrentObject.EOSDate)" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudDatePicker ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-datepicker" Editable="true"
+                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                           Label="End-of-Life"
+                                           @bind-Date=@CurrentObject.EOLDate DateFormat="dd-MMM-yyyy" For="@(() => CurrentObject.EOLDate)" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            @if (CurrentObject.ExpiryDate.HasValue && CurrentObject.ExpiryDate <= DateTime.Today)
+                            {
+                                <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Primary" StartIcon="material-symbols-rounded/autorenew" Class="pru-btn-base"
+                                    OnClick="RenewSubscription">
+                                    Renew</MudButton>
+                            }
+                        </MudItem>
+                        @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
+                        {
+                            <MudItem xs="12" Class="pt-10">
+                                @foreach (string msg in CurrentEditContext.GetValidationMessages())
+                                {
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@msg</MudAlert>
+                                }
+                                @foreach (string key in InvalidMsgList.Keys)
+                                {
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                }
+                            </MudItem>
+                        }
                         @if (Id > 0)
                         {
                             <MudStack Row="true" Class="px-2 py-1" AlignItems="AlignItems.Center" Spacing="1" Style="position:absolute; bottom:0; left:0; right:0; background-color:var(--pru-red-tw-50)">
@@ -458,6 +513,50 @@
     #endregion
 
     #region UI FUNCTIONS
+    private async Task RenewSubscription()
+    {
+        SweetAlertResult result = await SwAlSvc.FireAsync(new SweetAlertOptions
+        {
+            Title = "Renew Confirmation",
+            Text = $"Are you sure you would like to proceed to renew this scription?",
+            Icon = SweetAlertIcon.Question,
+            ShowCancelButton = true,
+            ShowConfirmButton = true,
+            ConfirmButtonText = "Yes, Confirmed",
+            CancelButtonText = "Cancel"
+        });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            var n = CurrentObject!.DeepClone();
+            n.StartDate = n.ExpiryDate;
+            n.EndDate = n.ExpiryDate!.Value.AddYears(1);
+            n.ExpiryDate = n.EndDate;
+            n.ObjectCode = null;
+            n.LifeCycleStatus = AssetLifeCycleStatuses.DRAFT;
+            n.CreatedUser = AuditTrailUser;
+            n.CreatedDateTime = DateTime.Now;
+            n.ModifiedUser = AuditTrailUser;
+            n.ModifiedDateTime = DateTime.Now;
+
+            int objId = await Uow.ITAssets.InsertAsync(n);
+
+            if (objId > 0)
+            {
+                NavManager.NavigateTo($"{UrlPrefix}/cruc/{CRUCModes.UPDATE}/{objId}", forceLoad: true);
+            }
+            else
+                await SwAlSvc.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Error",
+                    Text = "Application encountered error while trying to process the operation. Please try again. If the problem still persists, please contact your technical support.",
+                    Icon = SweetAlertIcon.Error,
+                    ShowConfirmButton = true,
+                    ConfirmButtonText = "OK"
+                });
+        }
+    }
+
     private async Task OnAssetTypeChanged(string assetType)
     {
         CurrentObject!.AssetType = assetType;
@@ -612,6 +711,9 @@
         {
             InvalidMsgList.Add("ObjectCode_Duplicate", $"Asset with ID='{CurrentObject.ObjectCode}' is already existed.");
         }
+
+        if (CurrentObject.CategoryCode == "SUBSCRIPTION" && string.IsNullOrEmpty(CurrentObject.SerialNo))
+            InvalidMsgList.Add("SerialNo_Required", "'Subscription ID' is required.");
     }
 
     protected override async Task<bool> SaveAndCommitProcessing()

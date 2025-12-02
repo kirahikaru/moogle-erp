@@ -51,6 +51,9 @@ public class ITAsset : AuditObject
 	/// </summary>
 	public string? FinAssetCode { get; set; }
 	public string? Manufacturer { get; set; }
+	/// <summary>
+	/// For Subscription Used as Subscription ID
+	/// </summary>
 	public string? SerialNo { get; set; }
 	public string? SKU { get; set; }
 	public string? CategoryCode { get; set; }

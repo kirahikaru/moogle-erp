@@ -163,7 +163,7 @@
                                           @bind-Value=CurrentObject!.SvcDeskTicketNo For="@(() => CurrentObject.SvcDeskTicketNo)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="3">
-                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" FullWidth="true"
+                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" PopoverClass="pru-ui-autocomplete-popover" FullWidth="true"
                                              CoerceText="true" CoerceValue="true" SearchFunc="SearchRequestor"
                                              Label="Requestor" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
                                              Value="_requestor" ValueChanged="OnRequestorValueChanged" />
@@ -179,7 +179,7 @@
                                           @bind-Value=CurrentObject!.RequestUserName For="@(() => CurrentObject.RequestUserName)" OnlyValidateIfDirty="true" />
                         </MudItem> *@
                         <MudItem xs="3">
-                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" FullWidth="true"
+                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" PopoverClass="pru-ui-autocomplete-popover" FullWidth="true"
                                              CoerceText="true" CoerceValue="true" SearchFunc="SearchCurrentUser"
                                              Label="Current User" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
                                              Value="_currentUser" ValueChanged="OnCurrentUserValueChanged" />
@@ -197,13 +197,13 @@
                                           @bind-Value=CurrentObject!.CurrentUserName For="@(() => CurrentObject.CurrentUserName)" OnlyValidateIfDirty="true" />
                         </MudItem> *@
                         <MudItem xs="3">
-                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" FullWidth="true"
+                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" PopoverClass="pru-ui-autocomplete-popover" FullWidth="true"
                                              CoerceText="true" CoerceValue="true" SearchFunc="SearchFunc"
                                              Label="Function" T="string"
                                              @bind-Value=CurrentObject!.CurrentUserFunc For="@(() => CurrentObject!.CurrentUserFunc)" />
                         </MudItem>
                         <MudItem xs="3">
-                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" FullWidth="true"
+                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" PopoverClass="pru-ui-autocomplete-popover" FullWidth="true"
                                              CoerceText="true" CoerceValue="true" SearchFunc="SearchDept"
                                              Label="Department" T="string"
                                              @bind-Value=CurrentObject.CurrentUserDept For="@(() => CurrentObject.CurrentUserDept)" />
@@ -290,7 +290,7 @@
                         @if (CurrentObject.ServerInfo != null)
                         {
                             <MudItem xs="2">
-                                <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" 
+                                <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover"
                                     Label="Environment" 
                                     T="string" @bind-Value=CurrentObject!.ServerInfo.Env For="@(() => CurrentObject!.ServerInfo.Env)" OnlyValidateIfDirty="true">
                                     @foreach (string env in _envList)

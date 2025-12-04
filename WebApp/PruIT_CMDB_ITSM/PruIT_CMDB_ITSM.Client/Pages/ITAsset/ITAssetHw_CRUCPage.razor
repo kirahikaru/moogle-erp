@@ -940,7 +940,7 @@
             }
         }
 
-        _employeeList = (await Uow.Employees.GetActiveForDropdownAsync()).ToList();
+        _employeeList = (await Uow.Employees.GetForDropdownAsync()).ToList();
 
         if (CurrentObject!.Requestor != null)
         {

@@ -158,6 +158,23 @@
                                           @bind-Value=CurrentObject!.SvcDeskTicketNo For="@(() => CurrentObject.SvcDeskTicketNo)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="3">
+                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" PopoverClass="pru-ui-autocomplete-popover" FullWidth="true"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchRequestor"
+                                             Label="Requestor" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
+                                             Value="_requestor" ValueChanged="OnRequestorValueChanged" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" PopoverClass="pru-ui-autocomplete-popover" FullWidth="true"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchCurrentUser"
+                                             Label="Current User" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
+                                             Value="_currentUser" ValueChanged="OnCurrentUserValueChanged" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered"
+                                          Label="Employee Department"
+                                          @bind-Value=CurrentObject!.CurrentUserDept For="@(() => CurrentObject.CurrentUserDept)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        @* <MudItem xs="3">
                             <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered"
                                           AdornmentIcon="material-symbols-rounded/assignment_ind" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                           Label="Requestor Staff ID" MaxLength="50"
@@ -168,9 +185,7 @@
                                           AdornmentIcon="material-symbols-rounded/person" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                           Label="Requested By" Placeholder="Full name of requestor" MaxLength="150"
                                           @bind-Value=CurrentObject!.RequestUserName For="@(() => CurrentObject.RequestUserName)" OnlyValidateIfDirty="true" />
-                        </MudItem>
-                        <MudItem xs="3">
-                        </MudItem>
+                        </MudItem> *@
                         <MudItem xs="3">
                             <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered"
                                           Label="PR#" MaxLength="25"
@@ -221,7 +236,8 @@
                                 </ChildContent>
                             </MudComboBox>
                         </MudItem>
-                        <MudItem xs="3">
+                        
+                        @* <MudItem xs="3">
                             <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered"
                                           AdornmentIcon="material-symbols-rounded/assignment_ind" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                           Label="Employee ID" MaxLength="25"
@@ -232,12 +248,7 @@
                                           AdornmentIcon="material-symbols-rounded/person" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                           Label="Employee Name" MaxLength="25"
                                           @bind-Value=CurrentObject!.CurrentUserName For="@(() => CurrentObject.CurrentUserName)" OnlyValidateIfDirty="true" />
-                        </MudItem>
-                        <MudItem xs="5">
-                            <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered"
-                                          Label="Employee Department" 
-                                          @bind-Value=CurrentObject!.CurrentUserDept For="@(() => CurrentObject.CurrentUserDept)" OnlyValidateIfDirty="true" />
-                        </MudItem>
+                        </MudItem> *@
                         <MudItem xs="12">
                             <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered"
                                           Label="Usage Purpose" MaxLength="255" MaxLines="25" Lines="4"
@@ -431,6 +442,44 @@
                     </MudStack>
                 </MudPaper>
             </MudTabPanel>
+            <MudTabPanel Text="Expense(s)" Icon="material-symbols-rounded/price_change" Class="pru-mud-tab-panel" Style="min-width:120px">
+                <MudPaper Class="px-4 pt-4 pb-5 overflow-y-auto" Height="calc(100vh - 210px)" Width="100%" Elevation="0">
+                    <MudStack Spacing="2" Justify=Justify.FlexStart>
+                        <MudDataGrid Class="pru-mud-datagrid mt-2" T="ExpenseItem" Items="_expenseItems" Dense="true" Hover="true" FixedHeader="true" Striped="true" ReadOnly=@IsViewMode
+                                     Elevation="0" ColumnResizeMode="ResizeMode.Container">
+                            <Columns>
+                                <PropertyColumn Title="Expense" Property="x => x.ObjectName" Sortable="false"
+                                    HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="i" ></PropertyColumn>
+                                <PropertyColumn Title="Account No." Property="x => x.AccountCode" Sortable="false"
+                                                HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-400" Context="i"></PropertyColumn>
+                                <PropertyColumn Title="Act #" Property="x => x.ActivityTrackID" Sortable="false"
+                                                HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-400" Context="i"></PropertyColumn>
+                                <PropertyColumn Title="Acct Sys ID" Property="x => x.AccSysID" Sortable="false"
+                                                HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-400" Context="i"></PropertyColumn>
+                                <PropertyColumn Title="Vendor" Property="x => x.VendorName" Sortable="false"
+                                                HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="i"></PropertyColumn>
+                                <PropertyColumn Title="Invoice Date" Property="x => x.InvoiceDate" Format="dd-MMM-yyyy" Sortable="false"
+                                                HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-400" 
+                                                CellStyle="text-align:center" Context="i"></PropertyColumn>
+                                <PropertyColumn Title="Invoice No." Property="x => x.InvoiceCode" Sortable="false"
+                                                HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="i"></PropertyColumn>
+                                <PropertyColumn Title="Amount" Property="x => x.Amount" Format="#,##0.00" Sortable="false"
+                                                HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
+                                                CellStyle="text-align:right" Context="i"
+                                                AggregateDefinition="_expAggr" FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right"></PropertyColumn>
+                                <PropertyColumn Title="Tax" Property="x => x.TaxAmount" Format="#,##0.00" Sortable="false"
+                                                HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" 
+                                                CellStyle="text-align:right" Context="i"
+                                                AggregateDefinition="_expAggr" FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right"></PropertyColumn>
+                                <PropertyColumn Title="Total" Property="x => x.TotalAmount" Format="#,##0.00" Sortable="false"
+                                                HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" 
+                                                CellStyle="text-align:right" Context="i"
+                                                AggregateDefinition="_expAggr" FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right"></PropertyColumn>
+                            </Columns>
+                        </MudDataGrid>
+                    </MudStack>
+                </MudPaper>
+            </MudTabPanel>
         </MudTabs>
     </EditForm>
 }
@@ -444,10 +493,15 @@
     IEnumerable<DropdownSelectItem> _categoryList = Enumerable.Empty<DropdownSelectItem>();
     IEnumerable<DropdownSelectItem> _subCategoryList = Enumerable.Empty<DropdownSelectItem>();
     IEnumerable<DropdownSelectItem> _vendorList = Enumerable.Empty<DropdownSelectItem>();
+    List<DropdownSelectItem> _employeeList = [];
+    List<ExpenseItem> _expenseItems = [];
     ITAssetAuditTrail? _tempItemToAdd;
     MudDataGrid<ITAssetAuditTrail> _auditTrailDataGrid = new();
     IEnumerable<string> _deptList = PruDepartments.GetLatest();
     IEnumerable<string> _funcList = [];
+
+    DropdownSelectItem? _requestor;
+    DropdownSelectItem? _currentUser;
 
     IEnumerable<string> _esuCwsLilst = [
         "Chanraksmey Soth",
@@ -455,6 +509,13 @@
         "Chhinlong Horn",
         "Hongseng Kheng"
     ];
+
+    AggregateDefinition<ExpenseItem> _expAggr = new AggregateDefinition<ExpenseItem>
+    {
+        Type = AggregateType.Sum,
+        NumberFormat = "N2",
+        DisplayFormat = "{value}"
+    };
     #endregion
 
     #region PAGE LIFECYCLE FUNCTIONS
@@ -498,21 +559,72 @@
 
         HeaderTitle = ObjectDisplayName;
 
-        _vendorList = await Uow.Vendors.GetForDropdownListAsync(PruLBUs.PCLA);
-
-        if (!string.IsNullOrEmpty(CurrentObject!.AssetType))
-        {
-            _categoryList = await Uow.ITAssetCategories.GetForDropdownAsync(CurrentObject!.AssetType);
-
-            if (!string.IsNullOrEmpty(CurrentObject!.CategoryCode))
-            {
-                _subCategoryList = await Uow.ITAssetCategories.GetForDropdownAsync(CurrentObject!.AssetType, CurrentObject!.CategoryCode);
-            }
-        }
+        if (CurrentObject != null)
+            await PopulateUIControls();
     }
     #endregion
 
     #region UI FUNCTIONS
+    private async Task<IEnumerable<DropdownSelectItem>> SearchRequestor(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _employeeList.Take(50);
+        }
+
+        return _employeeList.Where(x => x.Value.Contains(value, StringComparison.InvariantCultureIgnoreCase) || x.Key == value).Take(50);
+    }
+
+    private async Task<IEnumerable<DropdownSelectItem>> SearchCurrentUser(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _employeeList.Take(50);
+        }
+
+        return _employeeList.Where(x => x.Value.Contains(value, StringComparison.InvariantCultureIgnoreCase) || x.Key == value).Take(50);
+    }
+
+    void OnRequestorValueChanged(DropdownSelectItem? item)
+    {
+        if (item is null)
+        {
+            _requestor = null;
+            CurrentObject!.RequestUserID = null;
+            CurrentObject!.RequestUserName = null;
+        }
+        else
+        {
+            _requestor = item;
+            CurrentObject!.RequestUserID = item.Key;
+            CurrentObject!.RequestUserName = item.Value;
+        }
+    }
+
+    void OnCurrentUserValueChanged(DropdownSelectItem? item)
+    {
+        if (item is null)
+        {
+            _currentUser = null;
+            CurrentObject!.CurrentUserID = null;
+            CurrentObject!.CurrentUserName = null;
+        }
+        else
+        {
+            _currentUser = item;
+            CurrentObject!.CurrentUserID = item.Key;
+            CurrentObject!.CurrentUserName = item.Value;
+        }
+    }
+
     private async Task RenewSubscription()
     {
         SweetAlertResult result = await SwAlSvc.FireAsync(new SweetAlertOptions
@@ -735,5 +847,47 @@
     #endregion
 
     #region INTERNAL FUNCTION
+    private async Task PopulateUIControls()
+    {
+        _vendorList = await Uow.Vendors.GetForDropdownListAsync(PruLBUs.PCLA);
+        _categoryList = await Uow.ITAssetCategories.GetForDropdownAsync(CurrentObject!.AssetType!);
+
+        if (!string.IsNullOrEmpty(CurrentObject!.AssetType))
+        {
+            _categoryList = await Uow.ITAssetCategories.GetForDropdownAsync(CurrentObject!.AssetType);
+
+            if (!string.IsNullOrEmpty(CurrentObject!.CategoryCode))
+            {
+                _subCategoryList = await Uow.ITAssetCategories.GetForDropdownAsync(CurrentObject!.AssetType, CurrentObject!.CategoryCode);
+            }
+        }
+
+        _employeeList = (await Uow.Employees.GetForDropdownAsync()).ToList();
+        _expenseItems = await Uow.ExpenseItems.GetByAssetAsync(CurrentObject!.ObjectCode!);
+
+        if (CurrentObject!.Requestor != null)
+        {
+            if (_employeeList.Count(x => x.Key == CurrentObject!.Requestor.EmpID) == 1)
+            {
+                _requestor = _employeeList.SingleOrDefault<DropdownSelectItem>(x => x.Key == CurrentObject!.Requestor.EmpID);
+            }
+            else
+            {
+                
+            }
+        }
+
+        if (CurrentObject!.CurrentUser != null)
+        {
+            if (_employeeList.Count(x => x.Key == CurrentObject!.CurrentUser.EmpID) == 1)
+            {
+                _currentUser = _employeeList.SingleOrDefault<DropdownSelectItem>(x => x.Key == CurrentObject!.CurrentUser.EmpID);
+            }
+            else
+            {
+
+            }
+        }
+    }
     #endregion
 }

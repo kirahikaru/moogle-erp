@@ -57,23 +57,34 @@
 					else
 					{
 						<span>@rowData.Item.ObjectCode</span>
-					}
-				</CellTemplate>
-			</TemplateColumn>
-			<PropertyColumn Property="x => x.ProductName" Title="Product/Plan Name" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-			<PropertyColumn Property="x => x.Manufacturer" Title="Provider Company" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-			<PropertyColumn Property="x => x.SerialNo" Title="Serial No." HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
-			<PropertyColumn Property="x => x.CategoryName" Title="Category" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-			<PropertyColumn Property="x => x.SubCategory" Title="Sub-Category" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-			<PropertyColumn Property="x => x.CurrentUserName" Title="Current User" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-			<PropertyColumn Property="x => x.CurrentUserID" Title="Staff ID" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" Sortable="false" />
-			<PropertyColumn Property="x => x.CurrentUserFunc" Title="Function" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Property="x => x.CurrentUserDept" Title="Department" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Property="x => x.StartDate" Title="Start Date" Format="dd-MMM-yyyy"
+                    }
+                </CellTemplate>
+            </TemplateColumn>
+            <PropertyColumn Title="Product/Plan Name" Property="x => x.ProductName"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Property="x => x.EndDate" Title="End Date" Format="dd-MMM-yyyy"
+            <PropertyColumn Title="Provider Company" Property="x => x.Manufacturer"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="min-width:185px" />
+            <PropertyColumn Title="Serial No." Property="x => x.SerialNo"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
+            <PropertyColumn Title="Category" Property="x => x.CategoryName"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+            <PropertyColumn Title="Sub-Category" Property="x => x.SubCategory"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+            <PropertyColumn Title="Current User" Property="x => x.CurrentUserName"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="min-width:155px" />
+            <PropertyColumn Title="Staff ID" Property="x => x.CurrentUserID" Sortable="false"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400"
-                            CellStyle="text-align:center" />
+                            HeaderStyle="min-width: 75px" />
+			<PropertyColumn Title="Function" Property="x => x.CurrentUserFunc" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+			<PropertyColumn Title="Department" Property="x => x.CurrentUserDept" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+			<PropertyColumn Title="Start Date" Property="x => x.StartDate" Format="dd-MMM-yyyy"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400"
+							HeaderStyle="min-width:130px" CellStyle="text-align:center" />
+			<PropertyColumn Title="End Date" Property="x => x.EndDate" Format="dd-MMM-yyyy"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400"
+							HeaderStyle="min-width:130px" CellStyle="text-align:center" />
             @* <PropertyColumn Property="x => x.AssetState" Title="Asset State" HeaderClass="pru-mud-datagrid-hdr main-pg" /> *@
             @* <TemplateColumn Title="Asset State" HeaderClass="pru-mud-datagrid-hdr main-pg" CellStyle="text-align:center" CellClass="pru-mud-datagrid-cell">
                 <CellTemplate>
@@ -134,6 +145,8 @@
 		{ AssetStates.NA, "status-chip-obsolete-light" },
 		{ AssetStates.OFFBOARDED, "status-chip-obsolete-light" }
 	};
+
+	List<ExpenseItem> _expenseItems = [];
 	#endregion
 
 	#region PAGE LIFECYCLE EVENTS

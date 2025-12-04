@@ -5,7 +5,7 @@ namespace DataLayer.Repos.Pru.HR;
 
 public interface IEmployeeRepos : IBaseRepos<PruHR.Employee>
 {
-	Task<IEnumerable<DropdownSelectItem>> GetActiveForDropdownAsync(bool displayWithEmpID = false);
+	Task<IEnumerable<DropdownSelectItem>> GetForDropdownAsync(List<string>? statusList = null, bool displayWithEmpID = false);
 	Task<KeyValuePair<int, IEnumerable<PruHR.Employee>>> SearchAsync(
 		int pgSize = 0,
 		int pgNo = 0,
@@ -17,7 +17,7 @@ public interface IEmployeeRepos : IBaseRepos<PruHR.Employee>
 
 public class EmployeeRepos(IDbContext dbContext) : BaseRepos<PruHR.Employee>(dbContext, PruHR.Employee.DatabaseObject), IEmployeeRepos
 {
-	public async Task<IEnumerable<DropdownSelectItem>> GetActiveForDropdownAsync(bool displayWithEmpID = false)
+	public async Task<IEnumerable<DropdownSelectItem>> GetForDropdownAsync(List<string>? statusList = null, bool displayWithEmpID = false)
 	{
 		SqlBuilder sbSql = new();
 		DynamicParameters param = new();
@@ -32,8 +32,13 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<PruHR.Employee>(dbC
 		
 		sbSql.Where("t.IsDeleted=0");
 		sbSql.Where("LEN(ISNULL(t.EmpID,''))>0");
-		sbSql.Where("t.EmpStatus=@EmpStatus");
 		sbSql.OrderBy("t.ObjectName ASC");
+
+		if (statusList is not null && statusList.Count != 0)
+		{
+			sbSql.Where("t.EmpStatus IN @StatusList");
+			param.Add("@StatusList", statusList);
+		}
 
 		param.Add("@EmpStatus", EmployeeStatuses.ACTIVE, DbType.AnsiString);
 

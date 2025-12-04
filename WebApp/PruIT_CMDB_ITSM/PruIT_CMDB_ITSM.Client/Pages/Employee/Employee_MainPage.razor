@@ -30,7 +30,8 @@
 					 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row">
 		<Columns>
 			@* <PropertyColumn Property="x => x.ObjectName" Title="Asset Name" StickyLeft="true" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" /> *@
-			<TemplateColumn Title="Name" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+			<TemplateColumn Title="Name" StickyLeft="true" 
+				HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
                             HeaderStyle="min-width:200px"
                             Context="rowData">
 				<CellTemplate>
@@ -51,46 +52,64 @@
 					}
 				</CellTemplate>
             </TemplateColumn>
-            <PropertyColumn Title="Emp ID" Property="x => x.EmpID" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+            <PropertyColumn Title="Emp ID" Property="x => x.EmpID" Sortable="false" 
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
                             HeaderStyle="min-width:80px" />
-            <PropertyColumn Title="SurName" Property="x => x.Surname"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Property="x => x.GivenName" Title="Given Name" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Property="x => x.WorkerType" Title="Work Type" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+            <PropertyColumn Title="Surname" Property="x => x.Surname"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" />
+            <PropertyColumn Property="x => x.GivenName" Title="Given Name"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderStyle="min-width:200px" />
+            <PropertyColumn Title="Work Type" Property="x => x.WorkerType"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderStyle="min-width:130px" />
+			<PropertyColumn Title="Sale Tag" Property="x => x.SaleTag"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
+							HeaderStyle="min-width:120px" />
             <PropertyColumn Title="Job Grade" Property="x => x.JobGrade"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
                             HeaderStyle="min-width:280px" />
             <PropertyColumn Title="Job Title" Property="x => x.JobTitle"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
-							HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Job Family" Property="x => x.JobFamily" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
                             HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Section" Property="x => x.Section" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+            <PropertyColumn Title="Job Family" Property="x => x.JobFamily" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
                             HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Division" Property="x => x.Division" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+            <PropertyColumn Title="Section" Property="x => x.Section" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
                             HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Function" Property="x => x.Function" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Title="Department" Property="x => x.Department" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+            <PropertyColumn Title="Division" Property="x => x.Division"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
                             HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Joined On" Property="x => x.JoinedDate" Format="dd-MMM-yyyy" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+            <PropertyColumn Title="Function" Property="x => x.Function"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" />
+            <PropertyColumn Title="Department" Property="x => x.Department"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderStyle="min-width:280px" />
+            <PropertyColumn Title="Joined On" Property="x => x.JoinedDate" Format="dd-MMM-yyyy"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
+							HeaderStyle="min-width:130px" />
             <PropertyColumn Title="Last Day" Property="x => x.LastDay" Format="dd-MMM-yyyy"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-			<TemplateColumn Title="Status" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" CellStyle="text-align:center" HeaderStyle="justify-items:center">
-				<CellTemplate>
-					<MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(context.Item.EmpStatus) ? _statusCssClassList[context.Item.EmpStatus!] : "status-chip-default-dark")">
-						@EmployeeStatuses.GetDisplayText(context.Item.EmpStatus).ToUpper()
-					</MudChip>
-				</CellTemplate>
-			</TemplateColumn>
-			<TemplateColumn Title="Action" HeaderClass="pru-mud-datagrid-hdr main-pg" Sortable="false" Filterable="false" StickyRight="true"
-							CellClass="pru-mud-datagrid-cell" CellStyle="padding-inline-end:4px; padding-inline-start:4px" HeaderStyle="justify-items:center">
-				<CellTemplate>
-					<MudStack Row="true" Spacing="1">
-						<MudIconButton Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
+							HeaderStyle="min-width:130px" />
+            <TemplateColumn Title="Status" StickyRight="true"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+                            HeaderStyle="justify-items:center"
+                            CellStyle="text-align:center; padding-top:2px !important; padding-bottom:2px !important">
+                <CellTemplate>
+                    <MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(context.Item.EmpStatus) ? _statusCssClassList[context.Item.EmpStatus!] : "status-chip-default-dark")">
+                        @EmployeeStatuses.GetDisplayText(context.Item.EmpStatus).ToUpper()
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="justify-items:center"
+							CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
+                <CellTemplate>
+                    <MudStack Row="true" Spacing="1">
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>
@@ -109,6 +128,7 @@
 			{ "", "" },
 			{ EmployeeStatuses.ACTIVE, "status-chip-success-light" },
 			{ EmployeeStatuses.DRAFT, "status-chip-success-light" },
+			{ EmployeeStatuses.TERMINATED, "status-chip-obsolete-light" },
 			{ EmployeeStatuses.RESIGNED, "status-chip-obsolete-light" },
 			{ EmployeeStatuses.BLACKLIST, "status-chip-pending-light" },
 			{ EmployeeStatuses.INVALID, "status-chip-pending-light" },

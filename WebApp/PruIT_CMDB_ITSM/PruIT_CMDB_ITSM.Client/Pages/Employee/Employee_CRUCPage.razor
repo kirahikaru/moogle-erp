@@ -188,7 +188,12 @@
                                 }
                             </MudSelect>
                         </MudItem>
-                        <MudItem xs="6">
+                        <MudItem xs="2">
+                            <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered"
+                                          Label="Sale Tag"
+                                          @bind-Value=CurrentObject!.SaleTag For="@(() => CurrentObject.SaleTag)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="4">
                         </MudItem>
                         <MudItem xs="12">
                             <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Lines=4

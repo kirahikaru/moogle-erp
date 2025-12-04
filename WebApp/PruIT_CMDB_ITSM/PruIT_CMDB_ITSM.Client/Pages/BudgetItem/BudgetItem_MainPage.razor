@@ -29,7 +29,8 @@
 				 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" T="BudgetItem">
 		<Columns>
 			@* <PropertyColumn Property="x => x.LBU" Title="LBU" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" /> *@
-			<TemplateColumn Title="LBU" StickyLeft="true" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Context="rowData">
+			<TemplateColumn Title="LBU" StickyLeft="true" 
+				HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" Context="rowData">
 				<CellTemplate>
 					<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
 						<MudImage Src=@(_lbuFlagList[rowData.Item.LBU!]) Height="12" />
@@ -38,46 +39,64 @@
 				</CellTemplate>
 			</TemplateColumn>
 			<PropertyColumn Title="Grouping L1" Property="x => x.GroupingL1"
-							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" 
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
 				HeaderStyle="min-width:200px" Sortable="false" />
-			<PropertyColumn Property="x => x.GroupingL2" Title="Grouping L2" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" HeaderStyle="min-width:180px" Sortable="false" />
-			<PropertyColumn Property="x => x.GroupingL3" Title="Grouping L3." HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" HeaderStyle="min-width:200px" />
-			<PropertyColumn Property="x => x.ObjectName" Title="Budget Item" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" HeaderStyle="min-width:280px" />
-			<PropertyColumn Property="x => x.Category" Title="Category" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-			<PropertyColumn Property="x => x.AccountCode" Title="Account Code" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" Sortable="false" />
-			<PropertyColumn Property="x => x.AccountName" Title="Account Name" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Sortable="false" />
-			<PropertyColumn Property="x => x.ActivityTrackID" Title="Act Tracker ID" Sortable="false"
-				HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" HeaderStyle="min-width:120px" />
-			<PropertyColumn Property="x => x.Class2" Title="Class 2" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" HeaderStyle="min-width:180px" />
-			<PropertyColumn Property="x => x.CurrencyCode" Title="Currency" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Filterable="false" Sortable="false" />
-			<PropertyColumn Property="x => x.BudgetedAmount" Title="Budget Amount" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-500"
-							Format="#,##0" Sortable="false" 
-							HeaderStyle="min-width:140px" CellStyle="text-align:right" />
-			<PropertyColumn Property="x => x.TotalExpenseAmount" Title="Expense Amount" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-500"
-							Format="#,##0" Sortable="false" 
-							HeaderStyle="min-width:140px" CellStyle="text-align:right" />
-			@* <PropertyColumn Property="x => x.RemainingAmount" Title="Remaining Amount" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Format="#,##0" CellStyle="text-align:right" /> *@
-			<TemplateColumn Title="Remaining Amount" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
-							Filterable="false" Sortable="false"
-							HeaderStyle="min-width:150px" CellStyle="text-align:right" Context="item">
-				<CellTemplate>
-					<MudText Typo="Typo.body1" Class="reddit-mono-500" Color="@(item.Item.RemainingAmount > 0 ? Color.Success : (item.Item.RemainingAmount < 0 ? Color.Error : Color.Default))">
-						@item.Item.RemainingAmount.ToString("#,##0")
-					</MudText>
-				</CellTemplate>
-			</TemplateColumn>
-			<PropertyColumn Property="x => x.TaxRateText" Title="Tax Rate" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Sortable="false"
-				HeaderStyle="min-width:80px"/>
-			<PropertyColumn Property="x => x.ObjectCode" Title="Budget ID" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" HeaderStyle="min-width:150px" />
-			<PropertyColumn Property="x => x.VersionName" Title="Version" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-			<TemplateColumn Title="Action" HeaderClass="pru-mud-datagrid-hdr main-pg" Sortable="false" Filterable="false" StickyRight="true"
-							CellClass="pru-mud-datagrid-cell" CellStyle="padding-inline-end:4px; padding-inline-start:4px">
-				<CellTemplate>
-					<MudStack Row="true" Spacing="1">
-						<MudIconButton Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
+			<PropertyColumn Property="x => x.GroupingL2" Title="Grouping L2" 
+				HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" 
+				HeaderStyle="min-width:180px" Sortable="false" />
+			<PropertyColumn Property="x => x.GroupingL3" Title="Grouping L3." 
+				HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" HeaderStyle="min-width:200px" />
+			<PropertyColumn Property="x => x.ObjectName" Title="Budget Item" 
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
+				HeaderStyle="min-width:280px" />
+			<PropertyColumn Title="Category" Property="x => x.Category"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" />
+			<PropertyColumn Title="Account Code" Property="x => x.AccountCode" Sortable="false"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-400" />
+            <PropertyColumn Title="Account Name" Property="x => x.AccountName" Sortable="false"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" />
+            <PropertyColumn Title="Act Tracker ID" Property="x => x.ActivityTrackID" Sortable="false"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-400"
+                            HeaderStyle="min-width:120px" />
+            <PropertyColumn Title="Class 2" Property="x => x.Class2"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderStyle="min-width:180px" />
+            <PropertyColumn Title="Currency" Property="x => x.CurrencyCode" Filterable="false" Sortable="false"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" />
+            <PropertyColumn Title="Budget Amount" Property="x => x.BudgetedAmount" Format="#,##0" Sortable="false"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-500"
+                            HeaderStyle="min-width:140px" CellStyle="text-align:right" />
+            <PropertyColumn Title="Expense Amount" Property="x => x.TotalExpenseAmount" Format="#,##0" Sortable="false"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-500"
+                            HeaderStyle="min-width:140px" CellStyle="text-align:right" />
+            @* <PropertyColumn Property="x => x.RemainingAmount" Title="Remaining Amount" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Format="#,##0" CellStyle="text-align:right" /> *@
+            <TemplateColumn Title="Remaining Amount" Filterable="false" Sortable="false"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderStyle="min-width:150px" CellStyle="text-align:right" Context="item">
+                <CellTemplate>
+                    <MudText Typo="Typo.body1" Class="reddit-mono-500" Color="@(item.Item.RemainingAmount > 0 ? Color.Success : (item.Item.RemainingAmount < 0 ? Color.Error : Color.Default))">
+                        @item.Item.RemainingAmount.ToString("#,##0")
+                    </MudText>
+                </CellTemplate>
+            </TemplateColumn>
+            <PropertyColumn Property="x => x.TaxRateText" Title="Tax Rate" Sortable="false"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderStyle="min-width:80px" />
+            <PropertyColumn Title="Budget ID" Property="x => x.ObjectCode"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-400" HeaderStyle="min-width:150px" />
+            <PropertyColumn Title="Version" Property="x => x.VersionName"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
+							HeaderStyle="min-width:120px" />
+            <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="justify-items:center"
+							CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
+                <CellTemplate>
+                    <MudStack Row="true" Spacing="1">
+                        <MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>

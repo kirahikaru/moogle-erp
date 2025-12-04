@@ -122,6 +122,6 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<PruHR.Employee>(dbC
 
 	public override List<string> GetSearchOrderbBy()
 	{
-		return ["t.EmpStatus","t.ObjectName ASC"];
+		return ["(CASE t.EmpStatus WHEN 'ACTIVE' THEN 1 WHEN 'RESIGNED' THEN 2 ELSE 9 END)", "t.ObjectName ASC"];
 	}
 }

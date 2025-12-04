@@ -19,11 +19,14 @@ input[type="text" i] {
     padding-block: 0px;
     padding-inline: 0px;
 }
+
 /*#endregion */
 
 .pru-mud-form-field {
     & .mud-input {
-        & input.mud-input-root, div.mud-input-slot.mud-input-root {
+
+        & input.mud-input-root,
+        div.mud-input-slot.mud-input-root {
             color: var(--pru-gray-tw-600);
             line-height: 100%;
             font-size: 10pt;
@@ -47,25 +50,26 @@ input[type="text" i] {
         }
 
         &.mud-input-underline {
-            &:hover:not(.mud-disabled):before
-            {
+            &:hover:not(.mud-disabled):before {
                 border-bottom: 1px solid var(--pru-red-default);
             }
+
             &:after {
                 border-bottom: 1px solid var(--pru-red-default);
             }
         }
 
-        :focus-within ~ label.mud-input-label.mud-input-label-inputcontrol {
+        :focus-within~label.mud-input-label.mud-input-label-inputcontrol {
             color: var(--pru-navy-default);
         }
 
-        > .mud-icon-button-edge-margin-end {
+        >.mud-icon-button-edge-margin-end {
             margin-inline-end: 2px;
         }
 
         & .mud-icon-button-label {
             color: var(--pru-gray-tw-300);
+
             & .material-symbols-rounded {
                 font-size: 20px;
                 font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -76,6 +80,7 @@ input[type="text" i] {
             & .mud-icon-button {
                 padding: 4px;
             }
+
             & .material-symbols-rounded {
                 color: var(--pru-red-default);
                 font-size: 20px;
@@ -85,9 +90,9 @@ input[type="text" i] {
 
         &.mud-disabled {
             background-color: var(--pru-gray-tw-50);
-            
-            & > input {
-                cursor:not-allowed;
+
+            &>input {
+                cursor: not-allowed;
                 padding-left: 6px;
             }
         }
@@ -117,8 +122,7 @@ input[type="text" i] {
     &.bordered {
 
         /* For MudDatePicker is slightly different from  */
-        &>.mud-input-control
-        {
+        &>.mud-input-control {
             &>.mud-input-control-input-container {
                 &>div.mud-input.mud-input-text {
                     &.mud-input-text-with-label {
@@ -128,7 +132,7 @@ input[type="text" i] {
                     }
                 }
             }
-            
+
         }
 
         &>.mud-input-control-input-container {
@@ -153,8 +157,10 @@ input[type="text" i] {
         }
 
         & .mud-input {
-            & input.mud-input-root, div.mud-input-slot.mud-input-root {
-                font-size:10pt;
+
+            & input.mud-input-root,
+            div.mud-input-slot.mud-input-root {
+                font-size: 10pt;
                 line-height: 18px;
                 padding: 7px 0px 7px 10px;
                 height: unset;
@@ -170,12 +176,15 @@ input[type="text" i] {
 
             &.mud-input-underline {
                 border: none;
+
                 &:hover:not(.mud-disabled):before {
-                    border:none;
+                    border: none;
                 }
+
                 &::before {
                     border: none;
                 }
+
                 &::after {
                     border: none;
                 }
@@ -204,7 +213,7 @@ input[type="text" i] {
         .mud-icon-button {
             padding: 2px;
         }
-        
+
         & .mud-icon-button-edge-end {
             margin-right: 0px;
             margin-inline-end: 0px;
@@ -219,10 +228,12 @@ input[type="text" i] {
 
         & .mud-input-adornment {
             margin-right: 4px;
+
             & .mud-icon-button {
                 padding: 4px;
-                
+
             }
+
             & .material-symbols-rounded {
                 color: var(--pru-gray-tw-500);
                 font-size: 20px;
@@ -233,8 +244,10 @@ input[type="text" i] {
 
     &.pru-ui-select {
         & .mud-input {
-            & input.mud-input-root, div.mud-input-slot.mud-input-root {
-                font-size:10pt;
+
+            & input.mud-input-root,
+            div.mud-input-slot.mud-input-root {
+                font-size: 10pt;
                 padding: 7px 0px 7px 9px;
                 height: unset;
                 /* border-right: solid 1px var(--mud-palette-lines-inputs);
@@ -249,10 +262,12 @@ input[type="text" i] {
 
         & .mud-input-adornment {
             margin-right: 4px;
+
             & .mud-icon-button {
                 padding: 4px;
-                
+
             }
+
             & .material-symbols-rounded {
                 color: var(--pru-gray-tw-500);
                 font-size: 20px;
@@ -266,14 +281,14 @@ input[type="text" i] {
             margin-left: -6px;
             margin-inline-start: -6px;
         }
+
         & .mud-icon-button-edge-end {
             margin-right: 0px;
             margin-inline-end: 0px;
         }
     }
 
-    & .mud-input-adornment-start
-    {
+    & .mud-input-adornment-start {
         margin-left: 4px;
         margin-right: 4px;
     }
@@ -282,6 +297,7 @@ input[type="text" i] {
 .pru-btn-base {
     &.in-pg-action {
         padding: 2px 8px;
+
         & .mud-button-label {
             text-transform: none;
         }
@@ -309,25 +325,26 @@ input[type="text" i] {
         padding: 4px;
     }
 
-    & .mud-checkbox-false > .mud-icon-root {
+    & .mud-checkbox-false>.mud-icon-root {
         color: var(--pru-gray-tw-400);
     }
 
-    & .mud-checkbox-true  > .mud-icon-root {
+    & .mud-checkbox-true>.mud-icon-root {
         color: var(--pru-red-default);
     }
 
-    & .mud-checkbox.mud-disabled *, .mud-checkbox .mud-disabled:focus-visible *, .mud-checkbox .mud-disabled:active *
-    {
+    & .mud-checkbox.mud-disabled *,
+    .mud-checkbox .mud-disabled:focus-visible *,
+    .mud-checkbox .mud-disabled:active * {
         cursor: not-allowed;
     }
 
     & .mud-disabled {
-        & .mud-checkbox-false > .mud-icon-root {
+        & .mud-checkbox-false>.mud-icon-root {
             color: var(--pru-gray-tw-300);
-        }   
+        }
 
-        & .mud-checkbox-true  > .mud-icon-root {
+        & .mud-checkbox-true>.mud-icon-root {
             color: var(--pru-gray-tw-300);
         }
     }
@@ -353,7 +370,7 @@ input[type="text" i] {
         cursor: not-allowed;
     }
 
-    & .mud-switch-disabled{
+    & .mud-switch-disabled {
         & .mud-switch-button-m3 .mud-switch-thumb-m3.mud-switch-thumb-secondary-m3 {
             background-color: var(--pru-gray-tw-300);
             cursor: not-allowed;
@@ -365,7 +382,7 @@ input[type="text" i] {
             box-shadow: none;
         }
     }
-    
+
     & .mud-switch-span-m3 .mud-switch-track-m3 {
         height: 22px;
         border-radius: 22px;
@@ -375,8 +392,7 @@ input[type="text" i] {
         margin-inline-end: 6px;
     }
 
-    & .mud-switch-span-m3
-    {
+    & .mud-switch-span-m3 {
         height: 22px;
         width: 38px;
     }
@@ -385,15 +401,16 @@ input[type="text" i] {
 .pru-alert-validation {
     padding: 0px 8px !important;
     border: 1px solid var(--pru-red-default);
-    color:var(--pru-red-default);
+    color: var(--pru-red-default);
     background-color: #FAFAFA;
 
     & .mud-alert-icon {
         padding: 4px 0px;
         margin-right: 6px;
         margin-inline-end: 6px;
+
         &.mud-alert-icon-left {
-            color:var(--pru-red-default);
+            color: var(--pru-red-default);
         }
     }
 
@@ -482,35 +499,40 @@ input[type="text" i] {
 }
 
 .pru-mud-datagrid-hdr {
-    font-weight:600 !important;
+    font-weight: 600 !important;
     padding-inline-start: 6px !important;
     padding-inline-end: 6px !important;
     /* padding-top:4px !important;
     padding-bottom:4px !important; */
-    padding: 4px 10px 4px 10px !important;
-    line-height:100% !important;
-    
-    & .column-options {
+    padding: 6px 10px 6px 10px !important;
+    line-height: 100% !important;
+
+    & .mud-menu {
         margin-right: -6px;
     }
 
     & .mud-icon-button-size-small {
-        padding: 2px;
+        padding: 0px;
+    }
+
+    & .mud-icon-size-small {
+        font-size: 18px;
     }
 
     &.cruc-pg-items {
         padding: 8px 10px 8px 10px !important;
         background-color: var(--pru-gray-tw-50) !important;
         border-right: solid 1px var(--pru-gray-tw-100);
+
         & .column-header {
             color: var(--pru-red-default);
         }
     }
 
     &.main-pg {
-        border-right:1px solid #FFFFFF !important;
-        background-color:var(--pru-gray-default) !important;
-        color:#FFFFFF !important;    
+        border-right: 1px solid #FFFFFF !important;
+        background-color: var(--pru-gray-default) !important;
+        color: #FFFFFF !important;
     }
 
     & .mud-icon-root.mud-svg-icon {
@@ -527,7 +549,7 @@ input[type="text" i] {
         border-left: var(--pru-red-default) 3px solid;
         background-color: var(--material-yellow-50) !important;
 
-        & > .mud-table-cell {
+        &>.mud-table-cell {
             color: var(--pru-red-default) !important;
             font-weight: 500;
         }
@@ -535,8 +557,16 @@ input[type="text" i] {
 }
 
 .pru-mud-datagrid-cell {
-    padding: 2px 8px !important;
-    font-size: 10pt;
+    padding: 6px 10px !important;
+    font-size: 10pt !important;
+    line-height: 120% !important;
+
+    &.data-align-top {
+        vertical-align: top !important;
+        & .mud-table-cell {
+            vertical-align: top !important;
+        }
+    }
 
     &.spacious {
         padding: 8px 10px 8px 10px !important;
@@ -544,12 +574,20 @@ input[type="text" i] {
 }
 
 .pru-mud-datagrid-pager {
-    height:36px;
+    height: 36px;
 
     & .mud-icon-button {
-        padding:4px;
+        padding: 4px;
     }
 }
+
+.pru-ico-btn-datagrid-action {
+    font-size: 10px;
+    & .mud-icon-size-small {
+        font-size: 18px;
+    }
+}
+
 /*#endregion  */
 
 /*#region Mad Nav Menu */
@@ -560,14 +598,12 @@ input[type="text" i] {
         align-items: center;
         /* border-bottom: 1px solid var(--pru-gray-tw-50); */
 
-        & :not(.mud-nav-link-disabled) 
-        {
-            & .mud-nav-link-icon.mud-nav-link-icon-default
-            {
+        & :not(.mud-nav-link-disabled) {
+            & .mud-nav-link-icon.mud-nav-link-icon-default {
                 color: var(--pru-dark-gray-default);
             }
         }
-        
+
         & :focus:not(.mud-nav-link-disabled) {
             background-color: var(--pru-red-lighter);
         }
@@ -575,14 +611,14 @@ input[type="text" i] {
         &:hover {
             border-right: solid 3px var(--pru-red-default);
             background-color: var(--pru-red-tw-50) !important;
-            & > .mud-nav-link-text {
+
+            &>.mud-nav-link-text {
                 color: var(--pru-red-default);
             }
 
             & :not(.mud-nav-link-disabled) {
 
-                & .mud-nav-link-icon.mud-nav-link-icon-default 
-                {
+                & .mud-nav-link-icon.mud-nav-link-icon-default {
                     color: white;
                 }
             }
@@ -592,7 +628,7 @@ input[type="text" i] {
             }
         }
 
-        & > .mud-nav-link-text {
+        &>.mud-nav-link-text {
             font-weight: 600;
             color: var(--pru-red-default);
             margin-inline-start: 8px;
@@ -633,16 +669,16 @@ input[type="text" i] {
         align-items: center;
         color: var(--pru-red-default);
         transition: none !important;
+
         /* border-bottom: solid 1px var(--pru-gray-tw-50); */
         & .mud-nav-link-text {
             font-weight: 400;
             margin-inline-start: 4px;
         }
 
-        &.active:not(.mud-nav-link-disabled)
-        {
+        &.active:not(.mud-nav-link-disabled) {
             background-color: var(--pru-red-50) !important;
-            
+
             border-right: solid 3px var(--pru-red-default);
             border-left: solid 1px var(--pru-red-default);
 
@@ -655,14 +691,13 @@ input[type="text" i] {
         &:hover {
             border-right: solid 3px var(--pru-red-default);
             background-color: var(--pru-red-tw-50) !important;
-            
-            &.active:not(.mud-nav-link-disabled) 
-            {
+
+            &.active:not(.mud-nav-link-disabled) {
                 background-color: var(--pru-red-tw-50) !important;
             }
 
             & .mud-nav-link-text {
-                font-weight:500;
+                font-weight: 500;
             }
         }
 
@@ -683,7 +718,7 @@ input[type="text" i] {
 
     & .mud-icon-root {
         width: 20px;
-        height:20px;
+        height: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -700,8 +735,7 @@ input[type="text" i] {
 }
 
 .pru-mud-nav-item-l2 {
-    & .mud-nav-link
-    {
+    & .mud-nav-link {
         padding: 6px 8px;
         display: flex;
         align-items: center;
@@ -709,39 +743,33 @@ input[type="text" i] {
         background-color: #FFF !important;
         transition: none !important;
 
-        & :not(.mud-nav-link-disabled) 
-        {
-            & .mud-icon-root.mud-svg-icon 
-            {
+        & :not(.mud-nav-link-disabled) {
+            & .mud-icon-root.mud-svg-icon {
                 fill: var(--pru-dark-gray-default);
             }
 
-            & .mud-nav-link-text 
-            {
+            & .mud-nav-link-text {
                 color: var(--pru-dark-gray-default);
             }
         }
 
-        &.active:not(.mud-nav-link-disabled) 
-        {
+        &.active:not(.mud-nav-link-disabled) {
             background-color: #FFF !important;
             background-color: var(--pru-red-tw-50) !important;
-            
+
             border-right: solid 3px var(--pru-red-default);
             border-left: solid 1px var(--pru-red-default);
 
-            & .mud-icon-root.mud-svg-icon 
-            {
+            & .mud-icon-root.mud-svg-icon {
                 fill: var(--pru-red-default);
             }
 
-            & .mud-nav-link-text 
-            {
-                font-weight:400;
+            & .mud-nav-link-text {
+                font-weight: 400;
                 color: var(--pru-red-default);
             }
         }
-        
+
         & .mud-nav-link-text {
             font-weight: 400;
             margin-inline-start: 4px;
@@ -754,8 +782,7 @@ input[type="text" i] {
             border-right: solid 3px var(--pru-red-default) !important;
             background-color: var(--pru-red-tw-50) !important;
 
-            &.active:not(.mud-nav-link-disabled) 
-            {
+            &.active:not(.mud-nav-link-disabled) {
                 background-color: var(--pru-gray-tw-100) !important;
             }
         }
@@ -763,26 +790,27 @@ input[type="text" i] {
 
     & .mud-icon-root {
         width: 24px;
-        height:20px;
+        height: 20px;
         display: flex;
         align-items: center;
         justify-content: start;
     }
 }
+
 /*#endregion MudNavMenu */
 
 /*#region MudTab */
 .pru-mud-tab {
     & .mud-tab {
         min-height: 40px;
-        font-size:12pt;
+        font-size: 12pt;
     }
 
     & .mud-tabs-tabbar {
         background-color: transparent;
-        & .mud-tabs-tabbar-inner
-        {
-            min-height:36px;
+
+        & .mud-tabs-tabbar-inner {
+            min-height: 36px;
         }
     }
 
@@ -805,7 +833,7 @@ input[type="text" i] {
     }
 
     & .mud-tabs-panels {
-        height:calc(100vh - 200px);
+        height: calc(100vh - 200px);
     }
 
     & .material-symbols-rounded {
@@ -820,4 +848,5 @@ input[type="text" i] {
     background-color: #f5f6f6;
     border: solid 1px #cdd2d4;
 }
+
 /*#endregion MudTab */

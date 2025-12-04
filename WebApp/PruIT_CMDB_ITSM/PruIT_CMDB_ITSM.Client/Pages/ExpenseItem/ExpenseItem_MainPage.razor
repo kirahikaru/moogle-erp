@@ -38,45 +38,48 @@
 				</CellTemplate>
 			</TemplateColumn>
 			@* <PropertyColumn Property="x => x.LBU" Title="LBU" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" /> *@
-            <PropertyColumn Property="x => x.ExpenseYrMthTxt" Title="Expense Yr/Mth" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Property="x => x.EffectiveDate" Title="Eff. Date" Format="dd-MMM-yyyy"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
-                            HeaderStyle="min-width:130px" />
-            <PropertyColumn Property="x => x.ObjectName" Title="Item Name" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+			<PropertyColumn Title="Expense Yr/Mth" Property="x => x.ExpenseYrMthTxt" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+			<PropertyColumn Title="Eff. Date" Property="x => x.EffectiveDate" Format="dd-MMM-yyyy"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400"
+                            HeaderStyle="min-width:130px" CellStyle="text-align:center" />
+			<PropertyColumn Title="Item Name" Property="x => x.ObjectName" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
                             HeaderStyle="min-width:350px" />
             <PropertyColumn Property="x => x.InvoiceCode" Title="Invoice #" Sortable="false"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
-            <PropertyColumn Property="x => x.InvoiceDate" Title="Invoice Date" Format="dd-MMM-yyyy" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Property="x => x.AccountCode" Title="Account #" Sortable="false"
+            <PropertyColumn Title="Invoice Date" Property="x => x.InvoiceDate" Format="dd-MMM-yyyy"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400"
+                            HeaderStyle="min-width:150px" CellStyle="text-align:center" />
+			<PropertyColumn Title="Account #" Property="x => x.AccountCode" Sortable="false"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
-            <PropertyColumn Property="x => x.AccountName" Title="Account Name" Sortable="false"
+			<PropertyColumn Title="Account Name" Property="x => x.AccountName" Sortable="false"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
                             HeaderStyle="min-width:200px" />
-            <PropertyColumn Property="x => x.ActivityTrackID" Title="Act Tracker ID" Sortable="false"
+			<PropertyColumn Title="Act Tracker ID" Property="x => x.ActivityTrackID" Sortable="false"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400"
                             HeaderStyle="min-width:100px" />
             <PropertyColumn Property="x => x.BudgetItemName" Title="Budget Line" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
                             HeaderStyle="min-width:250px" />
             <PropertyColumn Property="x => x.BudgetItemID" Title="Budget ID" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400"
                             HeaderStyle="min-width:130px" />
-            <PropertyColumn Property="x => x.Amount" Title="Amount" Format="#,##0" Sortable="false"
+			<PropertyColumn Title="Amount" Property="x => x.Amount" Format="#,##0" Sortable="false"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" CellStyle="text-align:right" />
-            <PropertyColumn Property="x => x.TaxAmount" Title="Tax Amount" Format="#,##0" Sortable="false"
+			<PropertyColumn Title="Tax" Property="x => x.TaxAmount" Format="#,##0" Sortable="false"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" CellStyle="text-align:right" />
-			<PropertyColumn Property="x => x.PurchaseOrderNo" Title="PO#" Sortable="false"
+			<PropertyColumn Title="PO#" Property="x => x.PurchaseOrderNo" Sortable="false"
 							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
-			<PropertyColumn Property="x => x.InvoiceCode" Title="Invoice #" Sortable="false"
+			<PropertyColumn Title="Invoice #" Property="x => x.InvoiceCode" Sortable="false"
 							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
-			<PropertyColumn Property="x => x.VendorName" Title="Provider" Sortable="false"
-							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+			<PropertyColumn Title="Provider" Property="x => x.VendorName" Sortable="false"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="min-width:220px" />
             <TemplateColumn Title="Action" HeaderClass="pru-mud-datagrid-hdr main-pg" Sortable="false" Filterable="false" StickyRight="true"
                             CellClass="pru-mud-datagrid-cell" CellStyle="padding-inline-end:4px; padding-inline-start:4px">
                 <CellTemplate>
                     <MudStack Row="true" Spacing="1">
-						<MudIconButton Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>

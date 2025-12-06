@@ -169,7 +169,7 @@ public class UnitOfWork : IUnitOfWork
 			case DatabaseTypes.POSTGRESQL:
 				{
 					DatabaseConfig sqlDbConfig = dbConfigs.Get($"{_appName}PostgreSqlConnection");
-					if (!string.IsNullOrEmpty(sqlDbConfig.DatabaseType) && !string.IsNullOrEmpty(sqlDbConfig.ServerUrl) && sqlDbConfig.DatabaseType == DatabaseTypes.AZURE_SQL)
+					if (!string.IsNullOrEmpty(sqlDbConfig.DatabaseType) && !string.IsNullOrEmpty(sqlDbConfig.ServerUrl) && sqlDbConfig.DatabaseType == DatabaseTypes.POSTGRESQL)
 						dbContext = new DbContext(sqlDbConfig);
 				}
                 break;

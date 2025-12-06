@@ -27,8 +27,9 @@
                  @ref="MainDataGrid" ServerData="ServerDataFunc"
 				 T="MoogHobby.Boardgame">
         <Columns>
-            <TemplateColumn Title="Name"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell" Context="rowData">
+			<TemplateColumn Title="Name" StickyLeft="true"
+                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" 
+							HeaderStyle="min-width:280px" Context="rowData">
                 <CellTemplate>
                     @if (rowData.Item.ObjectState.Is(ObjectStates.WRITTEN_OFF, ObjectStates.SOLD, ObjectStates.GIFTED_OTHER))
                     {
@@ -48,33 +49,37 @@
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Title="Year" Property="x => x.ReleaseYear"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell" />
+                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
             <PropertyColumn Title="Age" Property="x => x.PlayingAgeText"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell" />
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
             <PropertyColumn Title="Play Time" Property="x => x.PlayDurationText"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell" />
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
+							HeaderStyle="min-width:150px" />
             <PropertyColumn Title="Player Limit" Property="x => x.PlayerLimitText"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell" />
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
+							HeaderStyle="min-width:150px" />
             <PropertyColumn Title="Price" Property="x => x.PurchasedPrice" Format="$ #,##0.00"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell" CellStyle="text-align:right" />
-            <PropertyColumn Property="x => x.PurchasedDate" Title="Purhcased Date" Format="dd-MMM-yyyy"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell" CellStyle="text-align:center" />
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="text-align:right"
+							HeaderStyle="min-width:100px" />
+			<PropertyColumn Title="Purhcased Date" Property="x => x.PurchasedDate" Format="dd-MMM-yyyy"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
+							HeaderStyle="min-width:170px" CellStyle="text-align:center" />
             <TemplateColumn Title="Purchase From" Sortable="false" Filterable="false" 
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell" Context="rowData">
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
+							HeaderStyle="min-width:280px" Context="rowData">
                 <CellTemplate>
                     @if (@rowData.Item.Merchant != null)
                     {
-                        <MudText Typo="Typo.body1">@rowData.Item.Merchant.ObjectName</MudText>
+                        <MudText Typo="Typo.body1" Style="font-size:10pt">@rowData.Item.Merchant.ObjectName</MudText>
                     }
                     else
                     {
-                        <MudText Typo="Typo.body1"> - </MudText>
+						<MudText Typo="Typo.body1" Style="font-size:10pt"> - </MudText>
                     }
                 </CellTemplate>
             </TemplateColumn>
             <TemplateColumn Title="State" Sortable="false" Filterable="false"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg"
-                            CellClass="mud-datagrid-cell" CellStyle="text-align:center"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="text-align:center; padding-top: 0px !important; padding-bottom: 0px !important"
                             Context="rowData">
                 <CellTemplate>
                     @* @(ObjectStates.GetDisplayText(rowData.Item.ObjectState).ToUpper()) *@
@@ -84,17 +89,18 @@
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Property="x => x.Barcode" Title="Barcode"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell reddit-mono-400" />
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
             <PropertyColumn Title="ID" Property="x => x.ObjectCode"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell reddit-mono-400" />
-            <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="false"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="mud-datagrid-cell" CellStyle="padding-inline-end:4px; padding-inline-start:4px">
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
+            <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
+							HeaderStyle="max-width: 120px; width:500px; justify-items:center" CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
 				<CellTemplate>
 					<MudStack Row="true" Spacing="1">
-						<MudIconButton Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
-						<MudIconButton Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(args => DeleteRecord(context.Item))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(args => DeleteRecord(context.Item))" />
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>

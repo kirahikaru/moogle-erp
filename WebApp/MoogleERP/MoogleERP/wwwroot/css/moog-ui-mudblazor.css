@@ -440,7 +440,7 @@ input[type="text" i] {
         
         & .mud-drop-container {
             width: 100%;
-            height: calc(100vh - 285px);
+            height: calc(100vh - 280px);
             overflow-y:auto;
         }
     }
@@ -453,6 +453,10 @@ input[type="text" i] {
             overflow-y:auto;
         }
     }
+
+    & .mud-table-pagination-toolbar {
+        height: 36px;
+    }
 }
 
 .moog-mud-datagrid-hdr {
@@ -461,7 +465,7 @@ input[type="text" i] {
     padding-inline-end: 6px !important;
     /* padding-top:4px !important;
     padding-bottom:4px !important; */
-    padding: 4px 10px 4px 10px !important;
+    padding: 8px 10px 8px 10px !important;
     line-height:100% !important;
     
     & .column-options {
@@ -469,7 +473,11 @@ input[type="text" i] {
     }
 
     & .mud-icon-button-size-small {
-        padding: 2px;
+        padding: 0px;
+    }
+
+    & .mud-icon-size-small {
+        font-size: 18px;
     }
 
     &.cruc-pg-items {
@@ -495,6 +503,18 @@ input[type="text" i] {
     }
 }
 
+.moog-mud-datagrid-row {
+    &.selected {
+        border-left: var(--ssv-pharma-blue) 3px solid;
+        background-color: var(--material-yellow-50) !important;
+
+        &>.mud-table-cell {
+            color: var(--ssv-pharma-blue) !important;
+            font-weight: 500;
+        }
+    }
+}
+
 /*#endregion */
 
 .moog-mud-datagrid-pager {
@@ -505,12 +525,27 @@ input[type="text" i] {
     }
 }
 
-.moog-mud-datagrid-cell {
-    padding: 2px 8px !important;
-    font-size: 10pt;
+.moog-ico-btn-datagrid-action {
+    font-size: 10px;
+    & .mud-icon-size-small {
+        font-size: 18px;
+    }
+}
 
-    &.tight {
-        padding: 4px 4px !important;
+.moog-mud-datagrid-cell {
+    padding: 6px 10px !important;
+    font-size: 10pt !important;
+    line-height: 120% !important;
+
+    &.data-align-top {
+        vertical-align: top !important;
+        & .mud-table-cell {
+            vertical-align: top !important;
+        }
+    }
+
+    &.spacious {
+        padding: 8px 10px 8px 10px !important;
     }
 }
 

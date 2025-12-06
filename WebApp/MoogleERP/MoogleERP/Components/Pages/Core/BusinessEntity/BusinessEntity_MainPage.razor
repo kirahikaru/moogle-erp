@@ -1,6 +1,6 @@
-﻿@page "/core/org-struct-type/main"
-@using DataLayer.AuxComponents.Extensions
-@inherits MainPageBase<OrgStructType>
+﻿@page "/core/busn-entity/main"
+
+@inherits MainPageBase<BusinessEntity>
 <MudPaper Class="moog-pg-banner mt-3 px-3 py-4" Elevation="1">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
@@ -23,20 +23,52 @@
                  ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple"
 				 Class="mt-2 moog-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" 
 				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-mud-datagrid-row"
-				 T="OrgStructType">
+				 T="BusinessEntity">
 		<Columns>
-			<PropertyColumn Title="Name" Property="x => x.ObjectName" 
+			<PropertyColumn Title="Name" Property="x => x.ObjectName" StickyLeft="true"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
-							CellStyle="font-weight:500; color:var(--ssv-pharma-blue)"/>
-			<PropertyColumn Title="Parent" Property="x => x.ParentName" 
+							CellStyle="font-weight:600; color:var(--ssv-pharma-blue)"/>
+			<PropertyColumn Title="Name (kh)" Property="x => x.ObjectNameKh"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<PropertyColumn Title="Level" Property="x => x.OrgLevel"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<PropertyColumn Title="ID" Property="x => x.ObjectCode"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
-			<PropertyColumn Title="Hierarchy Path" Property="x => x.HierarchyPath"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
-			<TemplateColumn Title="Action" Sortable="false" Filterable="false" 
+			<TemplateColumn Title="Base Country" Sortable="false" Filterable="false"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
+							Context="rowData">
+				<CellTemplate>
+					@if (rowData.Item.BaseCountry != null)
+					{
+						@if (!string.IsNullOrEmpty(rowData.Item.BaseCountry.FlagIconPath))
+						{
+							<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
+								<MudImage Src=@(rowData.Item.BaseCountry!.FlagIconPath!) Height="12" />
+								<MudText Typo="Typo.body1" Style="font-size:10pt">@rowData.Item.BaseCountry.ObjectName</MudText>
+							</MudStack>
+						}
+						else
+						{
+							<MudText Typo="Typo.body1" Style="font-size:10pt">@rowData.Item.BaseCountry.ObjectName</MudText>
+						}
+					}
+					else
+					{
+						<MudText Typo="Typo.body1" Style="font-size:10pt"> - </MudText>
+					}
+				</CellTemplate>
+			</TemplateColumn>
+			<TemplateColumn Title="Sector" Sortable="false" Filterable="false"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
+							Context="rowData">
+							<CellTemplate>
+					<MudText Typo="Typo.body1" Style="font-size:10pt">@(rowData.Item.BusinessSector != null ? rowData.Item.BusinessSector.ObjectName : "-")</MudText>
+							</CellTemplate>
+			</TemplateColumn>
+			<TemplateColumn Title="Industry" Sortable="false" Filterable="false"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
+							Context="rowData">
+				<CellTemplate>
+					<MudText Typo="Typo.body1" Style="font-size:10pt">@(rowData.Item.Industry != null ? rowData.Item.Industry.ObjectName : "-")</MudText>
+				</CellTemplate>
+			</TemplateColumn>
+			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
                             HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" 
 							HeaderStyle="max-width: 120px; width:500px; justify-items:center" CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
 				<CellTemplate>
@@ -50,7 +82,7 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="OrgStructType" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
+			<MudDataGridPager T="BusinessEntity" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
 		</PagerContent>
     </MudDataGrid>
 </MudPaper>
@@ -58,29 +90,13 @@
 @code {
 	#region UI VARIABLES
 
-	Dictionary<string, string> _statesCssClasses = new() {
-		{ ObjectStates.NEW, "status-chip-pink-light" },
-		{ ObjectStates.BNIB, "status-chip-pink-light" },
-		{ ObjectStates.IN_USE, "status-chip-green-light" },
-		{ ObjectStates.LOANED, "status-chip-amber-light"},
-		{ ObjectStates.UNKNOWN, "status-chip-brown-light"},
-		{ ObjectStates.OTHER, "status-chip-brown-light"},
-		{ ObjectStates.DRAFT, "status-chip-teal-light"},
-		{ ObjectStates.GIFTED_OTHER, "status-chip-blue-gray-light"},
-		{ ObjectStates.SOLD, "status-chip-blue-gray-light"},
-		{ ObjectStates.WRITTEN_OFF, "status-chip-blue-gray-light"},
-		{ ObjectStates.IN_STASH, "status-chip-purple-light" },
-		{ ObjectStates.BROKEN, "status-chip-blue-gray-light" },
-		{ ObjectStates.RARELY_USED, "status-chip-amber-light" },
-	};
-
 	#endregion
 
 	#region PAGE LIFECYCLE FUNCTIONS
 	public override Task SetParametersAsync(ParameterView parameters)
 	{
-		UrlPrefix = "/core/org-struct-type";
-		SearchParamName = "orgStructTypeSearchParam";
+		UrlPrefix = "/core/busn-entity";
+		SearchParamName = "busnEntitySearchParam";
 		return base.SetParametersAsync(parameters);
 	}
 
@@ -94,9 +110,9 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<OrgStructType>> ServerDataFunc(GridState<OrgStructType> gridState)
+	protected override async Task<GridData<BusinessEntity>> ServerDataFunc(GridState<BusinessEntity> gridState)
 	{
-		if (IsSearching) return new GridData<OrgStructType>
+		if (IsSearching) return new GridData<BusinessEntity>
 		{
 			Items = [],
 			TotalItems = 0
@@ -123,7 +139,7 @@
 			}
 			else
 			{
-				var result = await Uow.OrgStructTypes.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
+				var result = await Uow.BusinessEntities.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}
@@ -135,7 +151,7 @@
 			//	.Take(gridState.Count)
 			//	.ToList();
 
-			return new GridData<OrgStructType>
+			return new GridData<BusinessEntity>
 			{
 				Items = MainDataList,
 				TotalItems = totalItemCount
@@ -145,7 +161,7 @@
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
 
-			return new GridData<OrgStructType>
+			return new GridData<BusinessEntity>
 			{
 				Items = [],
 				TotalItems = 0

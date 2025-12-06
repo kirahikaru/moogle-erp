@@ -7,10 +7,6 @@ public interface IUowMoogleKhErpPg : IUowMoogleKhErp
 	
 }
 
-public class UowMoogleKhErpPg : UowMoogleKhErp, IUowMoogleKhErpPg
+public class UowMoogleKhErpPg(IOptionsMonitor<DatabaseConfig> dbConfigs) : UowMoogleKhErp(dbConfigs, DatabaseTypes.POSTGRESQL), IUowMoogleKhErpPg
 {
-    public UowMoogleKhErpPg(IOptionsMonitor<DatabaseConfig> dbConfigs) : base(dbConfigs, DatabaseTypes.POSTGRESQL)
-    {
-
-    }
 }

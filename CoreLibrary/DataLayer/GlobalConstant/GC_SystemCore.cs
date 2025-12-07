@@ -140,7 +140,10 @@ public static class CambodiaCommuneTypes
     }
 }
 
-public static class CambodiaDistrictTypes
+/// <summary>
+/// Cambodia District Types
+/// </summary>
+public static class KhDistrictTypes
 {
     public const string CITY = "C";
     public const string KHAN = "K";

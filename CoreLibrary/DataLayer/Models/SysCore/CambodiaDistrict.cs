@@ -1,4 +1,5 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
+using DataLayer.GlobalConstant;
 
 namespace DataLayer.Models.SysCore;
 
@@ -57,17 +58,22 @@ public class CambodiaDistrict : AuditObject
 
 	[Computed, Write(false)]
 	public List<CambodiaVillage> Villages { get; }
-    #endregion
+	#endregion
 
-    #region *** DYNAMIC PROPERTIES ***
-    [Computed, ReadOnly(true)]
-    public string ProvinceNameEn => Province != null ? Province.NameEn.NonNullValue("-") : "-";
+	#region *** DYNAMIC PROPERTIES ***
+	[Computed, Write(false), ReadOnly(true)]
+	public string ProvinceNameEn => Province != null ? Province.NameEn.NonNullValue("-") : "-";
 
-    [Computed, ReadOnly(true)]
+    [Computed, Write(false), ReadOnly(true)]
     public string ProvinceNameKh => Province != null ? Province.NameKh.NonNullValue("-") : "-";
-    #endregion
 
-    public CambodiaDistrict() : base()
+	[Computed, Write(false), ReadOnly(true)]
+	public string TypeText => KhDistrictTypes.GetDisplayText(Type);
+
+
+	#endregion
+
+	public CambodiaDistrict() : base()
     {
         Communes = [];
         Villages = [];

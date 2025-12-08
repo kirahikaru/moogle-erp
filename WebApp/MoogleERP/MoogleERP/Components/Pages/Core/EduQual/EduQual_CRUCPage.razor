@@ -1,7 +1,7 @@
-﻿@page "/core/busn-sector/{CRUCMode}"
-@page "/core/busn-sector/{CRUCMode}/{id:int}"
+﻿@page "/core/edu-qual/{CRUCMode}"
+@page "/core/edu-qual/{CRUCMode}/{id:int}"
 
-@inherits CRUCPageBase<BusinessSector>
+@inherits CRUCPageBase<EduQual>
 
 @if (CurrentObject != null && CurrentEditContext != null)
 {
@@ -74,24 +74,6 @@
                                           Label="ID" Placeholder="A-Z, 0-9, -_" Mask="objIdMask"
                                           @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" />
                         </MudItem>
-                        @if (CurrentObject!.Id > 0)
-                        {
-                            <MudItem xs="12">
-                                <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
-                                           Label="Parent" T="int?"
-                                           Value="CurrentObject!.ParentId" ValueChanged="OnParentChanged" For="@(() => CurrentObject!.ParentId)">
-                                    @foreach (var item in _validParents)
-                                    {
-                                        <MudSelectItem T="int?" Value="@item.ObjectId">@item.ObjectName</MudSelectItem>
-                                    }
-                                </MudSelect>
-                            </MudItem>
-                        }
-                        <MudItem xs="12">
-                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false" Disabled="true"
-                                          Label="Hierarchy path"
-                                          @bind-Value="CurrentObject!.HierarchyPath" For="@(() => CurrentObject!.HierarchyPath)" />
-                        </MudItem>
                     </MudGrid>
                 </MudPaper>
                 <MudPaper Height="26px" Elevation="1"
@@ -127,14 +109,14 @@
 
     #region UI PARAM
     MudTextField<string>? _mtfObjName;
-    IEnumerable<DropDownListItem> _validParents = [];
+    
     IMask objIdMask = new RegexMask(@"^[A-Z0-9-_]{0,}$");
     #endregion
 
     #region PAGE LIFECYCLE FUNCTIONS
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        UrlPrefix = "/core/edu-fos";
+        UrlPrefix = "/core/edu-qual";
         return base.SetParametersAsync(parameters);
     }
 
@@ -144,7 +126,7 @@
         {
             case CRUDCModes.READ:
                 {
-                    CurrentObject = await Uow.BusinessSectors.GetAsync(Id);
+                    CurrentObject = await Uow.EduQuals.GetAsync(Id);
                     IsViewMode = true;
                 }
                 break;
@@ -154,11 +136,11 @@
                 }
                 break;
             case CRUDCModes.UPDATE:
-                CurrentObject = await Uow.BusinessSectors.GetAsync(Id);
+                CurrentObject = await Uow.EduQuals.GetAsync(Id);
                 break;
             case CRUDCModes.CLONE:
                 {
-                    var tempObj = await Uow.BusinessSectors.GetAsync(Id);
+                    var tempObj = await Uow.EduQuals.GetAsync(Id);
                     CurrentObject = tempObj!.DeepClone();
                     CurrentObject!.Id = 0;
                     CurrentObject!.ObjectCode = null;
@@ -184,24 +166,7 @@
     #endregion
 
     #region UI FUNCTIONS
-    void OnParentChanged(int? parentId)
-    {
-        CurrentObject!.ParentId = parentId;
-
-        if (parentId.HasValue)
-        {
-            DropDownListItem? selectedItem = _validParents.FirstOrDefault(x => x.ObjectId == parentId.Value)!;
-
-            CurrentObject!.ParentCode = selectedItem!.ObjectCode;
-            CurrentObject!.HierarchyPath = $"{selectedItem!.HierarchyPath}>{CurrentObject!.ObjectCode}";
-        }
-        else
-        {
-            CurrentObject!.ParentCode = null;
-            CurrentObject!.HierarchyPath = CurrentObject!.ObjectCode;
-        }
-
-    }
+    
     #endregion
 
     #region DB UPDATE FUNCTIONS
@@ -220,9 +185,6 @@
     protected override Task PreSaveProcessing()
     {
         CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
-
-        if (string.IsNullOrEmpty(CurrentObject!.HierarchyPath))
-            CurrentObject!.HierarchyPath = CurrentObject!.ObjectCode;
 
         return base.PreSaveProcessing();
     }
@@ -243,12 +205,12 @@
         if (CurrentObject.Id > 0)
         {
             // Update existing record
-            bool isUpd = await Uow.BusinessSectors.UpdateAsync(CurrentObject);
+            bool isUpd = await Uow.EduQuals.UpdateAsync(CurrentObject);
             return isUpd;
         }
         else
         {
-            int objId = await Uow.BusinessSectors.InsertAsync(CurrentObject);
+            int objId = await Uow.EduQuals.InsertAsync(CurrentObject);
             if (objId > 0)
                 CurrentObject.Id = objId;
 
@@ -260,7 +222,7 @@
     #region INTERNAL FUNCTIONS
     async Task PopulatedUIControls()
     {
-        _validParents = await Uow.BusinessSectors.GetValidParentsAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!, CurrentObject!.ParentId);
+        
     }
     #endregion
 }

@@ -3,10 +3,10 @@
 public interface ILocationTypeRepos : IBaseRepos<LocationType>
 {
 	Task<List<DropDownListItem>> GetValidParentsAsync(
+		int objectId,
+		string objectCode,
 		string hierarchyPath,
-		string? searchText = null,
-		int? includingObjId = null,
-		List<int>? excludingObjectIdList = null);
+		string? searchText = null);
 
 	Task<List<LocationType>> GetChildsAsync(int objId, string hierarchyPath);
 
@@ -52,55 +52,141 @@ public class LocationTypeRepos(IDbContext dbContext) : BaseRepos<LocationType>(d
         return dataList;
     }
 
-    public async Task<List<DropDownListItem>> GetValidParentsAsync(
-        string hierarchyPath,
-        string? searchText = null,
-        int? includingObjId = null,
-        List<int>? excludingObjectIdList = null)
-    {
-        if (string.IsNullOrEmpty(hierarchyPath))
-            return [];
+	public async Task<List<DropDownListItem>> GetValidParentsAsync(
+		int objectId,
+		string objectCode,
+		string hierarchyPath,
+		string? searchText = null)
+	{
+		DynamicParameters param = new();
+		SqlBuilder sbSql = new();
 
-        DynamicParameters param = new();
-        SqlBuilder sbSql = new();
+		sbSql.Select("'ObjectId'=t.Id")
+			.Select("t.ObjectCode")
+			.Select("t.ObjectName")
+			.Select("t.HierarchyPath");
 
-        sbSql
-            .Select("t.Id")
-            .Select("'ObjectType' = 'LocationType'")
-            .Select("t.ObjectCode")
-            .Select("t.ObjectName")
-            .Select("t.HierarchyPath");
+		sbSql.Where("t.IsDeleted=0");
+		sbSql.Where("t.Id<>@ObjectId");
+		param.Add("@ObjectId", objectId);
 
-        sbSql
-            .Where("t.IsDeleted=0")
-            .Where("t.HierarchyPath NOT LIKE @HierarchyPath+'%'");
+		if (objectId > 0)
+		{
+			sbSql.Where("t.Id<>@Id");
+			param.Add("@Id", objectId);
+		}
 
-        param.Add("@HierarchyPath", hierarchyPath, DbType.AnsiString);
+		if (!string.IsNullOrEmpty(objectCode))
+		{
+			sbSql.Where("t.ObjectCode<>@ObjectCode");
+			param.Add("@ObjectCode", objectCode, DbType.AnsiString);
+		}
 
-        if (!string.IsNullOrEmpty(searchText))
-        {
-            sbSql.Where("UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%'");
-            param.Add("@SearchText", searchText, DbType.AnsiString);
-        }
+		if (!string.IsNullOrEmpty(hierarchyPath))
+		{
+			sbSql.Where("t.HierarchyPath NOT LIKE @HierarchyPath+'>%'");
+			param.Add("@HierarchyPath", hierarchyPath, DbType.AnsiString);
+		}
 
-        if (excludingObjectIdList != null && excludingObjectIdList.Count > 0)
-        {
-            sbSql.Where("t.Id NOT IN @ExcludingObjectIdList");
-            param.Add("@ExcludingObjectIdList", excludingObjectIdList, DbType.AnsiString);
-        }
+		if (!string.IsNullOrEmpty(searchText))
+		{
+			sbSql.Where("LOWER(t.ObjectName) LIKE '%'+LOWER(@SearchText)+'%'");
+			param.Add("@SearchText", searchText, DbType.AnsiString);
+		}
 
-        sbSql.OrderBy("t.ObjectName ASC");
+		sbSql.LeftJoin($"{OrgStructType.MsSqlTable} ost ON ost.Id=t.OrgStructTypeId");
 
-        string sql = sbSql.AddTemplate($"SELECT TOP 100 /**select**/ FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
+		sbSql.OrderBy("t.HierarchyPath");
+		sbSql.OrderBy("t.ObjectName");
 
-        using var cn = DbContext.DbCxn;
+		using var cn = DbContext.DbCxn;
 
-        var dataList = (await cn.QueryAsync<DropDownListItem>(sql, param)).AsList();
+		string sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
-        return dataList;
-    }
+		var dataList = (await cn.QueryAsync<DropDownListItem>(sql, param)).AsList();
 
-    public async Task<List<LocationType>> SearchAsync(
+		return dataList;
+	}
+
+	public override async Task<KeyValuePair<int, IEnumerable<LocationType>>> SearchNewAsync(
+		int pgSize = 0,
+		int pgNo = 0,
+		string? searchText = null,
+		IEnumerable<SqlSortCond>? sortConds = null,
+		IEnumerable<SqlFilterCond>? filterConds = null,
+		List<int>? excludeIdList = null)
+	{
+		if (pgNo < 0 && pgSize < 0)
+			throw new ArgumentOutOfRangeException(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
+
+		SqlBuilder sbSql = new();
+		DynamicParameters param = new();
+
+		sbSql.Where("t.IsDeleted=0");
+
+		#region Form Search Conditions
+		if (!string.IsNullOrEmpty(searchText))
+		{
+			if (searchText.StartsWith("id:", StringComparison.OrdinalIgnoreCase))
+			{
+				sbSql.Where("UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
+				param.Add("@SearchText", searchText.Replace("id:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
+			}
+			else if (searchText.StartsWith("code:", StringComparison.OrdinalIgnoreCase))
+			{
+				sbSql.Where("UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
+				param.Add("@SearchText", searchText.Replace("code:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
+			}
+			else
+			{
+				sbSql.Where("UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
+				param.Add("@SearchText", searchText, DbType.AnsiString);
+			}
+		}
+
+		sbSql.LeftJoin($"{LocationType.MsSqlTable} pr ON pr.Id=t.ParentId");
+
+		if (excludeIdList != null && excludeIdList.Count > 0)
+		{
+			sbSql.Where("t.Id NOT IN @ExcludeIdList");
+			param.Add("@ExcludeIdList", excludeIdList);
+		}
+		#endregion
+
+		foreach (string orderByClause in GetSearchOrderbBy())
+			sbSql.OrderBy(orderByClause);
+
+		string sql;
+
+		if (pgNo == 0 && pgSize == 0)
+		{
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/").RawSql;
+		}
+		else
+		{
+			param.Add("@PageSize", pgSize);
+			param.Add("@PageNo", pgNo);
+
+			sql = sbSql.AddTemplate(
+				$";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
+				$"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+		}
+
+		using var cn = DbContext.DbCxn;
+
+		var dataList = await cn.QueryAsync<LocationType, LocationType, LocationType>(sql, (obj, pr) =>
+		{
+			obj.Parent = pr;
+			return obj;
+		}, param, splitOn: "Id");
+
+		string countSql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
+		int count = await cn.ExecuteScalarAsync<int>(countSql, param);
+
+		return new KeyValuePair<int, IEnumerable<LocationType>>(count, dataList);
+	}
+
+	public async Task<List<LocationType>> SearchAsync(
         int pgSize = 0, int pgNo = 0,
         string? objectCode = null,
         string? objectName = null,

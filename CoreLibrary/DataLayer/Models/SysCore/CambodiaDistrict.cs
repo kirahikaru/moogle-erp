@@ -46,7 +46,7 @@ public class CambodiaDistrict : AuditObject
     [MaxLength(255), StringUnicode(true)]
     public string? Remark { get; set; }
 
-    public int? CambodiaProvinceId { get; set; }
+    public int? KhProvinceId { get; set; }
     #endregion
 
     #region *** LINKED OBJECTS ***

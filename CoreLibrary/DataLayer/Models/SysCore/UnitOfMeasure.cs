@@ -1,4 +1,6 @@
-﻿namespace DataLayer.Models.SysCore;
+﻿using DataLayer.GlobalConstant;
+
+namespace DataLayer.Models.SysCore;
 
 [Table("UnitOfMeasure"), DisplayName("Unit of Measure")]
 public class UnitOfMeasure : AuditObject
@@ -44,5 +46,7 @@ public class UnitOfMeasure : AuditObject
     #region *** DYNAMIC PROPERTIES ***
     [Computed, Write(false), ReadOnly(true)]
     public string NameWithSymbol => $"{ObjectName ?? ""} ({UnitSymbol ?? ""})";
+	[Computed, Write(false), ReadOnly(true)]
+	public string MeasureTypeText => UnitOfMeasureTypes.GetDisplayText(UnitOfMeasureType);
 	#endregion
 }

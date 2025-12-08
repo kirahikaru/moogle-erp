@@ -31,16 +31,17 @@ public class Occupation : AuditObject
     [MaxLength(255)]
     public new string? ObjectName { get; set; }
     public string? ObjectNameKh { get; set; }
-    public int? OccupationCategoryId { get; set; }
-    public string? OccupationCategoryCode { get; set; }
+    public int? OccpCategoryId { get; set; }
+    public string? OccpCategoryCode { get; set; }
     #endregion
 
     #region *** LINKED OBJECTS ***
     [Computed, Write(false)]
     public OccupationCategory? Category { get; set; }
-    #endregion
+	#endregion
 
-    #region *** DYNAMIC PROPERTIES ***
-
-    #endregion
+	#region *** DYNAMIC PROPERTIES ***
+	[Computed, Write(false), ReadOnly(true)]
+	public string CategoryName => Category != null ? Category.ObjectName.NonNullValue("-") : "-";
+	#endregion
 }

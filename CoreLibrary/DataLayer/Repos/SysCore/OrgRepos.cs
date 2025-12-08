@@ -64,7 +64,6 @@ public class OrgRepos(IDbContext dbContext) : BaseRepos<Organization>(dbContext,
         return pagination;
     }
 
-
     public async Task<List<Organization>> SearchAsync(
         int pgSize = 0, int pgNo = 0,
         string? objectCode = null,

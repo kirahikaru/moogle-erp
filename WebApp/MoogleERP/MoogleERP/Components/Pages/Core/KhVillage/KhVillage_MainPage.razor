@@ -1,6 +1,6 @@
-﻿@page "/core/kh-commune/main"
+﻿@page "/core/kh-village/main"
 
-@inherits MainPageBase<CambodiaCommune>
+@inherits MainPageBase<CambodiaVillage>
 <MudPaper Class="moog-pg-banner mt-3 px-3 py-4" Elevation="1">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
@@ -23,14 +23,16 @@
                  ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple"
 				 Class="mt-2 moog-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" 
 				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-mud-datagrid-row"
-				 T="CambodiaCommune">
+				 T="CambodiaVillage">
 		<Columns>
 			<PropertyColumn Title="Name" Property="x => x.ObjectName" StickyLeft="true"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
 							CellStyle="font-weight:600; color:var(--ssv-pharma-blue)"/>
 			<PropertyColumn Title="Name (kh)" Property="x => x.NameKh"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<PropertyColumn Title="Type" Property="x => x.TypeText"
+			<PropertyColumn Title="Commune Name" Property="x => x.CommuneNameEnText"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
+			<PropertyColumn Title="Commune Name (kh)" Property="x => x.CommuneNameKhText"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
 			<PropertyColumn Title="District Name" Property="x => x.DistrictNameEnText"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
@@ -40,9 +42,6 @@
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
 			<PropertyColumn Title="Province Name (kh)" Property="x => x.ProvinceNameKhText"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<PropertyColumn Title="# Village" Property="x => x.VillageCount"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" 
-							CellStyle="text-align:right" />
 			<PropertyColumn Title="Postal Code" Property="x => x.PostalCode"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
 			<PropertyColumn Title="ID" Property="x => x.ObjectCode"
@@ -61,7 +60,7 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="CambodiaCommune" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
+			<MudDataGridPager T="CambodiaVillage" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
 		</PagerContent>
     </MudDataGrid>
 </MudPaper>
@@ -74,8 +73,8 @@
 	#region PAGE LIFECYCLE FUNCTIONS
 	public override Task SetParametersAsync(ParameterView parameters)
 	{
-		UrlPrefix = "/core/kh-commune";
-		SearchParamName = "khCommuneSearchParam";
+		UrlPrefix = "/core/kh-village";
+		SearchParamName = "khVillageSearchParam";
 		return base.SetParametersAsync(parameters);
 	}
 
@@ -89,9 +88,9 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<CambodiaCommune>> ServerDataFunc(GridState<CambodiaCommune> gridState)
+	protected override async Task<GridData<CambodiaVillage>> ServerDataFunc(GridState<CambodiaVillage> gridState)
 	{
-		if (IsSearching) return new GridData<CambodiaCommune>
+		if (IsSearching) return new GridData<CambodiaVillage>
 		{
 			Items = [],
 			TotalItems = 0
@@ -118,7 +117,7 @@
 			}
 			else
 			{
-				var result = await Uow.CambodiaCommunes.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
+				var result = await Uow.CambodiaVillages.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}
@@ -130,7 +129,7 @@
 			//	.Take(gridState.Count)
 			//	.ToList();
 
-			return new GridData<CambodiaCommune>
+			return new GridData<CambodiaVillage>
 			{
 				Items = MainDataList,
 				TotalItems = totalItemCount
@@ -140,7 +139,7 @@
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
 
-			return new GridData<CambodiaCommune>
+			return new GridData<CambodiaVillage>
 			{
 				Items = [],
 				TotalItems = 0

@@ -32,7 +32,7 @@ public class OrgStructType : AuditObject, IParentChildHierarchyObject
     #endregion
 
     #region *** DYNAMIC PROPERTIES ***
-    [Computed, ReadOnly(true)]
+    [Computed, Write(false), ReadOnly(true)]
     public string ParentName => Parent != null ? Parent.ObjectName.NonNullValue("-") : "-";
 	#endregion
 }

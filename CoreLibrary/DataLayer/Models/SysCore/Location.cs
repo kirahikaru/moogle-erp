@@ -6,10 +6,10 @@ namespace DataLayer.Models.SysCore;
 public class Location : AuditObject, IParentChildHierarchyObject
 {
 	[Computed, ReadOnly(true), Write(false)]
-	public new static string MsSqlTableName => typeof(Language).Name;
+	public new static string MsSqlTableName => typeof(Location).Name;
 
 	[Computed, ReadOnly(true), Write(false)]
-	public new static string PgTableName => $"language";
+	public new static string PgTableName => $"location";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);
@@ -36,8 +36,9 @@ public class Location : AuditObject, IParentChildHierarchyObject
 
     [Required(ErrorMessage = "'Location Type' is required.")]
     public int? LocationTypeId { get; set; }
-    //public string? LocationTypeCode { get; set; }
-    public string? ReferenceNumber { get; set; }
+	public string? LocationTypeCode { get; set; }
+	//public string? LocationTypeCode { get; set; }
+	public string? ReferenceNumber { get; set; }
     public int? ParentId { get; set; }
 	public string? ParentCode { get; set; }
 	public string? HierarchyPath { get; set; }

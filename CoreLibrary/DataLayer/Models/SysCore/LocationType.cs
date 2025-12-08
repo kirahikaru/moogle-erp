@@ -39,13 +39,14 @@ public class LocationType : AuditObject, IParentChildHierarchyObject
 
 	[Computed, Write(false)]
 	public List<Location> Locations { get; set; }
-    #endregion
+	#endregion
 
-    #region *** DYNAMIC PROPERTIES ***
+	#region *** DYNAMIC PROPERTIES ***
+	[Computed, Write(false), ReadOnly(true)]
+	public string ParentName => Parent != null ? Parent.ObjectName.NonNullValue("-") : "-";
+	#endregion
 
-    #endregion
-
-    public LocationType() : base()
+	public LocationType() : base()
     {
         IsEnabled = true;
 		Childs = [];

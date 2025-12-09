@@ -67,9 +67,9 @@ public static class HealthcareFacilityTypes
     public const string CLINIC = "CLINIC";
     public const string POLYCLINIC = "POLYCLINIC";
 
-    public static string GetDisplayText(string eventTypeCode)
+    public static string GetDisplayText(string? facilityType)
     {
-        return eventTypeCode switch
+        return facilityType switch
         {
             HOSPITAL => "Hospital",
             CLINIC => "Clinic",

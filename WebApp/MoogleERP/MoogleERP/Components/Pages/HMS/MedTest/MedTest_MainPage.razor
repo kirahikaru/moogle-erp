@@ -1,6 +1,6 @@
-﻿@page "/hms/healthcare-facility/main"
+﻿@page "/hms/med-test/main"
 
-@inherits MainPageBase<HealthcareFacility>
+@inherits MainPageBase<MedTest>
 <MudPaper Class="moog-pg-banner mt-3 px-3 py-4" Elevation="1">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
@@ -23,59 +23,13 @@
                  ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple"
 				 Class="mt-2 moog-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" 
 				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-mud-datagrid-row"
-				 T="HealthcareFacility">
+				 T="MedTest">
 		<Columns>
 			<PropertyColumn Title="Name" Property="x => x.ObjectName" StickyLeft="true"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
 							CellStyle="font-weight:600; color:var(--ssv-pharma-blue)"/>
 			<PropertyColumn Title="Name (kh)" Property="x => x.ObjectNameKh"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<PropertyColumn Title="Type" Property="x => x.FacilityTypeText"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<PropertyColumn Title="Email" Property="x => x.Email"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<PropertyColumn Title="Phone Line (1)" Property="x => x.PhoneLine1"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-            <PropertyColumn Title="Phone Line (2)" Property="x => x.PhoneLine2"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-            <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="false"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
-                            CellStyle="padding-top: 4px !important; padding-bottom: 2px !important" Context="rowData">
-                <CellTemplate>
-                    <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center">
-                        @if (!string.IsNullOrEmpty(rowData.Item.GoogleMapLink))
-                        {
-                            <MudLink Href="@rowData.Item.GoogleMapLink">
-                                <MudIcon Icon="fas fa-map-marker-alt" Color="Color.Primary" Style="font-size:20px" />
-                            </MudLink>
-                        }
-                        else
-                        {
-							<MudIcon Icon="fas fa-map-marker-alt" Color="Color.Default" Style="font-size:20px; color:var(--material-blue-gray-100)" />
-                        }
-                        @if (!string.IsNullOrEmpty(rowData.Item.FacebookLink))
-                        {
-                            <MudLink Href="@rowData.Item.FacebookLink">
-                                <MudIcon Icon="fab fa-facebook" Color="Color.Primary" Style="font-size:20px" />
-                            </MudLink>
-						}
-						else
-						{
-							<MudIcon Icon="fab fa-facebook" Color="Color.Default" Style="font-size:20px; color:var(--material-blue-gray-100)" />
-						}
-						@if (!string.IsNullOrEmpty(rowData.Item.Website))
-						{
-							<MudLink Href="@rowData.Item.Website">
-								<MudIcon Icon="fas fa-globe" Color="Color.Primary" Style="font-size:20px" />
-							</MudLink>
-						}
-						else
-						{
-							<MudIcon Icon="fas fa-globe" Color="Color.Default" Style="font-size:20px; color:var(--material-blue-gray-100)" />
-						}
-					</MudStack>
-				</CellTemplate>
-			</TemplateColumn>
 			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
                             HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" 
 							HeaderStyle="max-width: 120px; width:500px; justify-items:center" CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
@@ -90,7 +44,7 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="HealthcareFacility" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
+			<MudDataGridPager T="MedTest" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
 		</PagerContent>
     </MudDataGrid>
 </MudPaper>
@@ -103,8 +57,8 @@
 	#region PAGE LIFECYCLE FUNCTIONS
 	public override Task SetParametersAsync(ParameterView parameters)
 	{
-		UrlPrefix = "/hms/healthcare-facility";
-		SearchParamName = "healthcareFaciltiySearchParam";
+		UrlPrefix = "/hms/med-test";
+		SearchParamName = "medTestSearchParam";
 		return base.SetParametersAsync(parameters);
 	}
 
@@ -118,9 +72,9 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<HealthcareFacility>> ServerDataFunc(GridState<HealthcareFacility> gridState)
+	protected override async Task<GridData<MedTest>> ServerDataFunc(GridState<MedTest> gridState)
 	{
-		if (IsSearching) return new GridData<HealthcareFacility>
+		if (IsSearching) return new GridData<MedTest>
 		{
 			Items = [],
 			TotalItems = 0
@@ -147,7 +101,7 @@
 			}
 			else
 			{
-				var result = await Uow.HealthcareFacilities.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
+				var result = await Uow.MedicalTests.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}
@@ -159,7 +113,7 @@
 			//	.Take(gridState.Count)
 			//	.ToList();
 
-			return new GridData<HealthcareFacility>
+			return new GridData<MedTest>
 			{
 				Items = MainDataList,
 				TotalItems = totalItemCount
@@ -169,7 +123,7 @@
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
 
-			return new GridData<HealthcareFacility>
+			return new GridData<MedTest>
 			{
 				Items = [],
 				TotalItems = 0

@@ -8,7 +8,7 @@ namespace DataLayer.Models.HMS;
 /// <remarks>
 /// 
 /// </remarks>
-[Table("[hms].[MedicalTestType]"), DisplayName("Medical Test Type")]
+[Table("[hms].[MedTestType]"), DisplayName("Medical Test Type")]
 public class MedTestType : AuditObject, IParentChildHierarchyObject
 {
 	[Computed, Write(false), ReadOnly(true)]

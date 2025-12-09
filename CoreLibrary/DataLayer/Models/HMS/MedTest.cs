@@ -43,8 +43,8 @@ public class MedTest : AuditObject
     public string? TestDesc { get; set; }
 
     [Required(AllowEmptyStrings = false, ErrorMessage = "'Test Type' is required.")]
-    public int? MedicalTestTypeId { get; set; }
-    public string? MedicalTestTypeCode { get; set; }
+    public int? MedTestTypeId { get; set; }
+    public string? MedTestTypeCode { get; set; }
     public decimal? MinValue { get; set; }
     public decimal? MidValue { get; set; }
     public decimal? MaxValue { get; set; }

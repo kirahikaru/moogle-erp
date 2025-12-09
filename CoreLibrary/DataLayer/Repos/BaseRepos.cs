@@ -470,7 +470,7 @@ public class BaseRepos<TEntity>(IDbContext dbContext, DatabaseObj dbObj) : IBase
 			param.Add("@Id", objectId);
 			param.Add("@ObjectCode", objectCode, DbType.AnsiString);
 
-			sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTableName} t /**where**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 
 		}
         else if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))

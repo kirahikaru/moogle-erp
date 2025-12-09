@@ -80,13 +80,14 @@ public class HealthcareFacility : AuditObject
 
 	[Computed, Write(false)]
 	public DropdownDataList? FacilityType { get; set; }
-    #endregion
+	#endregion
 
-    #region *** DYNAMIC PROPERTIES ***
+	#region *** DYNAMIC PROPERTIES ***
+	[Computed, Write(false), ReadOnly(true)]
+	public string FacilityTypeText => FacilityType != null ? FacilityType.NameEn.NonNullValue("-") : "-";
+	#endregion
 
-    #endregion
-
-    public HealthcareFacility()
+	public HealthcareFacility()
     {
         RegisteredAddress = new();
         MainBranchAddress = new();

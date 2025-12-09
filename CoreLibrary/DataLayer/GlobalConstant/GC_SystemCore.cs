@@ -1906,7 +1906,8 @@ public static class UnitOfMeasureTypes
     public const string MASS = "MASS";
     public const string MEDICINE_CONSUMABLE = "MEDICINE-CONSUMABLE";
     public const string MEDICINE_PACKAGING = "MEDICINE-PACKAGING";
-    public const string VOLUME = "VOLUME";
+    public const string MEDICAL_TEST = "MEDICAL-TEST";
+	public const string VOLUME = "VOLUME";
     public const string LENGTH = "LENGTH";
     public const string POWER = "POWER";
     public const string TIME = "TIME";
@@ -1920,7 +1921,8 @@ public static class UnitOfMeasureTypes
             MASS => "Mass",
             MEDICINE_CONSUMABLE => "Medicine Consumable",
             MEDICINE_PACKAGING => "Medicine Packing",
-            VOLUME => "Volume",
+			MEDICAL_TEST => "Medical Test",
+			VOLUME => "Volume",
             LENGTH => "Length",
             POWER => "Power",
             VELOCITY => "Velocity",
@@ -1938,7 +1940,8 @@ public static class UnitOfMeasureTypes
             { MASS, GetDisplayText(MASS) },
             { MEDICINE_CONSUMABLE, GetDisplayText(MEDICINE_CONSUMABLE) },
             { MEDICINE_PACKAGING, GetDisplayText(MEDICINE_PACKAGING) },
-            { VOLUME, GetDisplayText(VOLUME) },
+			{ MEDICAL_TEST, GetDisplayText(MEDICAL_TEST) },
+			{ VOLUME, GetDisplayText(VOLUME) },
             { LENGTH, GetDisplayText(LENGTH) },
             { POWER, GetDisplayText(POWER) },
             { RETAIL_ITEM, GetDisplayText(RETAIL_ITEM) },

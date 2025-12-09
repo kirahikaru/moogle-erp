@@ -3,11 +3,11 @@ using static Dapper.SqlMapper;
 
 namespace DataLayer.Repos.HMS;
 
-public interface IMedicalTestRepos : IBaseRepos<MedicalTest>
+public interface IMedicalTestRepos : IBaseRepos<MedTest>
 {
-	Task<MedicalTest?> GetFullAsync(int id);
+	Task<MedTest?> GetFullAsync(int id);
 
-	Task<List<MedicalTest>> SearchAsync(
+	Task<List<MedTest>> SearchAsync(
 		int pgSize = 0, int pgNo = 0,
 		string? objectCode = null,
 		string? objectName = null,
@@ -20,9 +20,9 @@ public interface IMedicalTestRepos : IBaseRepos<MedicalTest>
 		List<int>? medicalTestTypeIdList = null);
 }
 
-public class MedicalTestRepos(IDbContext dbContext) : BaseRepos<MedicalTest>(dbContext, MedicalTest.DatabaseObject), IMedicalTestRepos
+public class MedTestRepos(IDbContext dbContext) : BaseRepos<MedTest>(dbContext, MedTest.DatabaseObject), IMedicalTestRepos
 {
-	public async Task<MedicalTest?> GetFullAsync(int id)
+	public async Task<MedTest?> GetFullAsync(int id)
     {
 		SqlBuilder sbSql = new();
 		DynamicParameters param = new();
@@ -32,13 +32,13 @@ public class MedicalTestRepos(IDbContext dbContext) : BaseRepos<MedicalTest>(dbC
 
         param.Add("@Id", id);
 
-        sbSql.LeftJoin($"{MedicalTestType.MsSqlTable} mtt ON mtt.Id=t.MedicalTestTypeId");
+        sbSql.LeftJoin($"{MedTestType.MsSqlTable} mtt ON mtt.Id=t.MedicalTestTypeId");
 
 		using var cn = DbContext.DbCxn;
 
         string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
-        var dataObj = (await cn.QueryAsync<MedicalTest, MedicalTestType, MedicalTest>(sql,
+        var dataObj = (await cn.QueryAsync<MedTest, MedTestType, MedTest>(sql,
                                             (obj, medicalTestType) =>
                                             {
                                                 obj.TestType = medicalTestType;
@@ -48,7 +48,7 @@ public class MedicalTestRepos(IDbContext dbContext) : BaseRepos<MedicalTest>(dbC
         return dataObj;
 	}
 
-    public override async Task<List<MedicalTest>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null)
+    public override async Task<List<MedTest>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null)
     {
         if (pgNo < 0 && pgSize < 0)
             throw new ArgumentOutOfRangeException(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
@@ -85,7 +85,7 @@ public class MedicalTestRepos(IDbContext dbContext) : BaseRepos<MedicalTest>(dbC
         }
         #endregion
 
-        sbSql.LeftJoin($"{MedicalTestType.MsSqlTable} mtt ON mtt.Id=t.MedicalTestTypeId");
+        sbSql.LeftJoin($"{MedTestType.MsSqlTable} mtt ON mtt.Id=t.MedicalTestTypeId");
 
         sbSql.OrderBy("t.ObjectName ASC");
 
@@ -107,7 +107,7 @@ public class MedicalTestRepos(IDbContext dbContext) : BaseRepos<MedicalTest>(dbC
 
         using var cn = DbContext.DbCxn;
 
-        var result = (await cn.QueryAsync<MedicalTest, MedicalTestType, MedicalTest>(sql, 
+        var result = (await cn.QueryAsync<MedTest, MedTestType, MedTest>(sql, 
                         (obj, medicalTestType) =>
                         {
                             obj.TestType = medicalTestType;
@@ -118,7 +118,7 @@ public class MedicalTestRepos(IDbContext dbContext) : BaseRepos<MedicalTest>(dbC
         return result;
     }
 
-    public async Task<List<MedicalTest>> SearchAsync(
+    public async Task<List<MedTest>> SearchAsync(
         int pgSize = 0, int pgNo = 0,
         string? objectCode = null,
         string? objectName = null,
@@ -160,7 +160,7 @@ public class MedicalTestRepos(IDbContext dbContext) : BaseRepos<MedicalTest>(dbC
         }
         #endregion
 
-        sbSql.LeftJoin($"{MedicalTestType.MsSqlTable} mtt ON mtt.Id=t.MedicalTestTypeId");
+        sbSql.LeftJoin($"{MedTestType.MsSqlTable} mtt ON mtt.Id=t.MedicalTestTypeId");
         sbSql.OrderBy("t.ObjectName ASC");
 
         string sql;
@@ -181,7 +181,7 @@ public class MedicalTestRepos(IDbContext dbContext) : BaseRepos<MedicalTest>(dbC
 
         using var cn = DbContext.DbCxn;
 
-        var dataList = (await cn.QueryAsync<MedicalTest, MedicalTestType, MedicalTest>(
+        var dataList = (await cn.QueryAsync<MedTest, MedTestType, MedTest>(
                                         sql, (obj, testType) =>
                                         {
                                             obj.TestType = testType;
@@ -239,7 +239,7 @@ public class MedicalTestRepos(IDbContext dbContext) : BaseRepos<MedicalTest>(dbC
 
         DataPagination pagination = new()
         {
-            ObjectType = typeof(MedicalTest).Name,
+            ObjectType = typeof(MedTest).Name,
             PageSize = pgSize,
             PageCount = pageCount,
             RecordCount = (int)recordCount

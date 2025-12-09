@@ -8,17 +8,17 @@ namespace DataLayer.Models.HMS;
 /// <remarks>
 /// 
 /// </remarks>
-[Table("[hms].[MedicalAppt]"), DisplayName("Medical Appointment")]
-public class MedicalAppointment : WorkflowEnabledObject
+[Table("[hms].[MedicalExam]"), DisplayName("Medical Exam")]
+public class MedExam : WorkflowEnabledObject
 {
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string SchemaName => SysDbSchemaNames.HOSPITAL;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string MsSqlTableName => "MedicalAppt";
+	public new static string MsSqlTableName => typeof(MedExam).Name;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string PgTableName => "medical_appt";
+	public new static string PgTableName => "medical_exam";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);
@@ -30,26 +30,28 @@ public class MedicalAppointment : WorkflowEnabledObject
 	public static DatabaseObj DatabaseObject => new(SchemaName, MsSqlTableName, PgTableName);
 
 	#region *** DATABASE FIELDS ***
-	public DateTime? Date { get; set; }
-	public int? DurationHour { get; set; }
-	public int? DurationMin { get; set; }
-	public DateTime? StartTime { get; set; }
-	public DateTime? EndTime { get; set; }
-	public int? CustomerId { get; set; }
-	public int? PatientId { get; set; }
-    public string? DiagnosisNote { get; set; }
-    public string? RecommendationNote { get; set; }
-    public string? PrescriptionNote { get; set; }
+	public DateTime? RequestDate { get; set; }
+    public int? RequestorUserId { get; set; }
+    public int? DoctorId { get; set; }
+    public int? CustomerId { get; set; }
+    public string? CustomerIDCode { get; set; }
     #endregion
 
     #region *** LINKED OBJECTS ***
     [Computed, Write(false)]
-    public Employee? Employee { get; set; }
+    public Doctor? Doctor { get; set; }
 
 	[Computed, Write(false)]
-	public CambodiaAddress? RegisteredAddress { get; set; }
-	#endregion
+	public Customer? Customer { get; set; }
 
-	#region *** DYNAMIC PROPERTIES ***
-	#endregion
+	[Computed, Write(false)]
+	public User? RequestorUser { get; set; }
+
+	[Computed, Write(false)]
+	public User? AssignedUser { get; set; }
+    #endregion
+
+    #region *** DYNAMIC PROPERTIES ***
+
+    #endregion
 }

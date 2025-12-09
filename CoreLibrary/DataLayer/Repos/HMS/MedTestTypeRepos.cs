@@ -3,14 +3,14 @@ using static Dapper.SqlMapper;
 
 namespace DataLayer.Repos.HMS;
 
-public interface IMedicalTestTypeRepos : IBaseRepos<MedicalTestType>
+public interface IMedicalTestTypeRepos : IBaseRepos<MedTestType>
 {
 	Task<List<DropDownListItem>> GetValidParentsAsync(
 		int objectId,
 		string? objectCode,
 		int? includingId = null);
 
-	Task<List<MedicalTestType>> SearchAsync(
+	Task<List<MedTestType>> SearchAsync(
 		int pgSize = 0, int pgNo = 0,
 		string? objectCode = null,
 		string? objectName = null,
@@ -18,7 +18,7 @@ public interface IMedicalTestTypeRepos : IBaseRepos<MedicalTestType>
 		string? hierarchyPath = null);
 }
 
-public class MedicalTestTypeRepos(IDbContext dbContext) : BaseRepos<MedicalTestType>(dbContext, MedicalTestType.DatabaseObject), IMedicalTestTypeRepos
+public class MedTestTypeRepos(IDbContext dbContext) : BaseRepos<MedTestType>(dbContext, MedTestType.DatabaseObject), IMedicalTestTypeRepos
 {
 	public async Task<List<DropDownListItem>> GetValidParentsAsync(int objectId, string? objectCode, int? includingId = null)
     {
@@ -54,7 +54,7 @@ public class MedicalTestTypeRepos(IDbContext dbContext) : BaseRepos<MedicalTestT
         return (await cn.QueryAsync<DropDownListItem>(sql, param)).AsList();
     }
 
-    public async Task<List<MedicalTestType>> SearchAsync(
+    public async Task<List<MedTestType>> SearchAsync(
         int pgSize = 0, int pgNo = 0, 
         string? objectCode = null, 
         string? objectName = null,
@@ -124,7 +124,7 @@ public class MedicalTestTypeRepos(IDbContext dbContext) : BaseRepos<MedicalTestT
 
         using var cn = DbContext.DbCxn;
 
-        var dataList = (await cn.QueryAsync<MedicalTestType, MedicalTestType, MedicalTestType>(
+        var dataList = (await cn.QueryAsync<MedTestType, MedTestType, MedTestType>(
                                         sql, (obj, parent) =>
                                         {
                                             obj.Parent = parent;
@@ -134,7 +134,7 @@ public class MedicalTestTypeRepos(IDbContext dbContext) : BaseRepos<MedicalTestT
         return dataList;
     }
 
-	public override async Task<List<MedicalTestType>> QuickSearchAsync(
+	public override async Task<List<MedTestType>> QuickSearchAsync(
         int pgSize = 0, 
         int pgNo = 0, 
         string? searchText = null, List<int>? excludeIdList = null)
@@ -193,7 +193,7 @@ public class MedicalTestTypeRepos(IDbContext dbContext) : BaseRepos<MedicalTestT
 		}
 
 		using var cn = DbContext.DbCxn;
-		var dataList = (await cn.QueryAsync<MedicalTestType, MedicalTestType, MedicalTestType>(sql,
+		var dataList = (await cn.QueryAsync<MedTestType, MedTestType, MedTestType>(sql,
                                 (obj, parent) => {
                                     obj.Parent = parent;
                                     return obj;

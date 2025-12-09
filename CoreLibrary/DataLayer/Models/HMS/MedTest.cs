@@ -8,17 +8,17 @@ namespace DataLayer.Models.HMS;
 /// <remarks>
 /// 
 /// </remarks>
-[Table("[hms].[MedicalTestType]"), DisplayName("Medical Test Type")]
-public class MedicalTestType : AuditObject, IParentChildHierarchyObject
+[Table("[hms].[MedicalTest]"), DisplayName("Medical Test")]
+public class MedTest : AuditObject
 {
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string SchemaName => SysDbSchemaNames.HOSPITAL;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string MsSqlTableName => typeof(MedicalTestType).Name;
+	public new static string MsSqlTableName => typeof(MedTest).Name;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string PgTableName => "medical_test_type";
+	public new static string PgTableName => "medical_test";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);
@@ -39,18 +39,28 @@ public class MedicalTestType : AuditObject, IParentChildHierarchyObject
     [Required(AllowEmptyStrings = false, ErrorMessage = "'Name' is required.")]
     [MaxLength(255)]
     public new string? ObjectName { get; set; }
-	public string? ObjectNameKh { get; set; }
-    public string? Desc { get; set; }
-    public int? ParentId { get; set; }
-    public string? ParentCode { get; set; }
-    public string? HierarchyPath { get; set; }
+    public string? ObjectNameKh { get; set; }
+    public string? TestDesc { get; set; }
+
+    [Required(AllowEmptyStrings = false, ErrorMessage = "'Test Type' is required.")]
+    public int? MedicalTestTypeId { get; set; }
+    public string? MedicalTestTypeCode { get; set; }
+    public decimal? MinValue { get; set; }
+    public decimal? MidValue { get; set; }
+    public decimal? MaxValue { get; set; }
+    public string? ValueUomCode { get; set; }
+    public string? ValueUomSymbol { get; set; }
     #endregion
 
     #region *** LINKED OBJECTS ***
     [Computed, Write(false)]
-	public MedicalTestType? Parent { get; set; }
+	public MedTestType? TestType { get; set; }
+
+	[Computed, Write(false)]
+	public UnitOfMeasure? ValueUom { get; set; }
     #endregion
 
     #region *** DYNAMIC PROPERTIES ***
+
     #endregion
 }

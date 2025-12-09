@@ -49,8 +49,11 @@ public class HealthcareFacility : AuditObject
 	public int? FacilityTypeDdlId { get; set; }
 	public string? FacilityTypeDdlCode { get; set; }
 
-	public int? RegisteredAddressId { get; set; }
-    public int? MainBranchAddressId { get; set; }
+	/// <summary>
+	/// Registration Address ID
+	/// </summary>
+	public int? RegAddrId { get; set; }
+    public int? MainBranchAddrId { get; set; }
     public string? FacebookLink { get; set; }
     public string? Website { get; set; }
     public string? Email { get; set; }
@@ -61,6 +64,7 @@ public class HealthcareFacility : AuditObject
     public string? Telegram { get; set; }
     public string? GoogleMapLink { get; set; }
     public string? LogoImagePath { get; set; }
+	public string? OtherInfo { get; set; }
 
 	#endregion
 

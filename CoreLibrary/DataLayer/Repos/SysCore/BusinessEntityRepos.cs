@@ -621,7 +621,7 @@ public class BusinessEntityRepos(IDbContext dbContext) : BaseRepos<BusinessEntit
             }
 
             if (obj.MainLocalAddress != null && (
-                obj.MainLocalAddress.CambodiaProvinceId is not null ||
+                obj.MainLocalAddress.KhProvinceId is not null ||
                 !string.IsNullOrEmpty(obj.MainLocalAddress.UnitFloor) ||
                 !string.IsNullOrEmpty(obj.MainLocalAddress.StreetNo)))
             {
@@ -722,7 +722,7 @@ public class BusinessEntityRepos(IDbContext dbContext) : BaseRepos<BusinessEntit
             }
 
             if (obj.MainLocalAddress != null && (
-                obj.MainLocalAddress.CambodiaProvinceId is not null ||
+                obj.MainLocalAddress.KhProvinceId is not null ||
                 !string.IsNullOrEmpty(obj.MainLocalAddress.UnitFloor) ||
                 !string.IsNullOrEmpty(obj.MainLocalAddress.StreetNo)))
             {

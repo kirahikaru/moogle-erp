@@ -1,4 +1,6 @@
 ﻿using DataLayer.Models.HMS;
+using DataLayer.Models.PMS;
+using System.Text.RegularExpressions;
 using static Dapper.SqlMapper;
 
 namespace DataLayer.Repos.HMS;
@@ -104,7 +106,7 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
             SqlBuilder sbAddressUpdateSql = new();
 
             if (obj.RegisteredAddress != null && (
-				obj.RegisteredAddress.CambodiaProvinceId is not null ||
+				obj.RegisteredAddress.KhProvinceId is not null ||
                 !string.IsNullOrEmpty(obj.RegisteredAddress.UnitFloor) ||
                 !string.IsNullOrEmpty(obj.RegisteredAddress.StreetNo)))
 			{
@@ -117,12 +119,12 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
 
 				int registeredAddressId = await cn.InsertAsync(obj.RegisteredAddress, tran);
 
-				obj.RegisteredAddressId = registeredAddressId;
+				obj.RegAddrId = registeredAddressId;
                 addressUpdateParam.Add("@RegisteredAddressId", registeredAddressId);
             }
 
 			if (obj.MainBranchAddress != null && (
-                obj.MainBranchAddress.CambodiaProvinceId is not null ||
+                obj.MainBranchAddress.KhProvinceId is not null ||
                 !string.IsNullOrEmpty(obj.MainBranchAddress.UnitFloor) ||
                 !string.IsNullOrEmpty(obj.MainBranchAddress.StreetNo)))
 			{
@@ -133,16 +135,16 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
                 obj.MainBranchAddress.LinkedObjectId = objId;
                 obj.MainBranchAddress.LinkedObjectType = obj.GetType().Name;
 
-                int mainBranchAddressId = await cn.InsertAsync(obj.MainBranchAddress, tran);
+                int mainBranchAddrId = await cn.InsertAsync(obj.MainBranchAddress, tran);
 
-                obj.MainBranchAddressId = mainBranchAddressId;
-                addressUpdateParam.Add("@MainBranchAddressId", mainBranchAddressId);
+                obj.MainBranchAddrId = mainBranchAddrId;
+                addressUpdateParam.Add("@MainBranchAddressId", mainBranchAddrId);
             }
 
 			if (addressUpdateParam.ParameterNames.Any())
 			{
 				addressUpdateParam.Add("@Id", objId);
-				string addressUpdateSql = sbAddressUpdateSql.AddTemplate($"UPDATE {DbObject.MsSqlTable} SET RegisteredAddressId=@RegisteredAddressId, MainBranchAddressId=@MainBranchAddressId WHERE Id=@Id").RawSql;
+				string addressUpdateSql = sbAddressUpdateSql.AddTemplate($"UPDATE {DbObject.MsSqlTable} SET RegAddrId=@RegAddrId, MainBranchAddrId=@MainBranchAddrId WHERE Id=@Id").RawSql;
 				int addressUpdCount = await cn.ExecuteAsync(addressUpdateSql, addressUpdateParam);
 			}
 
@@ -174,7 +176,7 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
             if (obj.RegisteredAddress != null)
             {
                 if (obj.RegisteredAddress.Id == 0 && (
-					obj.RegisteredAddress.CambodiaProvinceId is not null ||
+					obj.RegisteredAddress.KhProvinceId is not null ||
 					!string.IsNullOrEmpty(obj.RegisteredAddress.UnitFloor) ||
 					!string.IsNullOrEmpty(obj.RegisteredAddress.StreetNo)))
                 {
@@ -185,9 +187,9 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
                     obj.RegisteredAddress.LinkedObjectId = obj.Id;
                     obj.RegisteredAddress.LinkedObjectType = obj.GetType().Name;
 
-                    int registeredAddressId = await cn.InsertAsync(obj.RegisteredAddress, tran);
+                    int regAddrId = await cn.InsertAsync(obj.RegisteredAddress, tran);
 
-					obj.RegisteredAddressId = registeredAddressId;
+					obj.RegAddrId = regAddrId;
                 }
                 else if (obj.RegisteredAddress.Id > 0)
                 {
@@ -203,7 +205,7 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
             if (obj.MainBranchAddress != null)
             {
                 if (obj.MainBranchAddress.Id == 0 && (
-					obj.MainBranchAddress.CambodiaProvinceId is not null ||
+					obj.MainBranchAddress.KhProvinceId is not null ||
 					!string.IsNullOrEmpty(obj.MainBranchAddress.UnitFloor) ||
 					!string.IsNullOrEmpty(obj.MainBranchAddress.StreetNo)))
                 {
@@ -214,9 +216,9 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
                     obj.MainBranchAddress.LinkedObjectId = obj.Id;
                     obj.MainBranchAddress.LinkedObjectType = obj.GetType().Name;
 
-                    int mainBranchAddressId = await cn.InsertAsync(obj.MainBranchAddress, tran);
+                    int mainBranchAddrId = await cn.InsertAsync(obj.MainBranchAddress, tran);
 
-                    obj.MainBranchAddressId = mainBranchAddressId;
+                    obj.MainBranchAddrId = mainBranchAddrId;
                 }
                 else if (obj.MainBranchAddress.Id > 0)
                 {
@@ -244,7 +246,98 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
         }
     }
 
-    public override async Task<List<HealthcareFacility>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null)
+	public override async Task<KeyValuePair<int, IEnumerable<HealthcareFacility>>> SearchNewAsync(
+		int pgSize = 0, int pgNo = 0,
+		string? searchText = null,
+		IEnumerable<SqlSortCond>? sortConds = null,
+		IEnumerable<SqlFilterCond>? filterConds = null,
+		List<int>? excludeIdList = null
+	)
+	{
+		DynamicParameters param = new();
+		SqlBuilder sbSql = new();
+
+		sbSql.Where("t.IsDeleted=0");
+
+		#region Form Search Conditions
+		if (!string.IsNullOrEmpty(searchText))
+		{
+			if (Regex.IsMatch(searchText, @"^[0-9]{5,}$"))
+			{
+				sbSql.Where("t.Barcode=@SearchText");
+				param.Add("@SearchText", searchText);
+			}
+			else
+			{
+				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%')");
+				param.Add("@SearchText", searchText);
+			}
+		}
+
+		if (excludeIdList != null && excludeIdList.Count != 0)
+		{
+			sbSql.Where("t.Id NOT IN @ExcludeIdList");
+			param.Add("@ExcludeIdList", excludeIdList);
+		}
+
+		if (filterConds != null && filterConds.Any())
+		{
+			foreach (SqlFilterCond filterCond in filterConds)
+			{
+
+			}
+		}
+
+		sbSql.LeftJoin($"{DropdownDataList.MsSqlTable} ft ON ft.Id=t.FacilityTypeDdlId");
+
+		#endregion
+
+		if (sortConds is null || !sortConds.Any())
+		{
+			foreach (string order in GetSearchOrderbBy())
+			{
+				sbSql.OrderBy(order);
+			}
+		}
+		else
+		{
+			foreach (SqlSortCond sortCond in sortConds)
+			{
+				sbSql.OrderBy(sortCond.GetSortCommand("t"));
+			}
+		}
+
+		string sql;
+
+		if (pgNo == 0 && pgSize == 0)
+		{
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/").RawSql;
+		}
+		else
+		{
+			param.Add("@PageSize", pgSize);
+			param.Add("@PageNo", pgNo);
+			sql = sbSql.AddTemplate(
+				$";WITH pg AS (SELECT Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
+				$"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+		}
+
+		using var cn = DbContext.DbCxn;
+
+		var dataList = await cn.QueryAsync<HealthcareFacility, DropdownDataList, HealthcareFacility>(
+										sql, (obj, facType) =>
+										{
+											obj.FacilityType =facType;
+
+											return obj;
+										}, param, splitOn: "Id");
+
+		string sqlCount = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
+		int dataCount = await cn.ExecuteScalarAsync<int>(sqlCount, param);
+		return new(dataCount, dataList);
+	}
+
+	public override async Task<List<HealthcareFacility>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null)
 	{
 		if (pgNo < 0 && pgSize < 0)
 			throw new ArgumentOutOfRangeException(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));

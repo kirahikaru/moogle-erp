@@ -8,17 +8,17 @@ namespace DataLayer.Models.HMS;
 /// <remarks>
 /// 
 /// </remarks>
-[Table("[hms].[MedicalApptDx]"), DisplayName("Diagnosis")]
-public class MedicalApptDiagnosis : AuditObject
+[Table("[hms].[MedicalAppt]"), DisplayName("Medical Appointment")]
+public class MedAppt : WorkflowEnabledObject
 {
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string SchemaName => SysDbSchemaNames.HOSPITAL;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string MsSqlTableName => "MedicalApptDx";
+	public new static string MsSqlTableName => "MedicalAppt";
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string PgTableName => "medical_appt_dx";
+	public new static string PgTableName => "medical_appt";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);
@@ -30,12 +30,24 @@ public class MedicalApptDiagnosis : AuditObject
 	public static DatabaseObj DatabaseObject => new(SchemaName, MsSqlTableName, PgTableName);
 
 	#region *** DATABASE FIELDS ***
-	public int? MedicalAppointmentId { get; set; }
-
+	public DateTime? Date { get; set; }
+	public int? DurationHour { get; set; }
+	public int? DurationMin { get; set; }
+	public DateTime? StartTime { get; set; }
+	public DateTime? EndTime { get; set; }
+	public int? CustomerId { get; set; }
+	public int? PatientId { get; set; }
+    public string? DiagnosisNote { get; set; }
+    public string? RecommendationNote { get; set; }
+    public string? PrescriptionNote { get; set; }
     #endregion
 
     #region *** LINKED OBJECTS ***
-    
+    [Computed, Write(false)]
+    public Employee? Employee { get; set; }
+
+	[Computed, Write(false)]
+	public CambodiaAddress? RegisteredAddress { get; set; }
 	#endregion
 
 	#region *** DYNAMIC PROPERTIES ***

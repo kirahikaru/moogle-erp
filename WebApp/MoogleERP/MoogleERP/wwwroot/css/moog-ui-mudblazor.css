@@ -110,6 +110,10 @@ input[type="text" i] {
             padding: 8px 0 8px;
         }
 
+        & .mud-input-adornment-icon {
+            font-size:18px;
+        }
+
         &.mud-input-underline {
             &:hover:not(.mud-disabled):before
             {

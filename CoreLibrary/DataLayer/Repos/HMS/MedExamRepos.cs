@@ -2,9 +2,9 @@
 
 namespace DataLayer.Repos.HMS;
 
-public interface IMedicalExamRepos : IBaseWorkflowEnabledRepos<MedicalExam>
+public interface IMedicalExamRepos : IBaseWorkflowEnabledRepos<MedExam>
 {
-	Task<List<MedicalExam>> SearchAsync(
+	Task<List<MedExam>> SearchAsync(
 		int pgSize = 0, int pgNo = 0,
 		string? objectCode = null,
 		string? objectName = null,
@@ -31,7 +31,7 @@ public interface IMedicalExamRepos : IBaseWorkflowEnabledRepos<MedicalExam>
 		List<string>? workflowStatusList = null);
 }
 
-public class MedicalExamRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<MedicalExam>(dbContext, MedicalExam.DatabaseObject), IMedicalExamRepos
+public class MedExamRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<MedExam>(dbContext, MedExam.DatabaseObject), IMedicalExamRepos
 {
 	public async Task<DataPagination> GetSearchPaginationAsync(
         int pgSize = 0, 
@@ -169,7 +169,7 @@ public class MedicalExamRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<M
 
         DataPagination pagination = new()
         {
-            ObjectType = typeof(MedicalTest).Name,
+            ObjectType = typeof(MedTest).Name,
             PageSize = pgSize,
             PageCount = pageCount,
             RecordCount = (int)recordCount
@@ -178,7 +178,7 @@ public class MedicalExamRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<M
         return pagination;
     }
 
-    public async Task<List<MedicalExam>> SearchAsync(
+    public async Task<List<MedExam>> SearchAsync(
         int pgSize = 0, int pgNo = 0, 
         string? objectCode = null, 
         string? objectName = null,
@@ -332,7 +332,7 @@ public class MedicalExamRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<M
 
         using var cn = DbContext.DbCxn;
 
-        var dataList = (await cn.QueryAsync<MedicalExam, User, User, Doctor, Customer, MedicalExam>(
+        var dataList = (await cn.QueryAsync<MedExam, User, User, Doctor, Customer, MedExam>(
                                         sql, (obj, reqUsr, assUsr, dr, cust) =>
                                         {
                                             obj.RequestorUser = reqUsr;

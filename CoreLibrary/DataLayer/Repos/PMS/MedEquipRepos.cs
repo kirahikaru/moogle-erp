@@ -3,7 +3,10 @@ using DataLayer.Models.RMS;
 
 namespace DataLayer.Repos.PMS;
 
-public interface IMedicalEquipmentRepos : IBaseRepos<MedicalEquipment>
+/// <summary>
+/// Medical Equipment Repository
+/// </summary>
+public interface IMedEquipRepos : IBaseRepos<MedicalEquipment>
 {
 	Task<MedicalEquipment?> GetFullAsync(int id);
 
@@ -31,7 +34,7 @@ public interface IMedicalEquipmentRepos : IBaseRepos<MedicalEquipment>
 		List<string>? mfgCountryCodeList = null);
 }
 
-public class MedicalEquipmentRepos(IDbContext dbContext) : BaseRepos<MedicalEquipment>(dbContext, MedicalEquipment.DatabaseObject), IMedicalEquipmentRepos
+public class MedEquipRepos(IDbContext dbContext) : BaseRepos<MedicalEquipment>(dbContext, MedicalEquipment.DatabaseObject), IMedEquipRepos
 {
 	public async Task<MedicalEquipment?> GetFullAsync(int id)
     {

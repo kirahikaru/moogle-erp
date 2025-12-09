@@ -2,8 +2,11 @@
 
 namespace DataLayer.Models.HMS;
 
+/// <summary>
+/// Medical Prescription
+/// </summary>
 [Table("[hms].[MedicalRx]"), DisplayName("Medical Prescription")]
-public class MedicalPrescription : AuditObject
+public class MedRx : AuditObject
 {
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string SchemaName => SysDbSchemaNames.HOSPITAL;
@@ -46,7 +49,7 @@ public class MedicalPrescription : AuditObject
 
     #region *** LINKED OBJECTS ***
     [Computed, Write(false)]
-	public List<MedicalPrescriptionItem> PrescriptionItems { get; set; }
+	public List<MedRxItem> PrescriptionItems { get; set; }
 
 	[Computed, Write(false)]
 	public HealthcareFacility? HealthcareFacility { get; set; }
@@ -61,7 +64,7 @@ public class MedicalPrescription : AuditObject
     #region *** DYNAMIC PROPERTIES ***
     #endregion
 
-    public MedicalPrescription()
+    public MedRx()
     {
         PrescriptionItems = new();
     }

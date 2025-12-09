@@ -2,9 +2,12 @@
 
 namespace DataLayer.Repos.HMS;
 
-public interface IMedicalPrescriptionRepos : IBaseRepos<MedicalPrescription>
+/// <summary>
+/// Medical Prescription Repository
+/// </summary>
+public interface IMedicalPrescriptionRepos : IBaseRepos<MedRx>
 {
-	Task<List<MedicalPrescription>> SearchAsync(
+	Task<List<MedRx>> SearchAsync(
 		int pgSize = 0, int pgNo = 0,
 		string? objectCode = null,
 		string? objectName = null,
@@ -25,7 +28,7 @@ public interface IMedicalPrescriptionRepos : IBaseRepos<MedicalPrescription>
 		DateTime? issueDateTimeTo = null);
 }
 
-public class MedicalPrescriptionRepos(IDbContext dbContext) : BaseRepos<MedicalPrescription>(dbContext, MedicalPrescription.DatabaseObject), IMedicalPrescriptionRepos
+public class MedRxRepos(IDbContext dbContext) : BaseRepos<MedRx>(dbContext, MedRx.DatabaseObject), IMedicalPrescriptionRepos
 {
 	public async Task<DataPagination> GetSearchPaginationAsync(
         int pgSize = 0, 
@@ -126,7 +129,7 @@ public class MedicalPrescriptionRepos(IDbContext dbContext) : BaseRepos<MedicalP
 
         DataPagination pagination = new()
         {
-            ObjectType = typeof(MedicalTest).Name,
+            ObjectType = typeof(MedTest).Name,
             PageSize = pgSize,
             PageCount = pageCount,
             RecordCount = (int)recordCount
@@ -135,7 +138,7 @@ public class MedicalPrescriptionRepos(IDbContext dbContext) : BaseRepos<MedicalP
         return pagination;
     }
 
-    public async Task<List<MedicalPrescription>> SearchAsync(
+    public async Task<List<MedRx>> SearchAsync(
         int pgSize = 0, 
         int pgNo = 0, 
         string? objectCode = null, 
@@ -252,7 +255,7 @@ public class MedicalPrescriptionRepos(IDbContext dbContext) : BaseRepos<MedicalP
 
         using var cn = DbContext.DbCxn;
 
-        var dataList = (await cn.QueryAsync<MedicalPrescription, HealthcareFacility, Doctor, Customer, MedicalPrescription>(
+        var dataList = (await cn.QueryAsync<MedRx, HealthcareFacility, Doctor, Customer, MedRx>(
                                         sql, (obj, healthcareFacility, dr, cust) =>
                                         {
                                             obj.HealthcareFacility = healthcareFacility;

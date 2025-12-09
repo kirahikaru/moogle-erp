@@ -1,19 +1,24 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.PMS;
 
 namespace DataLayer.Models.HMS;
 
-[Table("[hms].[MedicalRxItem]")]
-public class MedicalPrescriptionItem : AuditObject
+/// <summary>
+/// Medical Appointment Diagnosis
+/// </summary>
+/// <remarks>
+/// 
+/// </remarks>
+[Table("[hms].[MedicalApptDx]"), DisplayName("Diagnosis")]
+public class MedicalApptDiagnosis : AuditObject
 {
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string SchemaName => SysDbSchemaNames.HOSPITAL;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string MsSqlTableName => "MedicalRxItem";
+	public new static string MsSqlTableName => "MedicalApptDx";
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string PgTableName => "medical_rx_item";
+	public new static string PgTableName => "medical_appt_dx";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);
@@ -25,23 +30,14 @@ public class MedicalPrescriptionItem : AuditObject
 	public static DatabaseObj DatabaseObject => new(SchemaName, MsSqlTableName, PgTableName);
 
 	#region *** DATABASE FIELDS ***
-	//public int? MedicalPrescriptionId { get; set; }
-	public int? MedicalRxId { get; set; }
-    public int? MedicineId { get; set; }
-    public string? UnitCode { get; set; }
-    public int? Quantity { get; set; }
-    public string? DosageDirectionDesc { get; set; }
+	public int? MedicalAppointmentId { get; set; }
+
+    #endregion
+
+    #region *** LINKED OBJECTS ***
+    
 	#endregion
 
-	#region *** LINKED OBJECTS ***
-	[Computed, Write(false)]
-	public Medicine? Medicine { get; set; }
-
-    [Computed, Write(false)]
-    public UnitOfMeasure? Unit { get; set; }
-
-    #endregion
-
-    #region *** DYNAMIC PROPERTIES ***
-    #endregion
+	#region *** DYNAMIC PROPERTIES ***
+	#endregion
 }

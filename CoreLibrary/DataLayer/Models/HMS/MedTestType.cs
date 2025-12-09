@@ -8,17 +8,17 @@ namespace DataLayer.Models.HMS;
 /// <remarks>
 /// 
 /// </remarks>
-[Table("[hms].[MedicalTest]"), DisplayName("Medical Test")]
-public class MedicalTest : AuditObject
+[Table("[hms].[MedicalTestType]"), DisplayName("Medical Test Type")]
+public class MedTestType : AuditObject, IParentChildHierarchyObject
 {
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string SchemaName => SysDbSchemaNames.HOSPITAL;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string MsSqlTableName => typeof(MedicalTest).Name;
+	public new static string MsSqlTableName => typeof(MedTestType).Name;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string PgTableName => "medical_test";
+	public new static string PgTableName => "medical_test_type";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);
@@ -39,28 +39,18 @@ public class MedicalTest : AuditObject
     [Required(AllowEmptyStrings = false, ErrorMessage = "'Name' is required.")]
     [MaxLength(255)]
     public new string? ObjectName { get; set; }
-    public string? ObjectNameKh { get; set; }
-    public string? TestDesc { get; set; }
-
-    [Required(AllowEmptyStrings = false, ErrorMessage = "'Test Type' is required.")]
-    public int? MedicalTestTypeId { get; set; }
-    public string? MedicalTestTypeCode { get; set; }
-    public decimal? MinValue { get; set; }
-    public decimal? MidValue { get; set; }
-    public decimal? MaxValue { get; set; }
-    public string? ValueUomCode { get; set; }
-    public string? ValueUomSymbol { get; set; }
+	public string? ObjectNameKh { get; set; }
+    public string? Desc { get; set; }
+    public int? ParentId { get; set; }
+    public string? ParentCode { get; set; }
+    public string? HierarchyPath { get; set; }
     #endregion
 
     #region *** LINKED OBJECTS ***
     [Computed, Write(false)]
-	public MedicalTestType? TestType { get; set; }
-
-	[Computed, Write(false)]
-	public UnitOfMeasure? ValueUom { get; set; }
+	public MedTestType? Parent { get; set; }
     #endregion
 
     #region *** DYNAMIC PROPERTIES ***
-
     #endregion
 }

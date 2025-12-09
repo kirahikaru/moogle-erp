@@ -8,17 +8,17 @@ namespace DataLayer.Models.HMS;
 /// <remarks>
 /// 
 /// </remarks>
-[Table("[hms].[MedicalExam]"), DisplayName("Medical Exam")]
-public class MedicalExam : WorkflowEnabledObject
+[Table("[hms].[MedicalExamItem]")]
+public class MedExamItem : AuditObject
 {
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string SchemaName => SysDbSchemaNames.HOSPITAL;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string MsSqlTableName => typeof(MedicalExam).Name;
+	public new static string MsSqlTableName => typeof(MedExamItem).Name;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string PgTableName => "medical_exam";
+	public new static string PgTableName => "medical_exam_item";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);
@@ -30,25 +30,28 @@ public class MedicalExam : WorkflowEnabledObject
 	public static DatabaseObj DatabaseObject => new(SchemaName, MsSqlTableName, PgTableName);
 
 	#region *** DATABASE FIELDS ***
-	public DateTime? RequestDate { get; set; }
-    public int? RequestorUserId { get; set; }
-    public int? DoctorId { get; set; }
-    public int? CustomerId { get; set; }
-    public string? CustomerIDCode { get; set; }
+	public int? MedicalExamId { get; set; }
+    public int? MedicalTestId { get; set; }
+    public string? MedicalTestCode { get; set; }
+    public int? MedicalTestTypeId { get; set; }
+    public string? MedicalTestTypeCode { get; set; }
+    public string? ResultDesc { get; set; }
+    public decimal? ResultValue { get; set; }
+    public string? Remark { get; set; }
     #endregion
 
     #region *** LINKED OBJECTS ***
     [Computed, Write(false)]
-    public Doctor? Doctor { get; set; }
+    public Customer? Customer { get; set; }
 
 	[Computed, Write(false)]
-	public Customer? Customer { get; set; }
+	public Doctor? Doctor { get; set; }
 
 	[Computed, Write(false)]
 	public User? RequestorUser { get; set; }
 
 	[Computed, Write(false)]
-	public User? AssignedUser { get; set; }
+	public UnitOfMeasure? ValueUom { get; set; }
     #endregion
 
     #region *** DYNAMIC PROPERTIES ***

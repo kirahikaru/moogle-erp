@@ -39,10 +39,10 @@ public class CambodiaAddress : AuditObject
 	public string? VillageNameKh { get; set; }
 	public string? PostalCode { get; set; }
 
-    public int? CambodiaProvinceId { get; set; }
-    public int? CambodiaDistrictId { get; set; }
-    public int? CambodiaCommuneId { get; set; }
-    public int? CambodiaVillageId { get; set; }
+    public int? KhProvinceId { get; set; }
+    public int? KhDistrictId { get; set; }
+    public int? KhCommuneId { get; set; }
+    public int? KhVillageId { get; set; }
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
     #endregion

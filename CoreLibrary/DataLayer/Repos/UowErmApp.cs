@@ -71,7 +71,7 @@ public interface IUowErmApp : IUnitOfWork
 
 	#region PMS - Pharmacy Management System
 	IMedicineRepos Medicines { get; }
-	IMedicalEquipmentRepos MedicalEquipments { get; }
+	IMedEquipRepos MedicalEquipments { get; }
 	IMedicineCompositionRepos MedicineCompositions { get; }
 	IMedicalCompositionRepos MedicalCompositions { get; }
 	#endregion
@@ -144,12 +144,12 @@ public class UowErmApp : UnitOfWork, IUowErmApp
         Doctors = new DoctorRepos(DbContext);
         HealthcareFacilities = new HealthcareFacilityRepos(DbContext);
         Illnesses = new IllnessRepos(DbContext);
-        MedicalExams = new MedicalExamRepos(DbContext);
-        MedicalAppointments = new MedicalAppointmentRepos(DbContext);
-        MedicalPrescriptions = new MedicalPrescriptionRepos(DbContext);
-        MedicalPrescriptionItems = new MedicalPrescriptionItemRepos(DbContext);
-        MedicalTests = new MedicalTestRepos(DbContext);
-        MedicalTestTypes = new MedicalTestTypeRepos(DbContext);
+        MedicalExams = new MedExamRepos(DbContext);
+        MedicalAppointments = new MedApptRepos(DbContext);
+        MedicalPrescriptions = new MedRxRepos(DbContext);
+        MedicalPrescriptionItems = new MedApptItemRepos(DbContext);
+        MedicalTests = new MedTestRepos(DbContext);
+        MedicalTestTypes = new MedTestTypeRepos(DbContext);
         Patients = new PatientRepos(DbContext);
         #endregion
 
@@ -168,7 +168,7 @@ public class UowErmApp : UnitOfWork, IUowErmApp
 
         #region PMS - Pharmacy Management System
         Medicines = new MedicineRepos(DbContext);
-        MedicalEquipments = new MedicalEquipmentRepos(DbContext);
+        MedicalEquipments = new MedEquipRepos(DbContext);
         MedicineCompositions = new MedicineCompositionRepos(DbContext);
         MedicalCompositions = new MedicalCompositionRepos(DbContext);
         #endregion
@@ -261,7 +261,7 @@ public class UowErmApp : UnitOfWork, IUowErmApp
 
     #region PMS - Pharmacy Management System
     public IMedicineRepos Medicines { get; }
-    public IMedicalEquipmentRepos MedicalEquipments { get; }
+    public IMedEquipRepos MedicalEquipments { get; }
     public IMedicineCompositionRepos MedicineCompositions { get; }
     public IMedicalCompositionRepos MedicalCompositions { get; }
     #endregion

@@ -104,7 +104,7 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
             }
 
             if (obj.MainCambodiaAddress != null && (
-                obj.MainCambodiaAddress.CambodiaProvinceId is not null ||
+                obj.MainCambodiaAddress.KhProvinceId is not null ||
                 !string.IsNullOrEmpty(obj.MainCambodiaAddress.UnitFloor) ||
                 !string.IsNullOrEmpty(obj.MainCambodiaAddress.StreetNo)))
             {
@@ -227,7 +227,7 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
             }
 
             if (obj.MainCambodiaAddress != null && (
-                obj.MainCambodiaAddress.CambodiaProvinceId is not null ||
+                obj.MainCambodiaAddress.KhProvinceId is not null ||
                 !string.IsNullOrEmpty(obj.MainCambodiaAddress.UnitFloor) ||
                 !string.IsNullOrEmpty(obj.MainCambodiaAddress.StreetNo)))
             {

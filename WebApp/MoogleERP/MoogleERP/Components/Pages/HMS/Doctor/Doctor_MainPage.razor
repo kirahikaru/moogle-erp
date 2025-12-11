@@ -1,6 +1,6 @@
-﻿@page "/hms/patient/main"
+﻿@page "/hms/doctor/main"
 
-@inherits MainPageBase<Patient>
+@inherits MainPageBase<Doctor>
 <MudPaper Class="moog-pg-banner mt-3 px-3 py-4" Elevation="1">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
@@ -22,18 +22,14 @@
 	<MudDataGrid Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage="50" Elevation="0"
                  ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple"
 				 Class="mt-2 moog-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" 
-				 T="Patient">
+				 T="Doctor">
 		<Columns>
-			<PropertyColumn Title="Patient ID" Property="x => x.ObjectCode" 
+			<PropertyColumn Title="ID" Property="x => x.ObjectCode" 
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
 			<PropertyColumn Title="Full Name" Property="x => x.ObjectName"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<PropertyColumn Title="Customer ID" Property="x => x.CustomerCode"
+			<PropertyColumn Title="Employee ID" Property="x => x.EmployeeCode"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
-            <PropertyColumn Title="Date of Birth" Property="x => x.BirthDate" Format="dd-MMM-yyyy"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<PropertyColumn Title="Registered On" Property="x => x.RegDateTime" Format="dd-MMM-yyyy"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
 			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
 							HeaderStyle="max-width: 120px; width:500px; justify-items:center" CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
@@ -48,7 +44,7 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="Patient" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
+			<MudDataGridPager T="Doctor" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
 		</PagerContent>
     </MudDataGrid>
 </MudPaper>
@@ -76,9 +72,9 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<Patient>> ServerDataFunc(GridState<Patient> gridState)
+	protected override async Task<GridData<Doctor>> ServerDataFunc(GridState<Doctor> gridState)
 	{
-		if (IsSearching) return new GridData<Patient>
+		if (IsSearching) return new GridData<Doctor>
 		{
 			Items = [],
 			TotalItems = 0
@@ -105,7 +101,7 @@
 			}
 			else
 			{
-				var result = await Uow.Patients.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
+				var result = await Uow.Doctors.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}
@@ -117,7 +113,7 @@
 			//	.Take(gridState.Count)
 			//	.ToList();
 
-			return new GridData<Patient>
+			return new GridData<Doctor>
 			{
 				Items = MainDataList,
 				TotalItems = totalItemCount
@@ -127,7 +123,7 @@
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
 
-			return new GridData<Patient>
+			return new GridData<Doctor>
 			{
 				Items = [],
 				TotalItems = 0

@@ -2,7 +2,7 @@
 
 namespace DataLayer.Models.Pru.Finance;
 
-[Table("[dbo].[FinActivityTracker]"), DisplayName("Finance Activity Tracker")]
+[Table("FinActTracker"), DisplayName("Finance Activity Tracker")]
 public class FinActivityTracker : AuditObject
 {
 	[Computed, Write(false), ReadOnly(true)]
@@ -30,8 +30,9 @@ public class FinActivityTracker : AuditObject
     [Required(AllowEmptyStrings = false, ErrorMessage = "'Account Name' is required.")]
     [MaxLength(255)]
     public new string? ObjectName { get; set; }
-
-    public string? FunctionName { get; set; }
+	public string? OwnerEmpID { get; set; }
+	public string? OwnerName { get; set; }
+	public string? FunctionName { get; set; }
     public string? DepartmentName { get; set; }
     public string? Remark { get; set; }
 

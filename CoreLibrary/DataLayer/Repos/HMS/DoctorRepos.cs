@@ -1,5 +1,6 @@
 ﻿using DataLayer.GlobalConstant;
 using DataLayer.Models.HMS;
+using System.Xml.Schema;
 
 namespace DataLayer.Repos.HMS;
 
@@ -236,7 +237,74 @@ public class DoctorRepos(IDbContext dbContext) : BaseRepos<Doctor>(dbContext, Do
         }
     }
 
-    public async Task<DataPagination> GetSearchPaginationAsync(
+	public override async Task<KeyValuePair<int, IEnumerable<Doctor>>> SearchNewAsync(
+		int pgSize = 0, int pgNo = 0, string? searchText = null,
+		IEnumerable<SqlSortCond>? sortConds = null,
+		IEnumerable<SqlFilterCond>? filterConds = null, List<int>? excludeIdList = null)
+	{
+		DynamicParameters param = new();
+		SqlBuilder sbSql = new();
+
+		sbSql.Where("t.IsDeleted=0");
+
+		#region Form Search Conditions
+		if (!string.IsNullOrEmpty(searchText))
+		{
+			if (searchText.StartsWith("id:"))
+			{
+				sbSql.Where("UPPER(t.ObjectCode) LIKE '%'+@SearchText+'%'");
+				param.Add("@SearchText", searchText.Replace("id:", "", StringComparison.CurrentCultureIgnoreCase), DbType.AnsiString);
+			}
+			else
+			{
+				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%')");
+				param.Add("@SearchText", searchText, DbType.AnsiString);
+			}
+		}
+
+		if (excludeIdList != null && excludeIdList.Count != 0)
+		{
+			sbSql.Where("t.Id NOT IN @ExcludeIdList");
+			param.Add("@ExcludeIdList", excludeIdList);
+		}
+		#endregion
+
+        //ANY JOIN CONDITIONS
+        sbSql.LeftJoin($"{Employee.MsSqlTable} emp ON emp.Id=t.EmployeeId");
+        sbSql.LeftJoin($"{HealthcareFacility.MsSqlTable} hcf ON hcf.Id=t.HealthcareFacilityId");
+
+		sbSql.OrderBy("t.ObjectName ASC");
+
+		string sql;
+
+		if (pgNo == 0 && pgSize == 0)
+		{
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/").RawSql;
+		}
+		else
+		{
+			param.Add("@PageSize", pgSize);
+			param.Add("@PageNo", pgNo);
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROW ONLY;").RawSql;
+		}
+
+		using var cn = DbContext.DbCxn;
+
+		var dataList = await cn.QueryAsync<Doctor, Employee, HealthcareFacility, Doctor>(sql, 
+            (obj, emp, hcf) =>
+            {
+                obj.Employee = emp;
+                obj.HealthcareFacility = hcf;
+
+                return obj;
+            }, param, splitOn: "Id");
+
+		string sqlCount = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
+		int dataCount = await cn.ExecuteScalarAsync<int>(sqlCount, param);
+		return new(dataCount, dataList);
+	}
+
+	public async Task<DataPagination> GetSearchPaginationAsync(
         int pgSize = 0, 
         string? objectCode = null, 
         string? objectName = null, 

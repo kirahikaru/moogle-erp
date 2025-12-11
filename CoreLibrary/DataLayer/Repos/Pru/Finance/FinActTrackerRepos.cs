@@ -5,18 +5,18 @@ namespace DataLayer.Repos.Pru.Finance;
 
 public interface IFinActTrackerRepos : IBaseRepos<FinActivityTracker>
 {
-	Task<KeyValuePair<int, IEnumerable<FinActivityTracker>>> SearchAsync(
-		int pgSize = 0,
-		int pgNo = 0,
-		string? searchText = null,
-		IEnumerable<SqlSortCond>? sortConds = null,
-		IEnumerable<SqlFilterCond>? filterConds = null,
-		List<int>? excludeIdList = null);
+	//Task<KeyValuePair<int, IEnumerable<FinActivityTracker>>> SearchAsync(
+	//	int pgSize = 0,
+	//	int pgNo = 0,
+	//	string? searchText = null,
+	//	IEnumerable<SqlSortCond>? sortConds = null,
+	//	IEnumerable<SqlFilterCond>? filterConds = null,
+	//	List<int>? excludeIdList = null);
 }
 
 public class FinActTrackerRepos(IDbContext dbContext) : BaseRepos<FinActivityTracker>(dbContext, FinActivityTracker.DatabaseObject), IFinActTrackerRepos
 {
-	public async Task<KeyValuePair<int, IEnumerable<FinActivityTracker>>> SearchAsync(
+	public override async Task<KeyValuePair<int, IEnumerable<FinActivityTracker>>> SearchNewAsync(
 		int pgSize = 0,
 		int pgNo = 0,
 		string? searchText = null,
@@ -95,6 +95,6 @@ public class FinActTrackerRepos(IDbContext dbContext) : BaseRepos<FinActivityTra
 
 	public override List<string> GetSearchOrderbBy()
 	{
-		return ["t.IsCurrent DESC", "t.BudgetYear DESC", "t.LBU", "t.VersionName DESC", "t.GroupingL1 ASC", "t.GroupingL2 ASC", "t.GroupingL3 ASC", "t.ObjectName ASC"];
+		return ["t.ObjectName ASC"];
 	}
 }

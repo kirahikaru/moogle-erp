@@ -43,9 +43,10 @@ public class OwnedItemCategory : AuditObject, IParentChildHierarchyObject
 	#region *** LINKED OBJECTS ***
 	[Computed, Write(false)]
 	public OwnedItemCategory? Parent { get; set; }
-    #endregion
+	#endregion
 
-    #region *** DYANMIC PROPERTIES ***
-
-    #endregion
+	#region *** DYANMIC PROPERTIES ***
+	[Computed, Write(false), ReadOnly(true)]
+	public string ParentName => Parent != null ? Parent.ObjectName.NonNullValue("-") : "-";
+	#endregion
 }

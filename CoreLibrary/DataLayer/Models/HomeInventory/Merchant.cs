@@ -1,5 +1,4 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.SysCore.NonPersistent;
 
 namespace DataLayer.Models.HomeInventory;
 [Table("[home].[Merchant]")]
@@ -32,9 +31,9 @@ public class Merchant : AuditObject, IParentChildHierarchyObject
     /// <summary>
     /// GlobalConstant.MerchantTypes
     /// </summary>
-    public string? MerchantType { get; set; }
-    public int? AddressId { get; set; }
-    public int? CambodiaAddressId { get; set; }
+	public string? MerchantType { get; set; }
+    public int? AddrId { get; set; }
+    public int? KhAddrId { get; set; }
     public string? Link { get; set; }
     public int? ParentId { get; set; }
     public string? ParentCode { get; set; }
@@ -52,9 +51,10 @@ public class Merchant : AuditObject, IParentChildHierarchyObject
 
 	[Computed, Write(false)]
 	public Merchant? Parent { get; set; }
-    #endregion
+	#endregion
 
-    #region *** DYANMIC PROPERTIES ***
-
-    #endregion
+	#region *** DYANMIC PROPERTIES ***
+	[Computed, Write(false), ReadOnly(true)]
+	public string MerchantTypeText => MerchantTypes.GetDisplayText(MerchantType);
+	#endregion
 }

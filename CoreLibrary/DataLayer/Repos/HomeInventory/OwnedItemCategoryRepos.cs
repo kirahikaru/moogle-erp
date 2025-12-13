@@ -7,7 +7,7 @@ public interface IOwnedItemCategoryRepos : IBaseRepos<OwnedItemCategory>
 	Task<List<OwnedItemCategory>> GetChildrenAsync(int objId, string hierarchyPath, bool getOnlyDirectChild = true);
 	Task<List<DropDownListItem>> GetValidParentsAsync(string? objectCode, string? hierarchyPath, string? searchText = null);
 
-	Task<List<BasicObjectSelectListItem>> GetValidParentAsync(int objectId, string objectCode, int? includingId = null);
+	Task<List<BasicObjectSelectListItem>> GetValidParentsAsync(int objectId, string objectCode, int? includingId = null);
 }
 
 public class OwnedItemCategoryRepos(IDbContext dbContext) : BaseRepos<OwnedItemCategory>(dbContext, OwnedItemCategory.DatabaseObject), IOwnedItemCategoryRepos
@@ -76,11 +76,11 @@ public class OwnedItemCategoryRepos(IDbContext dbContext) : BaseRepos<OwnedItemC
 
         using var cn = DbContext.DbCxn;
         var sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
-        List<DropDownListItem> dataList = (await cn.QueryAsync<DropDownListItem>(sql, param)).ToList();
+        List<DropDownListItem> dataList = (await cn.QueryAsync<DropDownListItem>(sql, param)).AsList();
         return dataList;
     }
 
-    public async Task<List<BasicObjectSelectListItem>> GetValidParentAsync(int objectId, string objectCode, int? includingId = null)
+    public async Task<List<BasicObjectSelectListItem>> GetValidParentsAsync(int objectId, string objectCode, int? includingId = null)
     {
         SqlBuilder sbSql = new();
         DynamicParameters param = new();

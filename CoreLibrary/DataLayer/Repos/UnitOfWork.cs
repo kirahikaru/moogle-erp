@@ -51,8 +51,14 @@ public interface IUnitOfWork : IDisposable
 	IObjectStateHistoryRepos ObjectStateHistories { get; }
 	IObjectStatusAuditTrailRepos ObjectStatusAuditTrails { get; }
 	IOccupationRepos Occupations { get; }
-	IOccupationCategoryRepos OccupationCategories { get; }
-	IOccupationIndustryRepos OccupationIndustries { get; }
+	/// <summary>
+	/// Occupation Category
+	/// </summary>
+	IOccpCategoryRepos OccpCategories { get; }
+	/// <summary>
+	/// Occupation Industry
+	/// </summary>
+	IOccpIndustryRepos OccpIndustries { get; }
 
 	/// <summary>
 	/// Organization Structure
@@ -85,7 +91,7 @@ public interface IUnitOfWork : IDisposable
 	/// </summary>
 	ISysRunNumRepos SysRunNums { get; }
 	ITelCoExtensionRepos TelCoExtensions { get; }
-	ITermAndConditionRepos TermAndConditions { get; }
+	ITermAndCondRepos TermAndConds { get; }
 
     /// <summary>
     /// Organiztaions
@@ -219,8 +225,8 @@ public class UnitOfWork : IUnitOfWork
 		ObjectStateHistories = new ObjectStateHistoryRepos(DbContext);
         ObjectStatusAuditTrails = new ObjectStatusAuditTrailRepos(DbContext);
         Occupations = new OccupationRepos(DbContext);
-        OccupationCategories = new OccupationCategoryRepos(DbContext);
-        OccupationIndustries = new OccupationIndustryRepos(DbContext);
+        OccpCategories = new OccpCategoryRepos(DbContext);
+        OccpIndustries = new OccpIndustryRepos(DbContext);
         Orgs = new OrgRepos(DbContext);
         OrgBranches = new OrgBranchRepos(DbContext);
         OrgStructs = new OrgStructRepos(DbContext);
@@ -236,7 +242,7 @@ public class UnitOfWork : IUnitOfWork
         SysRunNums = new SysRunNumRepos(DbContext);
         SysObjDocTypes = new SysObjDocTypeRepos(DbContext);
         TelCoExtensions = new TelCoExtensionRepos(DbContext);
-        TermAndConditions = new TermAndConditionRepos(DbContext);
+        TermAndConds = new TermAndCondRepos(DbContext);
         UoMs = new UoMRepos(DbContext);
         UserNotifs = new UserNotifRepos(DbContext);
         UserLocHistories = new UserLocHistoryRepos(DbContext);
@@ -286,8 +292,8 @@ public class UnitOfWork : IUnitOfWork
 	public IObjectStateHistoryRepos ObjectStateHistories { get; }
     public IObjectStatusAuditTrailRepos ObjectStatusAuditTrails { get; }
     public IOccupationRepos Occupations { get; }
-    public IOccupationCategoryRepos OccupationCategories { get; }
-    public IOccupationIndustryRepos OccupationIndustries { get; }
+    public IOccpCategoryRepos OccpCategories { get; }
+    public IOccpIndustryRepos OccpIndustries { get; }
     public IOrgBranchRepos OrgBranches { get; }
 	public IOrgStructRepos OrgStructs { get; }
 	public IOrgStructTypeRepos OrgStructTypes { get; }
@@ -300,7 +306,7 @@ public class UnitOfWork : IUnitOfWork
     public ISysObjDocTypeRepos SysObjDocTypes { get; }
     public ISysRunNumRepos SysRunNums { get; }
     public ITelCoExtensionRepos TelCoExtensions { get; }
-    public ITermAndConditionRepos TermAndConditions { get; }
+    public ITermAndCondRepos TermAndConds { get; }
     public IUoMRepos UoMs { get; }
     public IUserLocHistoryRepos UserLocHistories { get; }
     public IUserNotifRepos UserNotifs { get; }

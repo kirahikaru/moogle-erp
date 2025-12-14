@@ -1,7 +1,7 @@
-﻿@page "/him/my-stuff-ctg/{CRUCMode}"
-@page "/him/my-stuff-ctg/{CRUCMode}/{id:int}"
+﻿@page "/fin/currency/{CRUCMode}"
+@page "/fin/currency/{CRUCMode}/{id:int}"
 
-@inherits CRUCPageBase<OwnedItemCategory>
+@inherits CRUCPageBase<Currency>
 
 @if (CurrentObject != null && CurrentEditContext != null)
 {
@@ -64,7 +64,10 @@
                                           Label="Name"
                                           @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" @ref=_mtfObjName />
                         </MudItem>
-                        <MudItem xs="5">
+                        <MudItem xs="2">
+                            
+                        </MudItem>
+                        <MudItem xs="3">
                             <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
                                           Label="ID" Placeholder="A-Z, 0-9, -_" Mask="objIdMask"
                                           @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" />
@@ -82,11 +85,6 @@
                                 </MudSelect>
                             </MudItem>
                         }
-                        <MudItem xs="12">
-                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false" Disabled="true"
-                                          Label="Hierarchy path"
-                                          @bind-Value="CurrentObject!.HierarchyPath" For="@(() => CurrentObject!.HierarchyPath)" />
-                        </MudItem>
                     </MudGrid>
                 </MudPaper>
                 <MudPaper Height="26px" Elevation="1"
@@ -129,7 +127,7 @@
     #region PAGE LIFECYCLE FUNCTIONS
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        UrlPrefix = "/him/my-stuff-ctg";
+        UrlPrefix = "/fin/currency";
         return base.SetParametersAsync(parameters);
     }
 
@@ -139,7 +137,7 @@
         {
             case CRUDCModes.READ:
                 {
-                    CurrentObject = await Uow.OwnedItemCategories.GetAsync(Id);
+                    CurrentObject = await Uow.Currencies.GetFullAsync(Id);
                     IsViewMode = true;
                 }
                 break;
@@ -149,11 +147,11 @@
                 }
                 break;
             case CRUDCModes.UPDATE:
-                CurrentObject = await Uow.OwnedItemCategories.GetAsync(Id);
+                CurrentObject = await Uow.Currencies.GetFullAsync(Id);
                 break;
             case CRUDCModes.CLONE:
                 {
-                    var tempObj = await Uow.OwnedItemCategories.GetAsync(Id);
+                    var tempObj = await Uow.Currencies.GetFullAsync(Id);
                     CurrentObject = tempObj!.DeepClone();
                     CurrentObject!.Id = 0;
                     CurrentObject!.ObjectCode = null;
@@ -204,7 +202,7 @@
     {
         InvalidMsgList.Clear();
 
-        bool isDuplicated = await Uow.OwnedItemCategories.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+        bool isDuplicated = await Uow.LocationTypes.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
 
         if (isDuplicated)
         {
@@ -238,12 +236,12 @@
         if (CurrentObject.Id > 0)
         {
             // Update existing record
-            bool isUpd = await Uow.OwnedItemCategories.UpdateAsync(CurrentObject);
+            bool isUpd = await Uow.LocationTypes.UpdateAsync(CurrentObject);
             return isUpd;
         }
         else
         {
-            int objId = await Uow.OwnedItemCategories.InsertAsync(CurrentObject);
+            int objId = await Uow.LocationTypes.InsertAsync(CurrentObject);
             if (objId > 0)
                 CurrentObject.Id = objId;
 
@@ -255,7 +253,7 @@
     #region INTERNAL FUNCTIONS
     async Task PopulatedUIControls()
     {
-        _validParents = await Uow.OwnedItemCategories.GetValidParentsAsync(CurrentObject!.ObjectCode, CurrentObject!.HierarchyPath!);
+        _validParents = await Uow.LocationTypes.GetValidParentsAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!, CurrentObject!.HierarchyPath!, null);
     }
     #endregion
 }

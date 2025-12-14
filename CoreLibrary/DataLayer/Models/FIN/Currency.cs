@@ -44,8 +44,7 @@ public class Currency : AuditObject
     #endregion
 
     #region *** LINKED OBJECT ***
-    [Computed]
-    [Description("ignore")]
-    public Country? Country { get; set; }
+    [Computed, Write(false)]
+	public Country? Country { get; set; }
     #endregion
 }

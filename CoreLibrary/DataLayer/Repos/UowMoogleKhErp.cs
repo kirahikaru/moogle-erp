@@ -183,7 +183,7 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
         CustPurchaseInvItems = new CustPurchaseInvItemRepos(DbContext);
         CustomerPurchaseOrders = new CustPurchaseOrderRepos(DbContext);
         CustomerPurchaseOrderItems = new CustPurchaseOrderItemRepos(DbContext);
-        CustomerPurchaseInvoicePayments = new CustPurchaseInvPaymentRepos(DbContext);
+        CustomerPurchaseInvoicePayments = new CustPurchaseInvPymtRepos(DbContext);
         DeliveryOptions = new DeliveryOptionRepos(DbContext);
         Gs1CompanyPrefixes = new Gs1CompanyPrefixRepos(DbContext);
         InventoryCheckIns = new InventoryCheckInRepos(DbContext);

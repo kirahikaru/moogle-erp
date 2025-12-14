@@ -174,7 +174,16 @@ public class CountryRepos(IDbContext dbContext) : BaseRepos<Country>(dbContext, 
 		}
 		#endregion
 
-		sbSql.OrderBy("t.ObjectName ASC");
+		if (sortConds != null && sortConds.Any())
+		{
+			foreach (var sortCond in sortConds)
+				sbSql.OrderBy(sortCond.GetSortCommand("t"));
+		}
+		else
+		{
+			foreach (string orderBy in GetSearchOrderbBy())
+				sbSql.OrderBy(orderBy);
+		}
 
 		string sql;
 

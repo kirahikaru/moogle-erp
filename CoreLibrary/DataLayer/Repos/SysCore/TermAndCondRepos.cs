@@ -1,6 +1,6 @@
 ﻿namespace DataLayer.Repos.SysCore;
 
-public interface ITermAndConditionRepos : IBaseRepos<TermAndCondition>
+public interface ITermAndCondRepos : IBaseRepos<TermAndCondition>
 {
 	Task<List<TermAndCondition>> GetByLinkedObjectAsync(string linkedObjectType, int? linkedObjectId, string linkedRecordID, string languageCode = "");
 	Task<bool> IsTermAndConditionAcceptedAsync(string userId,
@@ -12,7 +12,7 @@ public interface ITermAndConditionRepos : IBaseRepos<TermAndCondition>
 											   string linkedRecordID);
 }
 
-public class TermAndConditionRepos(IDbContext dbContext) : BaseRepos<TermAndCondition>(dbContext, TermAndCondition.DatabaseObject), ITermAndConditionRepos
+public class TermAndCondRepos(IDbContext dbContext) : BaseRepos<TermAndCondition>(dbContext, TermAndCondition.DatabaseObject), ITermAndCondRepos
 {
 	public async Task<List<TermAndCondition>> GetByLinkedObjectAsync(string linkedObjectType, int? linkedObjectId, string linkedRecordID, string languageCode = "")
     {

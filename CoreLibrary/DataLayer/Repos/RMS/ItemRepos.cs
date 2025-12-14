@@ -521,7 +521,16 @@ public class ItemRepos(IDbContext dbContext) : BaseRepos<Item>(dbContext, Item.D
 		sbSql.LeftJoin($"{ItemCategory.MsSqlTable} ic ON ic.Id=t.ItemCategoryId");
 		sbSql.LeftJoin($"{Country.MsSqlTable} mc ON mc.IsDeleted=0 AND mc.ObjectCode=t.MfgCountryCode");
 
-		sbSql.OrderBy("t.ObjectName ASC");
+		if (sortConds != null && sortConds.Any())
+        {
+            foreach (var sortCond in sortConds)
+                sbSql.OrderBy(sortCond.GetSortCommand("t"));
+        }
+        else
+        {
+            foreach (string orderBy in GetSearchOrderbBy())
+                sbSql.OrderBy(orderBy);
+		}
 
 		string sql;
 

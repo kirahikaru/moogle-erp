@@ -27,6 +27,7 @@ public interface IUowErmApp : IUnitOfWork
 	IBankRepos Banks { get; }
 	ICurrencyRepos Currencies { get; }
 	ICustomerRepos Customers { get; }
+    ICustChgHistoryRepos CustChgHistories { get; }
 	IExchangeRateRepos ExchangeRates { get; }
 	IInvoiceRepos Invoices { get; }
 	IInvoiceItemRepos InvoiceItems { get; }
@@ -124,8 +125,9 @@ public class UowErmApp : UnitOfWork, IUowErmApp
         Banks = new BankRepos(DbContext);
         Currencies = new CurrencyRepos(DbContext);
         Customers = new CustomerRepos(DbContext);
-        ExchangeRates = new ExchangeRateRepos(DbContext);
-        Invoices = new InvoiceRepos(DbContext);
+		CustChgHistories = new CustChgHistoryRepos(DbContext);
+		ExchangeRates = new ExchangeRateRepos(DbContext);
+		Invoices = new InvoiceRepos(DbContext);
         InvoiceItems = new InvoiceItemRepos(DbContext);
         Taxes = new TaxRepos(DbContext);
         TaxRates = new TaxRateRepos(DbContext);
@@ -179,7 +181,7 @@ public class UowErmApp : UnitOfWork, IUowErmApp
         CustPurchaseInvItems = new CustPurchaseInvItemRepos(DbContext);
         CustomerPurchaseOrders = new CustPurchaseOrderRepos(DbContext);
         CustomerPurchaseOrderItems = new CustPurchaseOrderItemRepos(DbContext);
-        CustomerPurchaseInvoicePayments = new CustPurchaseInvPaymentRepos(DbContext);
+        CustomerPurchaseInvoicePayments = new CustPurchaseInvPymtRepos(DbContext);
         DeliveryOptions = new DeliveryOptionRepos(DbContext);
         Gs1CompanyPrefixes = new Gs1CompanyPrefixRepos(DbContext);
         InventoryCheckIns = new InventoryCheckInRepos(DbContext);
@@ -217,7 +219,8 @@ public class UowErmApp : UnitOfWork, IUowErmApp
     public IBankRepos Banks { get; }
     public ICurrencyRepos Currencies { get; }
     public ICustomerRepos Customers { get; }
-    public IExchangeRateRepos ExchangeRates { get; }
+	public ICustChgHistoryRepos CustChgHistories { get; }
+	public IExchangeRateRepos ExchangeRates { get; }
     public IInvoiceRepos Invoices { get; }
     public IInvoiceItemRepos InvoiceItems { get; }
     public ITaxRepos Taxes { get; }

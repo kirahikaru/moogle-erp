@@ -1,11 +1,11 @@
 ﻿namespace DataLayer.Repos.FIN;
 
-public interface ICustomerChangeHistoryRepos : IBaseRepos<CustomerChangeHistory>
+public interface ICustChgHistoryRepos : IBaseRepos<CustomerChangeHistory>
 {
 	Task<List<CustomerChangeHistory>> GetByCustomerAsync(int customerId);
 }
 
-public class CustomerChangeHistoryRepos(IDbContext dbContext) : BaseRepos<CustomerChangeHistory>(dbContext, CustomerChangeHistory.DatabaseObject), ICustomerChangeHistoryRepos
+public class CustChgHistoryRepos(IDbContext dbContext) : BaseRepos<CustomerChangeHistory>(dbContext, CustomerChangeHistory.DatabaseObject), ICustChgHistoryRepos
 {
 	public async Task<List<CustomerChangeHistory>> GetByCustomerAsync(int customerId)
     {

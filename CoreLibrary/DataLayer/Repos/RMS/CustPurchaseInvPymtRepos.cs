@@ -3,14 +3,18 @@ using DataLayer.Models.RMS;
 
 namespace DataLayer.Repos.RMS;
 
-public interface ICustomerPurchaseInvoicePaymentRepos : IBaseRepos<CustPurchaseInvPayment>
+public interface ICustPurchaseInvPymtRepos : IBaseRepos<CustPurchaseInvPayment>
 {
 	Task<CustPurchaseInvPayment?> GetFullAsync(int id);
 
 	Task<List<CustPurchaseInvPayment>> GetByInvoiceAsync(int customerPurchaseInvoiceId);
 }
 
-public class CustPurchaseInvPaymentRepos(IDbContext dbContext) : BaseRepos<CustPurchaseInvPayment>(dbContext, CustPurchaseInvPayment.DatabaseObject), ICustomerPurchaseInvoicePaymentRepos
+/// <summary>
+/// Repository : Customer Purchase Invoice Payment
+/// </summary>
+/// <param name="dbContext"></param>
+public class CustPurchaseInvPymtRepos(IDbContext dbContext) : BaseRepos<CustPurchaseInvPayment>(dbContext, CustPurchaseInvPayment.DatabaseObject), ICustPurchaseInvPymtRepos
 {
 	public async Task<CustPurchaseInvPayment?> GetFullAsync(int id)
     {

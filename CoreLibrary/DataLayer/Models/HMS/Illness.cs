@@ -30,6 +30,11 @@ public class Illness : AuditObject
 	public static DatabaseObj DatabaseObject => new(SchemaName, MsSqlTableName, PgTableName);
 
 	#region *** DATABASE FIELDS ***
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'Name' is required.")]
+	public new string? ObjectName { get; set; }
+
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'ID' is required.")]
+	public new string? ObjectCode { get; set; }
 	public string? ObjectNameKh { get; set; }
     
     #endregion

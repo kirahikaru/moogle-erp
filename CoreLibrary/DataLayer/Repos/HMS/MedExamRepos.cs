@@ -2,7 +2,7 @@
 
 namespace DataLayer.Repos.HMS;
 
-public interface IMedicalExamRepos : IBaseWorkflowEnabledRepos<MedExam>
+public interface IMedExamRepos : IBaseWorkflowEnabledRepos<MedExam>
 {
 	Task<List<MedExam>> SearchAsync(
 		int pgSize = 0, int pgNo = 0,
@@ -31,7 +31,7 @@ public interface IMedicalExamRepos : IBaseWorkflowEnabledRepos<MedExam>
 		List<string>? workflowStatusList = null);
 }
 
-public class MedExamRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<MedExam>(dbContext, MedExam.DatabaseObject), IMedicalExamRepos
+public class MedExamRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<MedExam>(dbContext, MedExam.DatabaseObject), IMedExamRepos
 {
 	public async Task<DataPagination> GetSearchPaginationAsync(
         int pgSize = 0, 
@@ -325,10 +325,8 @@ public class MedExamRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<MedEx
             param.Add("@PageSize", pgSize);
             param.Add("@PageNo", pgNo);
 
-            sql = sbSql.AddTemplate(
-                    $";WITH pg AS (SELECT Id FROM {DbObject.MsSqlTable} /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-                    $"SELECT t.*, regUsr.*, assUsr.*, dr.*, cust.* FROM {DbObject.MsSqlTable} t INNER JOIN pg p ON p.Id=t.Id /**leftjoin**/ /**orderby**/").RawSql;
-        }
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROW ONLY;").RawSql;
+		}
 
         using var cn = DbContext.DbCxn;
 

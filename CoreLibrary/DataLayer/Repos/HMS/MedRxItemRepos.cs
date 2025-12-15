@@ -2,14 +2,14 @@
 
 namespace DataLayer.Repos.HMS;
 
-public interface IMedApptRepos : IBaseRepos<MedAppt>
+public interface IMedRxItemRepos : IBaseRepos<MedRxItem>
 {
 
 }
 
-public class MedApptRepos(IDbContext dbContext) : BaseRepos<MedAppt>(dbContext, MedAppt.DatabaseObject), IMedApptRepos
+public class MedRxItemRepos(IDbContext dbContext) : BaseRepos<MedRxItem>(dbContext, MedRxItem.DatabaseObject), IMedRxItemRepos
 {
-	public override async Task<KeyValuePair<int, IEnumerable<MedAppt>>> SearchNewAsync(
+	public override async Task<KeyValuePair<int, IEnumerable<MedRxItem>>> SearchNewAsync(
 		int pgSize = 0, int pgNo = 0,
 		string? searchText = null,
 		IEnumerable<SqlSortCond>? sortConds = null,
@@ -53,8 +53,7 @@ public class MedApptRepos(IDbContext dbContext) : BaseRepos<MedAppt>(dbContext, 
 
 		#endregion
 
-		sbSql.LeftJoin($"{Patient.MsSqlTable} ptn ON ptn.Id=t.PatientId");
-		sbSql.LeftJoin($"{Customer.MsSqlTable} cust ON cust.Id=t.CustomerId");
+		sbSql.LeftJoin($"{MedRx.MsSqlTable} rx ON rx.Id=t.MedRxId");
 
 		if (sortConds is null || !sortConds.Any())
 		{
@@ -82,11 +81,9 @@ public class MedApptRepos(IDbContext dbContext) : BaseRepos<MedAppt>(dbContext, 
 
 		using var cn = DbContext.DbCxn;
 
-		var dataList = await cn.QueryAsync<MedAppt, Patient, Customer, MedAppt>(sql,
-			(obj, p, cust) => {
-				obj.Patient = p;
-				obj.Customer = cust;
-
+		var dataList = await cn.QueryAsync<MedRxItem, MedRx, MedRxItem>(sql, 
+			(obj, medRx) => {
+				obj.MedRx = medRx; 
 				return obj;
 			}, param, splitOn: "Id");
 

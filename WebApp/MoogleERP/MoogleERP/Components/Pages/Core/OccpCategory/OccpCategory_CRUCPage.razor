@@ -126,7 +126,7 @@
         {
             case CRUDCModes.READ:
                 {
-                    CurrentObject = await Uow.OccupationCategories.GetAsync(Id);
+                    CurrentObject = await Uow.OccpCategories.GetAsync(Id);
                     IsViewMode = true;
                 }
                 break;
@@ -136,11 +136,11 @@
                 }
                 break;
             case CRUDCModes.UPDATE:
-                CurrentObject = await Uow.OccupationCategories.GetAsync(Id);
+                CurrentObject = await Uow.OccpCategories.GetAsync(Id);
                 break;
             case CRUDCModes.CLONE:
                 {
-                    var tempObj = await Uow.OccupationCategories.GetAsync(Id);
+                    var tempObj = await Uow.OccpCategories.GetAsync(Id);
                     CurrentObject = tempObj!.DeepClone();
                     CurrentObject!.Id = 0;
                     CurrentObject!.ObjectCode = null;
@@ -174,7 +174,7 @@
     {
         InvalidMsgList.Clear();
 
-        bool isDuplicated = await Uow.OccupationCategories.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+        bool isDuplicated = await Uow.OccpCategories.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
 
         if (isDuplicated)
         {
@@ -205,12 +205,12 @@
         if (CurrentObject.Id > 0)
         {
             // Update existing record
-            bool isUpd = await Uow.OccupationCategories.UpdateAsync(CurrentObject);
+            bool isUpd = await Uow.OccpCategories.UpdateAsync(CurrentObject);
             return isUpd;
         }
         else
         {
-            int objId = await Uow.OccupationCategories.InsertAsync(CurrentObject);
+            int objId = await Uow.OccpCategories.InsertAsync(CurrentObject);
             if (objId > 0)
                 CurrentObject.Id = objId;
 

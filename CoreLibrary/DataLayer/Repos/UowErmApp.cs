@@ -48,12 +48,12 @@ public interface IUowErmApp : IUnitOfWork
 	IDoctorRepos Doctors { get; }
 	IHealthcareFacilityRepos HealthcareFacilities { get; }
 	IIllnessRepos Illnesses { get; }
-	IMedicalAppointmentRepos MedicalAppointments { get; }
-	IMedicalExamRepos MedicalExams { get; }
-	IMedicalPrescriptionItemRepos MedicalPrescriptionItems { get; }
-	IMedicalPrescriptionRepos MedicalPrescriptions { get; }
-	IMedicalTestRepos MedicalTests { get; }
-	IMedicalTestTypeRepos MedicalTestTypes { get; }
+	IMedApptRepos MedAppts { get; }
+	IMedExamRepos MedExams { get; }
+	IMedRxItemRepos MedRxItems { get; }
+	IMedRxRepos MedRxs { get; }
+	IMedTestRepos MedTests { get; }
+	IMedTestTypeRepos MedTestTypes { get; }
 	IPatientRepos Patients { get; }
 	#endregion
 
@@ -79,11 +79,11 @@ public interface IUowErmApp : IUnitOfWork
 
 	#region RMS - Retail Management System
 	IBrandRepos Brands { get; }
-	ICustomerPurchaseInvoiceRepos CustomerPurchaseInvoices { get; }
+	ICustPurchaseInvoiceRepos CustPurchaseInvoices { get; }
 	ICustPurchaseInvItemRepos CustPurchaseInvItems { get; }
-	ICustomerPurchaseOrderRepos CustomerPurchaseOrders { get; }
-	ICustomerPurchaseOrderItemRepos CustomerPurchaseOrderItems { get; }
-	ICustomerPurchaseInvoicePaymentRepos CustomerPurchaseInvoicePayments { get; }
+	ICustPurchaseOrderRepos CustPurchaseOrders { get; }
+	ICustPurchaseOrderItemRepos CustPurchaseOrderItems { get; }
+	ICustPurchaseInvPymtRepos CustPurchaseInvPymts { get; }
 	IDeliveryOptionRepos DeliveryOptions { get; }
 	IGs1CompanyPrefixRepos Gs1CompanyPrefixes { get; }
 	IInventoryCheckInRepos InventoryCheckIns { get; }
@@ -146,12 +146,12 @@ public class UowErmApp : UnitOfWork, IUowErmApp
         Doctors = new DoctorRepos(DbContext);
         HealthcareFacilities = new HealthcareFacilityRepos(DbContext);
         Illnesses = new IllnessRepos(DbContext);
-        MedicalExams = new MedExamRepos(DbContext);
-        MedicalAppointments = new MedApptRepos(DbContext);
-        MedicalPrescriptions = new MedRxRepos(DbContext);
-        MedicalPrescriptionItems = new MedApptItemRepos(DbContext);
-        MedicalTests = new MedTestRepos(DbContext);
-        MedicalTestTypes = new MedTestTypeRepos(DbContext);
+        MedExams = new MedExamRepos(DbContext);
+        MedAppts = new MedApptRepos(DbContext);
+        MedRxs = new MedRxRepos(DbContext);
+        MedRxItems = new MedRxItemRepos(DbContext);
+        MedTests = new MedTestRepos(DbContext);
+        MedTestTypes = new MedTestTypeRepos(DbContext);
         Patients = new PatientRepos(DbContext);
         #endregion
 
@@ -177,11 +177,11 @@ public class UowErmApp : UnitOfWork, IUowErmApp
 
         #region RMS - Retail Management System
         Brands = new BrandRepos(DbContext);
-        CustomerPurchaseInvoices = new CustPurchaseInvoiceRepos(DbContext);
+        CustPurchaseInvoices = new CustPurchaseInvoiceRepos(DbContext);
         CustPurchaseInvItems = new CustPurchaseInvItemRepos(DbContext);
-        CustomerPurchaseOrders = new CustPurchaseOrderRepos(DbContext);
-        CustomerPurchaseOrderItems = new CustPurchaseOrderItemRepos(DbContext);
-        CustomerPurchaseInvoicePayments = new CustPurchaseInvPymtRepos(DbContext);
+        CustPurchaseOrders = new CustPurchaseOrderRepos(DbContext);
+        CustPurchaseOrderItems = new CustPurchaseOrderItemRepos(DbContext);
+        CustPurchaseInvPymts = new CustPurchaseInvPymtRepos(DbContext);
         DeliveryOptions = new DeliveryOptionRepos(DbContext);
         Gs1CompanyPrefixes = new Gs1CompanyPrefixRepos(DbContext);
         InventoryCheckIns = new InventoryCheckInRepos(DbContext);
@@ -231,12 +231,15 @@ public class UowErmApp : UnitOfWork, IUowErmApp
 	public IDoctorRepos Doctors { get; }
     public IIllnessRepos Illnesses { get; }
 	public IHealthcareFacilityRepos HealthcareFacilities { get; }
-	public IMedicalAppointmentRepos MedicalAppointments { get; }
-	public IMedicalExamRepos MedicalExams { get; }
-	public IMedicalPrescriptionItemRepos MedicalPrescriptionItems { get; }
-	public IMedicalPrescriptionRepos MedicalPrescriptions { get; }
-	public IMedicalTestRepos MedicalTests { get; }
-	public IMedicalTestTypeRepos MedicalTestTypes { get; }
+	/// <summary>
+	/// Medical Appointments
+	/// </summary>
+	public IMedApptRepos MedAppts { get; }
+	public IMedExamRepos MedExams { get; }
+	public IMedRxItemRepos MedRxItems { get; }
+	public IMedRxRepos MedRxs { get; }
+	public IMedTestRepos MedTests { get; }
+	public IMedTestTypeRepos MedTestTypes { get; }
     public IPatientRepos Patients { get; }
     #endregion
 
@@ -271,11 +274,14 @@ public class UowErmApp : UnitOfWork, IUowErmApp
 
     #region RMS - Retail Management System
     public IBrandRepos Brands { get; }
-    public ICustomerPurchaseInvoiceRepos CustomerPurchaseInvoices { get; }
+    public ICustPurchaseInvoiceRepos CustPurchaseInvoices { get; }
     public ICustPurchaseInvItemRepos CustPurchaseInvItems { get; }
-    public ICustomerPurchaseOrderRepos CustomerPurchaseOrders { get; }
-    public ICustomerPurchaseOrderItemRepos CustomerPurchaseOrderItems { get; }
-    public ICustomerPurchaseInvoicePaymentRepos CustomerPurchaseInvoicePayments { get; }
+    public ICustPurchaseOrderRepos CustPurchaseOrders { get; }
+    public ICustPurchaseOrderItemRepos CustPurchaseOrderItems { get; }
+	/// <summary>
+	/// Customer Purchase Invoice Payments
+	/// </summary>
+	public ICustPurchaseInvPymtRepos CustPurchaseInvPymts { get; }
     public IDeliveryOptionRepos DeliveryOptions { get; }
     public IGs1CompanyPrefixRepos Gs1CompanyPrefixes { get; }
     public IInventoryCheckInRepos InventoryCheckIns { get; }

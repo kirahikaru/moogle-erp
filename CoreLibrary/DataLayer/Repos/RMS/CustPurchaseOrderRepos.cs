@@ -2,7 +2,7 @@
 
 namespace DataLayer.Repos.RMS;
 
-public interface ICustomerPurchaseOrderRepos : IBaseWorkflowEnabledRepos<CustPurchaseOrder>
+public interface ICustPurchaseOrderRepos : IBaseWorkflowEnabledRepos<CustPurchaseOrder>
 {
 	Task<CustPurchaseOrder?> GetFullAsync(int id);
 
@@ -31,7 +31,7 @@ public interface ICustomerPurchaseOrderRepos : IBaseWorkflowEnabledRepos<CustPur
 		string? workflowStatus = null);
 }
 
-public class CustPurchaseOrderRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<CustPurchaseOrder>(dbContext, CustPurchaseOrder.DatabaseObject), ICustomerPurchaseOrderRepos
+public class CustPurchaseOrderRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<CustPurchaseOrder>(dbContext, CustPurchaseOrder.DatabaseObject), ICustPurchaseOrderRepos
 {
 	public async Task<CustPurchaseOrder?> GetFullAsync(int id)
     {

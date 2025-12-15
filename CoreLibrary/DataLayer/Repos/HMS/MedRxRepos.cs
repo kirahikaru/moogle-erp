@@ -5,7 +5,7 @@ namespace DataLayer.Repos.HMS;
 /// <summary>
 /// Medical Prescription Repository
 /// </summary>
-public interface IMedicalPrescriptionRepos : IBaseRepos<MedRx>
+public interface IMedRxRepos : IBaseRepos<MedRx>
 {
 	Task<List<MedRx>> SearchAsync(
 		int pgSize = 0, int pgNo = 0,
@@ -28,7 +28,7 @@ public interface IMedicalPrescriptionRepos : IBaseRepos<MedRx>
 		DateTime? issueDateTimeTo = null);
 }
 
-public class MedRxRepos(IDbContext dbContext) : BaseRepos<MedRx>(dbContext, MedRx.DatabaseObject), IMedicalPrescriptionRepos
+public class MedRxRepos(IDbContext dbContext) : BaseRepos<MedRx>(dbContext, MedRx.DatabaseObject), IMedRxRepos
 {
 	public async Task<DataPagination> GetSearchPaginationAsync(
         int pgSize = 0, 
@@ -248,10 +248,8 @@ public class MedRxRepos(IDbContext dbContext) : BaseRepos<MedRx>(dbContext, MedR
             param.Add("@PageSize", pgSize);
             param.Add("@PageNo", pgNo);
 
-            sql = sbSql.AddTemplate(
-                    $";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-                    $"SELECT t.*, hcf.*, dr.*, cust.* FROM {DbObject.MsSqlTable} t INNER JOIN pg p ON p.Id=t.Id /**leftjoin**/ /**orderby**/").RawSql;
-        }
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROW ONLY;").RawSql;
+		}
 
         using var cn = DbContext.DbCxn;
 

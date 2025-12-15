@@ -8,7 +8,7 @@ namespace DataLayer.Models.HMS;
 /// <remarks>
 /// 
 /// </remarks>
-[Table("[hms].[MedicalAppt]"), DisplayName("Medical Appointment")]
+[Table("[hms].[MedAppt]"), DisplayName("Medical Appointment")]
 public class MedAppt : WorkflowEnabledObject
 {
 	[Computed, Write(false), ReadOnly(true)]
@@ -44,10 +44,10 @@ public class MedAppt : WorkflowEnabledObject
 
     #region *** LINKED OBJECTS ***
     [Computed, Write(false)]
-    public Employee? Employee { get; set; }
+    public Patient? Patient { get; set; }
 
 	[Computed, Write(false)]
-	public CambodiaAddress? RegisteredAddress { get; set; }
+	public Customer? Customer { get; set; }
 	#endregion
 
 	#region *** DYNAMIC PROPERTIES ***

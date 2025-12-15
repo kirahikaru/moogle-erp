@@ -168,7 +168,7 @@
         {
             case CRUDCModes.READ:
                 {
-                    CurrentObject = await Uow.MedicalTests.GetAsync(Id);
+                    CurrentObject = await Uow.MedTests.GetAsync(Id);
                     IsViewMode = true;
                 }
                 break;
@@ -178,11 +178,11 @@
                 }
                 break;
             case CRUDCModes.UPDATE:
-                CurrentObject = await Uow.MedicalTests.GetAsync(Id);
+                CurrentObject = await Uow.MedTests.GetAsync(Id);
                 break;
             case CRUDCModes.CLONE:
                 {
-                    var tempObj = await Uow.MedicalTests.GetAsync(Id);
+                    var tempObj = await Uow.MedTests.GetAsync(Id);
                     CurrentObject = tempObj!.DeepClone();
                     CurrentObject!.Id = 0;
                     CurrentObject!.ObjectCode = null;
@@ -247,7 +247,7 @@
     {
         InvalidMsgList.Clear();
 
-        bool isDuplicated = await Uow.MedicalTests.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+        bool isDuplicated = await Uow.MedTests.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
 
         if (isDuplicated)
         {
@@ -278,12 +278,12 @@
         if (CurrentObject.Id > 0)
         {
             // Update existing record
-            bool isUpd = await Uow.MedicalTests.UpdateAsync(CurrentObject);
+            bool isUpd = await Uow.MedTests.UpdateAsync(CurrentObject);
             return isUpd;
         }
         else
         {
-            int objId = await Uow.MedicalTests.InsertAsync(CurrentObject);
+            int objId = await Uow.MedTests.InsertAsync(CurrentObject);
             if (objId > 0)
                 CurrentObject.Id = objId;
 
@@ -295,7 +295,7 @@
     #region INTERNAL FUNCTIONS
     async Task PopulatedUIControls()
     {
-        _medTestTypeList = await Uow.MedicalTestTypes.GetForDropdownSelectAsync();
+        _medTestTypeList = await Uow.MedTestTypes.GetForDropdownSelectAsync();
         _testUomList = await Uow.UoMs.GetByTypeAsync(UnitOfMeasureTypes.MEDICAL_TEST);
     }
     #endregion

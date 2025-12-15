@@ -101,7 +101,7 @@
 			}
 			else
 			{
-				var result = await Uow.MedicalTests.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
+				var result = await Uow.MedTests.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}

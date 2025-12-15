@@ -4,7 +4,7 @@ using static Dapper.SqlMapper;
 
 namespace DataLayer.Repos.HMS;
 
-public interface IMedicalTestTypeRepos : IBaseRepos<MedTestType>
+public interface IMedTestTypeRepos : IBaseRepos<MedTestType>
 {
 	Task<List<DropDownListItem>> GetValidParentsAsync(
 		int objectId,
@@ -19,7 +19,7 @@ public interface IMedicalTestTypeRepos : IBaseRepos<MedTestType>
 		string? hierarchyPath = null);
 }
 
-public class MedTestTypeRepos(IDbContext dbContext) : BaseRepos<MedTestType>(dbContext, MedTestType.DatabaseObject), IMedicalTestTypeRepos
+public class MedTestTypeRepos(IDbContext dbContext) : BaseRepos<MedTestType>(dbContext, MedTestType.DatabaseObject), IMedTestTypeRepos
 {
 	public override async Task<KeyValuePair<int, IEnumerable<MedTestType>>> SearchNewAsync(
 		int pgSize = 0, int pgNo = 0,
@@ -92,9 +92,7 @@ public class MedTestTypeRepos(IDbContext dbContext) : BaseRepos<MedTestType>(dbC
 		{
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
-			sql = sbSql.AddTemplate(
-				$";WITH pg AS (SELECT Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				$"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY;").RawSql;
 		}
 
 		using var cn = DbContext.DbCxn;

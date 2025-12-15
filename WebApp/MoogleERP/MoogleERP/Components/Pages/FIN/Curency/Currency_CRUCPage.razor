@@ -72,19 +72,6 @@
                                           Label="ID" Placeholder="A-Z, 0-9, -_" Mask="objIdMask"
                                           @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" />
                         </MudItem>
-                        @if (CurrentObject!.Id > 0)
-                        {
-                            <MudItem xs="12">
-                                <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
-                                           Label="Parent" T="int?"
-                                           Value="CurrentObject!.ParentId" ValueChanged="OnParentChanged" For="@(() => CurrentObject!.ParentId)">
-                                    @foreach (var item in _validParents)
-                                    {
-                                        <MudSelectItem T="int?" Value="@item.ObjectId">@item.ObjectName</MudSelectItem>
-                                    }
-                                </MudSelect>
-                            </MudItem>
-                        }
                     </MudGrid>
                 </MudPaper>
                 <MudPaper Height="26px" Elevation="1"
@@ -120,7 +107,6 @@
 
     #region UI PARAM
     MudTextField<string>? _mtfObjName;
-    IEnumerable<DropDownListItem> _validParents = [];
     IMask objIdMask = new RegexMask(@"^[A-Z0-9-_]{0,}$");
     #endregion
 
@@ -177,24 +163,24 @@
     #endregion
 
     #region UI FUNCTIONS
-    void OnParentChanged(int? parentId)
-    {
-        CurrentObject!.ParentId = parentId;
+    // void OnParentChanged(int? parentId)
+    // {
+    //     CurrentObject!.ParentId = parentId;
 
-        if (parentId.HasValue)
-        {
-            DropDownListItem? selectedItem = _validParents.FirstOrDefault(x => x.ObjectId == parentId.Value)!;
+    //     if (parentId.HasValue)
+    //     {
+    //         DropDownListItem? selectedItem = _validParents.FirstOrDefault(x => x.ObjectId == parentId.Value)!;
 
-            CurrentObject!.ParentCode = selectedItem!.ObjectCode;
-            CurrentObject!.HierarchyPath = $"{selectedItem!.HierarchyPath}>{CurrentObject!.ObjectCode}";
-        }
-        else
-        {
-            CurrentObject!.ParentCode = null;
-            CurrentObject!.HierarchyPath = CurrentObject!.ObjectCode;
-        }
+    //         CurrentObject!.ParentCode = selectedItem!.ObjectCode;
+    //         CurrentObject!.HierarchyPath = $"{selectedItem!.HierarchyPath}>{CurrentObject!.ObjectCode}";
+    //     }
+    //     else
+    //     {
+    //         CurrentObject!.ParentCode = null;
+    //         CurrentObject!.HierarchyPath = CurrentObject!.ObjectCode;
+    //     }
 
-    }
+    // }
     #endregion
 
     #region DB UPDATE FUNCTIONS
@@ -213,9 +199,6 @@
     protected override Task PreSaveProcessing()
     {
         CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
-
-        if (string.IsNullOrEmpty(CurrentObject!.HierarchyPath))
-            CurrentObject!.HierarchyPath = CurrentObject!.ObjectCode;
 
         return base.PreSaveProcessing();
     }
@@ -236,12 +219,12 @@
         if (CurrentObject.Id > 0)
         {
             // Update existing record
-            bool isUpd = await Uow.LocationTypes.UpdateAsync(CurrentObject);
+            bool isUpd = await Uow.Currencies.UpdateAsync(CurrentObject);
             return isUpd;
         }
         else
         {
-            int objId = await Uow.LocationTypes.InsertAsync(CurrentObject);
+            int objId = await Uow.Currencies.InsertAsync(CurrentObject);
             if (objId > 0)
                 CurrentObject.Id = objId;
 
@@ -253,7 +236,7 @@
     #region INTERNAL FUNCTIONS
     async Task PopulatedUIControls()
     {
-        _validParents = await Uow.LocationTypes.GetValidParentsAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!, CurrentObject!.HierarchyPath!, null);
+        
     }
     #endregion
 }

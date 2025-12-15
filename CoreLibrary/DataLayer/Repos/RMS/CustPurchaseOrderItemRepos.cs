@@ -2,7 +2,7 @@
 
 namespace DataLayer.Repos.RMS;
 
-public interface ICustomerPurchaseOrderItemRepos : IBaseRepos<CustPurchaseOrderItem>
+public interface ICustPurchaseOrderItemRepos : IBaseRepos<CustPurchaseOrderItem>
 {
 	Task<CustPurchaseOrderItem?> GetFullAsync(int id);
 
@@ -25,7 +25,7 @@ public interface ICustomerPurchaseOrderItemRepos : IBaseRepos<CustPurchaseOrderI
 		string? invoiceNumber = null);
 }
 
-public class CustPurchaseOrderItemRepos(IDbContext dbContext) : BaseRepos<CustPurchaseOrderItem>(dbContext, CustPurchaseOrderItem.DatabaseObject), ICustomerPurchaseOrderItemRepos
+public class CustPurchaseOrderItemRepos(IDbContext dbContext) : BaseRepos<CustPurchaseOrderItem>(dbContext, CustPurchaseOrderItem.DatabaseObject), ICustPurchaseOrderItemRepos
 {
 	public async Task<CustPurchaseOrderItem?> GetFullAsync(int id)
     {

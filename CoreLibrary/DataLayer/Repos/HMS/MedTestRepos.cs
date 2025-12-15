@@ -4,7 +4,7 @@ using static Dapper.SqlMapper;
 
 namespace DataLayer.Repos.HMS;
 
-public interface IMedicalTestRepos : IBaseRepos<MedTest>
+public interface IMedTestRepos : IBaseRepos<MedTest>
 {
 	Task<MedTest?> GetFullAsync(int id);
 
@@ -21,7 +21,7 @@ public interface IMedicalTestRepos : IBaseRepos<MedTest>
 		List<int>? medicalTestTypeIdList = null);
 }
 
-public class MedTestRepos(IDbContext dbContext) : BaseRepos<MedTest>(dbContext, MedTest.DatabaseObject), IMedicalTestRepos
+public class MedTestRepos(IDbContext dbContext) : BaseRepos<MedTest>(dbContext, MedTest.DatabaseObject), IMedTestRepos
 {
 	public async Task<MedTest?> GetFullAsync(int id)
     {
@@ -192,10 +192,8 @@ public class MedTestRepos(IDbContext dbContext) : BaseRepos<MedTest>(dbContext, 
             param.Add("@PageSize", pgSize);
             param.Add("@PageNo", pgNo);
 
-            sql = sbSql.AddTemplate(
-                $";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-                $"SELECT t.*, mtt.* FROM {DbObject.MsSqlTable} t INNER JOIN pg p ON p.Id=t.Id /**leftjoin**/ /**orderby**/").RawSql;
-        }
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROW ONLY;").RawSql;
+		}
 
         using var cn = DbContext.DbCxn;
 

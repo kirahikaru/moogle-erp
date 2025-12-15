@@ -1,10 +1,8 @@
-﻿using DataLayer.Models.FIN;
-using DataLayer.Models.RMS;
-using DataLayer.Models.SysCore.NonPersistent;
+﻿using DataLayer.Models.RMS;
 
 namespace DataLayer.Repos.RMS;
 
-public interface ICustomerPurchaseInvoiceRepos : IBaseWorkflowEnabledRepos<CustPurchaseInvoice>
+public interface ICustPurchaseInvoiceRepos : IBaseWorkflowEnabledRepos<CustPurchaseInvoice>
 {
 	Task<CustPurchaseInvoice?> GetFullAsync(int id);
 	Task<List<CustPurchaseInvoice>> SearchAsync(
@@ -32,7 +30,7 @@ public interface ICustomerPurchaseInvoiceRepos : IBaseWorkflowEnabledRepos<CustP
 		string? workflowStatus = null);
 }
 
-public class CustPurchaseInvoiceRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<CustPurchaseInvoice>(dbContext, CustPurchaseInvoice.DatabaseObject), ICustomerPurchaseInvoiceRepos
+public class CustPurchaseInvoiceRepos(IDbContext dbContext) : BaseWorkflowEnabledRepos<CustPurchaseInvoice>(dbContext, CustPurchaseInvoice.DatabaseObject), ICustPurchaseInvoiceRepos
 {
 	public async Task<CustPurchaseInvoice?> GetFullAsync(int id)
     {

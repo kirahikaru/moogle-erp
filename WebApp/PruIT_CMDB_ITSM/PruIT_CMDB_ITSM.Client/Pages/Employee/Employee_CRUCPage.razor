@@ -372,8 +372,12 @@
     #region UPDATE FUNCTIONS
     protected override async Task PreSaveProcessing()
     {
-        CurrentObject!.ObjectCode = CurrentObject!.EmpID;
-        CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
+        if (!string.IsNullOrEmpty(CurrentObject!.EmpID))
+        {
+            CurrentObject!.ObjectCode = CurrentObject!.EmpID;
+            CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
+        }
+        
         await Task.CompletedTask;
     }
 

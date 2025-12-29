@@ -142,7 +142,7 @@ public class ITAssetRepos(IDbContext dbContext) : BaseRepos<ITAsset>(dbContext, 
 			}
 			else
 			{
-				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.SerialNo) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.CurrentUserName) LIKE '%'+UPPER(@SearchText)+'%')");
+				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.SerialNo) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.CurrentUserName) LIKE '%'+UPPER(@SearchText)+'%' OR  t.CurrentUserID=@SearchText)");
 				param.Add("@SearchText", searchText, DbType.AnsiString);
 			}
 		}
@@ -168,9 +168,7 @@ public class ITAssetRepos(IDbContext dbContext) : BaseRepos<ITAsset>(dbContext, 
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
 
-			sql = sbSql.AddTemplate(
-				$";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				$"SELECT * FROM {DbObject.MsSqlTable} t WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY").RawSql;
 		}
 
 		using IDbConnection cn = DbContext.DbCxn;
@@ -221,7 +219,7 @@ public class ITAssetRepos(IDbContext dbContext) : BaseRepos<ITAsset>(dbContext, 
 			}
 			else
 			{
-				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.SerialNo) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.CurrentUserName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.CurrentUserDept) LIKE '%'+UPPER(@SearchText)+'%')");
+				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.SerialNo) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.CurrentUserName) LIKE '%'+UPPER(@SearchText)+'%' OR  t.CurrentUserID=@SearchText)");
 				param.Add("@SearchText", searchText, DbType.AnsiString);
 			}
 		}
@@ -247,9 +245,7 @@ public class ITAssetRepos(IDbContext dbContext) : BaseRepos<ITAsset>(dbContext, 
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
 
-			sql = sbSql.AddTemplate(
-				$";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				$"SELECT * FROM {DbObject.MsSqlTable} t WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY").RawSql;
 		}
 
 		using IDbConnection cn = DbContext.DbCxn;
@@ -300,7 +296,7 @@ public class ITAssetRepos(IDbContext dbContext) : BaseRepos<ITAsset>(dbContext, 
 			}
 			else
 			{
-				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.SerialNo) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.CurrentUserName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.CurrentUserDept) LIKE '%'+UPPER(@SearchText)+'%')");
+				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.SerialNo) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.CurrentUserName) LIKE '%'+UPPER(@SearchText)+'%' OR  t.CurrentUserID=@SearchText)");
 				param.Add("@SearchText", searchText, DbType.AnsiString);
 			}
 		}
@@ -326,9 +322,7 @@ public class ITAssetRepos(IDbContext dbContext) : BaseRepos<ITAsset>(dbContext, 
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
 
-			sql = sbSql.AddTemplate(
-				$";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				$"SELECT * FROM {DbObject.MsSqlTable} t WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY").RawSql;
 		}
 
 		using IDbConnection cn = DbContext.DbCxn;

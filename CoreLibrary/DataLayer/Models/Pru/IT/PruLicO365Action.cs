@@ -1,6 +1,4 @@
-﻿using DataLayer.Models.SysCore.NonPersistent;
-
-namespace DataLayer.Models.Pru.IT;
+﻿namespace DataLayer.Models.Pru.IT;
 
 [Table("[dbo].[PruLicO365Action]"), DisplayName("PruLicO365Action")]
 public class PruLicO365Action : AuditObject

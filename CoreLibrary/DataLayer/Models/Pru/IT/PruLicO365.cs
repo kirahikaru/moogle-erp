@@ -1,5 +1,4 @@
 ﻿using DataLayer.GlobalConstant.Pru;
-using DataLayer.Models.SysCore.NonPersistent;
 
 namespace DataLayer.Models.Pru.IT;
 

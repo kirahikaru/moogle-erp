@@ -530,7 +530,7 @@
     MudDataGrid<ITAssetAuditTrail> _auditTrailDataGrid = new();
     IEnumerable<string> _envList = ["DEV", "UAT", "PRD", "SIT"];
     IEnumerable<string> _zoneList = ["Azure", "On-Prem"];
-    IEnumerable<string> _deptList = PruDepartments.GetLatest();
+    IEnumerable<string> _deptList = PruDepts.GetLatest();
     IEnumerable<string> _funcList = [];
 
     DropdownSelectItem? _requestor;

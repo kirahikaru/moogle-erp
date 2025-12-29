@@ -28,6 +28,14 @@
 				 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" Virtualize="true">
 		<Columns>
 			@* <PropertyColumn Property="x => x.ObjectName" Title="Asset Name" StickyLeft="true" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" /> *@
+			<TemplateColumn Title="LBU" StickyLeft="true" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Context="rowData">
+				<CellTemplate>
+					<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
+						<MudImage Src=@(_lbuFlagList[rowData.Item.LBU!]) Height="12" />
+						<MudText Typo="Typo.body1">@rowData.Item.LBU</MudText>
+					</MudStack>
+				</CellTemplate>
+			</TemplateColumn>
 			<TemplateColumn Title="Asset Name" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Context="rowData">
 				<CellTemplate>
 					@if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.TERMINATED, AssetLifeCycleStatuses.WRITTEN_OFF))
@@ -100,17 +108,19 @@
 					</MudChip>
 				</CellTemplate>
 			</TemplateColumn>
-            <TemplateColumn Title="Action" HeaderClass="pru-mud-datagrid-hdr main-pg" Sortable="false" Filterable="false" StickyRight="true"
-                            CellClass="pru-mud-datagrid-cell" CellStyle="padding-inline-end:4px; padding-inline-start:4px">
-                <CellTemplate>
-                    <MudStack Row="true" Spacing="1">
-                        <MudIconButton Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
-                        <MudIconButton Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
-                        <MudIconButton Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
-                        <MudIconButton Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
-                    </MudStack>
-                </CellTemplate>
-            </TemplateColumn>
+			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="justify-items:center; max-width:120px; width:500px"
+							CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
+				<CellTemplate>
+					<MudStack Row="true" Spacing="1">
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
+					</MudStack>
+				</CellTemplate>
+			</TemplateColumn>
 		</Columns>
 		<PagerContent>
 			<MudDataGridPager T="ITAsset" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] { 10, 30, 50, 80, 100 }" />
@@ -121,6 +131,7 @@
 @code {
 
 	#region UI Param
+	Dictionary<string, string> _lbuFlagList = PruLBUs.GetFlagIconPaths();
 	Dictionary<string, string> _statusCssClassList = new()
 		{
 			{ "", "" },

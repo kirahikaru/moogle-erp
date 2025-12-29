@@ -1,6 +1,4 @@
-﻿using DataLayer.Models.SysCore.NonPersistent;
-
-namespace DataLayer.Models.Pru.IT;
+﻿namespace DataLayer.Models.Pru.IT;
 
 [Table("[dbo].[ITAssetCategory]"), DisplayName("IT Asset Category")]
 public class ITAssetCategory : AuditObject, IParentChildHierarchyObject

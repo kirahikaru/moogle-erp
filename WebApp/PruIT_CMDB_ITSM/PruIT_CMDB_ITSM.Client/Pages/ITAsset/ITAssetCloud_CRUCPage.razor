@@ -143,7 +143,7 @@
                         </MudItem>
                         <MudItem xs="3">
                             <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered"
-                                          Label="Serial No." MaxLength="50"
+                                          Label="Serial No." MaxLength="80"
                                           @bind-Value=CurrentObject!.SerialNo For="@(() => CurrentObject.SerialNo)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="12">
@@ -425,7 +425,7 @@
     IEnumerable<DropdownSelectItem> _categoryList = Enumerable.Empty<DropdownSelectItem>();
     IEnumerable<DropdownSelectItem> _subCategoryList = Enumerable.Empty<DropdownSelectItem>();
     IEnumerable<DropdownSelectItem> _vendorList = Enumerable.Empty<DropdownSelectItem>();
-    IEnumerable<string> _deptList = PruDepartments.GetLatest();
+    IEnumerable<string> _deptList = PruDepts.GetLatest();
     IEnumerable<string> _funcList = [];
     ITAssetAuditTrail? _tempItemToAdd;
     MudDataGrid<ITAssetAuditTrail> _auditTrailDataGrid = new();

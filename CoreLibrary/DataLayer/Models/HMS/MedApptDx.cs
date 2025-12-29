@@ -8,17 +8,17 @@ namespace DataLayer.Models.HMS;
 /// <remarks>
 /// 
 /// </remarks>
-[Table("[hms].[MedicalApptDx]"), DisplayName("Diagnosis")]
-public class MedicalApptDiagnosis : AuditObject
+[Table("[hms].[MedApptDx]"), DisplayName("Diagnosis")]
+public class MedApptDx : AuditObject
 {
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string SchemaName => SysDbSchemaNames.HOSPITAL;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string MsSqlTableName => "MedicalApptDx";
+	public new static string MsSqlTableName => typeof(MedApptDx).Name;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string PgTableName => "medical_appt_dx";
+	public new static string PgTableName => "med_appt_dx";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);
@@ -30,12 +30,15 @@ public class MedicalApptDiagnosis : AuditObject
 	public static DatabaseObj DatabaseObject => new(SchemaName, MsSqlTableName, PgTableName);
 
 	#region *** DATABASE FIELDS ***
-	public int? MedicalAppointmentId { get; set; }
+	public int? MedApptId { get; set; }
+	public string? IllnessCode { get; set; }
+	public int? IllnessId { get; set; }
 
-    #endregion
+	#endregion
 
-    #region *** LINKED OBJECTS ***
-    
+	#region *** LINKED OBJECTS ***
+	[Computed, Write(false)]
+	public Illness? Illness { get; set; }
 	#endregion
 
 	#region *** DYNAMIC PROPERTIES ***

@@ -15,10 +15,10 @@ public class MedAppt : WorkflowEnabledObject
 	public new static string SchemaName => SysDbSchemaNames.HOSPITAL;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string MsSqlTableName => "MedicalAppt";
+	public new static string MsSqlTableName => typeof(MedAppt).Name;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string PgTableName => "medical_appt";
+	public new static string PgTableName => "med_appt";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);
@@ -37,7 +37,9 @@ public class MedAppt : WorkflowEnabledObject
 	public DateTime? EndTime { get; set; }
 	public int? CustomerId { get; set; }
 	public int? PatientId { get; set; }
-    public string? DiagnosisNote { get; set; }
+	public int? DoctorId { get; set; }
+	public int? HealthcareFacilityId { get; set; }
+	public string? DiagnosisNote { get; set; }
     public string? RecommendationNote { get; set; }
     public string? PrescriptionNote { get; set; }
     #endregion
@@ -48,8 +50,19 @@ public class MedAppt : WorkflowEnabledObject
 
 	[Computed, Write(false)]
 	public Customer? Customer { get; set; }
+	[Computed, Write(false)]
+	public Doctor? Doctor { get; set; }
+
+	[Computed, Write(false)]
+	public HealthcareFacility? HealthcareFacility { get; set; }
+	[Computed, Write(false)]
+	public List<MedApptDx> Diagnosis { get; set; }
 	#endregion
 
 	#region *** DYNAMIC PROPERTIES ***
 	#endregion
+	public MedAppt()
+	{
+		Diagnosis = [];
+	}
 }

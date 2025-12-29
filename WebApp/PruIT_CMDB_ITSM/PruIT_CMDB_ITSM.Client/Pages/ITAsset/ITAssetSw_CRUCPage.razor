@@ -52,7 +52,7 @@
             <MudTabPanel Text="Main" Icon="material-symbols-rounded/home" Class="pru-mud-tab-panel" Style="min-width:120px">
                 <MudPaper Class="px-4 pt-2 pb-5 overflow-y-auto" Height="calc(100vh - 210px)" Width="100%" Elevation="0" Style="position:relative">
                     <MudGrid Spacing="2" Justify="Justify.SpaceEvenly">
-                        <MudItem xs="8">
+                        <MudItem xs="7">
                             <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Required="true"
                                           Label="Asset Name" Placeholder="Asset name" InputId="ObjectName"
                                           @bind-Value=CurrentObject!.ObjectName For="@(() => CurrentObject.ObjectName)" MaxLength="255" OnlyValidateIfDirty="true" />
@@ -69,6 +69,17 @@
                                 @foreach (DropdownSelectItem assetType in _assetTypeList)
                                 {
                                     <MudSelectItem Value=@assetType.Key>@assetType.Value</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true"
+                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down"
+                                       Label="LBU" T="string"
+                                       Value=CurrentObject!.LBU For="@(() => CurrentObject.LBU)" ValueChanged="OnLBUChanged" OnlyValidateIfDirty="true">
+                                @foreach (string lbuID in _lbuIDList)
+                                {
+                                    <MudSelectItem Value=@lbuID>@lbuID</MudSelectItem>
                                 }
                             </MudSelect>
                         </MudItem>
@@ -497,11 +508,12 @@
     List<ExpenseItem> _expenseItems = [];
     ITAssetAuditTrail? _tempItemToAdd;
     MudDataGrid<ITAssetAuditTrail> _auditTrailDataGrid = new();
-    IEnumerable<string> _deptList = PruDepartments.GetLatest();
+    IEnumerable<string> _deptList = PruDepts.GetLatest();
     IEnumerable<string> _funcList = [];
 
     DropdownSelectItem? _requestor;
     DropdownSelectItem? _currentUser;
+    IEnumerable<string> _lbuIDList = ["PCLA", "PMLI", "PLAL"];
 
     IEnumerable<string> _esuCwsLilst = [
         "Chanraksmey Soth",
@@ -565,6 +577,20 @@
     #endregion
 
     #region UI FUNCTIONS
+    private async Task OnLBUChanged(string lbu)
+    {
+        if (!string.IsNullOrEmpty(lbu))
+        {
+            CurrentObject!.LBU = lbu;
+            _vendorList = await Uow.Vendors.GetForDropdownListAsync(CurrentObject!.LBU, CurrentObject!.VendorID);
+        }
+        else
+        {
+            CurrentObject!.LBU = null;
+            _vendorList = [];
+        }
+    }
+
     private async Task<IEnumerable<DropdownSelectItem>> SearchRequestor(string value, CancellationToken token)
     {
         // In real life use an asynchronous function for fetching data from an api.

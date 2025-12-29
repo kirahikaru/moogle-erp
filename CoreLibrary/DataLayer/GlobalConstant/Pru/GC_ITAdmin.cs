@@ -348,20 +348,61 @@ public static class InvoiceWFStatuses
 	}
 }
 
-public static class PruDepartments
+/// <summary>
+/// Pru Function
+/// </summary>
+public static class PruFuncs
+{
+	//TECHNOLOGY
+	public const string AppDevInt = "App Delivery, Support & Integration";
+	public const string BackEndAppDev = "Back-end Apps Delivery";
+	public const string FrontEndAppDev = "Front-end Apps Delivery";
+	public const string CoreSys = "Core System";
+	public const string DataEngineering = "Data Engineering";
+	public const string EcoSysIntegration = "Ecosystem Integration";
+	public const string DevOps = "DevOps & Cloud Engineering";
+	public const string TechBA = "Technical Business Analysis";
+	public const string ITProjManagement = "IT Project Management";
+	public const string ITOpsSvcManagement = "IT Operations & Service Management";
+	public const string ITSecurityGovernance = "IT Security & Governance";
+	public const string DataPrivacy = "Data Privacy";
+
+	// ACTUARY
+	public const string Product = "Product";
+	public const string Pricing = "Pricing";
+	public const string ActuaryReporting = "Actuary Reporting";
+
+	// FINANCE
+	public const string FinReporting = "Finance Reporting";
+	public const string FinBusnPartner = "Finance Business Partnering";
+	public const string FinOperations = "Finance Operations";
+
+	// S&D
+	public const string Agency = "Agency";
+	public const string Banca = "Bancassurance";
+	public const string PD = "Partnership Distribution";
+}
+
+/// <summary>
+/// Pru Departments
+/// </summary>
+public static class PruDepts
 {
 	public const string Actuary = "Actuary";
 	public const string Finance = "Finance";
 	public const string Marketing = "Marketing";
-	public const string TechOps = "Technology & Operation";
-	public const string OpsTech_Tech = "Technology & Operation | Technology";
-	public const string OpsTech_Ops = "Technology & Operation | Operation";
-	public const string LegalRiskCompliance = "Legal, Risk & Compliance";
+	public const string Operations = "Operations";
+	public const string TechOps = "Technology & Operations";
+	public const string OpsTech_Tech = "Technology & Operations | Technology";
+	public const string OpsTech_Ops = "Technology & Operations | Operation";
 	public const string RiskCompliance = "Risk & Compliance";
-	public const string LegalGR = "Legal & Goverment Relation";
-	public const string HumanResource = "Human Resource";
-	public const string SaleDist = "Sale & Distribution";
+	public const string LegalGovtRelation = "Legal & Government Relation";
+	//public const string LegalRiskCompliance = "Legal, Risk & Compliance";
+	public const string HumanResources = "Human Resources";
+	public const string SaleDist = "Sales & Distribution";
 	public const string CEOOffice = "CEO Office";
+	public const string Technology = "Technology";
+	public const string IT = "IT";
 
 	/// <summary>
 	/// Obsolete department
@@ -372,14 +413,14 @@ public static class PruDepartments
 	public static IEnumerable<string> GetAll()
 	{
 		return [
-			Actuary, Finance, Marketing, TechOps, OpsTech_Ops, OpsTech_Tech, LegalRiskCompliance, RiskCompliance, LegalGR, HumanResource, SaleDist, CEOOffice
+			Actuary, CEOOffice, Finance, HumanResources, IT, LegalGovtRelation, Marketing, Operations, OpsTech_Ops, OpsTech_Tech, Technology, TechOps, RiskCompliance, SaleDist
 			];
 	}
 
 	public static IEnumerable<string> GetLatest()
 	{
 		return [
-			Actuary, Finance, Marketing, TechOps, OpsTech_Ops, OpsTech_Tech, LegalRiskCompliance, RiskCompliance, LegalGR, HumanResource, SaleDist, CEOOffice
+			Actuary, CEOOffice, Finance, HumanResources, IT, LegalGovtRelation, Marketing, Operations, OpsTech_Ops, OpsTech_Tech, Technology, TechOps, RiskCompliance, SaleDist
 			];
 	}
 }

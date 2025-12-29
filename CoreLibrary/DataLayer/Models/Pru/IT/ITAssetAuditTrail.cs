@@ -1,6 +1,4 @@
-﻿using DataLayer.Models.SysCore.NonPersistent;
-
-namespace DataLayer.Models.Pru.IT;
+﻿namespace DataLayer.Models.Pru.IT;
 
 [Table("[dbo].[ITAssetAuditTrail]"), DisplayName("IT Asset Audit Trail")]
 public class ITAssetAuditTrail : AuditObject

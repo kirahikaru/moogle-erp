@@ -422,7 +422,7 @@
                                                         Context="expItem">
                                             <EditTemplate>
                                                 <MudStack Row="true" Spacing="3" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
-                                                    <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" Editable="true" FullWidth="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password" EnableFilter="true" Required="true"
+                                                    <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" PopoverClass="pru-ui-combo-box-popover" Editable="true" FullWidth="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password" EnableFilter="true" Required="true"
                                                                  Label="GL Acocunt #" T="string" SearchFunc="SeachGlAccountDropdown" SearchBoxClearable="true"
                                                                  Value=@expItem.Item.AccountCode For="@(() => expItem.Item.AccountCode)" ValueChanged=@(args => OnGlAccountSelectionChanged(expItem.Item, args)) OnlyValidateIfDirty="true">
                                                         @foreach (GLAccount gLAccount in _glAccountList)
@@ -448,7 +448,7 @@
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" Context="expItem"
                                                         FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right">
                                             <EditTemplate>
-                                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" Editable="true" FullWidth="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password" EnableFilter="true" Required="true"
+                                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" PopoverClass="pru-ui-combo-box-popover" Editable="true" FullWidth="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password" EnableFilter="true" Required="true"
                                                              Label="Act. Tracker #" SearchFunc="SeachGlAccountDropdown" SearchBoxClearable="true"
                                                              @bind-Value=@expItem.Item.ActivityTrackID For="@(() => expItem.Item.ActivityTrackID)" OnlyValidateIfDirty="true">
                                                     @foreach (FinActivityTracker actTracker in _finActTrackerList)

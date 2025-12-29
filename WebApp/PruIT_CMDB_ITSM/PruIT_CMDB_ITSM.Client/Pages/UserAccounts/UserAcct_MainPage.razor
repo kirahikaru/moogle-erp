@@ -1,106 +1,79 @@
-﻿@page "/hr/employee/main"
-@using PruHR = DataLayer.Models.Pru.HR
-@using PruIT_CMDB_ITSM.Client.Pages
+﻿@page "/pru/user-acct/main"
+
+@using PruIT=DataLayer.Models.Pru.IT
 
 @* @rendermode InteractiveAuto *@
 
-@inject SweetAlertService Swal
-@inherits MainPageBase<PruHR.Employee>
+@inherits MainPageBase<PruIT.UserAccount>
 
 <MudPaper Class="px-4 py-3 rounded" Width="100%" Elevation="0" Square="true" Style="background-color:#FFFDE7; border: solid 1px var(--pru-gray-tw-100)">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<div style="color:var(--pru-red-default); font-size:28px;">
 			<span style="font-weight:800">@HeaderTitle</span>
+			<span style="font-weight:400"> | Software</span>
 		</div>
 		<MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/add_circle" Size="Size.Small" Color="Color.Primary" Class="pru-btn-base" DropShadow="false" OnClick="@(args => CreateOrEditRecord(0))">Add New</MudButton>
 	</MudStack>
 </MudPaper>
+
 <MudPaper Class="pa-3 mt-3 rounded overflow-y-auto" Width="100%" Elevation="0" Square="true" Height="calc(100vh - 170px)">
-	<!-- SEARCH / FILTER INPUT AREA ---------------------------->
 	<MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
 		<MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="pru-mud-form-field bordered"
 					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
 					  Placeholder="Search text here..." HelperText="<Search input instruction here>" Style="padding: 2px 0px 2px 0px"
 					  @bind-Value="SearchText" OnKeyDown="OnSearchBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
-		<MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/search" Size="Size.Small" Color="Color.Primary" DropShadow="false" OnClick="OnSearchClicked" Class="pru-btn-base">Search</MudButton>
+		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false"
+				   StartIcon="material-symbols-rounded/search" Class="pru-btn-base" OnClick="OnSearchClicked">Search</MudButton>
 	</MudStack>
-	<!-- DATA RESULT DISPLAY AREA ------------------------------>
-	<MudDataGrid Class="mt-2 pru-mud-datagrid main-pg" @ref="MainDataGrid" T="PruHR.Employee" ServerData="ServerDataFunc" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage=@PageSize
-					 ColumnResizeMode="ResizeMode.Container" Elevation="0" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true"
-					 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row">
+	<MudDataGrid Class="mt-2 pru-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage="50" Elevation="0"
+				 ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true"
+				 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" T="PruIT.UserAccount">
 		<Columns>
 			@* <PropertyColumn Property="x => x.ObjectName" Title="Asset Name" StickyLeft="true" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" /> *@
-			<TemplateColumn Title="Name" StickyLeft="true" 
-				HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:200px"
-                            Context="rowData">
+			<TemplateColumn Title="LBU" StickyLeft="true" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Context="rowData">
 				<CellTemplate>
-					@if (rowData.Item.EmpStatus.Is(EmployeeStatuses.TERMINATED, EmployeeStatuses.RESIGNED))
-					{
-						<span style="text-decoration:line-through; font-style:italic; color:var(--vic-gray-300);">@rowData.Item.ObjectName</span>
-					}
-					else if (rowData.Item.EmpStatus.Is(EmployeeStatuses.BLACKLIST))
-					{
-						<MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
-							<MudIcon Icon="@Icons.Material.Rounded.WarningAmber" Style="color:var(--vic-orange-500);" />
-							<span style="font-weight:600; font-style:italic; color:var(--vic-orange-500);">@rowData.Item.ObjectName</span>
-						</MudStack>
-					}
-					else
-					{
-					<span style="font-weight:600;">@rowData.Item.ObjectName</span>
-					}
+					<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
+						<MudImage Src=@(_lbuFlagList[rowData.Item.LBU!]) Height="12" />
+						<MudText Typo="Typo.body1">@rowData.Item.LBU</MudText>
+					</MudStack>
 				</CellTemplate>
-            </TemplateColumn>
-            <PropertyColumn Title="Emp ID" Property="x => x.EmpID" Sortable="false" 
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:80px" />
-            <PropertyColumn Title="Surname" Property="x => x.Surname"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" />
-            <PropertyColumn Property="x => x.GivenName" Title="Given Name"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:200px" />
-            <PropertyColumn Title="Work Type" Property="x => x.WorkerType"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:130px" />
-			<PropertyColumn Title="Sale Tag" Property="x => x.SaleTag"
-							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-							HeaderStyle="min-width:120px" />
-            <PropertyColumn Title="Job Grade" Property="x => x.JobGrade"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Job Title" Property="x => x.JobTitle"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Job Family" Property="x => x.JobFamily" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Section" Property="x => x.Section" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Division" Property="x => x.Division"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Function" Property="x => x.Function"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" 
-							HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Department" Property="x => x.Department"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Joined On" Property="x => x.JoinedDate" Format="dd-MMM-yyyy"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-							HeaderStyle="min-width:130px" />
-            <PropertyColumn Title="Last Day" Property="x => x.LastDay" Format="dd-MMM-yyyy"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-							HeaderStyle="min-width:130px" />
-            <TemplateColumn Title="Status" StickyRight="true"
+			</TemplateColumn>
+            <PropertyColumn Title="DisplayName" Property="x => x.DisplayName"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+            <PropertyColumn Title="User ID" Property="x => x.UserID"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
-                            HeaderStyle="justify-items:center"
-                            CellStyle="text-align:center; padding-top:2px !important; padding-bottom:2px !important">
-                <CellTemplate>
-                    <MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(context.Item.EmpStatus) ? _statusCssClassList[context.Item.EmpStatus!] : "status-chip-default-dark")">
-                        @EmployeeStatuses.GetDisplayText(context.Item.EmpStatus).ToUpper()
-                    </MudChip>
-                </CellTemplate>
-            </TemplateColumn>
+							HeaderStyle="min-width:185px" />
+			<PropertyColumn Title="User Name" Property="x => x.UserName"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="min-width:185px" />
+            <PropertyColumn Title="ID" Property="x => x.ObjectCode"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" />
+            <PropertyColumn Title="User Type" Property="x => x.UserType"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+            <PropertyColumn Title="User Group" Property="x => x.UserGrouping"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+            <PropertyColumn Title="Platform" Property="x => x.UserPlatform"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="min-width:155px" />
+			<TemplateColumn Title="Enabled?" Sortable="false" Filterable="false"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Context="rowData"
+							HeaderStyle="width:800px; max-width:85px">
+				<CellTemplate>
+					<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
+						@if (@rowData.Item.IsEnabled)
+						{
+							<MudIcon Icon="material-symbols-rounded/check_circle" Color="Color.Success" Size="Size.Small" />
+						}
+						else
+						{
+							<MudIcon Icon="material-symbols-rounded/cancel" Color="Color.Error" Size="Size.Small" />
+						}
+					</MudStack>
+				</CellTemplate>
+			</TemplateColumn>
+            <PropertyColumn Title="Owner" Property="x => x.ManagerEmpID" Sortable="false"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400"
+                            HeaderStyle="min-width: 75px" />
 			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
 							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
 							HeaderStyle="justify-items:center; max-width:120px; width:500px"
@@ -116,32 +89,22 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="PruHR.Employee" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] { 10, 30, 50, 80, 100 }" />
+			<MudDataGridPager T="PruIT.UserAccount" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] { 10, 30, 50, 80, 100 }" />
 		</PagerContent>
 	</MudDataGrid>
 </MudPaper>
 
 @code {
 
-	#region UI PARAM
-	Dictionary<string, string> _statusCssClassList = new()
-		{
-			{ "", "" },
-			{ EmployeeStatuses.ACTIVE, "status-chip-success-light" },
-			{ EmployeeStatuses.DRAFT, "status-chip-success-light" },
-			{ EmployeeStatuses.TERMINATED, "status-chip-obsolete-light" },
-			{ EmployeeStatuses.RESIGNED, "status-chip-obsolete-light" },
-			{ EmployeeStatuses.BLACKLIST, "status-chip-pending-light" },
-			{ EmployeeStatuses.INVALID, "status-chip-pending-light" },
-		};
-
+	#region UI Param
+	Dictionary<string, string> _lbuFlagList = PruLBUs.GetFlagIconPaths();
 	#endregion
 
 	#region PAGE LIFECYCLE EVENTS
 	public override Task SetParametersAsync(ParameterView parameters)
 	{
-		UrlPrefix = "/hr/employee";
-		SearchParamName = "employeeParam";
+		UrlPrefix = "/pru/user-acct";
+		SearchParamName = "pruUserAcctParam";
 
 		return base.SetParametersAsync(parameters);
 	}
@@ -155,7 +118,7 @@
 			CurrentAppModPerm.CanRead = true;
 			CurrentAppModPerm.CanUpdate = true;
 			CurrentAppModPerm.CanDelete = true;
-			CurrentAppModPerm.ModuleName = typeof(PruHR.Employee).Name;
+			CurrentAppModPerm.ModuleName = typeof(PruIT.UserAccount).Name;
 		}
 		else
 		{
@@ -189,9 +152,9 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<PruHR.Employee>> ServerDataFunc(GridState<PruHR.Employee> gridState)
+	protected override async Task<GridData<PruIT.UserAccount>> ServerDataFunc(GridState<PruIT.UserAccount> gridState)
 	{
-		if (IsSearching) return new GridData<PruHR.Employee>
+		if (IsSearching) return new GridData<PruIT.UserAccount>
 			{
 				Items = [],
 				TotalItems = 0
@@ -219,7 +182,7 @@
 			else
 			{
 				// KeyValuePair<int, IEnumerable<ITAsset>> result = await Uow.ITAssets.HardwareSearchAsync(0, 0, SearchText, null, null, null);
-				KeyValuePair<int, IEnumerable<PruHR.Employee>> result = await Uow.Employees.SearchAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, null, null);
+				KeyValuePair<int, IEnumerable<PruIT.UserAccount>> result = await Uow.UserAccounts.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, null, null);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}
@@ -231,7 +194,7 @@
 			//	.Take(gridState.Count)
 			//	.ToList();
 
-			return new GridData<PruHR.Employee>
+			return new GridData<PruIT.UserAccount>
 				{
 					Items = MainDataList,
 					TotalItems = totalItemCount
@@ -240,7 +203,8 @@
 		catch (Exception ex)
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
-			return new GridData<PruHR.Employee>
+
+			return new GridData<PruIT.UserAccount>
 				{
 					Items = [],
 					TotalItems = 0
@@ -260,7 +224,7 @@
 	#endregion
 
 	#region CRUD FUNCTIONS
-	private async Task DeleteRecord(PruHR.Employee objToDelete)
+	private async Task DeleteRecord(PruIT.UserAccount objToDelete)
 	{
 		if (objToDelete == null)
 		{
@@ -290,7 +254,7 @@
 			{
 				try
 				{
-					int delCount = await Uow.Employees.DeleteAsync(objToDelete.Id, AuditTrailUser);
+					int delCount = await Uow.UserAccounts.DeleteAsync(objToDelete.Id, AuditTrailUser);
 
 					if (delCount > 0)
 					{

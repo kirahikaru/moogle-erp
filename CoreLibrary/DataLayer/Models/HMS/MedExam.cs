@@ -8,7 +8,7 @@ namespace DataLayer.Models.HMS;
 /// <remarks>
 /// 
 /// </remarks>
-[Table("[hms].[MedicalExam]"), DisplayName("Medical Exam")]
+[Table("[hms].[MedExam]"), DisplayName("Medical Exam")]
 public class MedExam : WorkflowEnabledObject
 {
 	[Computed, Write(false), ReadOnly(true)]
@@ -18,7 +18,7 @@ public class MedExam : WorkflowEnabledObject
 	public new static string MsSqlTableName => typeof(MedExam).Name;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string PgTableName => "medical_exam";
+	public new static string PgTableName => "med_exam";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);

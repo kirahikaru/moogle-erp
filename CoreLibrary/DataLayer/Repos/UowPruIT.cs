@@ -19,6 +19,7 @@ public interface IUowPruIT : IUnitOfWork
 	IITAssetAuditTrailRepos ITAssetAuditTrails { get; }
 	IITAssetCategoryRepos ITAssetCategories { get; }
 	IPruCoreProjectRepos PruCoreProjects { get; }
+	
 
 	/// <summary>
 	/// a.k.a appref
@@ -28,6 +29,7 @@ public interface IUowPruIT : IUnitOfWork
 	IPurchaseOrderRepos PurchaseOrders { get; }
 	IQuotationRepos Quotations { get; }
 	IQuotationItemRepos QuotationItems { get; }
+	IUserAccountRepos UserAccounts { get; }
 	IVendorRepos Vendors { get; }
 }
 
@@ -51,6 +53,7 @@ public class UowPruIT : UnitOfWork, IUowPruIT
 		PurchaseOrders = new PurchaseOrderRepos(DbContext);
 		Quotations = new QuotationRepos(DbContext);
 		QuotationItems = new QuotationItemRepos(DbContext);
+		UserAccounts = new UserAccountRepos(DbContext);
 		Vendors = new VendorRepos(DbContext);
 	}
 
@@ -74,5 +77,6 @@ public class UowPruIT : UnitOfWork, IUowPruIT
 	public IPurchaseOrderRepos PurchaseOrders { get; }
 	public IQuotationRepos Quotations { get; }
 	public IQuotationItemRepos QuotationItems { get; }
+	public IUserAccountRepos UserAccounts { get; }
 	public IVendorRepos Vendors { get; }
 }

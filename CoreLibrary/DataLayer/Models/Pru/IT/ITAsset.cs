@@ -1,5 +1,4 @@
 ﻿using DataLayer.GlobalConstant.Pru;
-using DataLayer.Models.SysCore.NonPersistent;
 using PruHR = DataLayer.Models.Pru.HR;
 
 namespace DataLayer.Models.Pru.IT;
@@ -36,6 +35,7 @@ public class ITAsset : AuditObject
     [Required(AllowEmptyStrings = false, ErrorMessage = "Asset name is required.")]
     [MaxLength(255)]
     public new string? ObjectName { get; set; }
+	public string? LBU { get; set; }
 
 	/// <summary>
 	/// Asset Type

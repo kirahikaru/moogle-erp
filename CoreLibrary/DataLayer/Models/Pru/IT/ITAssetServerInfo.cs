@@ -1,6 +1,4 @@
-﻿using DataLayer.Models.SysCore.NonPersistent;
-
-namespace DataLayer.Models.Pru.IT;
+﻿namespace DataLayer.Models.Pru.IT;
 
 [Table("[dbo].[ITAssetServerInfo]"), DisplayName("IT Asset - Server Detail")]
 public class ITAssetServerInfo : AuditObject

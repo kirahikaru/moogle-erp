@@ -153,7 +153,13 @@
                                              @bind-Value=CurrentObject!.TotalTaxAmount For="@(() => CurrentObject.TotalTaxAmount)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="7">
-                            <MudText Typo="Typo.body1" Class="reddit-mono-400">@(CurrentObject.FileNameDisplay)</MudText>
+                            <MudStack Row=true Spacing="1" Justify="Justify.FlexStart" AlignItems="AlignItems.Center" StretchItems="StretchItems.None">
+                                <MudText Typo="Typo.body1" Color="Color.Secondary">File Name: </MudText>
+                                <MudText Typo="Typo.body1" Class="reddit-mono-400" Color="Color.Info" Style="font-weight:500;">@(CurrentObject.FileNameDisplay)</MudText>
+                                <MudTooltip Text="Copy Filename">
+                                    <MudIconButton Icon="@Icons.Material.Rounded.ContentCopy" Size="Size.Small" Color="Color.Primary" aria-label="copy" OnClick="CopyFileName" />
+                                </MudTooltip>
+                            </MudStack>
                         </MudItem>
                         <MudItem xs="12">
                             <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" MaxLines="25" Lines=4
@@ -380,6 +386,20 @@
     #endregion
 
     #region UI FUNCTIONS
+    private async Task CopyFileName()
+    {
+        try
+        {
+            await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", CurrentObject!.FileNameDisplay);
+            Snackbar.Add("File name copied", Severity.Info);
+        }
+        catch (Exception ex)
+        {
+            await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
+            Snackbar.Add("Error encountered", Severity.Error);
+        }
+    }
+
     void AddItem()
     {
         _tempItemToAdd = new()

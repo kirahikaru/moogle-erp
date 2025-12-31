@@ -274,6 +274,281 @@
                                               Label="Item Content" Placeholder="Content..."
                                               @bind-Value="CurrentObject!.ContentDesc" For="@(() => CurrentObject!.ContentDesc)" />
                             </MudItem>
+                            <MudItem xs="12" Class="mt-3"></MudItem>
+                            <MudItem xs="12" Style="padding:4px 12px; background-color:var(--ssv-pharma-blue-100)">
+                                <MudText Typo="Typo.h1" Style="font-size:18px; font-weight:700; color:var(--ssv-pharma-blue)">Specification</MudText>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudStack Spacing="2" Justify=Justify.FlexStart >
+                                    @if (!IsViewMode)
+                                    {
+                                        <MudStack Row="true" Spacing="2" Justify=Justify.FlexStart>
+                                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Primary" DropShadow="false" FullWidth="false" Class="moog-btn-base moog-btn-tight moog-btn-primary-light" StartIcon="material-symbols-rounded/add_circle"
+                                                       OnClick="AddItemSpec">
+                                                Add Spec
+                                            </MudButton>
+                                        </MudStack>
+                                    }
+                                    @* EditDialogOptions=@(new() { BackdropClick = false, MaxWidth = MaxWidth.Medium, FullWidth = true }) *@
+                                    <MudDataGrid Class="moog-mud-datagrid" Dense="true" Hover="true" FixedHeader="true" Striped="false" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None"
+                                                 Items="@CurrentObject!.Specs" T="ItemSpec" @ref="_itemSpecsGrid" NoRecordsContent="_gridNoRecord" Style="width:100%"
+                                                 ReadOnly=@IsViewMode EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell" 
+                                                 StartedEditingItem="@StartedEditingItemSpec" CanceledEditingItem="@CanceledEditingItemSpec" CommittedItemChanges="@CommittedItemSpecChanges">
+                                        <Columns>
+                                            <PropertyColumn Title="No." Property="x => x.OrderNo" Sortable="false" Editable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                            CellStyle="text-align:right" />
+                                            <PropertyColumn Title="Type" Property="x => x.ObjectName" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  Placeholder="Spec Type"
+                                                                  @bind-Value=item.Item.ObjectName For="@(() => item.Item.ObjectName)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Spec Value" Property="x => x.SpecText" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  Placeholder="Spec Value"
+                                                                  @bind-Value=item.Item.SpecText For="@(() => item.Item.SpecText)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Value" Property="x => x.SpecValue" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderStyle="width:100px; max-width:80px" Context="item">
+                                                <EditTemplate>
+                                                    <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                     Placeholder="Qty" Format="#,##0.##" Step="0.1"
+                                                                     @bind-Value="item.Item.SpecValue" T="double?" For="(() => item.Item.SpecValue)"
+                                                                     Style="text-align:right" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Unit" Property="x => x.SpecUnit" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  Placeholder="Unit"
+                                                                  @bind-Value=item.Item.SpecUnit For="@(() => item.Item.SpecUnit)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                            CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
+                                                            Context="item">
+                                                <CellTemplate>
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemSpecUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemSpecDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItemSpec(item.Item))" />
+                                                </CellTemplate>
+                                                <EditTemplate>
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemSpecUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemSpecDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItemSpec(item.Item))" />
+                                                </EditTemplate>
+                                            </TemplateColumn>
+                                        </Columns>
+                                    </MudDataGrid>
+                                </MudStack>
+                            </MudItem>
+                            <MudItem xs="12" Class="mt-3"></MudItem>
+                            <MudItem xs="12" Style="padding:4px 12px; background-color:var(--ssv-pharma-blue-100)">
+                                <MudText Typo="Typo.h1" Style="font-size:18px; font-weight:700; color:var(--ssv-pharma-blue)">Variation</MudText>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudStack Spacing="2" Justify=Justify.FlexStart>
+                                    @if (!IsViewMode)
+                                    {
+                                        <MudStack Row="true" Spacing="2" Justify=Justify.FlexStart>
+                                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Primary" DropShadow="false" FullWidth="false" Class="moog-btn-base moog-btn-tight moog-btn-primary-light" StartIcon="material-symbols-rounded/add_circle"
+                                                       OnClick="AddItemVar">
+                                                Add Variation
+                                            </MudButton>
+                                        </MudStack>
+                                    }
+                                    @* EditDialogOptions=@(new() { BackdropClick = false, MaxWidth = MaxWidth.Medium, FullWidth = true }) *@
+                                    <MudDataGrid Class="moog-mud-datagrid" Dense="true" Hover="true" FixedHeader="true" Striped="false" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None"
+                                                 Items="@CurrentObject!.Variations" T="ItemVariation" @ref="_itemVarsGrid" NoRecordsContent="_gridNoRecord" Style="width:100%" QuickFilter="@_quickItemVarFilter"
+                                                 ReadOnly=@IsViewMode EditTrigger="DataGridEditTrigger.Manual" EditMode="DataGridEditMode.Form" EditDialogOptions="new DialogOptions() { BackdropClick=false, Position=DialogPosition.Center, FullWidth=true, MaxWidth=MaxWidth.Large }"
+                                                 StartedEditingItem="@StartedEditingItemVar" CanceledEditingItem="@CanceledEditingItemVar" CommittedItemChanges="@CommittedItemVarChanges">
+                                        <Columns>
+                                            <PropertyColumn Title="No." Property="x => x.SeqNo" Sortable="false" Editable="false" Hidden="true"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            CellStyle="text-align:right" Context="item">
+                                                            <EditTemplate>
+
+                                                            </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Name" Property="x => x.ObjectName" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" StretchItems="StretchItems.None" Class="mt-3">
+                                                        <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  Label="Name" Placeholder="Name"
+                                                                  @bind-Value=item.Item.ObjectName For="@(() => item.Item.ObjectName)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                        <div style="max-width:165px">
+                                                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false" FullWidth="false"
+                                                                          AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                                                          Label="Barcode"
+                                                                          @bind-Value="item.Item.Barcode" For="@(() => item.Item.Barcode)" />
+                                                        </div>
+                                                    </MudStack>
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Barcode" Property="x => x.Barcode" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            Context="item">
+                                                <EditTemplate>
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Description" Property="x => x.Desc" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered mt-3" Required="false"
+                                                                  Label="Description" Placeholder="Description"
+                                                                  @bind-Value=item.Item.Desc For="@(() => item.Item.Desc)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Color" Property="x => x.ColorDesc" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Class="mt-3">
+                                                        <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                                                      Label="Color" Placeholder="Color description..."
+                                                                      @bind-Value=item.Item.ColorDesc For="@(() => item.Item.ColorDesc)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                        <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                                                      Label="Size Desc" Placeholder="Size description..."
+                                                                      @bind-Value=item.Item.SizeDesc For="@(() => item.Item.SizeDesc)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                    </MudStack>
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Size Desc" Property="x => x.SizeDesc" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            Context="item">
+                                                <EditTemplate>
+
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Size" Property="x => x.DimensionText" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Class="mt-3">
+                                                        <div style="max-width:80px">
+                                                            <MudSelect ReadOnly=@IsViewMode ShrinkLabel="true" Clearable="true" Class="moog-mud-form-field bordered moog-ui-select" PopoverClass="moog-ui-select-popover"
+                                                                       Label="Unit" T="string"
+                                                                       Value="@item.Item.SizeUnitCode" For="(() => item.Item.SizeUnitCode)" ValueChanged="@(args => OnItemVarSizeUnitChanged(args, item.Item))">
+                                                                @foreach (var uom in _dimensionUnitList)
+                                                                {
+                                                                    <MudSelectItem T="string" Value="@uom.ObjectCode">@uom.UnitSymbol</MudSelectItem>
+                                                                }
+                                                            </MudSelect>
+                                                        </div>
+                                                        <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                         Label="Height" T="decimal?" Placeholder="Height"
+                                                                         @bind-Value="item.Item.Height" For="(() => item.Item.Height)"
+                                                                         Step="0.1M" Format="#,##0.##" />
+                                                        <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                         Label="Length" Placeholder="Length" T="decimal?"
+                                                                         @bind-Value="item.Item.Length" For="(() => item.Item.Length)"
+                                                                         Step="0.1M" Format="#,##0.##" />
+                                                        <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                         Label="Width" Placeholder="Width" T="decimal?"
+                                                                         @bind-Value="item.Item.Width" For="(() => item.Item.Width)"
+                                                                         Step="0.1M" Format="#,##0.##" />
+                                                    </MudStack>
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Weight" Property="x => x.WeightText" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" StretchItems="StretchItems.None" Class="mt-3">
+                                                        <div style="max-width:80px">
+                                                            <MudSelect ReadOnly=@IsViewMode ShrinkLabel="true" Clearable="true" Class="moog-mud-form-field bordered moog-ui-select" PopoverClass="moog-ui-select-popover"
+                                                                       Label="Weight Unit" T="string"
+                                                                       Value="@item.Item.WeightUnitCode" For="(() => item.Item.WeightUnitCode)" ValueChanged="@(args => OnItemVarWeightUnitChanged(args, item.Item))">
+                                                                @foreach (var wt in _weightUnitList)
+                                                                {
+                                                                    <MudSelectItem T="string" Value="@wt.ObjectCode">@wt.UnitSymbol</MudSelectItem>
+                                                                }
+                                                            </MudSelect>
+                                                        </div>
+                                                        <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                         Label="Weight" Placeholder="Weight" T="decimal?"
+                                                                         @bind-Value="item.Item.Weight" For="(() => item.Item.Weight)"
+                                                                         Step="0.1M" Format="#,##0.##" />
+                                                    </MudStack>
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="RMP" Property="x => x.RetailUnitPriceText" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" StretchItems="StretchItems.None" Class="mt-3">
+                                                        <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                                                                     PopoverClass="moog-ui-combo-box-popover"
+                                                                     Label="Currency" T="string"
+                                                                     ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _currencyList.SingleOrDefault<DropdownSelectItem>(x => x.Key == e)?.Value)"
+                                                                     @bind-Value="CurrentObject!.CurrencyCode" For="@(() => CurrentObject!.CurrencyCode)">
+                                                            @foreach (var curr in _currencyList)
+                                                            {
+                                                                <MudComboBoxItem T="string" Value="@curr.Key" Text="@curr.Value">@curr.Value</MudComboBoxItem>
+                                                            }
+                                                        </MudComboBox>
+                                                        <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                         AdornmentIcon="material-symbols-rounded/attach_money" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                                                         Label="RMP" Step="0.1M" Format="#,##0.##"
+                                                                         @bind-Value="item.Item.RetailUnitPrice" For="(() => CurrentObject.RetailUnitPrice)" T="decimal?" />
+                                                        <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                         Adornment="Adornment.Start" AdornmentColor="@Color.Primary" AdornmentText="KHR"
+                                                                         Label="RMP (KHR)" Step="1" Format="#,##0"
+                                                                         @bind-Value="item.Item.RetailUnitPriceKhr" For="(() => CurrentObject.RetailUnitPriceKhr)" T="int?" />
+                                                    </MudStack>
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="WSP" Property="x => x.WholeSaleUnitPriceText" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" StretchItems="StretchItems.None" Class="mt-3">
+                                                        <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                         AdornmentIcon="material-symbols-rounded/attach_money" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                                                         Label="WSP" Step="0.1M" Format="#,##0.##"
+                                                                         @bind-Value="item.Item.WholeSaleUnitPrice" For="(() => CurrentObject.WholeSaleUnitPrice)" T="decimal?" />
+                                                        <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                         Adornment="Adornment.Start" AdornmentColor="@Color.Primary" AdornmentText="KHR"
+                                                                         Label="WSP (KHR)" Step="1" Format="#,##0"
+                                                                         @bind-Value="item.Item.WholeSaleUnitPriceKhr" For="(() => CurrentObject.WholeSaleUnitPriceKhr)" T="int?" />
+                                                    </MudStack>
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                            CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
+                                                            Context="item">
+                                                <CellTemplate>
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" Color="Color.Info" OnClick="@item.Actions.StartEditingItemAsync" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemVarUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemVarDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItemVar(item.Item))" />
+                                                </CellTemplate>
+                                                @* <EditTemplate>
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemVarUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemVarDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItemVar(item.Item))" />
+                                                </EditTemplate> *@
+                                            </TemplateColumn>
+                                        </Columns>
+                                    </MudDataGrid>
+                                </MudStack>
+                            </MudItem>
                         </MudGrid>
                         <MudPaper MinWidth="500px" MaxWidth="500px" MaxHeight="1000px" MinHeight="500px" Class="pa-2" Elevation="0" >
                             <MudCarousel Class="mud-full-width" ShowArrows="false" ShowBullets="true" BulletsPosition="Position.End" EnableSwipeGesture="true" AutoCycle="false" TData="object" Style="min-height:540px">
@@ -332,39 +607,121 @@
                     </MudStack>
                 </MudPaper>
             </MudTabPanel>
-            <MudTabPanel Icon="@Icons.Material.Rounded.Info" Text="Other Info" Style="height:100%">
-                <MudDataGrid Class="main-pg-datagrid mt-2" T="ItemSupplier" Items="CurrentObject!.Suppliers" Dense="true" Hover="true" FixedHeader="true" Striped="true" 
-			                ColumnResizeMode="ResizeMode.Container" Height="calc(100vh - 270px)" >
-		            <Columns>
-                        <PropertyColumn Property="x => x.Supplier!.ObjectName" Title="Phone Line 1" HeaderClass="mud-datagrid-hdr" HeaderStyle=@DataGridHdrStyle CellClass="mud-datagrid-cell" />
-                        <TemplateColumn Title="Phone Line 1" HeaderClass="mud-datagrid-hdr" Sortable="false" Filterable="false" HeaderStyle=@DataGridHdrStyle
-                                        CellClass="mud-datagrid-cell" Context="rowData">
-                            <CellTemplate>
-                                @if (@rowData.Item.Supplier != null)
+            <MudTabPanel Icon="material-symbols-rounded/info" Text="Other Info">
+                <MudPaper Class="rounded-0" Elevation="1" Height="calc(100vh - 194px)" Style="overflow-y: auto; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px">
+                    <MudGrid Spacing="3" Class="pa-3">
+                        <MudItem xs="12" Style="padding:4px 12px; background-color:var(--ssv-pharma-blue-100)">
+                            <MudText Typo="Typo.h1" Style="font-size:18px; font-weight:700; color:var(--ssv-pharma-blue)">Supplier</MudText>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudStack Spacing="2" Justify=Justify.FlexStart>
+                                @if (!IsViewMode)
                                 {
-                                    <MudText Typo="Typo.body1">@rowData.Item.Supplier.PhoneLine1</MudText>
+                                    <MudStack Row="true" Spacing="2" Justify=Justify.FlexStart>
+                                        <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Primary" DropShadow="false" FullWidth="false" Class="moog-btn-base moog-btn-tight moog-btn-primary-light" StartIcon="material-symbols-rounded/add_circle"
+                                                   OnClick="AddSupplier">
+                                            Add Supplier
+                                        </MudButton>
+                                    </MudStack>
                                 }
-                                else
-                                {
-                                    <MudText Typo="Typo.body1">-</MudText>
-                                }
-                            </CellTemplate>
-                        </TemplateColumn>
-                        <TemplateColumn Title="Phone Line 2" HeaderClass="mud-datagrid-hdr" Sortable="false" Filterable="false" HeaderStyle=@DataGridHdrStyle
-                                        CellClass="mud-datagrid-cell" Context="rowData">
-                            <CellTemplate>
-                                @if (@rowData.Item.Supplier != null)
-                                {
-                                    <MudText Typo="Typo.body1">@rowData.Item.Supplier.PhoneLine1</MudText>
-                                }
-                                else
-                                {
-                                    <MudText Typo="Typo.body1">-</MudText>
-                                }
-                            </CellTemplate>
-                        </TemplateColumn>
-		            </Columns>
-                </MudDataGrid>
+                                @* EditDialogOptions=@(new() { BackdropClick = false, MaxWidth = MaxWidth.Medium, FullWidth = true }) *@
+                                <MudDataGrid Class="moog-mud-datagrid" Dense="true" Hover="true" FixedHeader="true" Striped="false" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None"
+                                             Items="@CurrentObject!.Suppliers" T="ItemSupplier" @ref="_supplierGrid" NoRecordsContent="_gridNoRecord" Style="width:100%"
+                                             ReadOnly=@IsViewMode EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
+                                             StartedEditingItem="@StartedEditingSupplier" CanceledEditingItem="@CanceledEditingSupplier" CommittedItemChanges="@CommittedSupplierChanges">
+                                    <Columns>
+                                        <PropertyColumn Title="No." Property="x => x.SeqNo" Sortable="false" Editable="false"
+                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                        Style="width: 100px; max-width:40px" CellStyle="text-align:right" />
+                                        <PropertyColumn Title="Supplier" Property="x => x.SupplierName" Sortable="false"
+                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                        Context="item">
+                                            <EditTemplate>
+                                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password" Required="true"
+                                                             PopoverClass="moog-ui-combo-box-popover" T="int?"
+                                                             ToStringFunc="@(e => (e is null || e!.Value < 0) ? "" : _supplierList.SingleOrDefault<Supplier>(x => x.Id == e)?.ObjectName)"
+                                                             Value="item.Item.SupplierId" For="@(() => item.Item.SupplierId)">
+                                                    @foreach (var s in _supplierList)
+                                                    {
+                                                        <MudComboBoxItem T="int?" Value="@s.Id" Text="@s.ObjectName">@s.ObjectName</MudComboBoxItem>
+                                                    }
+                                                </MudComboBox>
+                                            </EditTemplate>
+                                        </PropertyColumn>
+                                        <PropertyColumn Title="Description" Property="x => x.ObjectName" Sortable="false"
+                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                        Context="item">
+                                            <EditTemplate>
+                                                <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                              Placeholder="Description..."
+                                                              @bind-Value=item.Item.ObjectName For="@(() => item.Item.ObjectName)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                            </EditTemplate>
+                                        </PropertyColumn>
+                                        <PropertyColumn Title="Currency" Property="x => x.UnitPriceCurrencyCode" Sortable="false"
+                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderStyle="width:300px; max-width:140px" Context="item">
+                                            <EditTemplate>
+                                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                                                             PopoverClass="moog-ui-combo-box-popover" T="string"
+                                                             ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _currencyList.SingleOrDefault<DropdownSelectItem>(x => x.Key == e)?.Value)"
+                                                             @bind-Value="item.Item.UnitPriceCurrencyCode" For="@(() => item.Item.UnitPriceCurrencyCode)">
+                                                    @foreach (var curr in _currencyList)
+                                                    {
+                                                        <MudComboBoxItem T="string" Value="@curr.Key" Text="@curr.Value">@curr.Value</MudComboBoxItem>
+                                                    }
+                                                </MudComboBox>
+                                            </EditTemplate>
+                                        </PropertyColumn>
+                                        <PropertyColumn Title="Unit Price" Property="x => x.UnitPriceText" Sortable="false"
+                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderStyle="width:300px; max-width:140px" Context="item">
+                                            <EditTemplate>
+                                                <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                 AdornmentIcon="material-symbols-rounded/attach_money" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                                                 Step="0.1M" Format="#,##0.##"
+                                                                 @bind-Value="item.Item.UnitPrice" For="(() => item.Item.UnitPrice)" T="decimal?" />
+                                            </EditTemplate>
+                                        </PropertyColumn>
+                                        <PropertyColumn Title="Unit Price (US$)" Property="x => x.UnitPriceText" Sortable="false"
+                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderStyle="width:300px; max-width:140px" Context="item">
+                                            <EditTemplate>
+                                                <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                 AdornmentIcon="material-symbols-rounded/attach_money" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                                                 Step="0.1M" Format="#,##0.00"
+                                                                 @bind-Value="item.Item.UnitPriceUsd" For="(() => item.Item.UnitPriceUsd)" T="decimal?" />
+                                            </EditTemplate>
+                                        </PropertyColumn>
+                                        <PropertyColumn Title="Unit Price (KHR)" Property="x => x.UnitPriceText" Sortable="false"
+                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderStyle="width:300px; max-width:180px" Context="item">
+                                            <EditTemplate>
+                                                <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                 Step="1" Format="#,##0"
+                                                                 @bind-Value="item.Item.UnitPriceKhr" For="(() => item.Item.UnitPriceKhr)" T="int?" />
+                                            </EditTemplate>
+                                        </PropertyColumn>
+                                        <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
+                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                        CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
+                                                        HeaderStyle="width:300px; max-width:100px" Context="item">
+                                            <CellTemplate>
+                                                <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveSupplierUp(item.Item))" />
+                                                <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveSupplierDown(item.Item))" />
+                                                <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveSupplier(item.Item))" />
+                                            </CellTemplate>
+                                            <EditTemplate>
+                                                <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveSupplierUp(item.Item))" />
+                                                <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveSupplierDown(item.Item))" />
+                                                <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveSupplier(item.Item))" />
+                                            </EditTemplate>
+                                        </TemplateColumn>
+                                    </Columns>
+                                </MudDataGrid>
+                            </MudStack>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
             </MudTabPanel>
         </MudTabs>
     </EditForm>
@@ -373,9 +730,10 @@
 @code {
 
     #region UI PARAM
+    RenderFragment _gridNoRecord = @<p>No record</p>;
     List<DropdownSelectItem> _itemCategoryList = [];
     List<DropDownListItem> _countryList = [];
-    List<DropdownSelectItem> _merchantList = [];
+    List<Supplier> _supplierList = [];
     IEnumerable<DropdownSelectItem> _medCompList = [];
     IEnumerable<string> _brandList = [];
     MudTextField<string>? _mtfObjName;
@@ -390,7 +748,14 @@
     List<UnitOfMeasure> _itemUnitList = [];
     List<DropdownSelectItem> _currencyList = [];
 
-    public readonly string DataGridHdrStyle = "font-weight:700; background-color:var(--ssv-pharma-blue); color:#FFFFFF; border-right:1px solid #FFFFFF; padding-inline-start: 10px; padding-inline-end:5px; line-height:100%; padding-top:4px; padding-bottom:4px";
+    MudDataGrid<ItemSpec> _itemSpecsGrid = new();
+    ItemSpec? _tempItemSpecToAdd;
+
+    MudDataGrid<ItemVariation> _itemVarsGrid = new();
+    ItemVariation? _tempItemVarToAdd;
+
+    MudDataGrid<ItemSupplier> _supplierGrid = new();
+    ItemSupplier? _tempSupplierToAdd;
     #endregion
 
     #region PAGE LIFECYCLE FUNCTIONS
@@ -431,7 +796,11 @@
         CurrentEditContext = new EditContext(CurrentObject!);
 
         if (CurrentObject != null && CurrentObject.Id > 0)
+        {
             _images = await Uow.AttachedImages.GetByLinkedObjectAsync(CurrentObject.Id, CurrentObject.GetType().Name);
+            CurrentObject.Specs = await Uow.ItemSpecs.GetByItemAsync(CurrentObject.Id);
+            CurrentObject.Suppliers = await Uow.ItemSuppliers.GetByItemAsync(CurrentObject.Id);
+        }
 
         await PopulatedUIControls();
     }
@@ -517,6 +886,304 @@
             _itemUnitSymbol = "";
         }
     }
+
+    #region Item Specification
+    // quick filter - filter globally across multiple columns with the same input
+    private Func<ItemSpec, bool> _quickItemSpecFilter => x =>
+    {
+        return !x.IsDeleted;
+    };
+
+    void AddItemSpec()
+    {
+        _tempItemSpecToAdd = new()
+        {
+            OrderNo = CurrentObject!.Specs.Count + 1
+        };
+
+        CurrentObject!.Specs.Add(_tempItemSpecToAdd);
+        // _itemDataGrid.SetEditingItemAsync(_tempItemToAdd);
+    }
+
+    void MoveItemSpecUp(ItemSpec itemSpec)
+    {
+        if (CurrentObject!.Specs.Count > 1 && itemSpec.OrderNo!.Value > 1)
+        {
+            itemSpec.OrderNo--;
+
+            ItemSpec? a = CurrentObject!.Specs.FirstOrDefault(x => x.IsDeleted == false && x.OrderNo is not null && x.OrderNo == itemSpec.OrderNo && x != itemSpec);
+
+            if (a != null)
+                a!.OrderNo++;
+
+            CurrentObject!.Specs = CurrentObject!.Specs.OrderBy(x => x.OrderNo).ToList();
+        }
+    }
+
+    void MoveItemSpecDown(ItemSpec itemSpec)
+    {
+        if (CurrentObject!.Specs.Count > 1 && CurrentObject!.Specs.Count != itemSpec.OrderNo!.Value)
+        {
+            itemSpec.OrderNo++;
+
+            ItemSpec? a = CurrentObject!.Specs.FirstOrDefault(x => x.IsDeleted == false && x.OrderNo is not null && x.OrderNo == itemSpec.OrderNo && x != itemSpec);
+
+            if (a != null)
+                a!.OrderNo--;
+
+            CurrentObject!.Specs = CurrentObject!.Specs.OrderBy(x => x.OrderNo).ToList();
+        }
+    }
+
+    void RemoveItemSpec(ItemSpec itemSpec)
+    {
+        if (itemSpec.Id == 0)
+        {
+            CurrentObject!.Specs.Remove(itemSpec);
+
+            foreach (var var in CurrentObject!.Specs.Where(x => !x.IsDeleted && x.OrderNo > itemSpec.OrderNo))
+            {
+                var.OrderNo--;
+            }
+        }
+        else if (itemSpec.Id > 0)
+        {
+            foreach (var var in CurrentObject!.Specs.Where(x => !x.IsDeleted && x.OrderNo > itemSpec.OrderNo))
+                var.OrderNo--;
+
+            itemSpec.OrderNo = null;
+            itemSpec.IsDeleted = true;
+        }
+    }
+
+    void StartedEditingItemSpec(ItemSpec itemSpec)
+    {
+
+    }
+
+    void CanceledEditingItemSpec(ItemSpec item)
+    {
+        if (_tempItemSpecToAdd != null)
+        {
+            CurrentObject!.Specs.RemoveAt(CurrentObject!.Specs.FindIndex(x => x.OrderNo == item.OrderNo));
+            _tempItemSpecToAdd = null;
+        }
+    }
+
+    void CommittedItemSpecChanges(ItemSpec item)
+    {
+        _tempItemSpecToAdd = null;
+    }
+    #endregion
+
+    #region Item Variation
+    // quick filter - filter globally across multiple columns with the same input
+    private Func<ItemVariation, bool> _quickItemVarFilter => x =>
+    {
+        return !x.IsDeleted;
+    };
+
+
+    void AddItemVar()
+    {
+        _tempItemVarToAdd = new()
+        {
+            SeqNo = CurrentObject!.Variations.Count + 1
+        };
+
+        _itemVarsGrid.SetEditingItemAsync(_tempItemVarToAdd);
+    }
+
+    void MoveItemVarUp(ItemVariation itemVar)
+    {
+        if (CurrentObject!.Variations.Count > 1 && itemVar.SeqNo!.Value > 1)
+        {
+            itemVar.SeqNo--;
+
+            ItemVariation? a = CurrentObject!.Variations.FirstOrDefault(x => x.IsDeleted == false && x.SeqNo is not null && x.SeqNo == itemVar.SeqNo && x != itemVar);
+
+            if (a != null)
+                a!.SeqNo++;
+
+            CurrentObject!.Variations = CurrentObject!.Variations.OrderBy(x => x.SeqNo).ToList();
+        }
+    }
+
+    void MoveItemVarDown(ItemVariation itemVar)
+    {
+        if (CurrentObject!.Variations.Count > 1 && CurrentObject!.Variations.Count != itemVar.SeqNo!.Value)
+        {
+            itemVar.SeqNo++;
+
+            ItemVariation? a = CurrentObject!.Variations.FirstOrDefault(x => x.IsDeleted == false && x.SeqNo is not null && x.SeqNo == itemVar.SeqNo && x != itemVar);
+
+            if (a != null)
+                a!.SeqNo--;
+
+            CurrentObject!.Variations = CurrentObject!.Variations.OrderBy(x => x.SeqNo).ToList();
+        }
+    }
+
+    void RemoveItemVar(ItemVariation itemVar)
+    {
+        if (itemVar.Id == 0)
+        {
+            CurrentObject!.Variations.Remove(itemVar);
+
+            foreach (var var in CurrentObject!.Variations.Where(x => !x.IsDeleted && x.SeqNo > itemVar.SeqNo))
+            {
+                var.SeqNo--;
+            }
+        }
+        else if (itemVar.Id > 0)
+        {
+            foreach (var var in CurrentObject!.Variations.Where(x => !x.IsDeleted && x.SeqNo > itemVar.SeqNo))
+                var.SeqNo--;
+
+            itemVar.SeqNo = null;
+            itemVar.IsDeleted = true;
+        }
+    }
+
+    void StartedEditingItemVar(ItemVariation itemVar)
+    {
+
+    }
+
+    void CanceledEditingItemVar(ItemVariation item)
+    {
+        if (_tempItemVarToAdd != null)
+        {
+            _tempItemVarToAdd = null;
+        }
+    }
+
+    void CommittedItemVarChanges(ItemVariation item)
+    {
+        if (_tempItemVarToAdd != null)
+        {
+            CurrentObject!.Variations.Add(item);
+            _tempItemVarToAdd = null;
+        }
+    }
+
+    void OnItemVarSizeUnitChanged(string value, ItemVariation itemVar)
+    {
+        itemVar.SizeUnitCode = value;
+
+        if (!string.IsNullOrEmpty(value))
+        {
+            itemVar.DimensionUnit = _dimensionUnitList.SingleOrDefault<UnitOfMeasure>(x => x.ObjectCode == value);
+        }
+        else
+        {
+            itemVar.DimensionUnit = null;
+        }
+    }
+
+    void OnItemVarWeightUnitChanged(string value, ItemVariation itemVar)
+    {
+        itemVar.WeightUnitCode = value;
+
+        if (!string.IsNullOrEmpty(value))
+        {
+            itemVar.WeightUnit = _weightUnitList.SingleOrDefault<UnitOfMeasure>(x => x.ObjectCode == value);
+        }
+        else
+        {
+            itemVar.WeightUnit = null;
+        }
+    }
+    #endregion
+    #endregion
+
+    #region Item Supplier
+    // quick filter - filter globally across multiple columns with the same input
+    private Func<ItemSupplier, bool> _quickSupplierFilter => x =>
+    {
+        return !x.IsDeleted;
+    };
+
+    void AddSupplier()
+    {
+        _tempSupplierToAdd = new()
+        {
+            SeqNo = CurrentObject!.Suppliers.Count + 1
+        };
+
+        CurrentObject!.Suppliers.Add(_tempSupplierToAdd);
+        // _itemDataGrid.SetEditingItemAsync(_tempItemToAdd);
+    }
+
+    void RemoveSupplier(ItemSupplier supplier)
+    {
+        if (supplier.Id == 0)
+        {
+            CurrentObject!.Suppliers.Remove(supplier);
+
+            foreach (var var in CurrentObject!.Suppliers.Where(x => !x.IsDeleted && x.SeqNo > supplier.SeqNo))
+            {
+                var.SeqNo--;
+            }
+        }
+        else if (supplier.Id > 0)
+        {
+            foreach (var var in CurrentObject!.Suppliers.Where(x => !x.IsDeleted && x.SeqNo > supplier.SeqNo))
+                var.SeqNo--;
+
+            supplier.SeqNo = null;
+            supplier.IsDeleted = true;
+        }
+    }
+
+    void MoveSupplierUp(ItemSupplier supplier)
+    {
+        if (CurrentObject!.Suppliers.Count > 1 && supplier.SeqNo!.Value > 1)
+        {
+            supplier.SeqNo--;
+
+            ItemSupplier? a = CurrentObject!.Suppliers.FirstOrDefault(x => x.IsDeleted == false && x.SeqNo is not null && x.SeqNo == supplier.SeqNo && x != supplier);
+
+            if (a != null)
+                a!.SeqNo++;
+
+            CurrentObject!.Suppliers = CurrentObject!.Suppliers.OrderBy(x => x.SeqNo).ToList();
+        }
+    }
+
+    void MoveSupplierDown(ItemSupplier supplier)
+    {
+        if (CurrentObject!.Suppliers.Count > 1 && CurrentObject!.Suppliers.Count != supplier.SeqNo!.Value)
+        {
+            supplier.SeqNo++;
+
+            ItemSupplier? a = CurrentObject!.Suppliers.FirstOrDefault(x => x.IsDeleted == false && x.SeqNo is not null && x.SeqNo == supplier.SeqNo && x != supplier);
+
+            if (a != null)
+                a!.SeqNo--;
+
+            CurrentObject!.Suppliers = CurrentObject!.Suppliers.OrderBy(x => x.SeqNo).ToList();
+        }
+    }
+
+    void StartedEditingSupplier(ItemSupplier supplier)
+    {
+
+    }
+
+    void CanceledEditingSupplier(ItemSupplier supplier)
+    {
+        if (_tempSupplierToAdd != null)
+        {
+            CurrentObject!.Suppliers.RemoveAt(CurrentObject!.Suppliers.FindIndex(x => x.SeqNo == supplier.SeqNo));
+            _tempSupplierToAdd = null;
+        }
+    }
+
+    void CommittedSupplierChanges(ItemSupplier supplier)
+    {
+        _tempSupplierToAdd = null;
+    }
     #endregion
 
     #region DB UPDATE FUNCTIONS
@@ -577,7 +1244,7 @@
         _brandList = await Uow.Brands.GetAllBrandNamesAsync();
         _countryList = await Uow.Countries.GetForDropdownSelect1Async();
         _itemCategoryList = await Uow.ItemCategories.GetForDropdownSelectAsync();
-        _merchantList = await Uow.Merchants.GetForDropdownSelectAsync();
+        _supplierList = await Uow.Suppliers.GetAllAsync();
 
         _dimensionUnitList = await Uow.UoMs.GetByTypeAsync(UnitOfMeasureTypes.LENGTH);
         _weightUnitList = await Uow.UoMs.GetByTypeAsync(UnitOfMeasureTypes.MASS);

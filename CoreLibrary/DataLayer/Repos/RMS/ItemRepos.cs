@@ -155,13 +155,13 @@ public class ItemRepos(IDbContext dbContext) : BaseRepos<Item>(dbContext, Item.D
         if (data is not null)
         {
 			var priceHistorySql = $"SELECT * FROM {ItemPriceHistory.MsSqlTable} WHERE IsDeleted=0 AND ItemId=@ItemId Order By StartDateTime DESC";
-			List<ItemPriceHistory> priceHistories = (await cn.QueryAsync<ItemPriceHistory>(priceHistorySql, new { ItemId = id })).ToList();
+			var priceHistories = (await cn.QueryAsync<ItemPriceHistory>(priceHistorySql, new { ItemId = id })).AsList();
             data!.ItemPriceHistories = priceHistories;
 
 			var attachedImageSql = $"SELECT * FROM {AttachedImage.MsSqlTable} WHERE IsDeleted=0 AND LinkedObjectType=@LinkedObjectType AND LinkedObjectId=@LinkedObjectId";
 			if (includeAttachedImages)
             {
-                List<AttachedImage> attachedImages = (await cn.QueryAsync<AttachedImage>(attachedImageSql, new { LinkedObjectType = typeof(Item).Name, LinkedObjectId = id })).ToList();
+                var attachedImages = (await cn.QueryAsync<AttachedImage>(attachedImageSql, new { LinkedObjectType = typeof(Item).Name, LinkedObjectId = id })).AsList();
                 data.Images = attachedImages;
             }
 
@@ -267,6 +267,18 @@ public class ItemRepos(IDbContext dbContext) : BaseRepos<Item>(dbContext, Item.D
                 }
             }
 
+            foreach (ItemSpec spec in obj.Specs)
+            {
+                spec.ItemId = objId;
+                spec.ItemCode = obj.ObjectCode;
+                spec.CreatedUser = obj.CreatedUser;
+                spec.CreatedDateTime = obj.CreatedDateTime;
+                spec.ModifiedUser = obj.ModifiedUser;
+                spec.ModifiedDateTime = obj.ModifiedDateTime;
+
+                int specId = await cn.InsertAsync(spec, tran);
+            }
+
             tran.Commit();
             return objId;
         }
@@ -340,7 +352,31 @@ public class ItemRepos(IDbContext dbContext) : BaseRepos<Item>(dbContext, Item.D
                 }
             }
 
-            tran.Commit();
+			foreach (ItemSpec spec in obj.Specs)
+			{
+                if (spec.Id > 0)
+                {
+                    spec.ItemId = obj.Id;
+                    spec.ItemCode = obj.ObjectCode;
+                    spec.ModifiedUser = obj.ModifiedUser;
+                    spec.ModifiedDateTime = obj.ModifiedDateTime;
+                    bool isSpecUpd = await cn.UpdateAsync(spec, tran);
+                }
+                else if (spec.Id == 0)
+                {
+                    spec.ItemId = obj.Id;
+                    spec.ItemCode = obj.ObjectCode;
+                    spec.CreatedUser = obj.ModifiedUser;
+                    spec.CreatedDateTime = obj.ModifiedDateTime;
+                    spec.ModifiedUser = obj.ModifiedUser;
+                    spec.ModifiedDateTime = obj.ModifiedDateTime;
+                    int specId = await cn.InsertAsync(spec, tran);
+                }
+                else
+                    throw new Exception("Invalid ItemSpec.Id");
+			}
+
+			tran.Commit();
             return isUpdated;
         }
         catch

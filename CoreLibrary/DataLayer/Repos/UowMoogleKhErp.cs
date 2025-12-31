@@ -1,4 +1,6 @@
-﻿using DataLayer.Repos.FIN;
+﻿using DataLayer.Models.HMS;
+using DataLayer.Repos.EMS;
+using DataLayer.Repos.FIN;
 using DataLayer.Repos.HMS;
 using DataLayer.Repos.Hobby;
 using DataLayer.Repos.HomeInventory;
@@ -7,7 +9,6 @@ using DataLayer.Repos.PMS;
 using DataLayer.Repos.RMS;
 using DataLayer.Repos.SysCore;
 using Microsoft.Extensions.Options;
-using DataLayer.Repos.EMS;
 
 namespace DataLayer.Repos;
 
@@ -44,6 +45,7 @@ public interface IUowMoogleKhErp : IUnitOfWork
 	#endregion
 
 	#region HMS - Healthcare Management System
+    IDiseaseRepos Diseases { get; }
 	IDoctorRepos Doctors { get; }
 	IHealthcareFacilityRepos HealthcareFacilities { get; }
 	IIllnessRepos Illnesses { get; }
@@ -72,8 +74,14 @@ public interface IUowMoogleKhErp : IUnitOfWork
 	#region PMS - Pharmacy Management System
 	IMedicineRepos Medicines { get; }
 	IMedEquipRepos MedicalEquipments { get; }
-	IMedicineCompositionRepos MedicineCompositions { get; }
-	IMedicalCompositionRepos MedicalCompositions { get; }
+    /// <summary>
+    /// Medicine Composition
+    /// </summary>
+	IMedicineCompRepos MedicineComps { get; }
+    /// <summary>
+    /// Medical Composition
+    /// </summary>
+	IMedicalCompRepos MedicalComps { get; }
 	#endregion
 
 	#region RMS - Retail Management System
@@ -96,6 +104,7 @@ public interface IUowMoogleKhErp : IUnitOfWork
 	IItemRepos Items { get; }
 	IItemCategoryRepos ItemCategories { get; }
 	IItemPriceHistoryRepos ItemPriceHistories { get; }
+    IItemSpecRepos ItemSpecs { get; }
 	IItemStockBalanceRepos ItemStockBalances { get; }
 	IItemSupplierRepos ItemSuppliers { get; }
 	IItemVariationRepos ItemVariations { get; }
@@ -142,10 +151,11 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
         OwnedItems = new OwnedItemRepos(DbContext);
         OwnedItemCategories = new OwnedItemCategoryRepos(DbContext);
         OwnedItemAttachments = new OwnedItemAttachmentRepos(DbContext);
-        #endregion
+		#endregion
 
-        #region HMS - Healthcare Management System
-        Doctors = new DoctorRepos(DbContext);
+		#region HMS - Healthcare Management System
+		Diseases = new DiseaseRepos(DbContext);
+		Doctors = new DoctorRepos(DbContext);
         HealthcareFacilities = new HealthcareFacilityRepos(DbContext);
         Illnesses = new IllnessRepos(DbContext);
         MedExams = new MedExamRepos(DbContext);
@@ -173,8 +183,8 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
         #region PMS - Pharmacy Management System
         Medicines = new MedicineRepos(DbContext);
         MedicalEquipments = new MedEquipRepos(DbContext);
-        MedicineCompositions = new MedicineCompositionRepos(DbContext);
-        MedicalCompositions = new MedicalCompositionRepos(DbContext);
+        MedicineComps = new MedicineCompRepos(DbContext);
+        MedicalComps = new MedicalCompRepos(DbContext);
         #endregion
 
         #region RMS - Retail Management System
@@ -194,7 +204,8 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
         ItemCategories = new ItemCategoryRepos(DbContext);
         ItemPriceHistories = new ItemPriceHistoryRepos(DbContext);
         ItemVariations = new ItemVariationRepos(DbContext);
-        ItemStockBalances = new ItemStockBalanceRepos(DbContext);
+        ItemSpecs = new ItemSpecRepos(DbContext);
+		ItemStockBalances = new ItemStockBalanceRepos(DbContext);
         ItemSuppliers = new ItemSupplierRepos(DbContext);
         Manufacturers = new ManufacturerRepos(DbContext);
         Orders = new OrderRepos(DbContext);
@@ -229,6 +240,7 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
 	#endregion
 
 	#region HMS - Healthcare Management System
+	public IDiseaseRepos Diseases { get; }
 	public IDoctorRepos Doctors { get; }
     public IIllnessRepos Illnesses { get; }
 	public IHealthcareFacilityRepos HealthcareFacilities { get; }
@@ -266,12 +278,18 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
     #region PMS - Pharmacy Management System
     public IMedicineRepos Medicines { get; }
     public IMedEquipRepos MedicalEquipments { get; }
-    public IMedicineCompositionRepos MedicineCompositions { get; }
-    public IMedicalCompositionRepos MedicalCompositions { get; }
-    #endregion
+	/// <summary>
+	/// Medicine Composition
+	/// </summary>
+	public IMedicineCompRepos MedicineComps { get; }
+	/// <summary>
+	/// Medical Composition
+	/// </summary>
+	public IMedicalCompRepos MedicalComps { get; }
+	#endregion
 
-    #region RMS - Retail Management System
-    public IBrandRepos Brands { get; }
+	#region RMS - Retail Management System
+	public IBrandRepos Brands { get; }
     public ICustPurchaseInvoiceRepos CustPurchaseInvoices { get; }
     public ICustPurchaseInvItemRepos CustPurchaseInvItems { get; }
     public ICustPurchaseOrderRepos CustPurchaseOrders { get; }
@@ -286,7 +304,8 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
     public IItemRepos Items { get; }
     public IItemCategoryRepos ItemCategories { get; }
     public IItemPriceHistoryRepos ItemPriceHistories { get; }
-    public IItemStockBalanceRepos ItemStockBalances { get; }
+	public IItemSpecRepos ItemSpecs { get; }
+	public IItemStockBalanceRepos ItemStockBalances { get; }
     public IItemSupplierRepos ItemSuppliers { get; }
 	public IItemVariationRepos ItemVariations { get; }
 	public IManufacturerRepos Manufacturers { get; }

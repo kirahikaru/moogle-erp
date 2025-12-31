@@ -2,12 +2,12 @@
 
 namespace DataLayer.Repos.PMS;
 
-public interface IMedicineCompositionRepos : IBaseRepos<MedicineComposition>
+public interface IMedicineCompRepos : IBaseRepos<MedicineComposition>
 {
 	Task<List<MedicineComposition>> GetByMedicineIdAsync(int medicineId);
 }
 
-public class MedicineCompositionRepos(IDbContext dbContext) : BaseRepos<MedicineComposition>(dbContext, MedicineComposition.DatabaseObject), IMedicineCompositionRepos
+public class MedicineCompRepos(IDbContext dbContext) : BaseRepos<MedicineComposition>(dbContext, MedicineComposition.DatabaseObject), IMedicineCompRepos
 {
 	public async Task<List<MedicineComposition>> GetByMedicineIdAsync(int medicineId)
     {

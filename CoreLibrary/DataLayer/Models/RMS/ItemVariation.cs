@@ -32,8 +32,9 @@ public class ItemVariation : AuditObject
 
     public int? ItemId { get; set; }
     public string? Barcode { get; set; }
+    public int? SeqNo { get; set; }
 
-    [Required(ErrorMessage = "'Variation Description' is required.")]
+	[Required(ErrorMessage = "'Variation Description' is required.")]
     public string? Desc { get; set; }
     public string? ColorDesc { get; set; }
     public string? SizeDesc { get; set; }

@@ -73,8 +73,8 @@ public interface IUowErmApp : IUnitOfWork
 	#region PMS - Pharmacy Management System
 	IMedicineRepos Medicines { get; }
 	IMedEquipRepos MedicalEquipments { get; }
-	IMedicineCompositionRepos MedicineCompositions { get; }
-	IMedicalCompositionRepos MedicalCompositions { get; }
+	IMedicineCompRepos MedicineComps { get; }
+	IMedicalCompRepos MedicalComps { get; }
 	#endregion
 
 	#region RMS - Retail Management System
@@ -171,8 +171,8 @@ public class UowErmApp : UnitOfWork, IUowErmApp
         #region PMS - Pharmacy Management System
         Medicines = new MedicineRepos(DbContext);
         MedicalEquipments = new MedEquipRepos(DbContext);
-        MedicineCompositions = new MedicineCompositionRepos(DbContext);
-        MedicalCompositions = new MedicalCompositionRepos(DbContext);
+        MedicineComps = new MedicineCompRepos(DbContext);
+        MedicalComps = new MedicalCompRepos(DbContext);
         #endregion
 
         #region RMS - Retail Management System
@@ -268,8 +268,8 @@ public class UowErmApp : UnitOfWork, IUowErmApp
     #region PMS - Pharmacy Management System
     public IMedicineRepos Medicines { get; }
     public IMedEquipRepos MedicalEquipments { get; }
-    public IMedicineCompositionRepos MedicineCompositions { get; }
-    public IMedicalCompositionRepos MedicalCompositions { get; }
+    public IMedicineCompRepos MedicineComps { get; }
+    public IMedicalCompRepos MedicalComps { get; }
     #endregion
 
     #region RMS - Retail Management System

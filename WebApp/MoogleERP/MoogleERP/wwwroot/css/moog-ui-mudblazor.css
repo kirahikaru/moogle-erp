@@ -421,6 +421,15 @@ input[type="text" i] {
         }
     }
 
+    &.moog-btn-tight {
+        padding: 2px 8px;
+    }
+
+    &.moog-btn-primary-light {
+        background-color: var(--ssv-pharma-blue-50);
+        color: var(--ssv-pharma-blue);
+    }
+
     &.moog-btn-gray {
         background-color: var(--material-blue-gray-400);
         color:white;
@@ -485,10 +494,10 @@ input[type="text" i] {
     }
 
     &.cruc-pg-items {
-        background-color: var(--pru-gray-tw-50) !important;
-        border-right: solid 1px var(--pru-gray-tw-100);
+        background-color: var(--ssv-pharma-blue-50) !important;
+        border: solid 1px var(--ssv-pharma-blue-200);
         & .column-header {
-            color: var(--pru-red-default);
+            color: var(--ssv-pharma-blue);
         }
     }
 
@@ -514,7 +523,7 @@ input[type="text" i] {
 
         &>.mud-table-cell {
             color: var(--ssv-pharma-blue) !important;
-            font-weight: 500;
+            /* font-weight: 500; */
         }
     }
 }
@@ -546,6 +555,10 @@ input[type="text" i] {
         & .mud-table-cell {
             vertical-align: top !important;
         }
+    }
+
+    &.inline-editing {
+        padding: 4px 4px !important;
     }
 
     &.spacious {

@@ -158,6 +158,9 @@ public class Item : AuditObject
 
 	[Computed, Write(false)]
 	public List<ItemSupplier> Suppliers { get; set; }
+
+	[Computed, Write(false)]
+	public List<ItemSpec> Specs { get; set; }
 	#endregion
 
 	#region *** DYNAMIC PROPERTY ***
@@ -257,6 +260,7 @@ public class Item : AuditObject
         Variations = [];
         ItemPriceHistories = [];
         Images = [];
-        CurrencyCode = Currencies.US_USD;
+        Specs = [];
+		CurrencyCode = Currencies.US_USD;
     }
 }

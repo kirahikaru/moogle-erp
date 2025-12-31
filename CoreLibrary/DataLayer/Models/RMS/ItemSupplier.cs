@@ -28,7 +28,9 @@ public class ItemSupplier : AuditObject
     [Range(1, int.MaxValue, MinimumIsExclusive = true, ErrorMessage = "'Item' is not selected")]
     public int? ItemId { get; set; }
 
-    [Required(ErrorMessage = "'Supplier' is required.")]
+	public int? SeqNo { get; set; }
+
+	[Required(ErrorMessage = "'Supplier' is required.")]
     [Range(1, int.MaxValue, MinimumIsExclusive = true, ErrorMessage = "'Supplier' is not selected.")]
     public int? SupplierId { get; set; }
     public string? ItemCode { get; set; }
@@ -48,6 +50,9 @@ public class ItemSupplier : AuditObject
 	#endregion
 
 	#region *** DYNAMIC PROPERTY ***
+	[Computed, Write(false), ReadOnly(false)]
+	public string SupplierName => Supplier != null ? Supplier.ObjectName.NonNullValue("-") : "-";
+
 	[Computed, Write(false), ReadOnly(false)]
 	public string UnitPriceKhrText => "KHR " + (UnitPriceKhr != null ? UnitPriceKhr!.Value.ToString("#,##0") : "-" );
 

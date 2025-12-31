@@ -2,7 +2,7 @@
 
 namespace DataLayer.Repos.PMS;
 
-public interface IMedicalCompositionRepos : IBaseRepos<MedicalComposition>
+public interface IMedicalCompRepos : IBaseRepos<MedicalComposition>
 {
 	Task<List<MedicalComposition>> SearchAsync(
 		int pgSize = 0, int pgNo = 0,
@@ -17,7 +17,7 @@ public interface IMedicalCompositionRepos : IBaseRepos<MedicalComposition>
 		string? treatmentDesc = null);
 }
 
-public class MedicalCompositionRepos(IDbContext dbContext) : BaseRepos<MedicalComposition>(dbContext, MedicalComposition.DatabaseObject), IMedicalCompositionRepos
+public class MedicalCompRepos(IDbContext dbContext) : BaseRepos<MedicalComposition>(dbContext, MedicalComposition.DatabaseObject), IMedicalCompRepos
 {
 	public override async Task<KeyValuePair<int, IEnumerable<MedicalComposition>>> SearchNewAsync(
 		int pgSize = 0, int pgNo = 0,

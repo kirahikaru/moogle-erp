@@ -418,7 +418,7 @@ public class CurrencyRepos(IDbContext dbContext) : BaseRepos<Currency>(dbContext
 
         using var cn = DbContext.DbCxn;
 
-        List<DropdownSelectItem> result = new();
+        List<DropdownSelectItem> result = [];
         DynamicParameters param = new();
 
         sbSql.Select("t.Id")

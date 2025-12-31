@@ -144,7 +144,7 @@
 				//	.ToList();
 			}
 
-			var result = await Uow.MedicalCompositions.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, sortConds, filterConds);
+			var result = await Uow.MedicalComps.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, sortConds, filterConds);
 			MainDataList = result.Value;
 			totalItemCount = result.Key;
 

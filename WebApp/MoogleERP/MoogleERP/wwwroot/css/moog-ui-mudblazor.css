@@ -212,9 +212,9 @@ input[type="text" i] {
             }
 
             & .mud-input-adornment-start {
-                margin-right: -6px;
-                margin-inline-end: -6px;
-                margin-inline-start: 4px;
+                margin-right: -3px;
+                margin-inline-end: -3px;
+                margin-inline-start: 7px;
             }
 
             &.mud-input-underline {

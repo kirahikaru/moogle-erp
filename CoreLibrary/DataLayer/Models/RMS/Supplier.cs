@@ -77,6 +77,18 @@ public class Supplier : AuditObject
     #region *** DYNAMIC PROPERTIES ***
     [Computed, Write(false), ReadOnly(true)]
     public string StatusText => SupplierStatuses.GetDisplayText(Status);
+	[Computed, Write(false), ReadOnly(true)]
+	public string TelegramLink
+	{
+		get
+		{
+			if (string.IsNullOrWhiteSpace(Telegram))
+				return string.Empty;
+			if (Telegram.StartsWith("http://") || Telegram.StartsWith("https://"))
+				return Telegram;
+			return "https://t.me/" + Telegram.TrimStart('@');
+		}
+	}
 	#endregion
 
 	#region *** LINKED OBJECTS ***

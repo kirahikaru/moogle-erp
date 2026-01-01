@@ -1,0 +1,246 @@
+﻿@using DataLayer.Repos
+
+@inject IUowMoogleKhErp Uow;
+
+@if (Value != null)
+{
+    <MudStack Spacing="@VerticalSpacing" >
+        @if (!string.IsNullOrEmpty(Label))
+        {
+            <MudStack Row="true" Spacing="@ControlSpacing" Class="px-2 py-1" Style="background-color: var(--ssv-pharma-blue-50); border-bottom: 1px solid var(--ssv-pharma-blue)">
+                <MudText Typo="Typo.body1" Style="font-weight:600; color: var(--ssv-pharma-blue)">@Label</MudText>
+            </MudStack>
+        }
+        <MudStack Row="true" Spacing="@ControlSpacing">
+            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                          Label="Unit / Floor" 
+                          @bind-Value=Value.UnitFloor For="@(() => Value.UnitFloor)" OnlyValidateIfDirty="true" MaxLength="255" />
+            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                          Label="Street"
+                          @bind-Value=Value.StreetNo For="@(() => Value.StreetNo)" OnlyValidateIfDirty="true" MaxLength="255" />
+            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                          Label="Landmark"
+                          @bind-Value=Value.Landmark For="@(() => Value.Landmark)" OnlyValidateIfDirty="true" MaxLength="255" />
+        </MudStack>
+        <MudStack Row="true" Spacing="@ControlSpacing">
+            @if (Readonly)
+            {
+                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" 
+                              Label="Province"
+                              @bind-Value=Value.ProvinceName MaxLength="255" />
+                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" 
+                              Label="District"
+                              @bind-Value=Value.DistrictName MaxLength="255" />
+                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" 
+                              Label="Commune"
+                              @bind-Value=Value.CommuneName MaxLength="255" />
+                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" 
+                              Label="Village"
+                              @bind-Value=Value.VillageName For="@(() => Value.VillageName)" OnlyValidateIfDirty="true" MaxLength="255" />
+            }
+            else
+            {
+                <MudComboBox ReadOnly=@Readonly Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                             PopoverClass="moog-ui-combo-box-popover" T="int?"
+                             Label="Province" Placeholder="Province"
+                             ToStringFunc="@(e => e is null || e <= 0 ? "" : _khProvinceList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == e)?.ObjectName)"
+                             Value="Value.KhProvinceId" For="@(() => Value.KhProvinceId)" ValueChanged="OnProvinceChanged">
+                    @foreach (var p in _khProvinceList)
+                    {
+                        <MudComboBoxItem T="int?" Value="@p.ObjectId" Text="@p.ObjectName">@p.ObjectName</MudComboBoxItem>
+                    }
+                </MudComboBox>
+                <MudComboBox ReadOnly=@Readonly Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                             PopoverClass="moog-ui-combo-box-popover" T="int?" Disabled="Value.KhProvinceId is null"
+                             Label="District" Placeholder="District"
+                             ToStringFunc="@(e => e is null || e <= 0 ? "" : _khDistrictList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == e)?.ObjectName)"
+                             Value="Value.KhDistrictId" For="@(() => Value.KhDistrictId)" ValueChanged="OnDistrictChanged">
+                    @foreach (var d in _khDistrictList)
+                    {
+                        <MudComboBoxItem T="int?" Value="@d.ObjectId" Text="@d.ObjectName">@d.ObjectName</MudComboBoxItem>
+                    }
+                </MudComboBox>
+                <MudComboBox ReadOnly=@Readonly Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                             PopoverClass="moog-ui-combo-box-popover" T="int?" Disabled="Value.KhDistrictId is null"
+                             Label="Commune" Placeholder="Commune"
+                             ToStringFunc="@(e => e is null || e <= 0 ? "" : _khCommuneList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == e)?.ObjectName)"
+                             Value="Value.KhCommuneId" For="@(() => Value.KhCommuneId)" ValueChanged="OnCommuneChanged">
+                    @foreach (var c in _khCommuneList)
+                    {
+                        <MudComboBoxItem T="int?" Value="@c.ObjectId" Text="@c.ObjectName">@c.ObjectName</MudComboBoxItem>
+                    }
+                </MudComboBox>
+                <MudComboBox ReadOnly=@Readonly Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                             PopoverClass="moog-ui-combo-box-popover" T="int?" Disabled="Value.KhCommuneId is null"
+                             Label="Village" Placeholder="Village"
+                             ToStringFunc="@(e => e is null || e <= 0 ? "" : _khVillageList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == e)?.ObjectName)"
+                             Value="Value.KhVillageId" For="@(() => Value.KhVillageId)" ValueChanged="OnVillageChanged">
+                    @foreach (var v in _khVillageList)
+                    {
+                        <MudComboBoxItem T="int?" Value="@v.ObjectId" Text="@v.ObjectName">@v.ObjectName</MudComboBoxItem>
+                    }
+                </MudComboBox>
+            }
+        </MudStack>
+    </MudStack>
+}
+
+@code {
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public CambodiaAddress? Value { get; set; }
+
+    [Parameter]
+    public int VerticalSpacing { get; set; } = 2;
+
+    [Parameter]
+    public int ControlSpacing { get; set; } = 2;
+
+    [Parameter]
+    public bool Readonly { get; set; } = false;
+
+    List<DropDownListItem> _khProvinceList = [];
+    List<DropDownListItem> _khDistrictList = [];
+    List<DropDownListItem> _khCommuneList = [];
+    List<DropDownListItem> _khVillageList = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await PopulateUIControls();
+    }
+
+    async Task PopulateUIControls()
+    {
+        if (Value != null)
+        {
+            _khProvinceList = await Uow.CambodiaProvinces.GetForDropdownSelect1Aysnc();
+
+            if (Value.KhProvinceId is not null)
+            {
+                _khDistrictList = await Uow.CambodiaDistricts.GetForDropdownSelect1Async(Value.KhProvinceId.Value);
+            }
+
+            if (Value.KhDistrictId is not null)
+            {
+                _khCommuneList = await Uow.CambodiaCommunes.GetForDropdownSelect1Async(Value.KhDistrictId.Value);
+            }
+
+            if (Value.KhCommuneId is not null)
+            {
+                _khVillageList = await Uow.CambodiaVillages.GetForDropdownSelect1Async(Value.KhCommuneId.Value);
+            }
+        };
+    }
+
+    #region UI FUNCTIONS
+    async Task OnProvinceChanged(int? provinceId)
+    {
+        if (provinceId is null)
+        {
+            Value!.KhProvinceId = null;
+            Value!.KhDistrictId = null;
+            Value!.KhCommuneId = null;
+            Value!.KhVillageId = null;
+        }
+        else if (provinceId != Value!.KhProvinceId)
+        {
+            Value!.KhProvinceId = provinceId;
+
+            var p = _khProvinceList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == provinceId);
+
+            if (p != null)
+            {
+                Value!.ProvinceName = p.ObjectNameEn;
+                Value!.ProvinceNameKh = p.ObjectNameKh;
+                Value!.PostalCode = p.ObjectCode;
+            }
+
+            Value!.KhDistrictId = null;
+            Value!.KhCommuneId = null;
+            Value!.KhVillageId = null;
+
+            _khDistrictList = await Uow.CambodiaDistricts.GetForDropdownSelect1Async(provinceId.Value);
+            _khCommuneList = [];
+            _khVillageList = [];
+        }
+    }
+
+    async Task OnDistrictChanged(int? districtId)
+    {
+        if (districtId is null)
+        {
+            Value!.KhDistrictId = null;
+            Value!.KhCommuneId = null;
+            Value!.KhVillageId = null;
+        }
+        else if (districtId != Value!.KhDistrictId)
+        {
+            Value!.KhDistrictId = districtId;
+
+            var d = _khDistrictList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == districtId);
+
+            if (d != null)
+            {
+                Value!.DistrictName = d.ObjectNameEn;
+                Value!.DistrictNameKh = d.ObjectNameKh;
+                Value!.PostalCode = d.ObjectCode;
+            }
+
+            Value!.KhCommuneId = null;
+            Value!.KhVillageId = null;
+
+            _khCommuneList = await Uow.CambodiaCommunes.GetForDropdownSelect1Async(districtId!.Value); ;
+            _khVillageList = [];
+        }
+    }
+
+    async Task OnCommuneChanged(int? communeId)
+    {
+        if (communeId is null)
+        {
+            Value!.KhCommuneId = null;
+            Value!.KhVillageId = null;
+        }
+        else if (communeId != Value!.KhCommuneId)
+        {
+            Value!.KhCommuneId = communeId;
+
+            var c = _khCommuneList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == communeId);
+
+            if (c != null)
+            {
+                Value!.CommuneName = c.ObjectNameEn;
+                Value!.CommuneNameKh = c.ObjectNameKh;
+                Value!.PostalCode = c.ObjectCode;
+            }
+
+            Value!.KhVillageId = null;
+
+            _khVillageList = await Uow.CambodiaVillages.GetForDropdownSelect1Async(communeId.Value);
+        }
+    }
+
+    async Task OnVillageChanged(int? villageId)
+    {
+        if (villageId is null)
+        {
+            Value!.KhVillageId = null;
+        }
+        else if (villageId != Value!.KhVillageId)
+        {
+            Value!.KhVillageId = villageId;
+
+            var v = _khVillageList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == villageId);
+
+            if (v != null)
+            {
+                Value!.VillageName = v.ObjectNameEn;
+                Value!.VillageNameKh = v.ObjectNameKh;
+                Value!.PostalCode = v.ObjectCode;
+            }
+        }
+    }
+    #endregion
+}

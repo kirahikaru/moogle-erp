@@ -7,10 +7,10 @@ public interface ICambodiaCommuneRepos : IBaseRepos<CambodiaCommune>
 {
 	Task<CambodiaCommune?> GetFullAsync(int id);
 
-	Task<CambodiaCommune?> GetGivenVillageAsync(int cambodiaVillageId);
+	Task<CambodiaCommune?> GetGivenVillageAsync(int khVillageId);
 
-	Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? cambodiaDistrictId, string? searchText = null);
-	Task<List<DropDownListItem>> GetForDropdownSelectFullTextAsync(int? cambodiaDistrictId, string? searchText = null);
+	Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? khDistrictId, string? searchText = null);
+	Task<List<DropDownListItem>> GetForDropdownSelectFullTextAsync(int? khDistrictId, string? searchText = null);
 
 	Task<List<CambodiaCommune>> SearchAsync(
 		int pgSize = 0, int pgNo = 0,
@@ -42,8 +42,8 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
 
         param.Add("@Id", id);
 
-        sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=t.CambodiaDistrictId");
-		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.Id=d.CambodiaProvinceId");
+        sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=t.KhDistrictId");
+		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.Id=d.KhProvinceId");
 
 		using var cn = DbContext.DbCxn;
 		string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
@@ -64,15 +64,15 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
             return null;
 	}
 
-	public async Task<CambodiaCommune?> GetGivenVillageAsync(int cambodiaVillageId)
+	public async Task<CambodiaCommune?> GetGivenVillageAsync(int khVillageId)
     {
         SqlBuilder sbSql = new();
         DynamicParameters param = new();
         sbSql.Where("t.IsDeleted=0");
         sbSql.Where("v.Id=@Id");
-        sbSql.LeftJoin($"{CambodiaVillage.MsSqlTable} v ON v.IsDeleted=0 AND v.CambodiaCommuneId=t.Id");
+        sbSql.LeftJoin($"{CambodiaVillage.MsSqlTable} v ON v.IsDeleted=0 AND v.KhCommuneId=t.Id");
 
-        param.Add("@Id", cambodiaVillageId);
+        param.Add("@Id", khVillageId);
 
         var sql = sbSql.AddTemplate($"SELECT c.* FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
@@ -81,7 +81,7 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
         return await cn.QuerySingleOrDefaultAsync<CambodiaCommune?>(sql, param);
     }
 
-    public async Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? cambodiaDistrictId, string? searchText = null)
+    public async Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? khDistrictId, string? searchText = null)
     {
         SqlBuilder sbSql = new();
         DynamicParameters param = new();
@@ -94,11 +94,11 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
 
         sbSql.Where("t.IsDeleted=0");
 
-        if (cambodiaDistrictId.HasValue)
+        if (khDistrictId.HasValue)
         {
-            sbSql.Where("t.CambodiaDistrictId IS NOT NULL");
-            sbSql.Where("t.CambodiaDistrictId=@CambodiaDistrictId");
-            param.Add("@CambodiaDistrictId", cambodiaDistrictId.Value);
+            sbSql.Where("t.KhDistrictId IS NOT NULL");
+            sbSql.Where("t.KhDistrictId=@KhDistrictId");
+            param.Add("@KhDistrictId", khDistrictId.Value);
         }
 
         if (!string.IsNullOrEmpty(searchText))
@@ -123,7 +123,7 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
         return (await cn.QueryAsync<DropDownListItem>(sbSqlTempl.RawSql, param)).AsList();
     }
 
-    public async Task<List<DropDownListItem>> GetForDropdownSelectFullTextAsync(int? cambodiaDistrictId, string? searchText = null)
+    public async Task<List<DropDownListItem>> GetForDropdownSelectFullTextAsync(int? khDistrictId, string? searchText = null)
     {
         SqlBuilder sbSql = new();
         DynamicParameters param = new();
@@ -137,15 +137,15 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
 
         sbSql.Where("cc.IsDeleted=0");
 
-        if (cambodiaDistrictId.HasValue)
+        if (khDistrictId.HasValue)
         {
-            sbSql.Where("cc.CambodiaDistrictId IS NOT NULL");
-            sbSql.Where("cc.CambodiaDistrictId=@CambodiaDistrictId");
-            param.Add("@CambodiaDistrictId", cambodiaDistrictId.Value);
+            sbSql.Where("cc.KhDistrictId IS NOT NULL");
+            sbSql.Where("cc.KhDistrictId=@KhDistrictId");
+            param.Add("@KhDistrictId", khDistrictId.Value);
         }
 
         if (!string.IsNullOrEmpty(searchText))
-        {
+        { 
             if (searchText.StartsWith("id:", StringComparison.OrdinalIgnoreCase))
             {
                 sbSql.Where("UPPER(cc.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
@@ -159,8 +159,8 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
             param.Add("@SearchText", searchText, DbType.AnsiString);
         }
 
-        sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} cd ON cd.IsDeleted=0 AND cd.Id=cc.CambodiaDistrictId");
-        sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} cp ON cp.IsDeleted=0 AND cp.Id=cd.CambodiaProvinceId");
+        sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} cd ON cd.IsDeleted=0 AND cd.Id=cc.KhDistrictId");
+        sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} cp ON cp.IsDeleted=0 AND cp.Id=cd.KhProvinceId");
 
         string sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} cc /**leftjoin**/ /**where**/").RawSql;
 
@@ -217,9 +217,7 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
 		{
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
-			sql = sbSql.AddTemplate(
-				$";WITH pg AS (SELECT Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				$"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY;").RawSql;
 		}
 
 		using var cn = DbContext.DbCxn;
@@ -276,8 +274,8 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
         }
         #endregion
 
-        sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=t.CambodiaDistrictId");
-		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} prv ON prv.Id=d.CambodiaProvinceId");
+        sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=t.KhDistrictId");
+		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} prv ON prv.Id=d.KhProvinceId");
 
 		sbSql.OrderBy("t.NameEn ASC")
 			.OrderBy("t.NameKh ASC");
@@ -293,9 +291,7 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
 
-			sql = sbSql.AddTemplate(
-				$";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				$"SELECT t.*, d.*, prv.* FROM {DbObject.MsSqlTable} t INNER JOIN pg p ON p.Id=t.Id /**leftjoin**/ /**orderby**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY;").RawSql;
 		}
 
 		using var cn = DbContext.DbCxn;
@@ -375,8 +371,8 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
         }
 		#endregion
 
-		sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=t.CambodiaDistrictId");
-		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} prv ON prv.Id=d.CambodiaProvinceId");
+		sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=t.KhDistrictId");
+		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} prv ON prv.Id=d.KhProvinceId");
 
 		sbSql.OrderBy("t.NameEn ASC")
 			.OrderBy("t.NameKh ASC");
@@ -391,10 +387,8 @@ public class CambodiaCommuneRepos(IDbContext dbContext) : BaseRepos<CambodiaComm
         {
             param.Add("@PageSize", pgSize);
             param.Add("@PageNo", pgNo);
-			sql = sbSql.AddTemplate(
-                $";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-                $"SELECT t.*, d.*, prv.* FROM {DbObject.MsSqlTable} t INNER JOIN pg p ON p.Id=t.Id /**leftjoin**/ /**orderby**/").RawSql;
-        }
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY;").RawSql;
+		}
 
         using var cn = DbContext.DbCxn;
 

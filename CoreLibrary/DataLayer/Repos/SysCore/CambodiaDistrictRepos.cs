@@ -7,8 +7,8 @@ public interface ICambodiaDistrictRepos : IBaseRepos<CambodiaDistrict>
 {
 	Task<CambodiaDistrict?> GetFullAsync(int id);
 
-	Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? cambodiaProvinceId, string? searchText = null);
-	Task<List<DropDownListItem>> GetForDropdownSelectFullTextAsync(int? cambodiaProvinceId, string? searchText = null);
+	Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? khProvinceId, string? searchText = null);
+	Task<List<DropDownListItem>> GetForDropdownSelectFullTextAsync(int? khProvinceId, string? searchText = null);
 
 	/// <summary>
 	/// Get Province given a known sub address e.g. known Commune or know Village
@@ -51,7 +51,7 @@ public class CambodiaDistrictRepos(IDbContext dbContext) : BaseRepos<CambodiaDis
 
         param.Add("@Id", id);
 
-        sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.Id=t.CambodiaProvinceId");
+        sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.Id=t.KhProvinceId");
 
         using var cn = DbContext.DbCxn;
         string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
@@ -69,7 +69,7 @@ public class CambodiaDistrictRepos(IDbContext dbContext) : BaseRepos<CambodiaDis
             return null;
     }
 
-    public async Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? cambodiaProvinceId, string? searchText = null)
+    public async Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? khProvinceId, string? searchText = null)
     {
         SqlBuilder sbSql = new();
         DynamicParameters param = new();
@@ -83,12 +83,12 @@ public class CambodiaDistrictRepos(IDbContext dbContext) : BaseRepos<CambodiaDis
 
         sbSql.Where("t.IsDeleted=0");
 
-        if (cambodiaProvinceId.HasValue)
+        if (khProvinceId.HasValue)
         {
-            sbSql.Where("t.CambodiaProvinceId IS NOT NULL");
-            sbSql.Where("t.CambodiaProvinceId=@CambodiaProvinceId");
+            sbSql.Where("t.KhProvinceId IS NOT NULL");
+            sbSql.Where("t.KhProvinceId=@KhProvinceId");
 
-            param.Add("@CambodiaProvinceId", cambodiaProvinceId.Value);
+            param.Add("@KhProvinceId", khProvinceId.Value);
         }
 
         if (!string.IsNullOrEmpty(searchText))
@@ -113,7 +113,7 @@ public class CambodiaDistrictRepos(IDbContext dbContext) : BaseRepos<CambodiaDis
         return (await cn.QueryAsync<DropDownListItem>(sql, param)).AsList();
     }
 
-    public async Task<List<DropDownListItem>> GetForDropdownSelectFullTextAsync(int? cambodiaProvinceId, string? searchText = null)
+    public async Task<List<DropDownListItem>> GetForDropdownSelectFullTextAsync(int? khProvinceId, string? searchText = null)
     {
         SqlBuilder sbSql = new();
         DynamicParameters param = new();
@@ -127,11 +127,11 @@ public class CambodiaDistrictRepos(IDbContext dbContext) : BaseRepos<CambodiaDis
 
         sbSql.Where("d.IsDeleted=0");
 
-        if (cambodiaProvinceId.HasValue)
+        if (khProvinceId.HasValue)
         {
-            sbSql.Where("d.CambodiaProvinceId IS NOT NULL");
-            sbSql.Where("d.CambodiaProvinceId=@CambodiaProvinceId");
-            param.Add("@CambodiaProvinceId", cambodiaProvinceId.Value);
+            sbSql.Where("d.KhProvinceId IS NOT NULL");
+            sbSql.Where("d.KhProvinceId=@KhProvinceId");
+            param.Add("@KhProvinceId", khProvinceId.Value);
         }
 
         if (!string.IsNullOrEmpty(searchText))
@@ -149,7 +149,7 @@ public class CambodiaDistrictRepos(IDbContext dbContext) : BaseRepos<CambodiaDis
             param.Add("@SearchText", searchText, DbType.AnsiString);
         }
 
-        sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.IsDeleted=0 AND p.Id=d.CambodiaProvinceId");
+        sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.IsDeleted=0 AND p.Id=d.KhProvinceId");
 
         string sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} d /**leftjoin**/ /**where**/").RawSql;
 
@@ -292,7 +292,7 @@ public class CambodiaDistrictRepos(IDbContext dbContext) : BaseRepos<CambodiaDis
         }
         #endregion
 
-        sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} prv ON prv.Id=t.CambodiaProvinceId");
+        sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} prv ON prv.Id=t.KhProvinceId");
 
 		sbSql.OrderBy("t.ObjectName ASC");
 
@@ -331,7 +331,7 @@ public class CambodiaDistrictRepos(IDbContext dbContext) : BaseRepos<CambodiaDis
         string? nameKh = null,
         string? nameEn = null,
         string? postalCode = null,
-        List<int>? countryProvinceIds = null)
+        List<int>? khProvinceIds = null)
     {
         if (pgNo < 0 && pgSize < 0)
             throw new Exception(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
@@ -372,22 +372,22 @@ public class CambodiaDistrictRepos(IDbContext dbContext) : BaseRepos<CambodiaDis
             param.Add("@PostalCode", postalCode, DbType.AnsiString);
         }
 
-        if (countryProvinceIds != null)
+        if (khProvinceIds != null)
         {
-            if (countryProvinceIds.Count == 1)
+            if (khProvinceIds.Count == 1)
             {
-                sbSql.Where("t.CambodiaProvinceId=@CambodiaProvinceId");
-                param.Add("@CambodiaProvinceId", countryProvinceIds[0]);
+                sbSql.Where("t.KhProvinceId=@KhProvinceId");
+                param.Add("@KhProvinceId", khProvinceIds[0]);
             }
             else
             {
-                sbSql.Where("t.CambodiaProvinceId IN @CambodiaProvinceIds");
-                param.Add("@CambodiaProvinceIds", countryProvinceIds);
+                sbSql.Where("t.KhProvinceId IN @KhProvinceIds");
+                param.Add("@KhProvinceIds", khProvinceIds);
             }
         }
         #endregion
 
-        sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} prv ON prv.Id=t.CambodiaProvinceId");
+        sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} prv ON prv.Id=t.KhProvinceId");
 
 		sbSql.OrderBy("t.ObjectName ASC");
 
@@ -424,7 +424,7 @@ public class CambodiaDistrictRepos(IDbContext dbContext) : BaseRepos<CambodiaDis
         string? nameKh = null,
         string? nameEn = null,
         string? postalCode = null,
-        List<int>? countryProvinceIds = null)
+        List<int>? khProvinceIds = null)
     {
         if (pgSize < 0)
             throw new Exception(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
@@ -465,17 +465,17 @@ public class CambodiaDistrictRepos(IDbContext dbContext) : BaseRepos<CambodiaDis
             param.Add("@PostalCode", postalCode, DbType.AnsiString);
         }
 
-        if (countryProvinceIds != null)
+        if (khProvinceIds != null)
         {
-            if (countryProvinceIds.Count == 1)
+            if (khProvinceIds.Count == 1)
             {
-                sbSql.Where("t.CambodiaProvinceId=@CambodiaProvinceId");
-                param.Add("@CambodiaProvinceId", countryProvinceIds[0]);
+                sbSql.Where("t.KhProvinceId=@KhProvinceId");
+                param.Add("@KhProvinceId", khProvinceIds[0]);
             }
             else
             {
-                sbSql.Where("t.CambodiaProvinceId IN @CambodiaProvinceIds");
-                param.Add("@CambodiaProvinceIds", countryProvinceIds);
+                sbSql.Where("t.KhProvinceId IN @KhProvinceIds");
+                param.Add("@KhProvinceIds", khProvinceIds);
             }
         }
         #endregion

@@ -6,7 +6,7 @@ public interface ICambodiaVillageRepos : IBaseRepos<CambodiaVillage>
 {
 	Task<CambodiaVillage?> GetFullAsync(int id);
 
-	Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? cambodiaCommuneId = null, string? searchText = null);
+	Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? khCommuneId = null, string? searchText = null);
 
 	new Task<List<SearchItemCambodiaVillage>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null);
 
@@ -17,7 +17,7 @@ public interface ICambodiaVillageRepos : IBaseRepos<CambodiaVillage>
 		string? nameKh = null,
 		string? nameEn = null,
 		string? postalCode = null,
-		List<int>? countryCommuneIds = null);
+		List<int>? khCommuneIds = null);
 
 	Task<DataPagination> GetSearchPaginationAsync(
 		int pgSize = 0,
@@ -26,7 +26,7 @@ public interface ICambodiaVillageRepos : IBaseRepos<CambodiaVillage>
 		string? nameKh = null,
 		string? nameEn = null,
 		string? postalCode = null,
-		List<int>? countryCommuneIds = null);
+		List<int>? khCommuneIds = null);
 }
 
 public class CambodiaVillageRepos(IDbContext dbContext) : BaseRepos<CambodiaVillage>(dbContext, CambodiaVillage.DatabaseObject), ICambodiaVillageRepos
@@ -40,9 +40,9 @@ public class CambodiaVillageRepos(IDbContext dbContext) : BaseRepos<CambodiaVill
 
         param.Add("@Id", id);
 
-		sbSql.LeftJoin($"{CambodiaCommune.MsSqlTable} c ON c.Id=t.CambodiaCommuneId");
-		sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=c.CambodiaDistrictId");
-		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.Id=d.CambodiaProvinceId");
+		sbSql.LeftJoin($"{CambodiaCommune.MsSqlTable} c ON c.Id=t.KhCommuneId");
+		sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=c.KhDistrictId");
+		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.Id=d.KhProvinceId");
 
 		using var cn = DbContext.DbCxn;
 		string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
@@ -65,7 +65,7 @@ public class CambodiaVillageRepos(IDbContext dbContext) : BaseRepos<CambodiaVill
 			return null;
 	}
 
-	public async Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? cambodiaCommuneId = null, string? searchText = null)
+	public async Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? khCommuneId = null, string? searchText = null)
     {
         SqlBuilder sbSql = new();
         DynamicParameters param = new();
@@ -79,11 +79,11 @@ public class CambodiaVillageRepos(IDbContext dbContext) : BaseRepos<CambodiaVill
 
         sbSql.Where("t.IsDeleted=0");
 
-        if (cambodiaCommuneId.HasValue)
+        if (khCommuneId.HasValue)
         {
-            sbSql.Where("t.CambodiaCommuneId IS NOT NULL");
-            sbSql.Where("t.CambodiaCommuneId=@CambodiaCommuneId");
-            param.Add("@CambodiaCommuneId", cambodiaCommuneId.Value);
+            sbSql.Where("t.KhCommuneId IS NOT NULL");
+            sbSql.Where("t.KhCommuneId=@KhCommuneId");
+            param.Add("@KhCommuneId", khCommuneId.Value);
         }
 
         if (!string.IsNullOrEmpty(searchText))
@@ -157,9 +157,7 @@ public class CambodiaVillageRepos(IDbContext dbContext) : BaseRepos<CambodiaVill
 		{
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
-			sql = sbSql.AddTemplate(
-				$";WITH pg AS (SELECT Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				$"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY;").RawSql;
 		}
 
 		using var cn = DbContext.DbCxn;
@@ -233,9 +231,9 @@ public class CambodiaVillageRepos(IDbContext dbContext) : BaseRepos<CambodiaVill
         }
         #endregion
 
-        sbSql.LeftJoin($"{CambodiaCommune.MsSqlTable} c ON c.Id=t.CambodiaCommuneId");
-		sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=c.CambodiaDistrictId");
-		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.Id=d.CambodiaProvinceId");
+        sbSql.LeftJoin($"{CambodiaCommune.MsSqlTable} c ON c.Id=t.KhCommuneId");
+		sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=c.KhDistrictId");
+		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.Id=d.KhProvinceId");
 
 		sbSql.OrderBy("p.NameEn ASC")
 			.OrderBy("d.NameEn ASC")
@@ -254,9 +252,7 @@ public class CambodiaVillageRepos(IDbContext dbContext) : BaseRepos<CambodiaVill
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
 
-			sql = sbSql.AddTemplate(
-				        $";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				        $"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY;").RawSql;
 		}
 
 		using var cn = DbContext.DbCxn;
@@ -359,9 +355,9 @@ public class CambodiaVillageRepos(IDbContext dbContext) : BaseRepos<CambodiaVill
         }
 		#endregion
 
-		sbSql.LeftJoin($"{CambodiaCommune.MsSqlTable} c ON c.Id=t.CambodiaCommuneId");
-		sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=c.CambodiaDistrictId");
-		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.Id=d.CambodiaProvinceId");
+		sbSql.LeftJoin($"{CambodiaCommune.MsSqlTable} c ON c.Id=t.KhCommuneId");
+		sbSql.LeftJoin($"{CambodiaDistrict.MsSqlTable} d ON d.Id=c.KhDistrictId");
+		sbSql.LeftJoin($"{CambodiaProvince.MsSqlTable} p ON p.Id=d.KhProvinceId");
 
 		sbSql.OrderBy("p.NameEn ASC")
 			.OrderBy("d.NameEn ASC")
@@ -378,9 +374,8 @@ public class CambodiaVillageRepos(IDbContext dbContext) : BaseRepos<CambodiaVill
         {
             param.Add("@PageSize", pgSize);
             param.Add("@PageNo", pgNo);
-            sql = sbSql.AddTemplate($";WITH pg AS (SELECT Id FROM {DbObject.MsSqlTable} /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-                  $"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
-        }
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY;").RawSql;
+		}
 
         using var cn = DbContext.DbCxn;
 
@@ -453,13 +448,13 @@ public class CambodiaVillageRepos(IDbContext dbContext) : BaseRepos<CambodiaVill
         {
             if (countryCommuneIds.Count == 1)
             {
-                sbSql.Where("t.CambodiaCommuneId=@CambodiaCommuneId");
-                param.Add("@CambodiaCommuneId", countryCommuneIds[0]);
+                sbSql.Where("t.KhCommuneId=@KhCommuneId");
+                param.Add("@KhCommuneId", countryCommuneIds[0]);
             }
             else
             {
-                sbSql.Where("t.CambodiaCommuneId IN @CambodiaCommuneIds");
-                param.Add("@CambodiaCommuneIds", countryCommuneIds);
+                sbSql.Where("t.KhCommuneId IN @KhCommuneIds");
+                param.Add("@KhCommuneIds", countryCommuneIds);
             }
         }
         #endregion

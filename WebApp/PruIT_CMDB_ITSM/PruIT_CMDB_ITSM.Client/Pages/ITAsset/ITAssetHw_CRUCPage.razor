@@ -57,7 +57,7 @@
                                           Label="Desc" Placeholder="Desc" InputId="ObjectName"
                                           @bind-Value=CurrentObject!.ObjectName For="@(() => CurrentObject.ObjectName)" MaxLength="255" OnlyValidateIfDirty="true" />
                         </MudItem>
-                        <MudItem xs="4">
+                        <MudItem xs="3">
                             <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Required="false"
                                           Label="System Asset Name" Placeholder="System Asset Name"
                                           @bind-Value=CurrentObject!.AssetName For="@(() => CurrentObject.AssetName)" MaxLength="255" OnlyValidateIfDirty="true" />
@@ -74,6 +74,17 @@
                                 @foreach (DropdownSelectItem assetType in _assetTypeList)
                                 {
                                     <MudSelectItem Value=@assetType.Key>@assetType.Value</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true"
+                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down"
+                                       Label="LBU" T="string"
+                                       Value=CurrentObject!.LBU For="@(() => CurrentObject.LBU)" ValueChanged="OnLBUChanged" OnlyValidateIfDirty="true">
+                                @foreach (string lbuID in _lbuIDList)
+                                {
+                                    <MudSelectItem Value=@lbuID>@lbuID</MudSelectItem>
                                 }
                             </MudSelect>
                         </MudItem>
@@ -179,10 +190,7 @@
                                           @bind-Value=CurrentObject!.RequestUserName For="@(() => CurrentObject.RequestUserName)" OnlyValidateIfDirty="true" />
                         </MudItem> *@
                         <MudItem xs="3">
-                            <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" PopoverClass="pru-ui-autocomplete-popover" FullWidth="true"
-                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchCurrentUser"
-                                             Label="Current User" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
-                                             Value="_currentUser" ValueChanged="OnCurrentUserValueChanged" />
+                            
                         </MudItem>
                         @* <MudItem xs="3">
                             <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered"
@@ -487,6 +495,30 @@
                                         
                                     </EditTemplate>
                                 </PropertyColumn>
+                                <PropertyColumn Title="To User ID" Property="x => x.ObjectCode" Sortable="false"
+                                                HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
+                                                Context="i">
+                                    <EditTemplate>
+                                        <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-autocomplete" PopoverClass="pru-ui-autocomplete-popover" FullWidth="true"
+                                                         CoerceText="true" CoerceValue="true" SearchFunc="SearchCurrentUser"
+                                                         Label="Current User" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
+                                                         Value="_currentUser" ValueChanged="OnCurrentUserValueChanged" />
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <PropertyColumn Title="To User" Property="x => x.ObjectName" Sortable="false"
+                                                HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
+                                                Context="i">
+                                    <EditTemplate>
+
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <PropertyColumn Title="Approver" Property="x => x.Approver" Sortable="false"
+                                    HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" 
+                                    Context="i" >
+                                    <EditTemplate>
+
+                                    </EditTemplate>
+                                </PropertyColumn>
                                 <PropertyColumn Property="x => x.Approver" Title="Approver" HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="i" Sortable="false">
                                     <EditTemplate>
 
@@ -532,6 +564,7 @@
     IEnumerable<string> _zoneList = ["Azure", "On-Prem"];
     IEnumerable<string> _deptList = PruDepts.GetLatest();
     IEnumerable<string> _funcList = [];
+    IEnumerable<string> _lbuIDList = ["PCLA", "PMLI", "PLAL"];
 
     DropdownSelectItem? _requestor;
     DropdownSelectItem? _currentUser;
@@ -620,6 +653,20 @@
     #endregion
 
     #region UI FUNCTIONS
+    private async Task OnLBUChanged(string lbu)
+    {
+        if (!string.IsNullOrEmpty(lbu))
+        {
+            CurrentObject!.LBU = lbu;
+            _vendorList = await Uow.Vendors.GetForDropdownListAsync(CurrentObject!.LBU, CurrentObject!.VendorID);
+        }
+        else
+        {
+            CurrentObject!.LBU = null;
+            _vendorList = [];
+        }
+    }
+
     private async Task OnAssetTypeChanged(string assetType)
     {
         CurrentObject!.AssetType = assetType;

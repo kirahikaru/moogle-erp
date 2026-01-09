@@ -1,75 +1,87 @@
-﻿@page "/fin/fin-act-tracker/main"
+﻿@page "/fin/fin-act-summ-entry/main"
+@using PruIT_CMDB_ITSM.Client.Pages
 
 @* @rendermode InteractiveAuto *@
 
-@inherits MainPageBase<FinActivityTracker>
+@inject SweetAlertService Swal
+@inherits MainPageBase<FinActSummEntry>
 
 <MudPaper Class="px-4 py-3 rounded" Width="100%" Elevation="0" Square="true" Style="background-color:#FFFDE7; border: solid 1px var(--pru-gray-tw-100)">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<div style="color:var(--pru-red-default); font-size:28px;">
 			<span style="font-weight:800">@HeaderTitle</span>
+			@* <span style="font-weight:400"> | Software</span> *@
 		</div>
 		<MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/add_circle" Size="Size.Small" Color="Color.Primary" Class="pru-btn-base" DropShadow="false" OnClick="@(args => CreateOrEditRecord(0))">Add New</MudButton>
 	</MudStack>
 </MudPaper>
+
 <MudPaper Class="pa-3 mt-3 rounded overflow-y-auto" Width="100%" Elevation="0" Square="true" Height="calc(100vh - 170px)">
-    <!-- SEARCH / FILTER INPUT AREA ---------------------------->
-    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
-        <MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="pru-mud-form-field bordered"
-                      AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
-                      Placeholder="Search text here..." HelperText="<Search input instruction here>" Style="padding: 2px 0px 2px 0px"
-                      @bind-Value="SearchText" OnKeyDown="OnSearchBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
-        <MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/search" Size="Size.Small" Color="Color.Primary" DropShadow="false" OnClick="OnSearchClicked" Class="pru-btn-base">Search</MudButton>
-    </MudStack>
-    <!-- DATA RESULT DISPLAY AREA ------------------------------>
-    <MudDataGrid Class="mt-2 pru-mud-datagrid main-pg" ServerData="ServerDataFunc" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage=@PageSize
-                 ColumnResizeMode="ResizeMode.Container" Elevation="0" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true"
-                 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row"
-                 @ref="MainDataGrid" T="FinActivityTracker">
-        <Columns>
-            <PropertyColumn Title="ID" Property="x => x.ObjectCode"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" Sortable="false" />
-            <PropertyColumn Title="Name" Property="x => x.ObjectName"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Title="Function" Property="x => x.FunctionName"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Title="Deparment" Property="x => x.DepartmentName"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Title="Owner Emp ID" Property="x => x.OwnerEmpID"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Title="Owner Name" Property="x => x.OwnerName"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
+	<MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
+		<MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="pru-mud-form-field bordered"
+					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
+					  Placeholder="Search text here..." HelperText="<Search input instruction here>" Style="padding: 2px 0px 2px 0px"
+					  @bind-Value="SearchText" OnKeyDown="OnSearchBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
+		<MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/search" Size="Size.Small" Color="Color.Primary" DropShadow="false" OnClick="OnSearchClicked" Class="pru-btn-base">Search</MudButton>
+	</MudStack>
+	<MudDataGrid Class="mt-2 pru-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage=50
+				 ColumnResizeMode="ResizeMode.Container" HorizontalScrollbar="true" Elevation="0" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true"
+				 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" T="FinActSummEntry">
+		<Columns>
+			@* <TemplateColumn Title="LBU" StickyLeft="true" 
+				HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" Context="rowData">
+				<CellTemplate>
+					<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
+						<MudImage Src=@(_lbuFlagList[rowData.Item.LBU!]) Height="12" />
+						<MudText Typo="Typo.body1">@rowData.Item.LBU</MudText>
+					</MudStack>
+				</CellTemplate>
+			</TemplateColumn> *@
+            <PropertyColumn Title="Budget ID" Property="x => x.ObjectCode"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
-                            HeaderStyle="justify-items:center; max-width:120px; width:500px"
-                            CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
+                            HeaderStyle="min-width:200px" Sortable="false" />
+			<PropertyColumn Title="Budget Item" Property="x => x.ObjectName"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+                            HeaderStyle="min-width:180px" Sortable="false" />
+			<PropertyColumn Title="Budget Month" Property="x => x.YyyyMmText"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="min-width:180px" Sortable="false" />
+			<PropertyColumn Title="Forecast Amount" Property="x => x.ForecastAmount" Format="#,##0.00" Sortable="false"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="min-width:180px" CellStyle="text-align:right" />
+			<PropertyColumn Title="Total Amount" Property="x => x.TotalAmount" Format="#,##0.00" Sortable="false"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="min-width:180px" CellStyle="text-align:right" />
+            <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderStyle="justify-items:center"
+							CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
                 <CellTemplate>
                     <MudStack Row="true" Spacing="1">
                         <MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
-                        <MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
-                        <MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
-                        <MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
-                    </MudStack>
-                </CellTemplate>
-            </TemplateColumn>
-        </Columns>
-        <PagerContent>
-            <MudDataGridPager T="FinActivityTracker" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] { 10, 30, 50, 80, 100 }" />
-        </PagerContent>
-    </MudDataGrid>
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
+						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
+					</MudStack>
+				</CellTemplate>
+			</TemplateColumn>
+		</Columns>
+		<PagerContent>
+			<MudDataGridPager T="FinActSummEntry" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] { 10, 30, 50, 80, 100 }" />
+		</PagerContent>
+	</MudDataGrid>
 </MudPaper>
 
 @code {
-
 	#region UI PARAM
-	
+	Dictionary<string, string> _lbuFlagList = PruLBUs.GetFlagIconPaths();
 	#endregion
 
 	#region PAGE LIFECYCLE EVENTS
 	public override Task SetParametersAsync(ParameterView parameters)
 	{
-		UrlPrefix = "/pru/fin/fin-act-tracker";
-		SearchParamName = "finActTrackerParam";
+		UrlPrefix = "/fin/fin-act-summ-entry";
+		SearchParamName = "finActSummEntrySearchParam";
 
 		return base.SetParametersAsync(parameters);
 	}
@@ -83,7 +95,7 @@
 			CurrentAppModPerm.CanRead = true;
 			CurrentAppModPerm.CanUpdate = true;
 			CurrentAppModPerm.CanDelete = true;
-			CurrentAppModPerm.ModuleName = typeof(FinActivityTracker).Name;
+			CurrentAppModPerm.ModuleName = typeof(FinActSummEntry).Name;
 		}
 		else
 		{
@@ -117,9 +129,9 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<FinActivityTracker>> ServerDataFunc(GridState<FinActivityTracker> gridState)
+	protected override async Task<GridData<FinActSummEntry>> ServerDataFunc(GridState<FinActSummEntry> gridState)
 	{
-		if (IsSearching) return new GridData<FinActivityTracker>
+		if (IsSearching) return new GridData<FinActSummEntry>
 			{
 				Items = [],
 				TotalItems = 0
@@ -146,8 +158,7 @@
 			}
 			else
 			{
-				// KeyValuePair<int, IEnumerable<ITAsset>> result = await Uow.ITAssets.HardwareSearchAsync(0, 0, SearchText, null, null, null);
-				KeyValuePair<int, IEnumerable<FinActivityTracker>> result = await Uow.FinActivityTrackers.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, null, null);
+				KeyValuePair<int, IEnumerable<FinActSummEntry>> result = await Uow.FinActSummEntries.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, null, null);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}
@@ -159,7 +170,7 @@
 			//	.Take(gridState.Count)
 			//	.ToList();
 
-			return new GridData<FinActivityTracker>
+			return new GridData<FinActSummEntry>
 				{
 					Items = MainDataList,
 					TotalItems = totalItemCount
@@ -168,7 +179,8 @@
 		catch (Exception ex)
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
-			return new GridData<FinActivityTracker>
+
+			return new GridData<FinActSummEntry>
 				{
 					Items = [],
 					TotalItems = 0
@@ -188,7 +200,7 @@
 	#endregion
 
 	#region CRUD FUNCTIONS
-	private async Task DeleteRecord(FinActivityTracker objToDelete)
+	private async Task DeleteRecord(FinActSummEntry objToDelete)
 	{
 		if (objToDelete == null)
 		{
@@ -218,7 +230,7 @@
 			{
 				try
 				{
-					int delCount = await Uow.FinActivityTrackers.DeleteAsync(objToDelete.Id, AuditTrailUser);
+					int delCount = await Uow.FinActSummEntries.DeleteAsync(objToDelete.Id, AuditTrailUser);
 
 					if (delCount > 0)
 					{
@@ -262,6 +274,8 @@
 	#endregion
 
 	#region INTERNAL FUNCTIONS
+	async ValueTask CreateRecord() => await CreateOrEditRecord(0);
+
 	public async ValueTask EditRecordHotKeyPressed()
 	{
 		await Task.CompletedTask;

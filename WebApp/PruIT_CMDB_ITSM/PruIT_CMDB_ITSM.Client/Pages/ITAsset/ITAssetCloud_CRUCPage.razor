@@ -375,6 +375,16 @@
                                     <EditTemplate>
                                     </EditTemplate>
                                 </PropertyColumn>
+                                <PropertyColumn Title="To User ID" Property="x => x.ObjectCode" HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="i">
+                                    <EditTemplate>
+
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <PropertyColumn Title="To User Name" Property="x => x.ObjectName" HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="i">
+                                    <EditTemplate>
+
+                                    </EditTemplate>
+                                </PropertyColumn>
                                 <PropertyColumn Property="x => x.Justification" Title="Justification" HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="i" Sortable="false">
                                     <EditTemplate>
                                         <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true" Lines=4

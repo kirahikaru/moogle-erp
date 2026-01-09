@@ -41,7 +41,7 @@
                     }
                     else
                     {
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Default" StartIcon="material-symbols-rounded/close" OnClick="Cancel">Close</MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Secondary" StartIcon="material-symbols-rounded/close" OnClick="Cancel">Close</MudButton>
                     }
                 </MudStack>
             </MudStack>
@@ -275,8 +275,8 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Start Date" Property="x => x.CoverageStartDate" Sortable="false" Filterable="false" Format="dd-MMM-yyyy"
-                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
-                                                        HeaderStyle="justify-items:center; min-width:110px"
+                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-400"
+                                                        HeaderStyle="justify-items:center; min-width:110px" CellStyle="text-align:center"
                                                         Context="qi">
                                             <EditTemplate>
                                                 <MudStack Row=true Spacing="3" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.All">
@@ -292,9 +292,9 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="End Date" Property="x => x.CoverageEndDate" Format="dd-MMM-yyyy" Filterable="false" Sortable="false"
-                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
-                                                        HeaderStyle="justify-items:center; min-width:110px"
-                                                        Context="qi">
+                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-400"
+                                                        HeaderStyle="justify-items:center; min-width:110px" CellStyle="text-align:center"
+                                                        Context="qi" FooterClass="reddit-mono-400">
                                             <EditTemplate>
 
                                             </EditTemplate>
@@ -306,7 +306,7 @@
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" Required=false Editable="false"
                                                         HeaderStyle="min-width:115px" CellStyle="text-align:right"
                                                         Filterable="false" Sortable="false" AggregateDefinition="@_itemAggr" FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right"
-                                                        Context="qi">
+                                                        Context="qi" FooterClass="reddit-mono-400">
                                             <EditTemplate>
 
                                             </EditTemplate>
@@ -315,7 +315,7 @@
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500"
                                                         HeaderStyle="min-width:50px" CellStyle="text-align:right"
                                                         Filterable="false" Sortable="false" AggregateDefinition="@_itemAggr" FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right"
-                                                        Context="qi">
+                                                        Context="qi" FooterClass="reddit-mono-400">
                                             <EditTemplate>
 
                                             </EditTemplate>
@@ -334,9 +334,11 @@
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell d-flex justify-end"
                                                         HeaderStyle="width:20px" Context="qi">
                                             <CellTemplate>
-                                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@qi.Actions.StartEditingItemAsync" />
-                                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" Color="Color.Error" OnClick="@(() => RemoveInvoiceItem(qi.Item))" />
+                                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Rounded.Edit" OnClick="@qi.Actions.StartEditingItemAsync" />
+                                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Rounded.Delete" Color="Color.Error" OnClick="@(() => RemoveInvoiceItem(qi.Item))" />
                                                 <MudIconButton Size="Size.Small" Icon="@Icons.Material.Rounded.FileCopy" Color="Color.Success" OnClick="@(() => CloneInvoiceItem(qi.Item))" />
+                                                <MudIconButton Size="Size.Small" Icon="@Icons.Material.Rounded.KeyboardArrowUp" Color="Color.Secondary" OnClick="@(() => MoveInvoiceItemUp(qi.Item))" />
+                                                <MudIconButton Size="Size.Small" Icon="@Icons.Material.Rounded.KeyboardArrowDown" Color="Color.Secondary" OnClick="@(() => MoveInvoiceItemDown(qi.Item))" />
                                             </CellTemplate>
                                         </TemplateColumn>
                                     </Columns>
@@ -461,9 +463,9 @@
                                                 <MudText Typo="Typo.body2" Style="font-weight:500">Total</MudText>
                                             </FooterTemplate>
                                         </PropertyColumn>
-                                        <PropertyColumn Property="x => x.TotalAmount" Title="Amount (incl. Tax)" Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")" Filterable="false" Sortable="false"
+                                        <PropertyColumn Title="Amount (incl. Tax)" Property="x => x.TotalAmount" Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")" Filterable="false" Sortable="false"
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" CellStyle="text-align:right"
-                                                        Context="qi"
+                                                        Context="qi" FooterClass="reddit-mono-400"
                                                         AggregateDefinition="_expAggr" FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right">
                                             <EditTemplate>
                                                 <MudStack Row=true Spacing="2">
@@ -481,18 +483,20 @@
                                                 </MudStack>
                                             </EditTemplate>
                                         </PropertyColumn>
-                                        <PropertyColumn Property="x => x.Amount" Title="Amount" Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")"
+                                        <PropertyColumn Title="Amount" Property="x => x.Amount" Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")"
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" CellStyle="text-align:right"
                                                         Filterable="false" Sortable="false" Editable="false" AggregateDefinition="_expAggr"
-                                                        FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right" Context="qi">
+                                                        FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right" Context="qi"
+                                                        FooterClass="reddit-mono-400">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
-                                        <PropertyColumn Property="x => x.TaxAmount" Title="Tax Amount" Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")"
+                                        <PropertyColumn Title="Tax Amount" Property="x => x.TaxAmount" Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")"
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" CellStyle="text-align:right"
                                                         Filterable="false" Sortable="false" Editable="false"
-                                                        AggregateDefinition="_expAggr" FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right" Context="qi">
+                                                        AggregateDefinition="_expAggr" FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right" Context="qi"
+                                                        FooterClass="reddit-mono-400">
                                             <EditTemplate>
 
                                             </EditTemplate>
@@ -531,9 +535,11 @@
                                         <TemplateColumn Hidden=@IsViewMode Title="Action" HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell d-flex justify-end"
                                                         HeaderStyle="width:20px" Context="qi">
                                             <CellTemplate>
-                                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@qi.Actions.StartEditingItemAsync" />
-                                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" Color="Color.Error" OnClick="@(() => RemoveExpenseItem(qi.Item))" />
+                                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Rounded.Edit" OnClick="@qi.Actions.StartEditingItemAsync" />
+                                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Rounded.Delete" Color="Color.Error" OnClick="@(() => RemoveExpenseItem(qi.Item))" />
                                                 <MudIconButton Size="Size.Small" Icon="@Icons.Material.Rounded.FileCopy" Color="Color.Success" OnClick="@(() => CloneExpenseItem(qi.Item))" />
+                                                <MudIconButton Size="Size.Small" Icon="@Icons.Material.Rounded.KeyboardArrowUp" Color="Color.Secondary" OnClick="@(() => MoveExpenseItemUp(qi.Item))" />
+                                                <MudIconButton Size="Size.Small" Icon="@Icons.Material.Rounded.KeyboardArrowDown" Color="Color.Secondary" OnClick="@(() => MoveExpenseItemDown(qi.Item))" />
                                             </CellTemplate>
                                         </TemplateColumn>
                                     </Columns>
@@ -805,6 +811,36 @@
         _qItemDataGrid.SetEditingItemAsync(_tempItemToAdd);
     }
 
+    void MoveInvoiceItemUp(InvoiceItem i)
+    {
+        if (i.OrderNo == 1)
+            return;
+        else
+        {
+            i.OrderNo--;
+            var tmpInvItem = CurrentObject!.Items.SingleOrDefault(x => x.OrderNo == i.OrderNo && x != i);
+            if (tmpInvItem != null)
+                tmpInvItem.OrderNo++;
+
+            CurrentObject!.Items = CurrentObject!.Items.OrderBy(x => x.OrderNo).ToList();
+        }
+    }
+
+    void MoveInvoiceItemDown(InvoiceItem i)
+    {
+        if (i.OrderNo == CurrentObject!.Items.Count())
+            return;
+        else
+        {
+            i.OrderNo++;
+            var tmpInvItem = CurrentObject!.Items.SingleOrDefault(x => x.OrderNo == i.OrderNo && x != i);
+            if (tmpInvItem != null)
+                tmpInvItem.OrderNo--;
+
+            CurrentObject!.Items = CurrentObject!.Items.OrderBy(x => x.OrderNo).ToList();
+        }
+    }
+
     void AddExpenseItem()
     {
         _tempExpItemToAdd = new()
@@ -854,6 +890,36 @@
 
         CurrentObject!.ExpenseItems.Add(_tempExpItemToAdd);
         _expItemDataGrid.SetEditingItemAsync(_tempExpItemToAdd);
+    }
+
+    void MoveExpenseItemUp(ExpenseItem i)
+    {
+        if (i.OrderNo == 1)
+            return;
+        else
+        {
+            i.OrderNo--;
+            var tmpExpItem = CurrentObject!.ExpenseItems.SingleOrDefault(x => x.OrderNo == i.OrderNo && x != i);
+            if (tmpExpItem != null)
+                tmpExpItem.OrderNo++;
+
+            CurrentObject!.ExpenseItems = CurrentObject!.ExpenseItems.OrderBy(x => x.OrderNo).ToList();
+        }
+    }
+
+    void MoveExpenseItemDown(ExpenseItem i)
+    {
+        if (i.OrderNo == CurrentObject!.ExpenseItems.Count())
+            return;
+        else
+        {
+            i.OrderNo++;
+            var tmpExpItem = CurrentObject!.ExpenseItems.SingleOrDefault(x => x.OrderNo == i.OrderNo && x != i);
+            if (tmpExpItem != null)
+                tmpExpItem.OrderNo--;
+
+            CurrentObject!.ExpenseItems = CurrentObject!.ExpenseItems.OrderBy(x => x.OrderNo).ToList();
+        }
     }
 
     void StartedEditingItem(InvoiceItem item)

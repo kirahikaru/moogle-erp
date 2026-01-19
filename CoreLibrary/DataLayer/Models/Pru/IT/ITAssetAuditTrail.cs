@@ -29,6 +29,8 @@ public class ITAssetAuditTrail : AuditObject
 	public string? AssetCode { get; set; }
 	public string? SerialNo { get; set; }
 	public string? Category { get; set; }
+	public string? RequestTicketRefNo { get; set; }
+	public string? RequestTicketSys { get; set; }
 	public string? SubCategory { get; set; }
 	[Required(ErrorMessage = "'Request Date' is required.")]
 	public DateTime? RequestDate { get; set; }
@@ -52,7 +54,11 @@ public class ITAssetAuditTrail : AuditObject
 	#endregion
 
 	#region *** DYNAMIC PROPERTIES ***
-	
+	[Computed, Write(false), ReadOnly(true)]
+	public string? ObjectNameAndCode => ObjectName.NonNullValue("") + (!string.IsNullOrEmpty(ObjectCode) ? $" ({ObjectCode!})" : "");
+
+	[Computed, Write(false), ReadOnly(true)]
+	public string? CurrentUserNameAndID => CurrentUserName.NonNullValue("") + (!string.IsNullOrEmpty(CurrentUserID) ? $" ({CurrentUserID!})" : "");
 	#endregion
 
 	public ITAssetAuditTrail() : base()

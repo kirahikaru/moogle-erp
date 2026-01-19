@@ -82,7 +82,7 @@
                         </MudItem>
                         @* ======================================================================================================== *@
                         <MudItem xs="2">
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true"
                                        Label="Expense Type"
                                        @bind-Value=CurrentObject!.ExpenseType For="@(() => CurrentObject.ExpenseType)" OnlyValidateIfDirty="true">
                                 @foreach (string item in _expenseTypeList)
@@ -92,7 +92,7 @@
                             </MudSelect>
                         </MudItem>
                         <MudItem xs="3">
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true"
                                        Label="Grouping Level 1" T="string"
                                        Value=CurrentObject!.GroupingL1 For="@(() => CurrentObject.GroupingL1)" OnlyValidateIfDirty="true"
                                        ValueChanged="OnGroupingL1Changed">
@@ -131,7 +131,7 @@
                                           MaxLength="5" />
                         </MudItem>
                         <MudItem xs="3">
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" 
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover"
                                        Label="Class 2"
                                        @bind-Value=CurrentObject!.Class2 For="@(() => CurrentObject.Class2)" OnlyValidateIfDirty="true">
                                 @foreach (string class2 in _class2List)
@@ -165,7 +165,7 @@
                         </MudItem>
                         @* ======================================================================================================== *@
                         <MudItem xs="1">
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered"
+                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover"
                                        Label="Currency"
                                        @bind-Value=CurrentObject!.CurrencyCode For="@(() => CurrentObject.CurrencyCode)" OnlyValidateIfDirty="true">
                                 @foreach (DropdownSelectItem curr in _currList)

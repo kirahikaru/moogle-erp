@@ -14,6 +14,8 @@ public interface IUowPruIT : IUnitOfWork
 	IExpenseItemRepos ExpenseItems { get; }
 	IGLAccountRepos GLAccounts { get; }
 	IFinActTrackerRepos FinActivityTrackers { get; }
+	IFinActSummEntryRepos FinActSummEntries { get; }
+	IGLEntryRepos GLEntries { get; }
 	IInvoiceRepos Invoices { get; }
 	IITAssetRepos ITAssets { get; }
 	IITAssetAuditTrailRepos ITAssetAuditTrails { get; }
@@ -43,6 +45,8 @@ public class UowPruIT : UnitOfWork, IUowPruIT
 		ExpenseItems = new ExpenseItemRepos(DbContext);
 		GLAccounts = new GLAccountRepos(DbContext);
 		FinActivityTrackers = new FinActTrackerRepos(DbContext);
+		FinActSummEntries = new FinActSummEntryRepos(DbContext);
+		GLEntries = new GLEntryRepos(DbContext);
 		Invoices = new InvoiceRepos(DbContext);
 		ITAssets = new ITAssetRepos(DbContext);
 		ITAssetAuditTrails = new ITAssetAuditTrailRepos(DbContext);
@@ -63,6 +67,8 @@ public class UowPruIT : UnitOfWork, IUowPruIT
 	public IExpenseItemRepos ExpenseItems { get; }
 	public IGLAccountRepos GLAccounts { get; }
 	public IFinActTrackerRepos FinActivityTrackers { get; }
+	public IFinActSummEntryRepos FinActSummEntries { get; }
+	public IGLEntryRepos GLEntries { get; }
 	public IInvoiceRepos Invoices { get; }
 	public IITAssetRepos ITAssets { get; }
 	public IITAssetAuditTrailRepos ITAssetAuditTrails { get; }

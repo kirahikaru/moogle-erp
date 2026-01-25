@@ -30,7 +30,7 @@ public class BudgetItem : AuditObject
     [Required(AllowEmptyStrings = false, ErrorMessage = "'Budget Line Description' is required.")]
     [MaxLength(255)]
     public new string? ObjectName { get; set; }
-
+	public string? DispOrder { get; set; }
 	public string? GroupingL1 { get; set; }
 	public string? GroupingL2 { get; set; }
 	public string? GroupingL3 { get; set; }

@@ -11,14 +11,6 @@ public interface IBudgetItemRepos : IBaseRepos<BudgetItem>
 	Task<BudgetItem?> GetFullAsync(int id);
 
 	Task<IEnumerable<BudgetItem>> GetByYearAsync(int year);
-
-	Task<KeyValuePair<int, IEnumerable<BudgetItem>>> SearchAsync(
-		int pgSize = 0,
-		int pgNo = 0,
-		string? searchText = null,
-		IEnumerable<SqlSortCond>? sortConds = null,
-		IEnumerable<SqlFilterCond>? filterConds = null,
-		List<int>? excludeIdList = null);
 }
 
 public class BudgetItemRepos(IDbContext dbContext) : BaseRepos<BudgetItem>(dbContext, BudgetItem.DatabaseObject), IBudgetItemRepos
@@ -97,7 +89,7 @@ public class BudgetItemRepos(IDbContext dbContext) : BaseRepos<BudgetItem>(dbCon
 		return dataList;
 	}
 
-	public async Task<KeyValuePair<int, IEnumerable<BudgetItem>>> SearchAsync(
+	public override async Task<KeyValuePair<int, IEnumerable<BudgetItem>>> SearchNewAsync(
 		int pgSize = 0,
 		int pgNo = 0,
 		string? searchText = null,
@@ -144,6 +136,20 @@ public class BudgetItemRepos(IDbContext dbContext) : BaseRepos<BudgetItem>(dbCon
 			}
 		}
 
+		if (filterConds != null && filterConds.Any())
+		{
+			foreach (SqlFilterCond filterCond in filterConds)
+			{
+				sbSql.Where(filterCond.GetFilterSqlCommand("t"));
+
+				if (filterCond.FilterValue != null)
+					param.Add($"@{filterCond.FieldName}", filterCond.FilterValue);
+				else if (filterCond.Parameters.ParameterNames.Count() > 0)
+					param.AddDynamicParams(filterCond.Parameters);
+
+			}
+		}
+
 		if (excludeIdList != null && excludeIdList.Count > 0)
 		{
 			sbSql.Where("t.Id NOT IN @ExcludeIdList");
@@ -165,9 +171,7 @@ public class BudgetItemRepos(IDbContext dbContext) : BaseRepos<BudgetItem>(dbCon
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
 
-			sql = sbSql.AddTemplate(
-				$";WITH pg AS (SELECT t.Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				$"SELECT * FROM {DbObject.MsSqlTable} t WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY").RawSql;
 		}
 
 		using var cn = DbContext.DbCxn;

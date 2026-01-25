@@ -44,8 +44,9 @@
             @* <PropertyColumn Property="x => x.LBU" Title="LBU" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" /> *@
             <PropertyColumn Title="Vendor" Property="x => x.VendorName"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
-            <PropertyColumn Title="Expiry" Property="x => x.ExpiryDate" Format="dd-MMM-yyyy"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Filterable="false" />
+			<PropertyColumn Title="Expiry" Property="x => x.ExpiryDate" Format="dd-MMM-yyyy" Filterable="false"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400"
+							HeaderStyle="min-width:120px"/>
             <PropertyColumn Title="Currency" Property="x => x.CurrencyCode"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Filterable="false" Sortable="false" />
             <PropertyColumn Title="Total Amount" Property="x => x.TotalAmount" Format="#,##0.00" Filterable="false" Sortable="false"

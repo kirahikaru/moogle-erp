@@ -1,11 +1,9 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
 using DataLayer.GlobalConstant;
-using DataLayer.Models.SysCore;
-using DataLayer.Models.SysCore.NonPersistent;
 
 namespace DataLayer.Models.HomeInventory;
 
-[Table("[home].[OwnedItem]"), DisplayName("My Item")]
+[Table("[him].[OwnedItem]"), DisplayName("My Item")]
 public class OwnedItem : AuditObject
 {
 	[Computed, Write(false), ReadOnly(true)]

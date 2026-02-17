@@ -1,5 +1,7 @@
-﻿using DataLayer.Models.RMS;
+﻿using DataLayer.Models.LIB;
 using DataLayer.Models.Retail.NonPersistent;
+using DataLayer.Models.RMS;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 
 namespace DataLayer.Repos.RMS;
@@ -20,7 +22,7 @@ public interface IItemRepos : IBaseRepos<Item>
 
 	Task<bool> UpdateUnitPriceAsync(int id, string currencyCode, decimal retailUnitPrice, decimal wholeSaleUnitPrice, string modifiedUser);
 
-	Task<Item?> GetFullAsync(int id, bool includeAttachedImages = false);
+	Task<Item?> GetFullAsync(int id, bool includSubItems = false, bool includeAttachedImages = false);
 
 	Task<List<Item>> QuickSearch1Async(int pgSize = 0, int pgNo = 0,
 		string? searchText = null,
@@ -124,7 +126,7 @@ public class ItemRepos(IDbContext dbContext) : BaseRepos<Item>(dbContext, Item.D
         }
     }
 
-    public async Task<Item?> GetFullAsync(int id, bool includeAttachedImages = false)
+    public async Task<Item?> GetFullAsync(int id, bool includSubItems = false, bool includeAttachedImages = false)
     {
 		SqlBuilder sbSql = new();
 		DynamicParameters param = new();
@@ -165,9 +167,18 @@ public class ItemRepos(IDbContext dbContext) : BaseRepos<Item>(dbContext, Item.D
                 data.Images = attachedImages;
             }
 
-            var itemVariationSql = $"SELECT * FROM {ItemVariation.MsSqlTable} t WHERE t.ItemId=@ItemId";
 
-            data.Variations = (await cn.QueryAsync<ItemVariation>(itemVariationSql, new { ItemId = id })).AsList();
+            if (includSubItems)
+            {
+				var itemVariationSql = $"SELECT * FROM {ItemVariation.MsSqlTable} t WHERE t.IsDeleted=0 AND t.ItemId=@ItemId";
+				data.Variations = (await cn.QueryAsync<ItemVariation>(itemVariationSql, new { ItemId = id })).AsList();
+
+				var itemSupplierSql = $"SELECT * FROM {ItemSupplier.MsSqlTable} t WHERE t.IsDeleted=0 AND t.ItemId=@ItemId";
+				data.Suppliers = (await cn.QueryAsync<ItemSupplier>(itemSupplierSql, new { ItemId = id })).AsList();
+
+				var itemSpecSql = $"SELECT * FROM {ItemSpec.MsSqlTable} t WHERE t.IsDeleted=0 AND t.ItemId=@ItemId";
+				data.Specs = (await cn.QueryAsync<ItemSpec>(itemSpecSql, new { ItemId = id })).AsList();
+			}
 
             return data;
         }
@@ -279,7 +290,22 @@ public class ItemRepos(IDbContext dbContext) : BaseRepos<Item>(dbContext, Item.D
                 int specId = await cn.InsertAsync(spec, tran);
             }
 
-            tran.Commit();
+			foreach (ItemSupplier supplier in obj.Suppliers)
+			{
+                if (supplier.SupplierId is null)
+                    continue;
+
+				supplier.ItemId = objId;
+				supplier.ItemCode = obj.ObjectCode;
+				supplier.CreatedUser = obj.CreatedUser;
+				supplier.CreatedDateTime = obj.CreatedDateTime;
+				supplier.ModifiedUser = obj.ModifiedUser;
+				supplier.ModifiedDateTime = obj.ModifiedDateTime;
+
+				int supplierId = await cn.InsertAsync(supplier, tran);
+			}
+
+			tran.Commit();
             return objId;
         }
         catch
@@ -374,6 +400,28 @@ public class ItemRepos(IDbContext dbContext) : BaseRepos<Item>(dbContext, Item.D
                 }
                 else
                     throw new Exception("Invalid ItemSpec.Id");
+			}
+
+			foreach (ItemSupplier supplier in obj.Suppliers)
+			{
+				if (supplier.Id > 0)
+				{
+					supplier.ItemId = obj.Id;
+					supplier.ItemCode = obj.ObjectCode;
+					supplier.ModifiedUser = obj.ModifiedUser;
+					supplier.ModifiedDateTime = obj.ModifiedDateTime;
+					bool isSupplierUpd = await cn.UpdateAsync(supplier, tran);
+				}
+				else if (supplier.Id == 0 && supplier.SupplierId is not null)
+				{
+					supplier.ItemId = obj.Id;
+					supplier.ItemCode = obj.ObjectCode;
+					supplier.CreatedUser = obj.ModifiedUser;
+					supplier.CreatedDateTime = obj.ModifiedDateTime;
+					supplier.ModifiedUser = obj.ModifiedUser;
+					supplier.ModifiedDateTime = obj.ModifiedDateTime;
+					int supplierId = await cn.InsertAsync(supplier, tran);
+				}
 			}
 
 			tran.Commit();
@@ -540,11 +588,16 @@ public class ItemRepos(IDbContext dbContext) : BaseRepos<Item>(dbContext, Item.D
                 sbSql.Where("t.Barcode=@SearchText");
                 param.Add("@SearchText", searchText, DbType.AnsiString);
 			}
+            else if (searchText.StartsWith("ctg:"))
+            {
+				sbSql.Where("LOWER(ic.ObjectName) LIKE '%'+LOWER(@SearchText)+'%'");
+				param.Add("@SearchText", searchText.Replace("ctg:",""), DbType.AnsiString);
+			}
             else
             {
                 sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%')");
-				param.Add("@SearchText", searchText, DbType.AnsiString);
-			}
+                param.Add("@SearchText", searchText, DbType.AnsiString);
+            }
 		}
 
 		if (excludeIdList != null && excludeIdList.Count != 0)
@@ -578,9 +631,7 @@ public class ItemRepos(IDbContext dbContext) : BaseRepos<Item>(dbContext, Item.D
 		{
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
-			sql = sbSql.AddTemplate(
-				$";WITH pg AS (SELECT Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				$"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY").RawSql;
 		}
 
 		using var cn = DbContext.DbCxn;
@@ -593,7 +644,7 @@ public class ItemRepos(IDbContext dbContext) : BaseRepos<Item>(dbContext, Item.D
 											return item;
 										}, param, splitOn: "Id");
 
-		string sqlCount = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
+		string sqlCount = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 		int dataCount = await cn.ExecuteScalarAsync<int>(sqlCount, param);
 		return new(dataCount, dataList);
 	}

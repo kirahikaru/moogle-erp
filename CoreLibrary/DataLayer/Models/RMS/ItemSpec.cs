@@ -24,7 +24,7 @@ public class ItemSpec : AuditObject
 	public static DatabaseObj DatabaseObject => new(SchemaName, MsSqlTableName, PgTableName);
 
 	#region *** DATABASE FIELDS ***
-	public int ItemId { get; set; }
+	public int? ItemId { get; set; }
 	public string? ItemCode { get; set; }
 	public int? OrderNo { get; set; }
 	public string? SpecTypeCode { get; set; }

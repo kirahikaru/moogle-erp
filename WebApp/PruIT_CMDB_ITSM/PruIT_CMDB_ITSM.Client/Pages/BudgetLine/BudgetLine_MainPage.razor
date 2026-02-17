@@ -1,10 +1,10 @@
-﻿@page "/fin/budget-item/main"
+﻿@page "/fin/budget-line/main"
 @using PruIT_CMDB_ITSM.Client.Pages
 
 @* @rendermode InteractiveAuto *@
 
 @inject SweetAlertService Swal
-@inherits MainPageBase<BudgetItem>
+@inherits MainPageBase<BudgetLine>
 
 <MudPaper Class="px-4 py-3 rounded" Width="100%" Elevation="0" Square="true" Style="background-color:#FFFDE7; border: solid 1px var(--pru-gray-tw-100)">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
@@ -24,94 +24,25 @@
 					  Placeholder="Search text here..." HelperText="<Search input instruction here>" Style="padding: 2px 0px 2px 0px"
 					  @bind-Value="SearchText" OnKeyDown="OnSearchBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
 		<MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/search" Size="Size.Small" Color="Color.Primary" DropShadow="false" OnClick="OnSearchClicked" Class="pru-btn-base">Search</MudButton>
-		<MudSelect Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true"
-				   Label="Year" T="int" FullWidth="false" Style="max-width:100px"
-				   @bind-Value=_budgetYr >
-			@foreach (int yr in _budgetYrList)
-			{
-				<MudSelectItem T="int" Value=@yr>@yr</MudSelectItem>
-			}
-		</MudSelect>
+		@* <MudRadioGroup  *@
 	</MudStack>
 	<MudDataGrid Class="mt-2 pru-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage=50
 				 ColumnResizeMode="ResizeMode.Container" HorizontalScrollbar="true" Elevation="0" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true"
-				 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" T="BudgetItem">
+				 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" T="BudgetLine">
 		<Columns>
-			@* <PropertyColumn Property="x => x.LBU" Title="LBU" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" /> *@
-			<TemplateColumn Title="LBU" StickyLeft="true" 
-				HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" Context="rowData">
-				<CellTemplate>
-					<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
-						<MudImage Src=@(_lbuFlagList[rowData.Item.LBU!]) Height="12" />
-						<MudText Typo="Typo.body1">@rowData.Item.LBU</MudText>
-					</MudStack>
-				</CellTemplate>
-            </TemplateColumn>
-            <TemplateColumn Title="Current" StickyLeft="true"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
-                            CellStyle="text-align:center" Context="rowData">
-                <CellTemplate>
-                    @if (rowData.Item.IsCurrent)
-                    {
-                        <MudIcon Icon="@Icons.Material.Rounded.CheckCircle" Color="Color.Success" Size="Size.Small" />
-                    }
-                    else
-                    {
-                        <MudIcon Icon="@Icons.Material.Rounded.Cancel" Color="Color.Secondary" Size="Size.Small" />
-                    }
-                </CellTemplate>
-            </TemplateColumn>
-            <PropertyColumn Title="Year" Property="x => x.BudgetYear" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" />
-            <PropertyColumn Title="Grouping L1" Property="x => x.GroupingL1"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:200px" Sortable="false" />
-            <PropertyColumn Property="x => x.GroupingL2" Title="Grouping L2"
+			<PropertyColumn Title="Order #" Property="x => x.OrderNo"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
                             HeaderStyle="min-width:180px" Sortable="false" />
-            <PropertyColumn Property="x => x.GroupingL3" Title="Grouping L3."
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" HeaderStyle="min-width:200px" />
+			<PropertyColumn Title="Display Order" Property="x => x.DisplayOrder" Sortable="false"
+							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-500"
+							HeaderStyle="min-width:140px" CellStyle="text-align:right" />
+			<PropertyColumn Title="Display Order" Property="x => x.DisplayOrder"
+                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" 
+							HeaderStyle="min-width:200px" />
             <PropertyColumn Property="x => x.ObjectName" Title="Budget Item"
                             HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
                             HeaderStyle="min-width:280px" />
-			<PropertyColumn Title="Category" Property="x => x.Category"
-							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" />
-            <PropertyColumn Title="Act Tracker ID" Property="x => x.ActivityTrackID" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-400"
-                            HeaderStyle="min-width:120px" />
-            <PropertyColumn Title="Class 2" Property="x => x.Class2"
-							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:180px" />
-            <PropertyColumn Title="Currency" Property="x => x.CurrencyCode" Filterable="false" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top" />
-            <PropertyColumn Title="Budget Amount" Property="x => x.BudgetedAmount" Format="#,##0" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-500"
-                            HeaderStyle="min-width:140px" CellStyle="text-align:right" />
-            <PropertyColumn Title="Expense Amount" Property="x => x.TotalExpenseAmount" Format="#,##0" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-500"
-                            HeaderStyle="min-width:140px" CellStyle="text-align:right" />
-            @* <PropertyColumn Property="x => x.RemainingAmount" Title="Remaining Amount" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Format="#,##0" CellStyle="text-align:right" /> *@
-            <TemplateColumn Title="Remaining Amount" Filterable="false" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:150px" CellStyle="text-align:right" Context="item">
-                <CellTemplate>
-                    <MudText Typo="Typo.body1" Class="reddit-mono-500" Color="@(item.Item.RemainingAmount > 0 ? Color.Success : (item.Item.RemainingAmount < 0 ? Color.Error : Color.Default))">
-                        @item.Item.RemainingAmount.ToString("#,##0")
-                    </MudText>
-                </CellTemplate>
-            </TemplateColumn>
-            <PropertyColumn Property="x => x.TaxRateText" Title="Tax Rate" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-                            HeaderStyle="min-width:110px" />
-            <PropertyColumn Title="Budget ID" Property="x => x.ObjectCode"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-400" HeaderStyle="min-width:150px" />
-            <PropertyColumn Title="Version" Property="x => x.VersionName"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
-							HeaderStyle="min-width:200px" />
-			<PropertyColumn Title="Account Code" Property="x => x.AccountCode" Sortable="false"
-							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-400"
-							HeaderStyle="min-width:150px" />
-			<PropertyColumn Title="Account Name" Property="x => x.AccountName" Sortable="false"
+			<PropertyColumn Title="Hierarchy Path" Property="x => x.HierarchyPath" Sortable="false"
 							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell data-align-top"
 							HeaderStyle="min-width:250px" />
             <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
@@ -129,36 +60,21 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="BudgetItem" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] {10, 30, 50, 80, 100}" />
+			<MudDataGridPager T="BudgetLine" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] {10, 30, 50, 80, 100}" />
 		</PagerContent>
 	</MudDataGrid>
 </MudPaper>
 
 @code {
 	#region UI PARAM
-	Dictionary<string, string> _lbuFlagList = PruLBUs.GetFlagIconPaths();
-	List<int> _budgetYrList = [];
-	int _budgetYr = 2026;
-	bool _isLatestBudget = true;
-
-	Dictionary<string, string> _statusCssClassList = new()
-		{
-			{ "", "" },
-			{ AssetLifeCycleStatuses.IN_STOCK, "status-chip-success-light" },
-			{ AssetLifeCycleStatuses.IN_USE, "status-chip-success-light" },
-			{ AssetLifeCycleStatuses.TERMINATED, "status-chip-obsolete-light" },
-			{ AssetLifeCycleStatuses.WRITTEN_OFF, "status-chip-obsolete-light" },
-			{ AssetLifeCycleStatuses.PENDING_REVIEW, "status-chip-pending-light" },
-			{ AssetLifeCycleStatuses.PENDING_WRITE_OFF, "status-chip-pending-light" },
-			{ AssetLifeCycleStatuses.PENDING_TERMINATION, "status-chip-pending-light" },
-		};
+	
 	#endregion
 
 	#region PAGE LIFECYCLE EVENTS
 	public override Task SetParametersAsync(ParameterView parameters)
 	{
-		UrlPrefix = "/fin/budget-item";
-		SearchParamName = "budgetItemSwParam";
+		UrlPrefix = "/fin/budget-line";
+		SearchParamName = "budgetLineSwParam";
 
 		return base.SetParametersAsync(parameters);
 	}
@@ -172,7 +88,7 @@
 			CurrentAppModPerm.CanRead = true;
 			CurrentAppModPerm.CanUpdate = true;
 			CurrentAppModPerm.CanDelete = true;
-			CurrentAppModPerm.ModuleName = typeof(BudgetItem).Name;
+			CurrentAppModPerm.ModuleName = typeof(BudgetLine).Name;
 		}
 		else
 		{
@@ -193,7 +109,6 @@
 
 		//=== LOAD SAVED SEARCH PARAMETERS ================================================
 		PopuplateSearchFilters();
-		await PopulateUIControls();
 		await Task.CompletedTask;
 	}
 
@@ -207,9 +122,9 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<BudgetItem>> ServerDataFunc(GridState<BudgetItem> gridState)
+	protected override async Task<GridData<BudgetLine>> ServerDataFunc(GridState<BudgetLine> gridState)
 	{
-		if (IsSearching) return new GridData<BudgetItem>
+		if (IsSearching) return new GridData<BudgetLine>
 			{
 				Items = [],
 				TotalItems = 0
@@ -229,20 +144,6 @@
 
 			List<SqlFilterCond> filterConds = [];
 
-            filterConds.Add(new SqlFilterCond()
-            {
-                FieldName = nameof(BudgetItem.IsCurrent),
-                FilterOperator = "=",
-                FilterValue = _isLatestBudget
-            });
-
-            filterConds.Add(new SqlFilterCond()
-            {
-                FieldName = nameof(BudgetItem.BudgetYear),
-                FilterOperator = "=",
-                FilterValue = _budgetYr
-            });
-
 			if (gridState.FilterDefinitions.Any())
 			{
 				//var filterFunctions = gridState.FilterDefinitions.Select(x => x.GenerateFilterFunction());
@@ -252,7 +153,7 @@
 			}
 			else
 			{
-				KeyValuePair<int, IEnumerable<BudgetItem>> result = await Uow.BudgetItems.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, filterConds, null);
+				KeyValuePair<int, IEnumerable<BudgetLine>> result = await Uow.BudgetLines.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, filterConds, null);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}
@@ -264,7 +165,7 @@
 			//	.Take(gridState.Count)
 			//	.ToList();
 
-			return new GridData<BudgetItem>
+			return new GridData<BudgetLine>
 				{
 					Items = MainDataList,
 					TotalItems = totalItemCount
@@ -274,7 +175,7 @@
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
 
-			return new GridData<BudgetItem>
+			return new GridData<BudgetLine>
 				{
 					Items = [],
 					TotalItems = 0
@@ -294,7 +195,7 @@
 	#endregion
 
 	#region CRUD FUNCTIONS
-	private async Task DeleteRecord(BudgetItem objToDelete)
+	private async Task DeleteRecord(BudgetLine objToDelete)
 	{
 		if (objToDelete == null)
 		{
@@ -324,7 +225,7 @@
 			{
 				try
 				{
-					int delCount = await Uow.BudgetItems.DeleteAsync(objToDelete.Id, AuditTrailUser);
+					int delCount = await Uow.BudgetLines.DeleteAsync(objToDelete.Id, AuditTrailUser);
 
 					if (delCount > 0)
 					{
@@ -378,16 +279,6 @@
 	private void PopuplateSearchFilters()
 	{
 
-	}
-
-	async Task PopulateUIControls()
-	{
-		for (int i=0; i<3; i++)
-		{
-			_budgetYrList.Add(DateTime.Today.Year - i);
-		}
-
-		_budgetYr = DateTime.Today.Year;
 	}
 	#endregion
 }

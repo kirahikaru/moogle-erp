@@ -10,6 +10,7 @@ public interface IUowPruIT : IUnitOfWork
 {
 	IEmployeeRepos Employees { get; }
 	IBudgetItemRepos BudgetItems { get; }
+	IBudgetLineRepos BudgetLines { get; }
 	ICmdbToAppMappingRepos CmdbToAppMappings { get; }
 	IExpenseItemRepos ExpenseItems { get; }
 	IGLAccountRepos GLAccounts { get; }
@@ -41,6 +42,7 @@ public class UowPruIT : UnitOfWork, IUowPruIT
     {
 		Employees = new EmployeeRepos(DbContext);
 		BudgetItems = new BudgetItemRepos(DbContext);
+		BudgetLines	= new BudgetLineRepos(DbContext);
 		CmdbToAppMappings = new CmdbToAppMappingRepos(DbContext);
 		ExpenseItems = new ExpenseItemRepos(DbContext);
 		GLAccounts = new GLAccountRepos(DbContext);
@@ -63,6 +65,7 @@ public class UowPruIT : UnitOfWork, IUowPruIT
 
 	public IEmployeeRepos Employees { get; }
 	public IBudgetItemRepos BudgetItems { get; }
+	public IBudgetLineRepos BudgetLines { get; }
 	public ICmdbToAppMappingRepos CmdbToAppMappings { get; }
 	public IExpenseItemRepos ExpenseItems { get; }
 	public IGLAccountRepos GLAccounts { get; }

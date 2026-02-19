@@ -216,6 +216,81 @@
                                               Label="Info Link"
                                               @bind-Value="CurrentObject!.InfoUrl" For="@(() => CurrentObject!.InfoUrl)" />
                             </MudItem>
+                            <MudItem xs="12" Class="mt-3"></MudItem>
+                            <MudItem xs="12" Style="padding:4px 12px; background-color:var(--ssv-pharma-blue-100)">
+                                <MudText Typo="Typo.h1" Style="font-size:18px; font-weight:700; color:var(--ssv-pharma-blue)">Content(s)</MudText>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudStack Spacing="2" Justify=Justify.FlexStart>
+                                    @if (!IsViewMode)
+                                    {
+                                        <MudStack Row="true" Spacing="2" Justify=Justify.FlexStart>
+                                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Primary" DropShadow="false" FullWidth="false" Class="moog-btn-base moog-btn-tight moog-btn-primary-light" StartIcon="material-symbols-rounded/add_circle"
+                                                       OnClick="AddContentItem" Disabled="!_isEditingContent">
+                                                Add Content
+                                            </MudButton>
+                                            <MudSwitchM3 ReadOnly=@IsViewMode Class="moog-mud-switch ml-2" Color="@(_isEditingContent? Color.Success: Color.Dark)"
+                                                         ThumbIcon="@Icons.Material.Rounded.Check" ThumbOffIcon="@Icons.Material.Rounded.Close" Size="Size.Small"
+                                                         Label=@(_isEditingContent ? "Edit ON" : "Edit OFF")
+                                                         @bind-Value="_isEditingContent" Style=@(_isEditingContent ? "color:#00C853; font-weight:600" : "color:#B0BEC5") />
+                                        </MudStack>
+                                    }
+                                    @* EditDialogOptions=@(new() { BackdropClick = false, MaxWidth = MaxWidth.Medium, FullWidth = true }) *@
+                                    <MudDataGrid Class="moog-mud-datagrid" Dense="true" Hover="true" FixedHeader="true" Striped="false" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None"
+                                                 Items="@CurrentObject!.ContentItems" T="BoardgameContentItem" @ref="_contentItemsGrid" NoRecordsContent="_gridNoRecord" Style="width:100%" QuickFilter="_quickContentFilter"
+                                                 ReadOnly=@(IsViewMode || !_isEditingContent) EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
+                                                 StartedEditingItem="@StartedEditingContentItem" CanceledEditingItem="@CanceledEditingContentItem" CommittedItemChanges="@CommittedContentItemChanges">
+                                        <Columns>
+                                            <PropertyColumn Title="No." Property="x => x.SeqNo" Sortable="false" Editable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderStyle="width:200px; max-width:48px" CellStyle="text-align:right" />
+                                            <PropertyColumn Title="Item" Property="x => x.ObjectName" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  @bind-Value=item.Item.ObjectName For="@(() => item.Item.ObjectName)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Count" Property="x => x.ItemCount" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderStyle="width:100px; max-width:80px" CellStyle=@(IsViewMode || !_isEditingContent ? "text-align:right" : "")
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                     Placeholder="Qty" Format="#,##0" Step="1"
+                                                                     @bind-Value="item.Item.ItemCount" T="int" For="(() => item.Item.ItemCount)"
+                                                                     Style="text-align:right" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Remark" Property="x => x.Remark" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Lines="2" AutoGrow="false"
+                                                                  Placeholder="Remark..."
+                                                                  @bind-Value="item.Item.Remark" For="@(() => item.Item.Remark)" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                            HeaderStyle="width:500px; max-width:88px" CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
+                                                            Context="item">
+                                                <CellTemplate>
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveContentItemUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveContentItemDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveContentItem(item.Item))" />
+                                                </CellTemplate>
+                                                <EditTemplate>
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveContentItemUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveContentItemDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveContentItem(item.Item))" />
+                                                </EditTemplate>
+                                            </TemplateColumn>
+                                        </Columns>
+                                    </MudDataGrid>
+                                </MudStack>
+                            </MudItem>
                         </MudGrid>
                         <MudPaper MinWidth="500px" MaxWidth="500px" MaxHeight="1000px" MinHeight="500px" Class="pa-2" Elevation="0">
                             <MudCarousel Class="mud-full-width" ShowArrows="false" ShowBullets="true" BulletsPosition="Position.End" EnableSwipeGesture="true" AutoCycle="false" TData="object" Style="min-height:540px">
@@ -306,7 +381,11 @@
     Dictionary<string, string> _nextValidActionList = [];
     Dictionary<string, string> _actionIconList = [];
     ObjectStateTransitionDetail? _objStateTranDetail = null;
-    public readonly string DataGridHdrStyle = "font-weight:700; background-color:var(--ssv-pharma-blue); color:#FFFFFF; border-right:1px solid #FFFFFF; padding-inline-start: 10px; padding-inline-end:5px; line-height:100%; padding-top:4px; padding-bottom:4px";
+
+    bool _isEditingContent = false;
+    BoardgameContentItem? _tempContentItemToAdd;
+    RenderFragment _gridNoRecord = @<p>No record</p>;
+    MudDataGrid<BoardgameContentItem> _contentItemsGrid = new();
     #endregion
 
     #region PAGE LIFECYCLE FUNCTIONS
@@ -414,6 +493,95 @@
         var dialog = await MudDialogSvc.ShowAsync<AttachedImagesDiag>($"IMAGE(S)", param, diagOptions);
         var result = await dialog.Result;
     }
+
+    #region Boardgame Content Item
+    // quick filter - filter globally across multiple columns with the same input
+    private Func<BoardgameContentItem, bool> _quickContentFilter => x =>
+    {
+        return !x.IsDeleted;
+    };
+
+    void AddContentItem()
+    {
+        _tempContentItemToAdd = new()
+        {
+            SeqNo = CurrentObject!.ContentItems.Count + 1
+        };
+
+        CurrentObject!.ContentItems.Add(_tempContentItemToAdd);
+        // _itemDataGrid.SetEditingItemAsync(_tempItemToAdd);
+    }
+
+    void MoveContentItemUp(BoardgameContentItem contentItem)
+    {
+        if (CurrentObject!.ContentItems.Count > 1 && contentItem.SeqNo!.Value > 1)
+        {
+            contentItem.SeqNo--;
+
+            BoardgameContentItem? a = CurrentObject!.ContentItems.FirstOrDefault(x => x.IsDeleted == false && x.SeqNo is not null && x.SeqNo == contentItem.SeqNo && x != contentItem);
+
+            if (a != null)
+                a!.SeqNo++;
+
+            CurrentObject!.ContentItems = CurrentObject!.ContentItems.OrderBy(x => x.SeqNo).ToList();
+        }
+    }
+
+    void MoveContentItemDown(BoardgameContentItem contentItem)
+    {
+        if (CurrentObject!.ContentItems.Count > 1 && CurrentObject!.ContentItems.Count != contentItem.SeqNo!.Value)
+        {
+            contentItem.SeqNo++;
+
+            BoardgameContentItem? a = CurrentObject!.ContentItems.FirstOrDefault(x => x.IsDeleted == false && x.SeqNo is not null && x.SeqNo == contentItem.SeqNo && x != contentItem);
+
+            if (a != null)
+                a!.SeqNo--;
+
+            CurrentObject!.ContentItems = CurrentObject!.ContentItems.OrderBy(x => x.SeqNo).ToList();
+        }
+    }
+
+    void RemoveContentItem(BoardgameContentItem contentItem)
+    {
+        if (contentItem.Id == 0)
+        {
+            CurrentObject!.ContentItems.Remove(contentItem);
+
+            foreach (var var in CurrentObject!.ContentItems.Where(x => !x.IsDeleted && x.SeqNo > contentItem.SeqNo))
+            {
+                var.SeqNo--;
+            }
+        }
+        else if (contentItem.Id > 0)
+        {
+            foreach (var var in CurrentObject!.ContentItems.Where(x => !x.IsDeleted && x.SeqNo > contentItem.SeqNo))
+                var.SeqNo--;
+
+            contentItem.SeqNo = null;
+            contentItem.IsDeleted = true;
+        }
+    }
+
+    void StartedEditingContentItem(BoardgameContentItem contentItem)
+    {
+
+    }
+
+    void CanceledEditingContentItem(BoardgameContentItem contentItem)
+    {
+        if (_tempContentItemToAdd != null)
+        {
+            CurrentObject!.ContentItems.RemoveAt(CurrentObject!.ContentItems.FindIndex(x => x.SeqNo == contentItem.SeqNo));
+            _tempContentItemToAdd = null;
+        }
+    }
+
+    void CommittedContentItemChanges(BoardgameContentItem contentItem)
+    {
+        _tempContentItemToAdd = null;
+    }
+    #endregion
     #endregion
 
     #region DB UPDATE FUNCTIONS

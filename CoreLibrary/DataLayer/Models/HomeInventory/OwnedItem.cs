@@ -55,13 +55,12 @@ public class OwnedItem : AuditObject
 	[MaxLength(80)]
 	public string? OtherRefNum2 { get; set; }
 
-	[MaxLength(255), StringUnicode(true)]
+	[StringUnicode(true)]
 	public string? ItemDescription { get; set; }
 
-	[MaxLength(255)]
 	public string? Specification { get; set; }
 
-	[MaxLength(255), StringUnicode(true)]
+	[StringUnicode(true)]
 	public string? Remark { get; set; }
 
 	/// <summary>

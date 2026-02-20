@@ -41,6 +41,8 @@ public class MedicineComposition : AuditObject
     [Range(0.00, 99999999999.99, ErrorMessage ="'Quantity' must be positive number.")]
     [Precision(10, 2)]
     public double? Quantity { get; set; }
+
+    public string? QtyDesc { get; set; }
     #endregion
 
     #region *** LINKED OBJECTS ***

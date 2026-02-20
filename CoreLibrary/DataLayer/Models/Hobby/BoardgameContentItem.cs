@@ -25,7 +25,7 @@ public class BoardgameContentItem : AuditObject
 
 	#region *** DATABASE FIELDS ***
 	public int? BoardgameId { get; set; }
-    public int? SequenceNo { get; set; }
+    public int? SeqNo { get; set; }
     public int ItemCount { get; set; }
     public string? Remark { get; set; }
     #endregion

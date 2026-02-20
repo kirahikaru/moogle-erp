@@ -119,6 +119,8 @@ public class BoardgameRepos(IDbContext dbContext) : BaseRepos<Boardgame>(dbConte
 					{
 						if (!item.IsDeleted)
 						{
+                            item.ObjectCode = $"{obj.ObjectCode}_{item.SeqNo!.Value:000000}";
+                            item.BoardgameId = objId;
 							item.CreatedDateTime = obj.CreatedDateTime;
 							item.CreatedUser = obj.CreatedUser;
 							item.ModifiedDateTime = obj.ModifiedDateTime;
@@ -147,6 +149,8 @@ public class BoardgameRepos(IDbContext dbContext) : BaseRepos<Boardgame>(dbConte
 
 						if (item.Id == 0)
 						{
+							item.ObjectCode = $"{obj.ObjectCode}_{item.SeqNo!.Value:000000}";
+							item.BoardgameId = obj.Id;
 							item.CreatedDateTime = obj.ModifiedDateTime;
 							item.CreatedUser = obj.ModifiedUser;
 							item.ModifiedDateTime = obj.ModifiedDateTime;
@@ -159,6 +163,8 @@ public class BoardgameRepos(IDbContext dbContext) : BaseRepos<Boardgame>(dbConte
 						}
 						else
 						{
+							item.ObjectCode = $"{obj.ObjectCode}_{item.SeqNo!.Value:000000}";
+							item.BoardgameId = obj.Id;
 							item.ModifiedDateTime = obj.ModifiedDateTime;
 							item.ModifiedUser = obj.ModifiedUser;
 							bool isItemUpdated = await cn.UpdateAsync(item, tran);

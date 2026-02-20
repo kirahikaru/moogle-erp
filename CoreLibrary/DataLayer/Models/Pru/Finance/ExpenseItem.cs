@@ -39,7 +39,8 @@ public class ExpenseItem : AuditObject
 	public string? AccountName { get; set; }
 
 	[RegularExpression(@"^\d{4}[A-Z]{0,1}$", ErrorMessage = "Invalid format. Valid format is 4 digit with operation (A to E) at the end")]
-	public string? ActivityTrackID { get; set; }
+	public string? FinActTrackerID { get; set; }
+	public string? FinActTrackerName { get; set; }
 	public string? FinProjectCode { get; set; }
 	public decimal? Amount { get; set; }
 	public decimal? TaxRate { get; set; }

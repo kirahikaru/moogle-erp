@@ -1,5 +1,5 @@
-﻿@page "/fin/fin-act-tracker/cruc/{CRUCMode}"
-@page "/fin/fin-act-tracker/cruc/{CRUCMode}/{id:int}"
+﻿@page "/pru/fin/fin-act-tracker/cruc/{CRUCMode}"
+@page "/pru/fin/fin-act-tracker/cruc/{CRUCMode}/{id:int}"
 
 @* @rendermode InteractiveAuto*@
 
@@ -87,6 +87,8 @@
                                               Label="Owner Name"
                                               @bind-Value=CurrentObject!.OwnerName For="@(() => CurrentObject.OwnerName)"
                                               MaxLength="255" />
+                            </MudItem>
+                            <MudItem xs="3">
                             </MudItem>
                             <MudItem xs="12">
                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" MaxLines="25" Lines=4

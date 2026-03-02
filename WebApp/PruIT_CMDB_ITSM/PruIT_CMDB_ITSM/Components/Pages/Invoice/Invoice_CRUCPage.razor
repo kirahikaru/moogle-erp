@@ -439,29 +439,43 @@
                                                 </MudStack>
                                             </EditTemplate>
                                         </PropertyColumn>
-                                        <PropertyColumn Property="x => x.AccountName" Title="Account Name" Sortable="false"
+                                        <PropertyColumn Title="Account Name" Property="x => x.AccountName" Sortable="false"
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
                                                         Context="expItem">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
-                                        <PropertyColumn Title="Act Tracker" Property="x => x.ActivityTrackID" Sortable="false"
+                                        <PropertyColumn Title="Act Tracker" Property="x => x.FinActTrackerID" Sortable="false"
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" Context="expItem"
                                                         FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right">
                                             <EditTemplate>
-                                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" PopoverClass="pru-ui-combo-box-popover" Editable="true" FullWidth="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password" EnableFilter="true" Required="true"
-                                                             Label="Act. Tracker #" SearchFunc="SeachGlAccountDropdown" SearchBoxClearable="true"
-                                                             @bind-Value=@expItem.Item.ActivityTrackID For="@(() => expItem.Item.ActivityTrackID)" OnlyValidateIfDirty="true">
-                                                    @foreach (FinActivityTracker actTracker in _finActTrackerList)
-                                                    {
-                                                        <MudComboBoxItem Value="@actTracker.ObjectCode" Text="@($"{actTracker.ObjectCode} - {actTracker.ObjectName}")">@($"{actTracker.ObjectCode} - {actTracker.ObjectName}")</MudComboBoxItem>
-                                                    }
-                                                </MudComboBox>
+                                                <MudStack Row="true" Spacing="3" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
+                                                    <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" PopoverClass="pru-ui-combo-box-popover" Editable="true" FullWidth="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password" EnableFilter="true" Required="true"
+                                                                 Label="Act. Tracker #" SearchFunc="SeachGlAccountDropdown" SearchBoxClearable="true" T="string"
+                                                                 Value=@expItem.Item.FinActTrackerID ValueChanged="@(args => OnFinActTrackerSelectionChanged(expItem.Item, args))"
+                                                                 For="@(() => expItem.Item.FinActTrackerID)" OnlyValidateIfDirty="true">
+                                                        @foreach (FinActivityTracker actTracker in _finActTrackerList)
+                                                        {
+                                                            <MudComboBoxItem Value="@actTracker.ObjectCode" Text="@($"{actTracker.ObjectCode} - {actTracker.ObjectName}")">@($"{actTracker.ObjectCode} - {actTracker.ObjectName}")</MudComboBoxItem>
+                                                        }
+                                                    </MudComboBox>
+                                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered"
+                                                                  Label="Act. Tracker Name"
+                                                                  @bind-Value=@expItem.Item.FinActTrackerName For="@(() => expItem.Item.FinActTrackerName)" OnlyValidateIfDirty="true"
+                                                                  MaxLength="255" />
+                                                </MudStack>
                                             </EditTemplate>
                                             <FooterTemplate>
                                                 <MudText Typo="Typo.body2" Style="font-weight:500">Total</MudText>
                                             </FooterTemplate>
+                                        </PropertyColumn>
+                                        <PropertyColumn Title="Tracker Name" Property="x => x.FinActTrackerName" Sortable="false"
+                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
+                                                        Context="expItem">
+                                            <EditTemplate>
+
+                                            </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Amount (incl. Tax)" Property="x => x.TotalAmount" Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")" Filterable="false" Sortable="false"
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" CellStyle="text-align:right"
@@ -715,7 +729,8 @@
     {
         _tempItemToAdd = new()
         {
-            OrderNo = CurrentObject!.Items.Count + 1
+            OrderNo = CurrentObject!.Items.Count + 1,
+            Quantity = 1
         };
         CurrentObject!.Items.Add(_tempItemToAdd);
         _qItemDataGrid.SetEditingItemAsync(_tempItemToAdd);
@@ -848,7 +863,6 @@
             OrderNo = CurrentObject!.ExpenseItems.Count + 1,
             ExpenseMth = CurrentObject!.EffectiveDate?.Month,
             ExpenseYr = CurrentObject!.EffectiveDate?.Year,
-
         };
         CurrentObject!.ExpenseItems.Add(_tempExpItemToAdd);
         _expItemDataGrid.SetEditingItemAsync(_tempExpItemToAdd);
@@ -881,7 +895,7 @@
             OrderNo = CurrentObject!.ExpenseItems.Count + 1,
             AccountCode = i.AccountCode,
             AccountName = i.AccountName,
-            ActivityTrackID = i.ActivityTrackID,
+            FinActTrackerID = i.FinActTrackerID,
             ExpenseYr = i.ExpenseYr,
             ExpenseMth = i.ExpenseMth,
             Amount = i.Amount,
@@ -1001,6 +1015,25 @@
             if (glAcc != null)
             {
                 item.AccountName = glAcc.ObjectName;
+            }
+        }
+    }
+
+    void OnFinActTrackerSelectionChanged(ExpenseItem item, string? finActTrackerId)
+    {
+        if (string.IsNullOrEmpty(finActTrackerId))
+        {
+            item.FinActTrackerID = null;
+            item.FinActTrackerName = null;
+        }
+        else
+        {
+            item.FinActTrackerID = finActTrackerId;
+            FinActivityTracker? finActTracker = _finActTrackerList.SingleOrDefault<FinActivityTracker>(x => x.ObjectCode == finActTrackerId);
+
+            if (finActTracker != null)
+            {
+                item.FinActTrackerName = finActTracker.ObjectName;
             }
         }
     }

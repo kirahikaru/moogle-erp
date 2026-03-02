@@ -72,6 +72,11 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<PruHR.Employee>(dbC
 				sbSql.Where("UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
 				param.Add("@SearchText", searchText.Replace("id:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
 			}
+			else if (searchText.StartsWith("objId:", StringComparison.OrdinalIgnoreCase))
+			{
+				sbSql.Where("t.Id=@Id");
+				param.Add("@Id", searchText.Replace("objId:", "", StringComparison.OrdinalIgnoreCase));
+			}
 			else if (searchText.StartsWith("code:", StringComparison.OrdinalIgnoreCase))
 			{
 				sbSql.Where("UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");

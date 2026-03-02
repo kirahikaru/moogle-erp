@@ -255,7 +255,9 @@
                                         </PropertyColumn>
                                         <PropertyColumn Property="x => x.TotalAmount" Title="Total Amount" HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" Required=false CellClass="pru-mud-datagrid-cell" Editable="false" CellStyle="text-align:right"
                                                         Filterable="false" Sortable="false"
-                                                        Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")" Context="qi" AggregateDefinition="@_itemAggr">
+                                                        Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")" Context="qi" AggregateDefinition="@_itemAggr"
+                                                        FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right"
+                                                        FooterClass="reddit-mono-400">
                                             <EditTemplate>
                                                 @* <MudNumericField @bind-Value=qi.Item.UnitPrice Label="Unit Price" Step=".1M" Format="#,##0.##" Min="0" HideSpinButtons="true" ReadOnly=@IsViewMode Culture="@CultureInfo.GetCultureInfo("en-US")"
                                                 For="@(() => qi.Item.UnitPrice)" OnlyValidateIfDirty="true" Clearable="true" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.AttachMoney" />*@                                            </EditTemplate>
@@ -319,6 +321,7 @@
     AggregateDefinition<PurchaseOrderItem> _itemAggr = new AggregateDefinition<PurchaseOrderItem>
     {
         Type = AggregateType.Sum,
+        NumberFormat = "N2",
         DisplayFormat = "{value}"
     };
     #endregion
@@ -404,7 +407,8 @@
     {
         _tempItemToAdd = new()
             {
-                OrderNo = CurrentObject!.Items.Count + 1
+                OrderNo = CurrentObject!.Items.Count + 1,
+                Quantity = 1
             };
         CurrentObject!.Items.Add(_tempItemToAdd);
         _qItemDataGrid.SetEditingItemAsync(_tempItemToAdd);

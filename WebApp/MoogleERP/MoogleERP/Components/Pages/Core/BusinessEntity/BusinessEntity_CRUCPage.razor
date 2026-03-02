@@ -60,10 +60,137 @@
                 <MudPaper Class="rounded-0" Elevation="1" Height="calc(100vh - 220px)" Style="overflow-y: auto;">
                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" StretchItems="StretchItems.All" Spacing="1">
                         <MudGrid Spacing="3" Class="pa-3">
-                            <MudItem xs="6">
+                            <MudItem xs="5">
                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
                                               Label="Name"
                                               @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" />
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              Label="Name​​ (Kh)"
+                                              @bind-Value="CurrentObject!.ObjectNameKh" For="@(() => CurrentObject!.ObjectNameKh)" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                              Label="ID"
+                                              @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" Style="text-transform:uppercase" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Class="moog-mud-form-field bordered moog-ui-datepicker" Required="false"
+                                               AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                               Label="Registration Date" Placeholder="Registration Date" DateFormat="dd-MMM-yyyy"
+                                               @bind-Date="CurrentObject!.RegistrationDate" For="@(() => CurrentObject!.RegistrationDate)" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              Label="Registration No."
+                                              @bind-Value="CurrentObject!.RegistrationNo" For="@(() => CurrentObject!.RegistrationNo)" Style="text-transform:uppercase" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              Label="License No."
+                                              @bind-Value="CurrentObject!.LicenceNo" For="@(() => CurrentObject!.LicenceNo)" Style="text-transform:uppercase" />
+                            </MudItem>
+                            <MudItem xs="4">
+                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                                             PopoverClass="moog-ui-combo-box-popover"
+                                             Label="Base Country"
+                                             @bind-Value="@CurrentObject.BaseCountryCode" @bind-Text=@_selectedCountryName
+                                             T="string" ToStringFunc="@(e => string.IsNullOrEmpty(e) || _countryList.Count == 0 ? "" : _countryList.Single<DropDownListItem>(x => x.ObjectCode == e)?.ObjectName)">
+                                    <ChildContent>
+                                        @foreach (var cty in _countryList)
+                                        {
+                                            <MudComboBoxItem T="string" Value="@cty.ObjectCode" Text="@cty.ObjectName">@cty.ObjectName</MudComboBoxItem>
+                                        }
+                                    </ChildContent>
+                                </MudComboBox>
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password" Required="false"
+                                             PopoverClass="moog-ui-combo-box-popover" T="int?"
+                                             Label="Business Sector"
+                                             ToStringFunc="@(e => (e is null || e!.Value < 0) ? "" : _busnSectList.SingleOrDefault<DropdownSelectItem>(x => x.Id == e)?.Value)"
+                                             Value="@CurrentObject!.BusinessSectorId" For="@(() => @CurrentObject!.BusinessSectorId)"
+                                             ValueChanged="@OnBusnSectorChanged">
+                                    @foreach (var busnSect in _busnSectList)
+                                    {
+                                        <MudComboBoxItem T="int?" Value="@busnSect.Id" Text="@busnSect.Value">@busnSect.Value</MudComboBoxItem>
+                                    }
+                                </MudComboBox>
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password" Required="false"
+                                             PopoverClass="moog-ui-combo-box-popover" T="int?"
+                                             Label="Industry"
+                                             ToStringFunc="@(e => (e is null || e!.Value < 0) ? "" : _industryList.SingleOrDefault<DropdownSelectItem>(x => x.Id == e)?.Value)"
+                                             Value="@CurrentObject!.IndustryId" For="@(() => @CurrentObject!.IndustryId)"
+                                             ValueChanged="@OnIndustryChanged">
+                                    @foreach (var i in _industryList)
+                                    {
+                                        <MudComboBoxItem T="int?" Value="@i.Id" Text="@i.Value">@i.Value</MudComboBoxItem>
+                                    }
+                                </MudComboBox>
+                            </MudItem>
+                            <MudItem xs="3">
+
+                            </MudItem>
+                            <MudItem xs="3">
+
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              AdornmentIcon="material-symbols-rounded/person" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                              Label="Contact Person Name"
+                                              @bind-Value="CurrentObject!.ContactPersonName" For="@(() => CurrentObject!.ContactPersonName)" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              AdornmentIcon="material-symbols-rounded/mail" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                              Label="Email" Placeholder="email@domain.com"
+                                              @bind-Value="CurrentObject!.Email" For="@(() => CurrentObject!.Email)" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              AdornmentIcon="material-symbols-rounded/mobile" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                              Label="Phone No. (1)"
+                                              @bind-Value="CurrentObject!.PhoneLine1" For="@(() => CurrentObject!.PhoneLine1)" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              AdornmentIcon="material-symbols-rounded/mobile" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                              Label="Phone No. (1)"
+                                              @bind-Value="CurrentObject!.PhoneLine2" For="@(() => CurrentObject!.PhoneLine2)" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              AdornmentIcon="material-symbols-rounded/mobile" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                              Label="Phone No. (1)"
+                                              @bind-Value="CurrentObject!.PhoneLine3" For="@(() => CurrentObject!.PhoneLine3)" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              AdornmentIcon="material-symbols-rounded/globe" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              Label="Website"
+                                              @bind-Value="CurrentObject!.Website" For="@(() => CurrentObject!.Website)" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              AdornmentIcon="fab fa-facebook" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              Label="Facebook"
+                                              @bind-Value="CurrentObject!.FacebookPage" For="@(() => CurrentObject!.FacebookPage)" />
+                            </MudItem>
+                            <MudItem xs="3">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              AdornmentIcon="fab fa-instagram" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              Label="Instagram"
+                                              @bind-Value="CurrentObject!.InstagramUser" For="@(() => CurrentObject!.InstagramUser)" />
+                            </MudItem>
+                            <MudItem xs="9">
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MoogKhAddress Readonly="@IsViewMode" Value="CurrentObject!.MainKhAddress" Label="Main Address" />
+                            </MudItem>
+                            <MudItem xs="6">
                             </MudItem>
                         </MudGrid>
                         <MudPaper MinWidth="500px" MaxWidth="500px" MaxHeight="1000px" MinHeight="500px" Class="pa-2" Elevation="0" >
@@ -134,12 +261,18 @@
 
     #region UI PARAM
     List<DropDownListItem> _countryList = [];
+    string? _selectedCountryName;
+
     List<DropdownSelectItem> _genderList = Genders.GetForDropdown();
     List<DropdownSelectItem> _maritalStatusList = MaritalStatuses.GetForDropdown();
     MudTextField<string>? _mtfObjName;
     List<AttachedImage> _images = [];
     List<DropdownSelectItem> _contractTypeList = EmployeeContractTypes.GetForDropdown();
     List<DropdownSelectItem> _timeTypeList = EmployeeTimeTypes.GetForDropdown();
+    List<DropdownSelectItem> _busnSectList = [];
+    string? _selectedBusnSectName;
+    List<DropdownSelectItem> _industryList = [];
+    string? _selectedIndustryName;
     #endregion
 
     #region PAGE LIFECYCLE FUNCTIONS
@@ -213,6 +346,52 @@
         var dialog = await MudDialogSvc.ShowAsync<AttachedImagesDiag>($"IMAGE(S)", param, diagOptions);
         var result = await dialog.Result;
     }
+
+    void OnBusnSectorChanged(int? busnSectId)
+    {
+        if (busnSectId.HasValue)
+        {
+            var busnSect = _busnSectList.SingleOrDefault<DropdownSelectItem>(x => x.Id == busnSectId.Value);
+            if (busnSect != null)
+            {
+                CurrentObject!.BusinessSectorId = busnSect.Id;
+                CurrentObject!.BusinessSectorCode = busnSect.Key;
+            }
+            else
+            {
+                CurrentObject!.BusinessSectorId = null;
+                CurrentObject!.BusinessSectorCode = null;
+            }
+        }
+        else
+        {
+            CurrentObject!.BusinessSectorId = null;
+            CurrentObject!.BusinessSectorCode = null;
+        }
+    }
+
+    void OnIndustryChanged(int? industryId)
+    {
+        if (industryId.HasValue)
+        {
+            var industry = _industryList.SingleOrDefault<DropdownSelectItem>(x => x.Id == industryId.Value);
+            if (industry != null)
+            {
+                CurrentObject!.IndustryId = industry.Id;
+                CurrentObject!.IndustryCode = industry.Key;
+            }
+            else
+            {
+                CurrentObject!.IndustryId = null;
+                CurrentObject!.IndustryCode = null;
+            }
+        }
+        else
+        {
+            CurrentObject!.IndustryId = null;
+            CurrentObject!.IndustryCode = null;
+        }
+    }
     #endregion
 
     #region DB UPDATE FUNCTIONS
@@ -246,7 +425,7 @@
             CurrentObject!.CreatedDateTime = timestamp;
             CurrentObject!.ModifiedDateTime = timestamp;
 
-            int objId = await Uow.BusinessEntities.InsertAsync(CurrentObject!);
+            int objId = await Uow.BusinessEntities.InsertFullAsync(CurrentObject!);
 
             if (objId > 0)
             {
@@ -260,7 +439,7 @@
             CurrentObject!.ModifiedUser = AuditTrailUser;
             CurrentObject!.ModifiedDateTime = timestamp;
 
-            return await Uow.BusinessEntities.UpdateAsync(CurrentObject!);
+            return await Uow.BusinessEntities.UpdateFullAsync(CurrentObject!);
         }
     }
     #endregion
@@ -268,7 +447,15 @@
     #region INTERNAL FUNCTIONS
     async Task PopulatedUIControls()
     {
-        
+        _busnSectList = await Uow.BusinessSectors.GetForDropdownSelectAsync();
+        _industryList = await Uow.Industries.GetForDropdownSelectAsync();
+        _countryList = await Uow.Countries.GetForDropdownSelect1Async();
+
+        if (CurrentObject!.MainKhAddrId.HasValue)
+            CurrentObject!.MainKhAddress = await Uow.CambodiaAddresses.GetAsync(CurrentObject!.MainKhAddrId.Value);
+
+        if (CurrentObject!.MainAddrId.HasValue)
+            CurrentObject!.MainAddress = await Uow.Addresses.GetAsync(CurrentObject!.MainAddrId.Value);
     }
     #endregion
 }

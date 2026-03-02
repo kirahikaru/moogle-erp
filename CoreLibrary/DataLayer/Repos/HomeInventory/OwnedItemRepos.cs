@@ -286,11 +286,20 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
 
 		sbSql.Where("t.IsDeleted=0");
 
-		#region Form Search Conditions
-		if (!string.IsNullOrEmpty(searchText))
+        #region Form Search Conditions
+
+        if (!string.IsNullOrEmpty(searchText))
         {
-            sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%')");
-            param.Add("@SearchText", searchText);
+            if (searchText.StartsWith("ctg:", StringComparison.OrdinalIgnoreCase))
+            {
+                sbSql.Where("LOWER(ISNULL(oic.ObjectName,'')) LIKE '%'+@SearchText+'%'");
+                param.Add("@SearchText", searchText.Replace("ctg:", "", StringComparison.OrdinalIgnoreCase).ToLower(), DbType.AnsiString);
+            }
+            else
+            {
+				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%')");
+				param.Add("@SearchText", searchText);
+			}
         }
 
         if (excludeIdList != null && excludeIdList.Count != 0)
@@ -338,9 +347,7 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
 		{
 			param.Add("@PageSize", pgSize);
 			param.Add("@PageNo", pgNo);
-			sql = sbSql.AddTemplate(
-				$";WITH pg AS (SELECT Id FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
-				$"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY").RawSql;
 		}
 
 		using var cn = DbContext.DbCxn;
@@ -354,7 +361,7 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
 											return oi;
 										}, param, splitOn: "Id");
 
-        string sqlCount = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
+        string sqlCount = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
         int dataCount = await cn.ExecuteScalarAsync<int>(sqlCount, param);
         return new(dataCount, dataList);
 	}

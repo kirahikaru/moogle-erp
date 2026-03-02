@@ -78,8 +78,19 @@ public class Item : AuditObject
     /// </summary>
     [MaxLength(3)]
     public string? MfgCountryCode { get; set; }
+	/// <summary>
+    /// Manufacturer Business Entity Id
+    /// </summary>
+    public int? MfgBusnEntId { get; set; }
+    public string? ManufacturerName { get; set; }
+    /// <summary>
+    /// Distributor Business Entity Id
+    /// </summary>
+	public int? DistBusnEntId { get; set; }
+    public string? DistributorName { get; set; }
 
-    public string? UnitCode { get; set; }
+
+	public string? UnitCode { get; set; }
 
     /// <summary>
     /// Manufacturing Part Number

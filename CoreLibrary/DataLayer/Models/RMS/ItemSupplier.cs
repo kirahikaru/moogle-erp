@@ -35,8 +35,9 @@ public class ItemSupplier : AuditObject
     public int? SupplierId { get; set; }
     public string? ItemCode { get; set; }
     public string? SupplierCode { get; set; }
+	public string? SupplierName { get; set; }
 
-    [Range(0.00, double.MaxValue, MinimumIsExclusive = true, ErrorMessage = "'Unit Price' can only be positive value.")]
+	[Range(0.00, double.MaxValue, MinimumIsExclusive = true, ErrorMessage = "'Unit Price' can only be positive value.")]
     public decimal? UnitPrice { get; set; }
     public string? UnitPriceCurrencyCode { get; set; }
 
@@ -50,8 +51,8 @@ public class ItemSupplier : AuditObject
 	#endregion
 
 	#region *** DYNAMIC PROPERTY ***
-	[Computed, Write(false), ReadOnly(false)]
-	public string SupplierName => Supplier != null ? Supplier.ObjectName.NonNullValue("-") : "-";
+	//[Computed, Write(false), ReadOnly(false)]
+	//public string SupplierName => Supplier != null ? Supplier.ObjectName.NonNullValue("-") : "-";
 
 	[Computed, Write(false), ReadOnly(false)]
 	public string UnitPriceKhrText => "KHR " + (UnitPriceKhr != null ? UnitPriceKhr!.Value.ToString("#,##0") : "-" );

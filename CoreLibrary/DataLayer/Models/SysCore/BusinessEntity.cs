@@ -45,12 +45,14 @@ public class BusinessEntity : AuditObject
     /// [FK] > BusinessSector
     /// </summary>
     public int? BusinessSectorId { get; set; }
-    public int? IndustryId { get; set; }
+	public string? BusinessSectorCode { get; set; }
+	public int? IndustryId { get; set; }
+	public string? IndustryCode { get; set; }
 
-    /// <summary>
-    /// [FK] Country
-    /// </summary>
-    public string? BaseCountryCode { get; set; }
+	/// <summary>
+	/// [FK] Country
+	/// </summary>
+	public string? BaseCountryCode { get; set; }
     public string? ContactPersonName { get; set; }
 
     public string? PhoneLine1 { get; set; }
@@ -61,8 +63,8 @@ public class BusinessEntity : AuditObject
     public string? FacebookPage { get; set; }
     public string? InstagramUser { get; set; }
     public string? LocationUrl { get; set; }
-    public int? MainAddressId { get; set; }
-    public int? MainCambodiaAddressId { get; set; }
+    public int? MainAddrId { get; set; }
+    public int? MainKhAddrId { get; set; }
     public string? LogoImagePath { get; set; }
     public int? CustomerId { get; set; }
     public string? CustomerObjectCode { get; set; }
@@ -87,7 +89,7 @@ public class BusinessEntity : AuditObject
 
     [Computed]
     [Description("ignore")]
-    public CambodiaAddress? MainLocalAddress { get; set; }
+    public CambodiaAddress? MainKhAddress { get; set; }
 
     [Computed]
     [Description("ignore"), ReadOnly(true)]
@@ -97,7 +99,7 @@ public class BusinessEntity : AuditObject
     public BusinessEntity() : base()
     {
         MainAddress = new();
-        MainLocalAddress = new();
+		MainKhAddress = new();
         Contacts = [];
     }
 

@@ -3,7 +3,7 @@ using DataLayer.Models.SysCore.NonPersistent;
 
 namespace DataLayer.Models.HomeInventory;
 
-[Table("[home].[OwnedItemCategory]"), DisplayName("My Item Category")]
+[Table("[him].[OwnedItemCategory]"), DisplayName("My Item Category")]
 public class OwnedItemCategory : AuditObject, IParentChildHierarchyObject
 {
 	[Computed, Write(false), ReadOnly(true)]

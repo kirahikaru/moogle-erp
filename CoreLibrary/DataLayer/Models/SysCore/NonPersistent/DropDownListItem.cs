@@ -10,4 +10,5 @@ public class DropDownListItem
     public string? ObjectNameEn { get; set; }
     public string? ObjectNameKh { get; set; }
     public string? HierarchyPath { get; set; }
+    public int Level { get; set; }
 }

@@ -265,6 +265,32 @@
                                 </MudStack>
                             </MudItem>
                             <MudItem xs="6">
+                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password" Required="false"
+                                             PopoverClass="moog-ui-combo-box-popover" T="int?"
+                                             Label="Manufacturer"
+                                             ToStringFunc="@(e => (e is null || e!.Value < 0) ? "" : _busnEntList.SingleOrDefault<DropdownSelectItem>(x => x.Id == e)?.Value)"
+                                             Value="@CurrentObject!.MfgBusnEntId" For="@(() => @CurrentObject!.MfgBusnEntId)"
+                                             ValueChanged="@OnManufacturerChanged">
+                                    @foreach (var busnEntity in _busnEntList)
+                                    {
+                                        <MudComboBoxItem T="int?" Value="@busnEntity.Id" Text="@busnEntity.Value">@busnEntity.Value</MudComboBoxItem>
+                                    }
+                                </MudComboBox>
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password" Required="false"
+                                             PopoverClass="moog-ui-combo-box-popover" T="int?"
+                                             Label="Distributor"
+                                             ToStringFunc="@(e => (e is null || e!.Value < 0) ? "" : _busnEntList.SingleOrDefault<DropdownSelectItem>(x => x.Id == e)?.Value)"
+                                             Value="@CurrentObject!.DistBusnEntId" For="@(() => @CurrentObject!.DistBusnEntId)"
+                                             ValueChanged="@OnDistributorChanged">
+                                    @foreach (var busnEntity in _busnEntList)
+                                    {
+                                        <MudComboBoxItem T="int?" Value="@busnEntity.Id" Text="@busnEntity.Value">@busnEntity.Value</MudComboBoxItem>
+                                    }
+                                </MudComboBox>
+                            </MudItem>
+                            <MudItem xs="6">
                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Lines="8"
                                               Label="Item Description" Placeholder="Description..." 
                                               @bind-Value="CurrentObject!.Description" For="@(() => CurrentObject!.Description)" />
@@ -770,6 +796,7 @@
     List<DropdownSelectItem> _itemCategoryList = [];
     List<DropDownListItem> _countryList = [];
     List<Supplier> _supplierList = [];
+    List<DropdownSelectItem> _busnEntList = [];
     IEnumerable<DropdownSelectItem> _medCompList = [];
     IEnumerable<string> _brandList = [];
     MudTextField<string>? _mtfObjName;
@@ -947,6 +974,52 @@
         else
         {
             _itemUnitSymbol = "";
+        }
+    }
+
+    void OnManufacturerChanged(int? busnEntId)
+    {
+        if (busnEntId.HasValue)
+        {
+            var busnEntity = _busnEntList.SingleOrDefault<DropdownSelectItem>(x => x.Id == busnEntId.Value);
+            if (busnEntity != null)
+            {
+                CurrentObject!.MfgBusnEntId = busnEntity.Id;
+                CurrentObject!.ManufacturerName = busnEntity.Value;
+            }
+            else
+            {
+                CurrentObject!.MfgBusnEntId = null;
+                CurrentObject!.ManufacturerName = null;
+            }
+        }
+        else
+        {
+            CurrentObject!.MfgBusnEntId = null;
+            CurrentObject!.ManufacturerName = null;
+        }
+    }
+
+    void OnDistributorChanged(int? busnEntId)
+    {
+        if (busnEntId.HasValue)
+        {
+            var busnEntity = _busnEntList.SingleOrDefault<DropdownSelectItem>(x => x.Id == busnEntId.Value);
+            if (busnEntity != null)
+            {
+                CurrentObject!.DistBusnEntId = busnEntity.Id;
+                CurrentObject!.DistributorName = busnEntity.Value;
+            }
+            else
+            {
+                CurrentObject!.DistBusnEntId = null;
+                CurrentObject!.DistributorName = null;
+            }
+        }
+        else
+        {
+            CurrentObject!.DistBusnEntId = null;
+            CurrentObject!.DistributorName = null;
         }
     }
 
@@ -1257,17 +1330,20 @@
             {
                 itemSupplier.SupplierId = supplier.Id;
                 itemSupplier.SupplierCode = supplier.ObjectCode;
+                itemSupplier.SupplierName = supplier.ObjectName;
             }
             else
             {
                 itemSupplier.SupplierId = null;
                 itemSupplier.SupplierCode = null;
+                itemSupplier.SupplierName = null;
             }
         }
         else
         {
             itemSupplier.SupplierId = null;
             itemSupplier.SupplierCode = null;
+            itemSupplier.SupplierName = null;
         }
     }
     #endregion
@@ -1336,6 +1412,7 @@
         _weightUnitList = await Uow.UoMs.GetByTypeAsync(UnitOfMeasureTypes.MASS);
         _itemUnitList = await Uow.UoMs.GetByTypeAsync(UnitOfMeasureTypes.RETAIL_ITEM);
         _currencyList = await Uow.Currencies.GetForDropdownSelect1Async(null);
+        _busnEntList = await Uow.BusinessEntities.GetForDropdownSelectAsync();
 
 
         _knownEcommSites.Add("AMAZON-US", "https://www.amazon.com/gp/product/{id}");

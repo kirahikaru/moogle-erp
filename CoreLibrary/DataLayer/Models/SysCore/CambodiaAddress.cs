@@ -5,7 +5,7 @@
 /// <remarks>
 /// 
 /// </remarks>
-[Table("[dbo].[CambodiaAddress]"), DisplayName("Cambodia Address")]
+[Table("[dbo].[KhAddress]"), DisplayName("Cambodia Address")]
 public class CambodiaAddress : AuditObject
 {
 	[Computed, ReadOnly(true), Write(false)]

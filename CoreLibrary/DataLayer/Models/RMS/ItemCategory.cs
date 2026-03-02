@@ -36,8 +36,11 @@ public class ItemCategory : AuditObject, IParentChildHierarchyObject
     [MaxLength(255)]
     public new string? ObjectName { get; set; }
 
-    #region *** DATABASE FIELDS ***
-    public int? ParentId { get; set; }
+	#region *** DATABASE FIELDS ***
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'Level' is required.")]
+	[Range(0, 99999, ErrorMessage = "'Level' must be positive whole number.")]
+	public int Level { get; set; }
+	public int? ParentId { get; set; }
     public string? ParentCode { get; set; }
 
     [MaxLength(255)]
@@ -47,8 +50,13 @@ public class ItemCategory : AuditObject, IParentChildHierarchyObject
     #region *** LINKED OBJECTS ***
     [Computed, Write(false)]
 	public ItemCategory? Parent { get; set; }
-    #endregion
+	#endregion
 
-    #region *** DYNAMIC PROPERTIES
-    #endregion
+	#region *** DYNAMIC PROPERTIES
+	#endregion
+
+	public ItemCategory()
+	{
+		Level = 1;
+	}
 }

@@ -41,7 +41,8 @@ public class ItemCategoryRepos(IDbContext dbContext) : BaseRepos<ItemCategory>(d
             .Select("'ObjectType'='ItemCategory'")
             .Select("t.ObjectCode")
             .Select("t.ObjectName")
-            .Select("t.HierarchyPath");
+            .Select("t.HierarchyPath")
+            .Select("t.[Level]");
 
         sbSql.Where("t.IsDeleted=0");
         sbSql.Where("t.ObjectCode<>@ObjectCode");
@@ -61,8 +62,8 @@ public class ItemCategoryRepos(IDbContext dbContext) : BaseRepos<ItemCategory>(d
         sbSql.OrderBy("t.ObjectName ASC");
         
         using var cn = DbContext.DbCxn;
-        var sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
-        List<DropDownListItem> dataList = (await cn.QueryAsync<DropDownListItem>(sql, param)).ToList();
+        var sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
+		var dataList = (await cn.QueryAsync<DropDownListItem>(sql, param)).AsList();
         return dataList;
     }
 
@@ -163,7 +164,11 @@ public class ItemCategoryRepos(IDbContext dbContext) : BaseRepos<ItemCategory>(d
 		return dataList;
 	}
 
-	public override async Task<KeyValuePair<int, IEnumerable<ItemCategory>>> SearchNewAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, IEnumerable<SqlSortCond>? sortConds = null, IEnumerable<SqlFilterCond>? filterConds = null, List<int>? excludeIdList = null)
+	public override async Task<KeyValuePair<int, IEnumerable<ItemCategory>>> SearchNewAsync(
+        int pgSize = 0, int pgNo = 0, 
+        string? searchText = null, IEnumerable<SqlSortCond>? sortConds = null, 
+        IEnumerable<SqlFilterCond>? filterConds = null, 
+        List<int>? excludeIdList = null)
 	{
 		DynamicParameters param = new();
 		SqlBuilder sbSql = new();

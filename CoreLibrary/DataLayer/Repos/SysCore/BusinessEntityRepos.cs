@@ -88,7 +88,7 @@ public class BusinessEntityRepos(IDbContext dbContext) : BaseRepos<BusinessEntit
 
         using var cn = DbContext.DbCxn;
 
-        List<BusinessEntity> dataList = (await cn.QueryAsync<BusinessEntity, Country, BusinessSector, Industry, BusinessEntity>(sbSqlTempl.RawSql,
+        var dataList = (await cn.QueryAsync<BusinessEntity, Country, BusinessSector, Industry, BusinessEntity>(sbSqlTempl.RawSql,
                                                 (obj, country, sector, industry) =>
                                                 {
                                                     obj.BaseCountry = country;
@@ -588,9 +588,6 @@ public class BusinessEntityRepos(IDbContext dbContext) : BaseRepos<BusinessEntit
 
         try
         {
-            obj.CreatedDateTime = timestamp;
-            obj.ModifiedDateTime = timestamp;
-
             int objId = await cn.InsertAsync(obj, tran);
 
             if (objId <= 0)
@@ -598,8 +595,8 @@ public class BusinessEntityRepos(IDbContext dbContext) : BaseRepos<BusinessEntit
 
             obj.Id = objId;
 
-            DynamicParameters addressUpdateParam = new();
-            SqlBuilder sbAddressUpdateSql = new();
+            DynamicParameters addrUpdParam = new();
+            SqlBuilder sbAddrUpdSql = new();
 
             if (obj.MainAddress != null && (
                 !string.IsNullOrEmpty(obj.MainAddress.CountryCode) ||
@@ -614,35 +611,45 @@ public class BusinessEntityRepos(IDbContext dbContext) : BaseRepos<BusinessEntit
                 obj.MainAddress.LinkedObjectId = objId;
                 obj.MainAddress.LinkedObjectType = obj.GetType().Name;
 
-                int mainAddressId = await cn.InsertAsync(obj.MainAddress, tran);
+                int mainAddrId = await cn.InsertAsync(obj.MainAddress, tran);
 
-                obj.MainAddressId = mainAddressId;
-                addressUpdateParam.Add("@MainAddressId", mainAddressId);
+                obj.MainAddrId = mainAddrId;
+				addrUpdParam.Add("@MainAddrId", mainAddrId);
             }
 
-            if (obj.MainLocalAddress != null && (
-                obj.MainLocalAddress.KhProvinceId is not null ||
-                !string.IsNullOrEmpty(obj.MainLocalAddress.UnitFloor) ||
-                !string.IsNullOrEmpty(obj.MainLocalAddress.StreetNo)))
+            if (obj.MainKhAddress != null && (
+                obj.MainKhAddress.KhProvinceId is not null ||
+                !string.IsNullOrEmpty(obj.MainKhAddress.UnitFloor) ||
+                !string.IsNullOrEmpty(obj.MainKhAddress.StreetNo)))
             {
-                obj.MainLocalAddress.CreatedUser = obj.CreatedUser;
-                obj.MainLocalAddress.CreatedDateTime = timestamp;
-                obj.MainLocalAddress.ModifiedUser = obj.ModifiedUser;
-                obj.MainLocalAddress.ModifiedDateTime = timestamp;
-                obj.MainLocalAddress.LinkedObjectId = objId;
-                obj.MainLocalAddress.LinkedObjectType = obj.GetType().Name;
+                obj.MainKhAddress.CreatedUser = obj.CreatedUser;
+                obj.MainKhAddress.CreatedDateTime = timestamp;
+                obj.MainKhAddress.ModifiedUser = obj.ModifiedUser;
+                obj.MainKhAddress.ModifiedDateTime = timestamp;
+                obj.MainKhAddress.LinkedObjectId = objId;
+                obj.MainKhAddress.LinkedObjectType = obj.GetType().Name;
 
-                int mainCambodiaAddressId = await cn.InsertAsync(obj.MainLocalAddress, tran);
+                int mainKhAddrId = await cn.InsertAsync(obj.MainKhAddress, tran);
 
-                obj.MainCambodiaAddressId = mainCambodiaAddressId;
-                addressUpdateParam.Add("@MainCambodiaAddressId", mainCambodiaAddressId);
+                obj.MainKhAddrId = mainKhAddrId;
+
+				addrUpdParam.Add("@MainKhAddrId", mainKhAddrId);
             }
 
-            if (addressUpdateParam.ParameterNames.Any())
+            if (addrUpdParam.ParameterNames.Any())
             {
-                addressUpdateParam.Add("@Id", objId);
-                string addressUpdateSql = sbAddressUpdateSql.AddTemplate($"UPDATE {DbObject.MsSqlTable} SET MainAddressId=@MainAddressId, MainCambodiaAddressId=@MainCambodiaAddressId WHERE Id=@Id").RawSql;
-                int addressUpdCount = await cn.ExecuteAsync(addressUpdateSql, addressUpdateParam);
+				addrUpdParam.Add("@Id", objId);
+				sbAddrUpdSql.Where("Id=@Id");
+                foreach (string paramName in addrUpdParam.ParameterNames)
+                {
+                    if (paramName == "MainAddrId")
+                        sbAddrUpdSql.Set("MainAddrId=@MainAddrId");
+                    else if (paramName == "MainKhAddrId")
+                        sbAddrUpdSql.Set("MainKhAddrId=@MainKhAddrId");
+				}
+
+				string addrUpdSql = sbAddrUpdSql.AddTemplate($"UPDATE {DbObject.MsSqlTable} /**set**/ /**where**/").RawSql;
+                int addressUpdCount = await cn.ExecuteAsync(addrUpdSql, addrUpdParam, tran);
             }
 
             if (obj.Contacts != null && obj.Contacts.Any())
@@ -653,7 +660,7 @@ public class BusinessEntityRepos(IDbContext dbContext) : BaseRepos<BusinessEntit
                     {
                         contact.ModifiedUser = obj.ModifiedUser;
                         contact.ModifiedDateTime = obj.ModifiedDateTime;
-                        bool isContactUpdated = await cn.UpdateAsync(contact);
+                        bool isContactUpdated = await cn.UpdateAsync(contact, tran);
                     }
                     else if (contact.Id > 0)
                     {
@@ -664,7 +671,7 @@ public class BusinessEntityRepos(IDbContext dbContext) : BaseRepos<BusinessEntit
                         contact.CreatedDateTime = obj.ModifiedDateTime;
                         contact.ModifiedDateTime = obj.ModifiedDateTime;
 
-                        int contactId = await cn.InsertAsync(contact);
+                        int contactId = await cn.InsertAsync(contact, tran);
                     }
                 }
             }
@@ -704,7 +711,7 @@ public class BusinessEntityRepos(IDbContext dbContext) : BaseRepos<BusinessEntit
             {
                 obj.MainAddress.ModifiedUser = obj.ModifiedUser;
                 obj.MainAddress.ModifiedDateTime = obj.ModifiedDateTime;
-                if (obj.MainAddressId.HasValue)
+                if (obj.MainAddrId.HasValue)
                 {
                     bool isMainAddressUpdated = await cn.UpdateAsync(obj.MainAddress, tran);
                 }
@@ -714,37 +721,37 @@ public class BusinessEntityRepos(IDbContext dbContext) : BaseRepos<BusinessEntit
                     obj.MainAddress.CreatedDateTime = obj.CreatedDateTime;
                     obj.MainAddress.LinkedObjectId = obj.Id;
                     obj.MainAddress.LinkedObjectType = obj.GetType().Name;
-                    int mainAddressId = await cn.InsertAsync(obj.MainAddress, tran);
+                    int mainAddrId = await cn.InsertAsync(obj.MainAddress, tran);
 
-                    if (mainAddressId > 0)
-                        obj.MainAddressId = mainAddressId;
+                    if (mainAddrId > 0)
+                        obj.MainAddrId = mainAddrId;
                 }
             }
 
-            if (obj.MainLocalAddress != null && (
-                obj.MainLocalAddress.KhProvinceId is not null ||
-                !string.IsNullOrEmpty(obj.MainLocalAddress.UnitFloor) ||
-                !string.IsNullOrEmpty(obj.MainLocalAddress.StreetNo)))
+            if (obj.MainKhAddress != null && (
+                obj.MainKhAddress.KhProvinceId is not null ||
+                !string.IsNullOrEmpty(obj.MainKhAddress.UnitFloor) ||
+                !string.IsNullOrEmpty(obj.MainKhAddress.StreetNo)))
             {
-                obj.MainLocalAddress.ModifiedUser = obj.ModifiedUser;
-                obj.MainLocalAddress.ModifiedDateTime = obj.ModifiedDateTime;
+                obj.MainKhAddress.ModifiedUser = obj.ModifiedUser;
+                obj.MainKhAddress.ModifiedDateTime = obj.ModifiedDateTime;
 
-                if (obj.MainCambodiaAddressId.HasValue)
+                if (obj.MainKhAddrId.HasValue)
                 {
-                    bool isMainCambodiaAddressUpdated = await cn.UpdateAsync(obj.MainLocalAddress, tran);
+                    bool isMainKhAddrUpd = await cn.UpdateAsync(obj.MainKhAddress, tran);
                 }
                 else
                 {
-                    obj.MainLocalAddress.CreatedUser = obj.CreatedUser;
-                    obj.MainLocalAddress.CreatedDateTime = obj.ModifiedDateTime;
+                    obj.MainKhAddress.CreatedUser = obj.CreatedUser;
+                    obj.MainKhAddress.CreatedDateTime = obj.ModifiedDateTime;
 
-                    obj.MainLocalAddress.LinkedObjectId = obj.Id;
-                    obj.MainLocalAddress.LinkedObjectType = obj.GetType().Name;
+                    obj.MainKhAddress.LinkedObjectId = obj.Id;
+                    obj.MainKhAddress.LinkedObjectType = obj.GetType().Name;
 
-                    int mainCambodiaAddressId = await cn.InsertAsync(obj.MainLocalAddress, tran);
+                    int mainKhAddrId = await cn.InsertAsync(obj.MainKhAddress, tran);
 
-                    if (mainCambodiaAddressId > 0)
-                        obj.MainCambodiaAddressId = mainCambodiaAddressId;
+                    if (mainKhAddrId > 0)
+                        obj.MainKhAddrId = mainKhAddrId;
 
                 }
             }

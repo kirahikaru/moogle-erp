@@ -650,7 +650,7 @@
     {
         _packageUnitList = await Uow.UoMs.GetByTypeAsync(UnitOfMeasureTypes.MEDICINE_PACKAGING);
         _consumableUnitList = await Uow.UoMs.GetByTypeAsync(UnitOfMeasureTypes.MEDICINE_CONSUMABLE);
-        // _medicineTypeList = await Uow.UoMs.GetForDropdownListAsync(DropdownDataSystems.PHARMACY_MANAGEMENT_SYSTEM, typeof(Medicine).Name, "MedicineTypeId");
+        _medicineTypeList = await Uow.DropdownDataLists.GetForDropdownListAsync(DropdownDataSystems.PHARMACY_MANAGEMENT_SYSTEM, typeof(Medicine).Name, "MedicineTypeId");
         _currencyList = await Uow.Currencies.GetForDropdownSelect1Async(null);
         
         _countryList = await Uow.Countries.GetForDropdownSelect1Async();

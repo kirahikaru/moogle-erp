@@ -59,27 +59,44 @@
             <MudTabPanel Icon="material-symbols-rounded/home" Text="Main">
                 <MudPaper Class="rounded-0" Elevation="1" Height="calc(100vh - 220px)" Style="overflow-y: auto;">
                     <MudGrid Spacing="3" Class="pa-3">
-                        <MudItem xs="7">
+                        <MudItem xs="6">
                             <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
                                           Label="Name"
                                           @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" @ref=_mtfObjName />
                         </MudItem>
-                        <MudItem xs="5">
+                        <MudItem xs="4">
                             <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
                                           Label="ID" Placeholder="A-Z, 0-9, -_" Mask="objIdMask"
                                           @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" />
                         </MudItem>
+                        <MudItem xs="2">
+                            <MudNumericField ReadOnly="true" Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true" Required="true"
+                                             Label="Level" Format="#,##0" Step="1"
+                                             @bind-Value="CurrentObject!.Level" T="int" For="(() => CurrentObject!.Level)"
+                                             Style="text-align:right" />
+                        </MudItem>
                         @if (CurrentObject!.Id > 0)
                         {
                             <MudItem xs="12">
-                                <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                @* <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
                                            Label="Parent" T="int?"
                                            Value="CurrentObject!.ParentId" ValueChanged="OnParentChanged" For="@(() => CurrentObject!.ParentId)">
                                     @foreach (var item in _validParents)
                                     {
                                         <MudSelectItem T="int?" Value="@item.ObjectId">@item.ObjectName</MudSelectItem>
                                     }
-                                </MudSelect>
+                                </MudSelect> *@
+                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password" Required="false"
+                                             PopoverClass="moog-ui-combo-box-popover" T="int?"
+                                             Label="Parent"
+                                             ToStringFunc="@(e => (e is null || e!.Value < 0) ? "" : _validParents.SingleOrDefault<DropDownListItem>(x => x.Id == e)?.ObjectName)"
+                                             Value="@CurrentObject!.ParentId" For="@(() => @CurrentObject!.ParentId)"
+                                             ValueChanged="@OnParentChanged">
+                                    @foreach (var pr in _validParents)
+                                    {
+                                        <MudComboBoxItem T="int?" Value="@pr.Id" Text="@pr.ObjectName">@pr.ObjectName</MudComboBoxItem>
+                                    }
+                                </MudComboBox>
                             </MudItem>
                         }
                         <MudItem xs="12">
@@ -181,18 +198,30 @@
     #region UI FUNCTIONS
     void OnParentChanged(int? parentId)
     {
-        CurrentObject!.ParentId = parentId;
-
         if (parentId.HasValue)
         {
             DropDownListItem? selectedItem = _validParents.FirstOrDefault(x => x.ObjectId == parentId.Value)!;
 
-            CurrentObject!.ParentCode = selectedItem!.ObjectCode;
-            CurrentObject!.HierarchyPath = $"{selectedItem!.HierarchyPath}>{CurrentObject!.ObjectCode}";
+            if (selectedItem != null)
+            {
+                CurrentObject!.ParentId = parentId;
+                CurrentObject!.ParentCode = selectedItem.ObjectCode;
+                CurrentObject!.Level = selectedItem.Level + 1;
+                CurrentObject!.HierarchyPath = $"{selectedItem!.HierarchyPath}>{CurrentObject!.ObjectCode}";
+            }
+            else
+            {
+                CurrentObject!.ParentId = null;
+                CurrentObject!.ParentCode = null;
+                CurrentObject!.Level = 1;
+                CurrentObject!.HierarchyPath = CurrentObject!.ObjectCode;
+            }
         }
         else
         {
+            CurrentObject!.ParentId = null;
             CurrentObject!.ParentCode = null;
+            CurrentObject!.Level = 1;
             CurrentObject!.HierarchyPath = CurrentObject!.ObjectCode;
         }
 

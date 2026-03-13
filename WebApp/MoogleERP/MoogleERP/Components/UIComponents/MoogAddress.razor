@@ -1,0 +1,234 @@
+﻿@using DataLayer.Repos
+
+@inject IUowMoogleKhErp Uow;
+
+@if (Value != null)
+{
+    <MudGrid Spacing="@Spacing" Justify="Justify.FlexStart">
+        @if (!string.IsNullOrEmpty(Label))
+        {
+            <MudItem xs="12">
+            
+                <MudStack Row="true" Spacing="@Spacing" Class="px-2 py-1" Style="background-color: var(--ssv-pharma-blue-50); border-bottom: 1px solid var(--ssv-pharma-blue)">
+                    <MudText Typo="Typo.body1" Style="font-weight:600; color: var(--ssv-pharma-blue)">@Label</MudText>
+                </MudStack>
+            </MudItem>
+        }
+        <MudItem xs="2">
+            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false" 
+                          Label="Unit / Floor"
+                          @bind-Value=Value.ObjectName For="@(() => Value.ObjectName)" OnlyValidateIfDirty="true" MaxLength="255" />
+        </MudItem>
+        <MudItem xs="4">
+            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false" FullWidth="false"
+                          Label="Street"
+                          @bind-Value=Value.Street For="@(() => Value.Street)" OnlyValidateIfDirty="true" MaxLength="255" />
+            
+        </MudItem>
+        <MudItem xs="6">
+            @if (ShowLandmark)
+            {
+                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false" FullWidth="false"
+                              Label="Landmark"
+                              @bind-Value=Value.Landmark For="@(() => Value.Landmark)" OnlyValidateIfDirty="true" MaxLength="255" />
+            }
+        </MudItem>
+        
+        @if (ShowLine1)
+        {
+            <MudItem xs="12">
+                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                              Label=@Line1Label Placeholder="@Line1Placeholder" Disabled="@Disabled"
+                              @bind-Value=Value.Line1 For="@(() => Value.Line1)" MaxLength="255" />
+            </MudItem>
+        }
+
+        @if (ShowLine2)
+        {
+            <MudItem xs="12">
+                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                              Label=@Line2Label Placeholder="@Line2Placeholder" Disabled="@Disabled"
+                              @bind-Value=Value.Line2 For="@(() => Value.Line2)" MaxLength="255" />
+            </MudItem>
+        }
+
+        @if (ShowLine3)
+        {
+            <MudItem xs="12">
+                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                              Label=@Line3Label Placeholder="@Line3Placeholder" Disabled="@Disabled"
+                              @bind-Value=Value.Line3 For="@(() => Value.Line3)" MaxLength="255" />
+            </MudItem>
+        }
+
+        @if (ShowLine4)
+        {
+            <MudItem xs="12">
+                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                              Label=@Line4Label Placeholder="@Line4Placeholder" Disabled="@Disabled"
+                              @bind-Value=Value.Line4 For="@(() => Value.Line4)" MaxLength="255" />
+            </MudItem>
+        }
+
+        @if (ShowLine5)
+        {
+            <MudItem xs="12">
+                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                              Label=@Line5Label Placeholder="@Line5Placeholder" Disabled="@Disabled"
+                              @bind-Value=Value.Line5 For="@(() => Value.Line5)" MaxLength="255" />
+            </MudItem>
+        }
+        <MudItem xs="4">
+            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                          Label="@SubDistrictLabel" Placeholder="@SubDistrictPlaceholder" 
+                          @bind-Value=Value.SubDistrict For="@(() => Value.SubDistrict)" OnlyValidateIfDirty="true" MaxLength="255" />
+        </MudItem>
+        <MudItem xs="4">
+            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                          Label="@DistrictLabel" Placeholder="@DistrictPlaceholder"
+                          @bind-Value=Value.District For="@(() => Value.District)" OnlyValidateIfDirty="true" MaxLength="255" />
+        </MudItem>
+        <MudItem xs="4">
+            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                          Label="@CityLabel" Placeholder="@CityPlaceholder"
+                          @bind-Value=Value.City For="@(() => Value.City)" OnlyValidateIfDirty="true" MaxLength="255" />
+        </MudItem>
+        <MudItem xs="4">
+            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                          Label="@StateLabel" Placeholder="@StatePlaceholder"
+                          @bind-Value=Value.State For="@(() => Value.State)" OnlyValidateIfDirty="true" MaxLength="255" />
+        </MudItem>
+        <MudItem xs="2">
+            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                          Label="@PostalCodeLabel" Placeholder="@PostalCodePlaceholder"
+                          @bind-Value=Value.Zipcode For="@(() => Value.Zipcode)" OnlyValidateIfDirty="true" MaxLength="255" />
+        </MudItem>
+    </MudGrid>
+    
+}
+
+@code {
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public Address? Value { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
+    [Parameter]
+    public int Spacing { get; set; } = 2;
+
+    [Parameter]
+    public bool Readonly { get; set; } = false;
+
+    [Parameter]
+    public bool ManualInput { get; set; } = false;
+
+    [Parameter]
+    public string? Line1Label { get; set; } = "Line 1";
+
+    [Parameter]
+    public string? Line1Placeholder { get; set; }
+
+    [Parameter]
+    public bool ShowLine1 { get; set; } = true;
+
+    [Parameter]
+    public string? Line2Label { get; set; } = "Line 2";
+
+    [Parameter]
+    public string? Line2Placeholder { get; set; }
+
+    [Parameter]
+    public bool ShowLine2 { get; set; } = true;
+
+    [Parameter]
+    public string? Line3Label { get; set; } = "Line 3";
+
+    [Parameter]
+    public string? Line3Placeholder { get; set; }
+
+    [Parameter]
+    public bool ShowLine3 { get; set; } = false;
+
+    [Parameter]
+    public string? Line4Label { get; set; } = "Line 4";
+
+    [Parameter]
+    public string? Line4Placeholder { get; set; }
+
+    [Parameter]
+    public bool ShowLine4 { get; set; } = false;
+
+    [Parameter]
+    public string? Line5Label { get; set; } = "Line 5";
+
+    [Parameter]
+    public string? Line5Placeholder { get; set; }
+
+    [Parameter]
+    public bool ShowLine5 { get; set; } = false;
+
+    [Parameter]
+    public string? SubDistrictLabel { get; set; } = "Sub-District";
+
+    [Parameter]
+    public string? SubDistrictPlaceholder { get; set; }
+
+    [Parameter]
+    public bool ShowSubDistrict { get; set; } = false;
+
+    [Parameter]
+    public string? DistrictLabel { get; set; } = "District";
+
+    [Parameter]
+    public string? DistrictPlaceholder { get; set; }
+
+    [Parameter]
+    public bool ShowDistrict { get; set; } = false;
+
+    [Parameter]
+    public string? CityLabel { get; set; } = "City/Province";
+
+    [Parameter]
+    public string? CityPlaceholder { get; set; }
+
+    [Parameter]
+    public bool ShowCity { get; set; } = true;
+
+    [Parameter]
+    public string? StateLabel { get; set; } = "State";
+
+    [Parameter]
+    public string? StatePlaceholder { get; set; }
+
+    [Parameter]
+    public bool ShowState { get; set; } = true;
+
+    [Parameter]
+    public string? PostalCodeLabel { get; set; } = "Postal Code";
+
+    [Parameter]
+    public string? PostalCodePlaceholder { get; set; }
+
+    [Parameter]
+    public bool ShowPostalCode { get; set; } = true;
+
+    [Parameter]
+    public bool ShowLandmark { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await PopulateUIControls();
+    }
+
+    async Task PopulateUIControls()
+    {
+        
+    }
+
+    #region UI FUNCTIONS
+    #endregion
+}

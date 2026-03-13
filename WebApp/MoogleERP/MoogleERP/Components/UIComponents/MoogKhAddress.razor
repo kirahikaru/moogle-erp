@@ -101,6 +101,9 @@
     [Parameter]
     public bool Readonly { get; set; } = false;
 
+    [Parameter]
+    public bool ManualInput { get; set; } = false;
+
     List<DropDownListItem> _khProvinceList = [];
     List<DropDownListItem> _khDistrictList = [];
     List<DropDownListItem> _khCommuneList = [];

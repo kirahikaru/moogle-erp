@@ -102,7 +102,7 @@ public class Supplier : AuditObject
 	public Address? MainAddress { get; set; }
 
 	[Computed, Write(false), ReadOnly(true)]
-	public CambodiaAddress? MainCambodiaAddress { get; set; }
+	public CambodiaAddress? MainKhAddress { get; set; }
 
 	[Computed, Write(false), ReadOnly(true)]
 	public List<ItemSupplier> SaleItems { get; set; }
@@ -115,6 +115,6 @@ public class Supplier : AuditObject
 		SaleItems = [];
 		Status = SupplierStatuses.ACTIVE;
         MainAddress = new();
-        MainCambodiaAddress = new();
+		MainKhAddress = new();
     }
 }

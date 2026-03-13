@@ -127,8 +127,11 @@
                                           Label="Note" Placeholder="Note..."
                                           @bind-Value="CurrentObject!.Note" For="@(() => CurrentObject!.Note)" />
                         </MudItem>
-                        <MudItem xs="12">
-                            <MoogKhAddress Readonly=@IsViewMode Value="CurrentObject!.MainCambodiaAddress" />
+                        <MudItem xs="6">
+                            <MoogAddress Label="Address" Readonly="@IsViewMode" Value="CurrentObject!.MainAddress" ShowLine1="false" ShowLine2="false" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MoogKhAddress Label="Local Address (if any)" Readonly=@IsViewMode Value="CurrentObject!.MainKhAddress" />
                         </MudItem>
                     </MudGrid>
                 </MudPaper>

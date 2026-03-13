@@ -29,7 +29,8 @@ public class Address : AuditObject
     public string? LinkedRecordID { get; set; }
     public string? LinkedObjectType { get; set; }
     public string? Type { get; set; }
-    public string? Line1 { get; set; }
+	public string? Street { get; set; }
+	public string? Line1 { get; set; }
     public string? Line2 { get; set; }
     public string? Line3 { get; set; }
     public string? Line4 { get; set; }
@@ -38,8 +39,8 @@ public class Address : AuditObject
     public string? State { get; set; }
     public string? District { get; set; }
     public string? SubDistrict { get; set; }
-    public string? Zipcode { get; set; }
-    public string? Country { get; set; }
+	public string? Zipcode { get; set; }
+    public string? CountryName { get; set; }
     public string? CountryCode { get; set; }
     public string? Landmark { get; set; }
     public double? Latitude { get; set; }

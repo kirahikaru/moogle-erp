@@ -53,7 +53,9 @@ public class HealthcareFacility : AuditObject
 	/// Registration Address ID
 	/// </summary>
 	public int? RegAddrId { get; set; }
-    public int? MainBranchAddrId { get; set; }
+	public int? RegKhAddrId { get; set; }
+	public int? MainBranchKhAddrId { get; set; }
+	public int? MainBranchAddrId { get; set; }
     public string? FacebookLink { get; set; }
     public string? Website { get; set; }
     public string? Email { get; set; }
@@ -72,11 +74,23 @@ public class HealthcareFacility : AuditObject
 	[Computed, Write(false)]
 	public List<ContactPhone> Contacts { get; set; }
 
+	/// <summary>
+	/// Registered Local Address
+	/// </summary>
 	[Computed, Write(false)]
-	public CambodiaAddress? RegisteredAddress { get; set; }
+	public Address? RegAddress { get; set; }
 
 	[Computed, Write(false)]
-	public CambodiaAddress? MainBranchAddress { get; set; }
+	public Address? MainBranchAddress { get; set; }
+
+	/// <summary>
+	/// Registered Local Address
+	/// </summary>
+	[Computed, Write(false)]
+	public CambodiaAddress? RegKhAddress { get; set; }
+
+	[Computed, Write(false)]
+	public CambodiaAddress? MainBranchKhAddress { get; set; }
 
 	[Computed, Write(false)]
 	public DropdownDataList? FacilityType { get; set; }
@@ -89,8 +103,10 @@ public class HealthcareFacility : AuditObject
 
 	public HealthcareFacility()
     {
-        RegisteredAddress = new();
-        MainBranchAddress = new();
+        RegKhAddress = new();
+		RegAddress = new();
+        MainBranchKhAddress = new();
+		MainBranchAddress = new();
         Contacts = [];
     }
 }

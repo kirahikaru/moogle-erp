@@ -363,9 +363,9 @@
                                              StartedEditingItem="@StartedEditingExpItem" CanceledEditingItem="@CanceledEditingExpItem" CommittedItemChanges="@CommittedExpItemChanges" Style="width:100%"
                                              @ref="_expItemDataGrid" T="ExpenseItem" Items="@CurrentObject!.ExpenseItems">
                                     <Columns>
-                                        <PropertyColumn Property="x => x.OrderNo" Title="No." Editable="false" Sortable="false" 
-                                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" 
-                                            CellStyle="text-align:right" Context="qi">
+                                        <PropertyColumn Title="No." Property="x => x.OrderNo" Editable="false" Sortable="false"
+                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
+                                                        CellStyle="text-align:right" Context="qi">
                                             <EditTemplate>
                                                 <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
                                                     <MudText Typo="Typo.body1">Order # </MudText>
@@ -374,7 +374,8 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Item" Property="x => x.ObjectName" Sortable="false"
-                                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="qi">
+                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
+                                                        HeaderStyle="min-width:300px" Context="qi">
                                             <EditTemplate>
                                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
                                                               Label="Name"
@@ -383,7 +384,8 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="IT Asset ID" Property="x => x.ObjectCode" Sortable="false"
-                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="qi">
+                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="qi"
+                                                        HeaderStyle="min-width:120px">
                                             <EditTemplate>
                                                 <MudStack Row="true" Spacing="3" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
                                                     <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="false"
@@ -398,7 +400,8 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Staff ID" Property="x => x.EmpID" Sortable="false"
-                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="qi">
+                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" 
+                                                        HeaderStyle="min-width:100px" Context="qi">
                                             <EditTemplate>
                                                 
                                             </EditTemplate>
@@ -419,9 +422,9 @@
                                                 </MudSelect>
                                             </EditTemplate>
                                         </PropertyColumn>
-                                        <PropertyColumn Property="x => x.AccountCode" Title="GL Account #" Sortable="false"
+                                        <PropertyColumn Title="GL Account #" Property="x => x.AccountCode" Sortable="false"
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-400"
-                                                        Context="expItem">
+                                                        HeaderStyle="min-width:120px" Context="expItem">
                                             <EditTemplate>
                                                 <MudStack Row="true" Spacing="3" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
                                                     <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" PopoverClass="pru-ui-combo-box-popover" Editable="true" FullWidth="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password" EnableFilter="true" Required="true"
@@ -441,13 +444,14 @@
                                         </PropertyColumn>
                                         <PropertyColumn Title="Account Name" Property="x => x.AccountName" Sortable="false"
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
-                                                        Context="expItem">
+                                                        HeaderStyle="min-width:250px" Context="expItem">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Act Tracker" Property="x => x.FinActTrackerID" Sortable="false"
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" Context="expItem"
+                                                        HeaderStyle="min-width:140px"
                                                         FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right">
                                             <EditTemplate>
                                                 <MudStack Row="true" Spacing="3" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
@@ -472,13 +476,14 @@
                                         </PropertyColumn>
                                         <PropertyColumn Title="Tracker Name" Property="x => x.FinActTrackerName" Sortable="false"
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
-                                                        Context="expItem">
+                                                        HeaderStyle="min-width:200px" Context="expItem">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Amount (incl. Tax)" Property="x => x.TotalAmount" Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")" Filterable="false" Sortable="false"
-                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" CellStyle="text-align:right"
+                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" 
+                                                        HeaderStyle="min-width:150px" CellStyle="text-align:right"
                                                         Context="qi" FooterClass="reddit-mono-400"
                                                         AggregateDefinition="_expAggr" FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right">
                                             <EditTemplate>
@@ -507,7 +512,8 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Tax Amount" Property="x => x.TaxAmount" Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")"
-                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" CellStyle="text-align:right"
+                                                        HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell reddit-mono-500" 
+                                                        HeaderStyle="min-width:120px" CellStyle="text-align:right"
                                                         Filterable="false" Sortable="false" Editable="false"
                                                         AggregateDefinition="_expAggr" FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right" Context="qi"
                                                         FooterClass="reddit-mono-400">
@@ -515,7 +521,8 @@
 
                                             </EditTemplate>
                                         </PropertyColumn>
-                                        <TemplateColumn Title="Exp. Year" HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="expItem"
+                                        <TemplateColumn Title="Exp. Year" HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" 
+                                                        HeaderStyle="min-width:100px" Context="expItem"
                                                         Filterable="false" Sortable="false">
                                             <CellTemplate>
                                                 <MudText Typo="Typo.body1">@((expItem.Item.ExpenseYr.HasValue ? expItem.Item.ExpenseYr!.Value.ToString() : "YYYY") + "-" + (expItem.Item.ExpenseMth.HasValue ? expItem.Item.ExpenseMth!.Value.ToString("00") : "MM"))</MudText>
@@ -535,10 +542,9 @@
                                                 </MudStack>
                                             </EditTemplate>
                                         </TemplateColumn>
-                                        <PropertyColumn Property="x => x.Remark" Title="Remark" Filterable="false" Sortable="false"
+                                        <PropertyColumn Title="Remark" Property="x => x.Remark" Filterable="false" Sortable="false"
                                                         HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
-                                                        HeaderStyle="max-width:350px"
-                                                        Context="qi">
+                                                        HeaderStyle="min-width:350px" Context="qi">
                                             <EditTemplate>
                                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Lines=4
                                                               Label="Remark"

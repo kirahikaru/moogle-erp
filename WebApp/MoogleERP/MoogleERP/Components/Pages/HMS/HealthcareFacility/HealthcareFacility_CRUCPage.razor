@@ -144,10 +144,16 @@
                                           @bind-Value="CurrentObject!.OtherInfo" For="@(() => CurrentObject!.OtherInfo)" />
                         </MudItem>
                         <MudItem xs="6">
-                            <MoogKhAddress Readonly="@IsViewMode" Value="CurrentObject!.MainBranchAddress" Label="Main Branch Address" />
+                            <MoogKhAddress Readonly="@IsViewMode" Value="CurrentObject!.MainBranchKhAddress" Label="Main Branch Local Address" />
                         </MudItem>
                         <MudItem xs="6">
-                            <MoogKhAddress Readonly="@IsViewMode" Value="CurrentObject!.RegisteredAddress" Label="Registered Address" />
+                            <MoogKhAddress Readonly="@IsViewMode" Value="CurrentObject!.RegKhAddress" Label="Registered Local Address" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MoogAddress Readonly="@IsViewMode" Value="CurrentObject!.MainBranchAddress" Label="Main Branch Address" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MoogAddress Readonly="@IsViewMode" Value="CurrentObject!.RegAddress" Label="Registered Address" />
                         </MudItem>
                     </MudGrid>
                 </MudPaper>

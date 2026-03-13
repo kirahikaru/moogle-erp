@@ -98,16 +98,39 @@
                           Label="@StateLabel" Placeholder="@StatePlaceholder"
                           @bind-Value=Value.State For="@(() => Value.State)" OnlyValidateIfDirty="true" MaxLength="255" />
         </MudItem>
+        <MudItem xs="3">
+            @if (CountrySelection)
+            {
+                <MudComboBox ReadOnly=@Readonly Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                             PopoverClass="moog-ui-combo-box-popover"
+                             Label="Country" T="string"
+                             Value="@Value.CountryCode" ValueChanged="OnCountryChanged"
+                             ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _countryList.SingleOrDefault<DropDownListItem>(x => x.ObjectCode == e)?.ObjectName)">
+                    <ChildContent>
+                        @foreach (var cty in _countryList)
+                        {
+                            <MudComboBoxItem T="string" Value="@cty.ObjectCode" Text="@cty.ObjectName">@cty.ObjectName</MudComboBoxItem>
+                        }
+                    </ChildContent>
+                </MudComboBox>
+            }
+            else
+            {
+                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                              Label="Country" Placeholder="Country"
+                              @bind-Value=Value.CountryName For="@(() => Value.CountryName)" OnlyValidateIfDirty="true" MaxLength="255" />
+            }
+        </MudItem>
         <MudItem xs="2">
             <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
                           Label="@PostalCodeLabel" Placeholder="@PostalCodePlaceholder"
                           @bind-Value=Value.Zipcode For="@(() => Value.Zipcode)" OnlyValidateIfDirty="true" MaxLength="255" />
         </MudItem>
     </MudGrid>
-    
 }
 
 @code {
+    #region CONTROL PARAMS
     [Parameter]
     public string? Label { get; set; }
 
@@ -218,15 +241,51 @@
 
     [Parameter]
     public bool ShowLandmark { get; set; } = true;
+    #endregion
+
+    #region UI PARAM
+    List<DropDownListItem> _countryList = [];
+    #endregion
+    /// <summary>
+    /// If false then Manual Country Name text box will appear instead
+    /// </summary>
+    [Parameter]
+    public bool CountrySelection { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
         await PopulateUIControls();
     }
 
+    void OnCountryChanged(string? ctyCode)
+    {
+        if (!string.IsNullOrEmpty(ctyCode))
+        {
+            var cty = _countryList.SingleOrDefault<DropDownListItem>(x => x.ObjectCode == ctyCode);
+            if (cty != null)
+            {
+                Value!.CountryCode = ctyCode;
+                Value!.CountryName = cty.ObjectName;
+            }
+            else
+            {
+                Value!.CountryCode = null;
+                Value!.CountryName = null;
+            }
+        }
+        else
+        {
+            Value!.CountryCode = null;
+            Value!.CountryName = null;
+        }
+    }
+
     async Task PopulateUIControls()
     {
-        
+        if (CountrySelection)
+        {
+            _countryList = await Uow.Countries.GetForDropdownSelect1Async();
+        }
     }
 
     #region UI FUNCTIONS

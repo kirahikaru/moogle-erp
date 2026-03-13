@@ -40,19 +40,23 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
         sbSql.Where("t.Id=@Id");
 		param.Add("@Id", id);
 
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegisteredAddressId");
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddressId");
-        sbSql.LeftJoin($"{DropdownDataList.MsSqlTable} ft ON ft.IsDeleted=0 AND ft.Id=t.FacilityTypeDdlId");
+        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
+        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
+		sbSql.LeftJoin($"{Address.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegAddrId");
+		sbSql.LeftJoin($"{Address.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddrId");
+		sbSql.LeftJoin($"{DropdownDataList.MsSqlTable} ft ON ft.IsDeleted=0 AND ft.Id=t.FacilityTypeDdlId");
 
         using var cn = DbContext.DbCxn;
 
 		string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
-        List<HealthcareFacility> dataList = (await cn.QueryAsync<HealthcareFacility, CambodiaAddress, CambodiaAddress, DropdownDataList, HealthcareFacility>(
-                sql, (obj, regAddr, mainBranchAddr, facilityType) =>
+        var dataList = (await cn.QueryAsync<HealthcareFacility, CambodiaAddress, CambodiaAddress, Address, Address, DropdownDataList, HealthcareFacility>(
+                sql, (obj, regKhAddr, mainBranchKhAddr, regAddr, mainBranchAddr, facilityType) =>
                 {
-                    obj.RegisteredAddress = regAddr;
-                    obj.MainBranchAddress = mainBranchAddr;
+                    obj.RegKhAddress = regKhAddr;
+                    obj.MainBranchKhAddress = mainBranchKhAddr;
+					obj.RegAddress = regAddr;
+					obj.MainBranchAddress = mainBranchAddr;
                     obj.FacilityType = facilityType;
 
                     return obj;
@@ -102,50 +106,93 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
 
 			obj.Id = objId;
 
-            DynamicParameters addressUpdateParam = new();
-            SqlBuilder sbAddressUpdateSql = new();
+            DynamicParameters addrUpdParams = new();
+            SqlBuilder sbAddrUpdSql = new();
 
-            if (obj.RegisteredAddress != null && (
-				obj.RegisteredAddress.KhProvinceId is not null ||
-                !string.IsNullOrEmpty(obj.RegisteredAddress.UnitFloor) ||
-                !string.IsNullOrEmpty(obj.RegisteredAddress.StreetNo)))
+            if (obj.RegKhAddress != null && (
+				obj.RegKhAddress.KhProvinceId is not null ||
+                !string.IsNullOrEmpty(obj.RegKhAddress.UnitFloor) ||
+                !string.IsNullOrEmpty(obj.RegKhAddress.StreetNo)))
 			{
-				obj.RegisteredAddress.CreatedUser = obj.CreatedUser;
-				obj.RegisteredAddress.CreatedDateTime = timestamp;
-                obj.RegisteredAddress.ModifiedUser = obj.ModifiedUser;
-                obj.RegisteredAddress.ModifiedDateTime = timestamp;
-				obj.RegisteredAddress.LinkedObjectId = objId;
-				obj.RegisteredAddress.LinkedObjectType = obj.GetType().Name;
+				obj.RegKhAddress.CreatedUser = obj.CreatedUser;
+				obj.RegKhAddress.CreatedDateTime = timestamp;
+                obj.RegKhAddress.ModifiedUser = obj.ModifiedUser;
+                obj.RegKhAddress.ModifiedDateTime = timestamp;
+				obj.RegKhAddress.LinkedObjectId = objId;
+				obj.RegKhAddress.LinkedObjectType = obj.GetType().Name;
 
-				int registeredAddressId = await cn.InsertAsync(obj.RegisteredAddress, tran);
+				int regKhAddrId = await cn.InsertAsync(obj.RegKhAddress, tran);
 
-				obj.RegAddrId = registeredAddressId;
-                addressUpdateParam.Add("@RegisteredAddressId", registeredAddressId);
+				obj.RegAddrId = regKhAddrId;
+                addrUpdParams.Add("@RegKhAddrId", regKhAddrId);
+            }
+
+			if (obj.RegAddress != null && (
+				!string.IsNullOrEmpty(obj.RegAddress.CountryName) ||
+				!string.IsNullOrEmpty(obj.RegAddress.Line1) ||
+				!string.IsNullOrEmpty(obj.RegAddress.Street)))
+			{
+				obj.RegAddress.CreatedUser = obj.CreatedUser;
+				obj.RegAddress.CreatedDateTime = timestamp;
+				obj.RegAddress.ModifiedUser = obj.ModifiedUser;
+				obj.RegAddress.ModifiedDateTime = timestamp;
+				obj.RegAddress.LinkedObjectId = objId;
+				obj.RegAddress.LinkedObjectType = obj.GetType().Name;
+
+				int regAddrId = await cn.InsertAsync(obj.RegAddress, tran);
+
+				obj.RegAddrId = regAddrId;
+				addrUpdParams.Add("@RegAddrId", regAddrId);
+			}
+
+			if (obj.MainBranchKhAddress != null && (
+                obj.MainBranchKhAddress.KhProvinceId is not null ||
+                !string.IsNullOrEmpty(obj.MainBranchKhAddress.UnitFloor) ||
+                !string.IsNullOrEmpty(obj.MainBranchKhAddress.StreetNo)))
+			{
+                obj.MainBranchKhAddress.CreatedUser = obj.CreatedUser;
+                obj.MainBranchKhAddress.CreatedDateTime = timestamp;
+                obj.MainBranchKhAddress.ModifiedUser = obj.ModifiedUser;
+                obj.MainBranchKhAddress.ModifiedDateTime = timestamp;
+                obj.MainBranchKhAddress.LinkedObjectId = objId;
+                obj.MainBranchKhAddress.LinkedObjectType = obj.GetType().Name;
+
+                int mainBranchKhAddrId = await cn.InsertAsync(obj.MainBranchKhAddress, tran);
+
+                obj.MainBranchKhAddrId = mainBranchKhAddrId;
+				addrUpdParams.Add("@MainBranchKhAddrId", mainBranchKhAddrId);
             }
 
 			if (obj.MainBranchAddress != null && (
-                obj.MainBranchAddress.KhProvinceId is not null ||
-                !string.IsNullOrEmpty(obj.MainBranchAddress.UnitFloor) ||
-                !string.IsNullOrEmpty(obj.MainBranchAddress.StreetNo)))
+				!string.IsNullOrEmpty(obj.MainBranchAddress.CountryName) ||
+				!string.IsNullOrEmpty(obj.MainBranchAddress.Line1) ||
+				!string.IsNullOrEmpty(obj.MainBranchAddress.Street)))
 			{
-                obj.MainBranchAddress.CreatedUser = obj.CreatedUser;
-                obj.MainBranchAddress.CreatedDateTime = timestamp;
-                obj.MainBranchAddress.ModifiedUser = obj.ModifiedUser;
-                obj.MainBranchAddress.ModifiedDateTime = timestamp;
-                obj.MainBranchAddress.LinkedObjectId = objId;
-                obj.MainBranchAddress.LinkedObjectType = obj.GetType().Name;
+				obj.MainBranchAddress.CreatedUser = obj.CreatedUser;
+				obj.MainBranchAddress.CreatedDateTime = timestamp;
+				obj.MainBranchAddress.ModifiedUser = obj.ModifiedUser;
+				obj.MainBranchAddress.ModifiedDateTime = timestamp;
+				obj.MainBranchAddress.LinkedObjectId = objId;
+				obj.MainBranchAddress.LinkedObjectType = obj.GetType().Name;
 
-                int mainBranchAddrId = await cn.InsertAsync(obj.MainBranchAddress, tran);
+				int mainBrAddrId = await cn.InsertAsync(obj.MainBranchAddress, tran);
 
-                obj.MainBranchAddrId = mainBranchAddrId;
-                addressUpdateParam.Add("@MainBranchAddressId", mainBranchAddrId);
-            }
+				obj.MainBranchAddrId = mainBrAddrId;
+				addrUpdParams.Add("@MainBranchAddrId", mainBrAddrId);
+			}
 
-			if (addressUpdateParam.ParameterNames.Any())
+			if (addrUpdParams.ParameterNames.Any())
 			{
-				addressUpdateParam.Add("@Id", objId);
-				string addressUpdateSql = sbAddressUpdateSql.AddTemplate($"UPDATE {DbObject.MsSqlTable} SET RegAddrId=@RegAddrId, MainBranchAddrId=@MainBranchAddrId WHERE Id=@Id").RawSql;
-				int addressUpdCount = await cn.ExecuteAsync(addressUpdateSql, addressUpdateParam);
+				foreach (string paramName in addrUpdParams.ParameterNames)
+				{
+					sbAddrUpdSql.Set($"{paramName}=@{paramName}");
+				}
+
+				addrUpdParams.Add("@Id", objId);
+				sbAddrUpdSql.Where("Id=@Id");
+
+				string addrUpdSql = sbAddrUpdSql.AddTemplate($"UPDATE {DbObject.MsSqlTable} /**set**/ /**where**/").RawSql;
+				int addrUpdCount = await cn.ExecuteAsync(addrUpdSql, addrUpdParams, tran);
 			}
 
 			tran.Commit();
@@ -173,61 +220,61 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
         {
             obj.ModifiedDateTime = timestamp;
 
-            if (obj.RegisteredAddress != null)
+            if (obj.RegKhAddress != null)
             {
-                if (obj.RegisteredAddress.Id == 0 && (
-					obj.RegisteredAddress.KhProvinceId is not null ||
-					!string.IsNullOrEmpty(obj.RegisteredAddress.UnitFloor) ||
-					!string.IsNullOrEmpty(obj.RegisteredAddress.StreetNo)))
+                if (obj.RegKhAddress.Id == 0 && (
+					obj.RegKhAddress.KhProvinceId is not null ||
+					!string.IsNullOrEmpty(obj.RegKhAddress.UnitFloor) ||
+					!string.IsNullOrEmpty(obj.RegKhAddress.StreetNo)))
                 {
-                    obj.RegisteredAddress.CreatedUser = obj.CreatedUser;
-                    obj.RegisteredAddress.CreatedDateTime = timestamp;
-                    obj.RegisteredAddress.ModifiedUser = obj.ModifiedUser;
-                    obj.RegisteredAddress.ModifiedDateTime = timestamp;
-                    obj.RegisteredAddress.LinkedObjectId = obj.Id;
-                    obj.RegisteredAddress.LinkedObjectType = obj.GetType().Name;
+                    obj.RegKhAddress.CreatedUser = obj.CreatedUser;
+                    obj.RegKhAddress.CreatedDateTime = timestamp;
+                    obj.RegKhAddress.ModifiedUser = obj.ModifiedUser;
+                    obj.RegKhAddress.ModifiedDateTime = timestamp;
+                    obj.RegKhAddress.LinkedObjectId = obj.Id;
+                    obj.RegKhAddress.LinkedObjectType = obj.GetType().Name;
 
-                    int regAddrId = await cn.InsertAsync(obj.RegisteredAddress, tran);
+                    int regAddrId = await cn.InsertAsync(obj.RegKhAddress, tran);
 
 					obj.RegAddrId = regAddrId;
                 }
-                else if (obj.RegisteredAddress.Id > 0)
+                else if (obj.RegKhAddress.Id > 0)
                 {
-                    obj.RegisteredAddress.ModifiedUser = obj.ModifiedUser;
-                    obj.RegisteredAddress.ModifiedDateTime = timestamp;
-                    obj.RegisteredAddress.LinkedObjectId = obj.Id;
-                    obj.RegisteredAddress.LinkedObjectType = obj.GetType().Name;
+                    obj.RegKhAddress.ModifiedUser = obj.ModifiedUser;
+                    obj.RegKhAddress.ModifiedDateTime = timestamp;
+                    obj.RegKhAddress.LinkedObjectId = obj.Id;
+                    obj.RegKhAddress.LinkedObjectType = obj.GetType().Name;
 
-                    bool isRegisteredAddressUpdated = await cn.UpdateAsync(obj.RegisteredAddress, tran);
+                    bool isRegisteredAddressUpdated = await cn.UpdateAsync(obj.RegKhAddress, tran);
                 }
             }
 
-            if (obj.MainBranchAddress != null)
+            if (obj.MainBranchKhAddress != null)
             {
-                if (obj.MainBranchAddress.Id == 0 && (
-					obj.MainBranchAddress.KhProvinceId is not null ||
-					!string.IsNullOrEmpty(obj.MainBranchAddress.UnitFloor) ||
-					!string.IsNullOrEmpty(obj.MainBranchAddress.StreetNo)))
+                if (obj.MainBranchKhAddress.Id == 0 && (
+					obj.MainBranchKhAddress.KhProvinceId is not null ||
+					!string.IsNullOrEmpty(obj.MainBranchKhAddress.UnitFloor) ||
+					!string.IsNullOrEmpty(obj.MainBranchKhAddress.StreetNo)))
                 {
-                    obj.MainBranchAddress.CreatedUser = obj.CreatedUser;
-                    obj.MainBranchAddress.CreatedDateTime = timestamp;
-                    obj.MainBranchAddress.ModifiedUser = obj.ModifiedUser;
-                    obj.MainBranchAddress.ModifiedDateTime = timestamp;
-                    obj.MainBranchAddress.LinkedObjectId = obj.Id;
-                    obj.MainBranchAddress.LinkedObjectType = obj.GetType().Name;
+                    obj.MainBranchKhAddress.CreatedUser = obj.CreatedUser;
+                    obj.MainBranchKhAddress.CreatedDateTime = timestamp;
+                    obj.MainBranchKhAddress.ModifiedUser = obj.ModifiedUser;
+                    obj.MainBranchKhAddress.ModifiedDateTime = timestamp;
+                    obj.MainBranchKhAddress.LinkedObjectId = obj.Id;
+                    obj.MainBranchKhAddress.LinkedObjectType = obj.GetType().Name;
 
-                    int mainBranchAddrId = await cn.InsertAsync(obj.MainBranchAddress, tran);
+                    int mainBranchAddrId = await cn.InsertAsync(obj.MainBranchKhAddress, tran);
 
                     obj.MainBranchAddrId = mainBranchAddrId;
                 }
-                else if (obj.MainBranchAddress.Id > 0)
+                else if (obj.MainBranchKhAddress.Id > 0)
                 {
-                    obj.MainBranchAddress.ModifiedUser = obj.ModifiedUser;
-                    obj.MainBranchAddress.ModifiedDateTime = timestamp;
-                    obj.MainBranchAddress.LinkedObjectId = obj.Id;
-                    obj.MainBranchAddress.LinkedObjectType = obj.GetType().Name;
+                    obj.MainBranchKhAddress.ModifiedUser = obj.ModifiedUser;
+                    obj.MainBranchKhAddress.ModifiedDateTime = timestamp;
+                    obj.MainBranchKhAddress.LinkedObjectId = obj.Id;
+                    obj.MainBranchKhAddress.LinkedObjectType = obj.GetType().Name;
 
-                    bool isMainBranchAddressUpdated = await cn.UpdateAsync(obj.MainBranchAddress, tran);
+                    bool isMainBranchAddressUpdated = await cn.UpdateAsync(obj.MainBranchKhAddress, tran);
                 }
             }
 
@@ -372,10 +419,12 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
             sbSql.Where("t.Id NOT IN @ExcludeIdList");
             param.Add("@ExcludeIdList", excludeIdList);
         }
-        #endregion
+		#endregion
 
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegisteredAddressId");
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddressId");
+		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
+		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
+		sbSql.LeftJoin($"{Address.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegAddrId");
+		sbSql.LeftJoin($"{Address.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddrId");
 		sbSql.LeftJoin($"{DropdownDataList.MsSqlTable} ft ON ft.IsDeleted=0 AND ft.Id=t.FacilityTypeDdlId");
 
         sbSql.OrderBy("t.ObjectName ASC");
@@ -398,17 +447,19 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
 
 		using var cn = DbContext.DbCxn;
 
-        var dataList = (await cn.QueryAsync<HealthcareFacility, CambodiaAddress, CambodiaAddress, DropdownDataList, HealthcareFacility>(
-                sql, (obj, regAddr, mainBranchAddr, facilityType) =>
-                {
-                    obj.RegisteredAddress = regAddr;
-                    obj.MainBranchAddress = mainBranchAddr;
+		var dataList = (await cn.QueryAsync<HealthcareFacility, CambodiaAddress, CambodiaAddress, Address, Address, DropdownDataList, HealthcareFacility>(
+				sql, (obj, regKhAddr, mainBranchKhAddr, regAddr, mainBranchAddr, facilityType) =>
+				{
+					obj.RegKhAddress = regKhAddr;
+					obj.MainBranchKhAddress = mainBranchKhAddr;
+					obj.RegAddress = regAddr;
+					obj.MainBranchAddress = mainBranchAddr;
 					obj.FacilityType = facilityType;
 
-                    return obj;
-                }, param, splitOn: "Id")).AsList();
+					return obj;
+				}, param, splitOn: "Id")).AsList();
 
-        return dataList;
+		return dataList;
 	}
 
 	public async Task<DataPagination> GetSearchPaginationAsync(int pgSize = 0, 
@@ -482,8 +533,10 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
 		}
 		#endregion
 
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegisteredAddressId");
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddressId");
+		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
+		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
+		sbSql.LeftJoin($"{Address.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegAddrId");
+		sbSql.LeftJoin($"{Address.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddrId");
 		sbSql.LeftJoin($"{DropdownDataList.MsSqlTable} ft ON ft.IsDeleted=0 AND ft.Id=t.FacilityTypeDdlId");
 
 		string sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
@@ -576,8 +629,10 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
 		}
 		#endregion
 
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegisteredAddressId");
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddressId");
+		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
+		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
+		sbSql.LeftJoin($"{Address.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegAddrId");
+		sbSql.LeftJoin($"{Address.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddrId");
 		sbSql.LeftJoin($"{DropdownDataList.MsSqlTable} ft ON ft.IsDeleted=0 AND ft.Id=t.FacilityTypeDdlId");
 
 		sbSql.OrderBy("t.ObjectName ASC");
@@ -599,16 +654,18 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
 
 		using var cn = DbContext.DbCxn;
 
-        var dataList = (await cn.QueryAsync<HealthcareFacility, CambodiaAddress, CambodiaAddress, DropdownDataList, HealthcareFacility>(
-                sql, (obj, regAddr, mainBranchAddr, facilityType) =>
-                {
-                    obj.RegisteredAddress = regAddr;
-                    obj.MainBranchAddress = mainBranchAddr;
-                    obj.FacilityType = facilityType;
+		var dataList = (await cn.QueryAsync<HealthcareFacility, CambodiaAddress, CambodiaAddress, Address, Address, DropdownDataList, HealthcareFacility>(
+				sql, (obj, regKhAddr, mainBranchKhAddr, regAddr, mainBranchAddr, facilityType) =>
+				{
+					obj.RegKhAddress = regKhAddr;
+					obj.MainBranchKhAddress = mainBranchKhAddr;
+					obj.RegAddress = regAddr;
+					obj.MainBranchAddress = mainBranchAddr;
+					obj.FacilityType = facilityType;
 
-                    return obj;
-                }, param, splitOn: "Id")).AsList();
+					return obj;
+				}, param, splitOn: "Id")).AsList();
 
-        return dataList;
+		return dataList;
 	}
 }

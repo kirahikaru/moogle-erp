@@ -81,8 +81,8 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
 
             obj.Id = objId;
 
-            //DynamicParameters addressUpdateParam = new();
-            //SqlBuilder sbAddressUpdateSql = new();
+            DynamicParameters addrUpdParam = new();
+            SqlBuilder sbAddrUpdSql = new();
 
             if (obj.MainAddress != null && (
                 !string.IsNullOrEmpty(obj.MainAddress.CountryCode) ||
@@ -97,10 +97,10 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
                 obj.MainAddress.LinkedObjectId = objId;
                 obj.MainAddress.LinkedObjectType = obj.GetType().Name;
 
-                int mainAddressId = await cn.InsertAsync(obj.MainAddress, tran);
+                int mainAddrId = await cn.InsertAsync(obj.MainAddress, tran);
 
-                //obj.MainAddressId = mainAddressId;
-                //addressUpdateParam.Add("@MainAddressId", mainAddressId);
+                //obj.MainAddrId = mainAddrId;
+                addrUpdParam.Add("@MainAddrId", mainAddrId);
             }
 
             if (obj.MainKhAddress != null && (
@@ -115,20 +115,20 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
                 obj.MainKhAddress.LinkedObjectId = objId;
                 obj.MainKhAddress.LinkedObjectType = obj.GetType().Name;
 
-                int mainCambodiaAddressId = await cn.InsertAsync(obj.MainKhAddress, tran);
+                int mainKhAddrId = await cn.InsertAsync(obj.MainKhAddress, tran);
 
-                //obj.MainCambodiaAddressId = mainCambodiaAddressId;
-                //addressUpdateParam.Add("@MainCambodiaAddressId", mainCambodiaAddressId);
+                //obj.MainKhAddrId = mainKhAddrId;
+                addrUpdParam.Add("@MainKhAddrId", mainKhAddrId);
             }
 
-            //if (addressUpdateParam.ParameterNames.Any())
-            //{
-            //    addressUpdateParam.Add("@Id", objId);
-            //    string addressUpdateSql = sbAddressUpdateSql.AddTemplate($"UPDATE {DbObject.MsSqlTable} SET MainAddressId=@MainAddressId, MainCambodiaAddressId=@MainCambodiaAddressId WHERE Id=@Id").RawSql;
-            //    int addressUpdCount = await cn.ExecuteAsync(addressUpdateSql, addressUpdateParam);
-            //}
+			//if (addrUpdParam.ParameterNames.Any())
+			//{
+			//    addrUpdParam.Add("@Id", objId);
+			//    string addrUpdSql = sbAddrUpdSql.AddTemplate($"UPDATE {DbObject.MsSqlTable} SET MainAddrId=@MainAddrId, MainKhAddrId=@MainKhAddrId WHERE Id=@Id").RawSql;
+			//    int addrUpdCount = await cn.ExecuteAsync(addrUpdSql, addrUpdParam, tran);
+			//}
 
-            if (obj.Contacts != null && obj.Contacts.Any())
+			if (obj.Contacts != null && obj.Contacts.Any())
             {
                 foreach (Contact contact in obj.Contacts)
                 {
@@ -218,11 +218,11 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
                     obj.MainAddress.LinkedObjectType = obj.GetType().Name;
 
 
-                    int mainAddressId = await cn.InsertAsync(obj.MainAddress, tran);
+                    int mainAddrId = await cn.InsertAsync(obj.MainAddress, tran);
                 }
                 else
                 {
-                    bool isMainAddressUpdated = await cn.UpdateAsync(obj.MainAddress, tran);
+                    bool isMainAddrUpd = await cn.UpdateAsync(obj.MainAddress, tran);
                 }
             }
 
@@ -240,11 +240,11 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
                     obj.MainKhAddress.LinkedObjectId = obj.Id;
                     obj.MainKhAddress.LinkedObjectType = obj.GetType().Name;
 
-                    int mainCambodiaAddressId = await cn.InsertAsync(obj.MainKhAddress, tran);
+                    int mainKhAddrId = await cn.InsertAsync(obj.MainKhAddress, tran);
                 }
                 else
                 {
-                    bool isMainCambodiaAddressUpdated = await cn.UpdateAsync(obj.MainKhAddress, tran);
+                    bool isMainKhAddrUpd = await cn.UpdateAsync(obj.MainKhAddress, tran);
                 }
             }
 

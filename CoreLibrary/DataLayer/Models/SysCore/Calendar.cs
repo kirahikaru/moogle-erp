@@ -1,4 +1,6 @@
 ﻿namespace DataLayer.Models.SysCore;
+
+using Dapper.Contrib.Extensions;
 /// <summary>
 /// 
 /// </summary>

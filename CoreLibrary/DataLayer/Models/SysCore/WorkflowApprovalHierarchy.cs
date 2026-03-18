@@ -1,4 +1,5 @@
-﻿namespace DataLayer.Models.SysCore;
+﻿using Dapper.Contrib.Extensions;
+namespace DataLayer.Models.SysCore;
 
 [Table("WorkflowApprovalHierarchy"), DisplayName("Workflow Approval Hierarchy")]
 public class WorkflowApprovalHierarchy : AuditObject

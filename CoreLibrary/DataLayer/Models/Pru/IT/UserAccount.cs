@@ -1,5 +1,7 @@
 ﻿namespace DataLayer.Models.Pru.IT;
 
+using Dapper.Contrib.Extensions;
+
 [Table("[dbo].[UserAccount]"), DisplayName("User Account")]
 public class UserAccount : AuditObject
 {

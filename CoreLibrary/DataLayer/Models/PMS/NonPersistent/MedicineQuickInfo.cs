@@ -1,5 +1,6 @@
 ﻿namespace DataLayer.Models.PMS.NonPersistent;
 
+using Dapper.Contrib.Extensions;
 public class MedicineQuickInfo
 {
     public int Id { get; set; }

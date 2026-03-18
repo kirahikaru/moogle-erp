@@ -2,6 +2,7 @@
 using PruHR=DataLayer.Models.Pru.HR;
 using static Dapper.SqlMapper;
 using DataLayer.GlobalConstant.Pru;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.Pru.IT;
 

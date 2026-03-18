@@ -1,5 +1,7 @@
 ﻿namespace DataLayer.Repos.SysCore;
 
+using Dapper.Contrib.Extensions;
+
 public interface IContactPhoneRepos : IBaseRepos<ContactPhone>
 {
 	Task<int> InsertMultipleAsync(List<ContactPhone> contacts);

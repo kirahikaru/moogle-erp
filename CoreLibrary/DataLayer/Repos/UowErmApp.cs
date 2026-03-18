@@ -19,7 +19,7 @@ public interface IUowErmApp : IUnitOfWork
 	IEventOrganizerRepos EventOrganizers { get; }
 	IEventOrganizerRoleRepos EventOrganizerRoles { get; }
 
-	IEventRegistrationRepos EventResgistrations { get; }
+	IEventRegRepos EventRegs { get; }
 	IEventTypeRepos EventTypes { get; }
 	#endregion
 
@@ -117,7 +117,7 @@ public class UowErmApp : UnitOfWork, IUowErmApp
         EventOrganizers = new EventOrganizerRepos(DbContext);
         EventOrganizerRoles = new EventOrganizerRoleRepos(DbContext);
         EventInvitations = new EventInvitRepos(DbContext);
-        EventResgistrations = new EventRegistrationRepos(DbContext);
+        EventRegs = new EventRegRepos(DbContext);
         EventTypes = new EventTypeRepos(DbContext);
         #endregion
 
@@ -211,7 +211,7 @@ public class UowErmApp : UnitOfWork, IUowErmApp
     public IEventOrganizerRepos EventOrganizers { get; }
     public IEventOrganizerRoleRepos EventOrganizerRoles { get; }
     public IEventInvitRepos EventInvitations { get; }
-    public IEventRegistrationRepos EventResgistrations { get; }
+    public IEventRegRepos EventRegs { get; }
     public IEventTypeRepos EventTypes { get; }
     #endregion
 

@@ -76,7 +76,7 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<DropdownDataList>> ServerDataFunc(GridState<DropdownDataList> gridState)
+	protected override async Task<GridData<DropdownDataList>> ServerDataFunc(GridState<DropdownDataList> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<DropdownDataList>
 		{

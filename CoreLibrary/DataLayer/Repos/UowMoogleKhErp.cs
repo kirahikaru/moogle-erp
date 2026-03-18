@@ -1,5 +1,4 @@
-﻿using DataLayer.Models.HMS;
-using DataLayer.Repos.EMS;
+﻿using DataLayer.Repos.EMS;
 using DataLayer.Repos.FIN;
 using DataLayer.Repos.HMS;
 using DataLayer.Repos.Hobby;
@@ -8,6 +7,7 @@ using DataLayer.Repos.LIB;
 using DataLayer.Repos.PMS;
 using DataLayer.Repos.RMS;
 using DataLayer.Repos.SysCore;
+using DataLayer.Repos.TSM;
 using Microsoft.Extensions.Options;
 
 namespace DataLayer.Repos;
@@ -16,11 +16,14 @@ public interface IUowMoogleKhErp : IUnitOfWork
 {
 	#region EMS - Event Management System
 	IEventRepos Events { get; }
-	IEventInvitRepos EventInvitations { get; }
+	IEventInvitRepos EventInvits { get; }
 	IEventOrganizerRepos EventOrganizers { get; }
 	IEventOrganizerRoleRepos EventOrganizerRoles { get; }
 
-	IEventRegistrationRepos EventResgistrations { get; }
+    /// <summary>
+    /// Event Registrations
+    /// </summary>
+	IEventRegRepos EventRegs { get; }
 	IEventTypeRepos EventTypes { get; }
 	#endregion
 
@@ -118,6 +121,12 @@ public interface IUowMoogleKhErp : IUnitOfWork
 	ISupplierRepos Suppliers { get; }
 	ISupplierBranchRepos SupplierBranches { get; }
 	#endregion
+
+	#region TSM - Tech Store Management
+    ILaptopRepos Laptops { get; }
+    ILaptopSpecVarRepos LaptopSpecVars { get; }
+	#endregion
+
 }
 
 public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
@@ -128,8 +137,8 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
         Events = new EventRepos(DbContext);
         EventOrganizers = new EventOrganizerRepos(DbContext);
         EventOrganizerRoles = new EventOrganizerRoleRepos(DbContext);
-        EventInvitations = new EventInvitRepos(DbContext);
-        EventResgistrations = new EventRegistrationRepos(DbContext);
+        EventInvits = new EventInvitRepos(DbContext);
+        EventRegs = new EventRegRepos(DbContext);
         EventTypes = new EventTypeRepos(DbContext);
         #endregion
 
@@ -216,15 +225,20 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
         RetailTaxItems = new RetailTaxItemRepos(DbContext);
         Suppliers = new SupplierRepos(DbContext);
         SupplierBranches = new SupplierBranchRepos(DbContext);
-        #endregion
-    }
+		#endregion
 
-    #region EMS - Event Management System
-    public IEventRepos Events { get; }
+		#region TMS - Tech Store Management
+        Laptops = new LaptopRepos(DbContext);
+        LaptopSpecVars = new LaptopSpecVarRepos(DbContext);
+		#endregion
+	}
+
+	#region EMS - Event Management System
+	public IEventRepos Events { get; }
     public IEventOrganizerRepos EventOrganizers { get; }
     public IEventOrganizerRoleRepos EventOrganizerRoles { get; }
-    public IEventInvitRepos EventInvitations { get; }
-    public IEventRegistrationRepos EventResgistrations { get; }
+    public IEventInvitRepos EventInvits { get; }
+    public IEventRegRepos EventRegs { get; }
     public IEventTypeRepos EventTypes { get; }
     #endregion
 
@@ -317,5 +331,10 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
     public IRetailTaxItemRepos RetailTaxItems { get; }
     public ISupplierRepos Suppliers { get; }
     public ISupplierBranchRepos SupplierBranches { get; }
-    #endregion
+	#endregion
+
+	#region TSM - Tech Store Management
+    public ILaptopRepos Laptops { get; }
+    public ILaptopSpecVarRepos LaptopSpecVars { get; }
+	#endregion
 }

@@ -88,7 +88,7 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<Currency>> ServerDataFunc(GridState<Currency> gridState)
+	protected override async Task<GridData<Currency>> ServerDataFunc(GridState<Currency> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<Currency>
 		{

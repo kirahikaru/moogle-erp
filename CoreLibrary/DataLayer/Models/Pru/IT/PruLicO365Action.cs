@@ -1,5 +1,6 @@
 ﻿namespace DataLayer.Models.Pru.IT;
 
+using Dapper.Contrib.Extensions;
 [Table("[dbo].[PruLicO365Action]"), DisplayName("PruLicO365Action")]
 public class PruLicO365Action : AuditObject
 {

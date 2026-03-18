@@ -1,4 +1,5 @@
-﻿namespace DataLayer.Models.SysCore;
+﻿using Dapper.Contrib.Extensions;
+namespace DataLayer.Models.SysCore;
 
 [Table("OrgStructType"), DisplayName("Organization Structure Type")]
 public class OrgStructType : AuditObject, IParentChildHierarchyObject

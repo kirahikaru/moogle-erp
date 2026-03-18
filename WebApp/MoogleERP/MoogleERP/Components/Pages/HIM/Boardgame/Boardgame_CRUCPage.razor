@@ -87,7 +87,7 @@
                 
             </MudStack>
         </MudPaper>
-        <MudTabs Color="Color.Primary" Class="mt-3 moog-cruc-pg-mudtab" ActiveTabClass="moog-cruc-pg-mudtab-active" PanelClass="moog-cruc-pg-mudtab-panel" TabHeaderClass="moog-cruc-pg-mudtab-header" TabPanelClass="moog-cruc-pg-mudtab-tab-panel"
+        <MudTabs Color="Color.Primary" Class="mt-3 moog-cruc-pg-mudtab" ActiveTabClass="moog-cruc-pg-mudtab-active" TabHeaderClass="moog-cruc-pg-mudtab-header" TabPanelsClass="moog-cruc-pg-mudtab-tab-panel"
                  Style="height:calc(100vh - 185px);">
             <MudTabPanel Icon="material-symbols-rounded/home" Text="Main" Style="height:100%">
                 <MudPaper Class="rounded-0" Elevation="1" Height="calc(100vh - 220px)" Style="overflow-y: auto;">
@@ -267,7 +267,7 @@
                                                             HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
-                                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Lines="2" AutoGrow="false"
+                                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Lines="2" 
                                                                   Placeholder="Remark..."
                                                                   @bind-Value="item.Item.Remark" For="@(() => item.Item.Remark)" />
                                                 </EditTemplate>
@@ -577,9 +577,11 @@
         }
     }
 
-    void CommittedContentItemChanges(BoardgameContentItem contentItem)
+    Task<DataGridEditFormAction> CommittedContentItemChanges(BoardgameContentItem contentItem)
     {
         _tempContentItemToAdd = null;
+
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
     #endregion
     #endregion

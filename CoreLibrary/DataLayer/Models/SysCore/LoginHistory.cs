@@ -1,4 +1,5 @@
-﻿namespace DataLayer.Models.SysCore;
+﻿using Dapper.Contrib.Extensions;
+namespace DataLayer.Models.SysCore;
 
 [Table("LoginHistory"), DisplayName("Login History")]
 public class LoginHistory : AuditObject

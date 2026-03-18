@@ -1,5 +1,5 @@
-﻿using Pru_GC = DataLayer.GlobalConstant.Pru;
-
+﻿using Dapper.Contrib.Extensions;
+using Pru_GC = DataLayer.GlobalConstant.Pru;
 namespace DataLayer.Models.Pru.Finance;
 
 [DisplayName("Quotation")]

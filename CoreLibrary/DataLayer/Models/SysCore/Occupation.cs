@@ -1,4 +1,4 @@
-﻿using DataLayer.Models.SysCore;
+﻿using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Models.SysCore;
 

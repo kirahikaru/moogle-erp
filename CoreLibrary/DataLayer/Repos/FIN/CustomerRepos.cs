@@ -1,6 +1,7 @@
 ﻿using DataLayer.GlobalConstant;
 using System.Text.RegularExpressions;
 using static Dapper.SqlMapper;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.FIN;
 

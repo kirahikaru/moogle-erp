@@ -1,5 +1,5 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.SysCore;
 
 [Table("Notification")]

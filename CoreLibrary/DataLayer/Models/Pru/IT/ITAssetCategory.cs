@@ -1,5 +1,6 @@
 ﻿namespace DataLayer.Models.Pru.IT;
 
+using Dapper.Contrib.Extensions;
 [Table("[dbo].[ITAssetCategory]"), DisplayName("IT Asset Category")]
 public class ITAssetCategory : AuditObject, IParentChildHierarchyObject
 {

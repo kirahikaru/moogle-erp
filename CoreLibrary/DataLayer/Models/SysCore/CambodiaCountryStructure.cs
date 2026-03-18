@@ -1,4 +1,5 @@
-﻿using DataLayer.GlobalConstant;
+﻿using Dapper.Contrib.Extensions;
+using DataLayer.GlobalConstant;
 
 namespace DataLayer.Models.SysCore;
 

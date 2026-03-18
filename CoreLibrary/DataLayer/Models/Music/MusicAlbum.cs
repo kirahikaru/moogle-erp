@@ -1,7 +1,5 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.LIB;
-using DataLayer.Models.SysCore.NonPersistent;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.Music;
 
 [Table("[mdb].[MusicAlbum]")]

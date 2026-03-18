@@ -1,5 +1,6 @@
 ﻿namespace DataLayer.Models.EMS.NonPersistent;
 
+using Dapper.Contrib.Extensions;
 /// <summary>
 /// Event Registration Summary
 /// </summary>

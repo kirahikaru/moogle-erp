@@ -1,5 +1,5 @@
-﻿namespace DataLayer.Models;
-
+﻿using Dapper.Contrib.Extensions;
+namespace DataLayer.Models;
 public class DropdownSelectItem
 {
     public int Id { get; set; }

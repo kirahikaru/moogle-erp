@@ -1,7 +1,7 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
 using DataLayer.GlobalConstant;
 using DataLayer.Models.HomeInventory;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.LIB;
 [Table("[lib].[BookPurchaseHistory]"), DisplayName("Book Purchase History")]
 public class BookPurchaseHistory : AuditObject

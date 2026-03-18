@@ -1,6 +1,6 @@
 ﻿using DataLayer.GlobalConstant;
 using DataAnnot = System.ComponentModel.DataAnnotations.Schema;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.HMS;
 
 /// <summary>

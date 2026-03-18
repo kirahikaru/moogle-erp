@@ -1,4 +1,4 @@
-﻿using DataLayer.Models.SysCore.NonPersistent;
+﻿using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Models.Pru.PruCORE;
 

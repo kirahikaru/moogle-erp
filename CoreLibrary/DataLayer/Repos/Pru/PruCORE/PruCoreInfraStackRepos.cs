@@ -1,5 +1,6 @@
 ﻿using DataLayer.Models.Pru.PruCORE;
 using static Dapper.SqlMapper;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.Pru.PruCORE;
 

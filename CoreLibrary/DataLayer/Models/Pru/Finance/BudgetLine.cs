@@ -1,5 +1,4 @@
-﻿using Pru_GC = DataLayer.GlobalConstant.Pru;
-using DataLayer.Models.SysCore.NonPersistent;
+﻿using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.Pru.Finance;
 
 [Table("[dbo].[BudgetLine]"), DisplayName("Budget Line")]

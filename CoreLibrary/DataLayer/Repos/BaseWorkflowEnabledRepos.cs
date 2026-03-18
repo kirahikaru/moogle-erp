@@ -1,5 +1,5 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.SysCore.NonPersistent;
+using Dapper.Contrib.Extensions;
 using System.Reflection;
 
 namespace DataLayer.Repos;

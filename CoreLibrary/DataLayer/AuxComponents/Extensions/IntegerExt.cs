@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace DataLayer.AuxComponents.Extensions;
+﻿namespace DataLayer.AuxComponents.Extensions;
 
 public static class IntegerExt
 {
@@ -39,4 +37,14 @@ public static class IntegerExt
 
         return sb.ToString();
     }
+
+    public static string ToText(
+        this int? value,
+        bool addComma = false)
+    {
+        if (value == null)
+            return string.Empty;
+        else
+            return value.Value.ToString(addComma ? "#,##0" : "0", CultureInfo.CurrentCulture);
+	}
 }

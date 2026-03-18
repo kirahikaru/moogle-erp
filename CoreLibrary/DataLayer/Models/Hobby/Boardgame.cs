@@ -1,6 +1,6 @@
 ﻿using DataLayer.GlobalConstant;
 using DataLayer.Models.HomeInventory;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.Hobby;
 
 [Table("[home].[Boardgame]")]

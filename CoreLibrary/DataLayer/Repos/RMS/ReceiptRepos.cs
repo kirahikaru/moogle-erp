@@ -1,5 +1,6 @@
 ﻿using DataLayer.Models.RMS;
 using DataLayer.GlobalConstant;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.RMS;
 

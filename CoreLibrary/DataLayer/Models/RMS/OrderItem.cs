@@ -1,4 +1,5 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
+using Dapper.Contrib.Extensions;
 using DataLayer.GlobalConstant;
 
 namespace DataLayer.Models.RMS;

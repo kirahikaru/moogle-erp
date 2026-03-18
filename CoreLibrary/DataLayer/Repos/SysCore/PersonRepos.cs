@@ -1,4 +1,4 @@
-﻿using DataLayer.Models.SysCore.NonPersistent;
+﻿using Dapper.Contrib.Extensions;
 using System.Text.RegularExpressions;
 
 namespace DataLayer.Repos.SysCore;

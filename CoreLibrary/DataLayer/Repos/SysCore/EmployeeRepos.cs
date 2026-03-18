@@ -1,5 +1,6 @@
 ﻿using DataLayer.GlobalConstant;
 using System.Text.RegularExpressions;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.SysCore;
 

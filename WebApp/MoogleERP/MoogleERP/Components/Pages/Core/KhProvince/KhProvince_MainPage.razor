@@ -78,7 +78,7 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<CambodiaProvince>> ServerDataFunc(GridState<CambodiaProvince> gridState)
+	protected override async Task<GridData<CambodiaProvince>> ServerDataFunc(GridState<CambodiaProvince> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<CambodiaProvince>
 		{

@@ -22,7 +22,7 @@ public class CRUCPageBase<T> : ComponentBase
 	public required IUowMoogleKhErp Uow { get; set; }
 
 	[Inject]
-	public required IUowMoogleKhErpPg PostgresUow { get; set; }
+	public required IUowMoogleKhErpPg UowPg { get; set; }
 
 	[Inject]
 	public required SweetAlertService Swal { get; set; }

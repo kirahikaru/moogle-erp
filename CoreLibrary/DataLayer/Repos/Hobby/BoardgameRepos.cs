@@ -1,6 +1,7 @@
 ﻿using DataLayer.Models.Hobby;
 using DataLayer.Models.HomeInventory;
 using System.Text.RegularExpressions;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.Hobby;
 

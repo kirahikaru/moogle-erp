@@ -1,6 +1,6 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
 using DataLayer.GlobalConstant;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.HomeInventory;
 
 [Table("[him].[OwnedItem]"), DisplayName("My Item")]

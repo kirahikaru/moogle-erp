@@ -1,4 +1,5 @@
-﻿namespace DataLayer.Models.SysCore;
+﻿using Dapper.Contrib.Extensions;
+namespace DataLayer.Models.SysCore;
 
 [Table("EduFieldOfStudy"), DisplayName("Field of Study")]
 public class EduFieldOfStudy : AuditObject

@@ -1,7 +1,7 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
 using DataLayer.GlobalConstant;
 using DataLayer.Models.SysCore.NonPersistent;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.Music;
 [Table("[mdb].[MusicSong]")]
 public class MusicSong : AuditObject

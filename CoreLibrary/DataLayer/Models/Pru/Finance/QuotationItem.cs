@@ -1,5 +1,5 @@
 ﻿using DataLayer.Models.Pru.IT;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.Pru.Finance;
 
 [Table("[dbo].[QuotationItem]"), DisplayName("QuotationItem")]

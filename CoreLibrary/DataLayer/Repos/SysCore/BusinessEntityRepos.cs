@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.SysCore;
 

@@ -1,4 +1,6 @@
-﻿namespace DataLayer.Models.SysCore;
+﻿using Dapper.Contrib.Extensions;
+
+namespace DataLayer.Models.SysCore;
 
 [Table("Credential")]
 public class Credential : AuditObject

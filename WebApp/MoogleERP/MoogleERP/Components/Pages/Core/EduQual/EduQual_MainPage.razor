@@ -74,7 +74,7 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<EduQual>> ServerDataFunc(GridState<EduQual> gridState)
+	protected override async Task<GridData<EduQual>> ServerDataFunc(GridState<EduQual> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<EduQual>
 		{

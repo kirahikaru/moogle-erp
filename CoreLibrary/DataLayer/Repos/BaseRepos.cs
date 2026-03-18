@@ -1,6 +1,5 @@
 ﻿//using DapperExtensions;
-using DataLayer.Models.SysCore.NonPersistent;
-using System.Data.Common;
+using Dapper.Contrib.Extensions;
 using System.Reflection;
 using System.Resources;
 
@@ -460,7 +459,7 @@ public class BaseRepos<TEntity>(IDbContext dbContext, DatabaseObj dbObj) : IBase
     {
         SqlBuilder sbSql = new();
         DynamicParameters param = new();
-        string sql = "";
+        string sql;
         if (DbContext.DbType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
 		{
 			sbSql.Where("t.IsDeleted=0");
@@ -477,11 +476,11 @@ public class BaseRepos<TEntity>(IDbContext dbContext, DatabaseObj dbObj) : IBase
 		{
 			sbSql.Where("t.is_deleted=false");
 			sbSql.Where("t.id<>@id");
-			sbSql.Where("UPPPER(t.object_code)=UPPER(@obj_code)");
+			sbSql.Where("UPPER(t.object_code)=UPPER(@obj_code)");
 			param.Add("@id", objectId);
 			param.Add("@obj_code", objectCode, DbType.AnsiString);
 
-			sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.PgTableName} t /**where**/").RawSql;
+			sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.PgTable} t /**where**/").RawSql;
 		}
         else
             throw new NotImplementedException();

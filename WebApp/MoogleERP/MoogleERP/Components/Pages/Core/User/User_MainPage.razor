@@ -86,7 +86,7 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<User>> ServerDataFunc(GridState<User> gridState)
+	protected override async Task<GridData<User>> ServerDataFunc(GridState<User> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<User>
 		{
@@ -115,7 +115,7 @@
 			}
 			else
 			{
-				var result = await PostgresUow.Users.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
+				var result = await UowPg.Users.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}

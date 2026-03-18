@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models.LIB;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.LIB;
 

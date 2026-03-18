@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models.EMS;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.EMS;
 

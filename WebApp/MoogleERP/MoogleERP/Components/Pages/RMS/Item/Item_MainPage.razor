@@ -99,7 +99,7 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<Item>> ServerDataFunc(GridState<Item> gridState)
+	protected override async Task<GridData<Item>> ServerDataFunc(GridState<Item> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<Item>
 		{

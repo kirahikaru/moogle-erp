@@ -1,6 +1,7 @@
 ﻿using PruFin=DataLayer.Models.Pru.Finance;
 using static Dapper.SqlMapper;
 using DataLayer.Models.Pru.Finance;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.Pru.Finance;
 

@@ -1,6 +1,6 @@
 ﻿using DataLayer.GlobalConstant;
 using DataLayer.Models.PMS;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.HMS;
 
 /// <summary>

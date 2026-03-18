@@ -1,5 +1,6 @@
 ﻿using DataLayer.Models.RMS;
 using static Dapper.SqlMapper;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.RMS;
 

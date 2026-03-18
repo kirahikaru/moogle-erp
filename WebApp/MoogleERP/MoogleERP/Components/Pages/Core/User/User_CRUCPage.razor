@@ -168,7 +168,7 @@
         {
             case CRUDCModes.READ:
                 {
-                    CurrentObject = await  PostgresUow.Users.GetFullAsync(Id);
+                    CurrentObject = await  UowPg.Users.GetFullAsync(Id);
                     IsViewMode = true;
                 }
                 break;
@@ -178,11 +178,11 @@
                 }
                 break;
             case CRUDCModes.UPDATE:
-                CurrentObject = await PostgresUow.Users.GetFullAsync(Id);
+                CurrentObject = await UowPg.Users.GetFullAsync(Id);
                 break;
             case CRUDCModes.CLONE:
                 {
-                    var tempObj = await PostgresUow.Users.GetAsync(Id);
+                    var tempObj = await UowPg.Users.GetAsync(Id);
                     CurrentObject = tempObj!.DeepClone();
                     CurrentObject!.Id = 0;
                     CurrentObject!.ObjectCode = null;
@@ -224,7 +224,7 @@
     {
         InvalidMsgList.Clear();
 
-        bool isDuplicated = await PostgresUow.Users.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+        bool isDuplicated = await UowPg.Users.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
 
         if (isDuplicated)
         {

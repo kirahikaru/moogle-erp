@@ -1,22 +1,26 @@
 ﻿using DataLayer.GlobalConstant;
 using DataLayer.Models.EMS;
 using System.Text.RegularExpressions;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.EMS;
 
-public interface IEventRegistrationRepos : IBaseRepos<EventRegistration>
+/// <summary>
+/// Repository : Event Registration
+/// </summary>
+public interface IEventRegRepos : IBaseRepos<EventReg>
 {
 	Task<int> GetExistingCountAsync(int objId, int eventId, int invitationId);
 	Task<int> GetExistingCountAsync(int objId, int eventId, string walkInRef);
 
-	Task<EventRegistration?> GetFullAsync(int id);
-	Task<EventRegistration?> GetFullByInvitationAsync(int eventInvitationId);
+	Task<EventReg?> GetFullAsync(int id);
+	Task<EventReg?> GetFullByInvitationAsync(int eventInvitationId);
 
-	Task<int> InsertFullAsync(EventRegistration obj);
+	Task<int> InsertFullAsync(EventReg obj);
 
-	Task<List<EventRegistration>> GetByEventAsync(int eventId, bool includeInvitationLink = false);
+	Task<List<EventReg>> GetByEventAsync(int eventId, bool includeInvitationLink = false);
 
-	Task<List<EventRegistration>> SearchByEventAsync(int eventId,
+	Task<List<EventReg>> SearchByEventAsync(int eventId,
 		int pgSize = 0,
 		int pgNo = 0,
 		string? name = null,
@@ -47,7 +51,7 @@ public interface IEventRegistrationRepos : IBaseRepos<EventRegistration>
 		decimal? feeAmountKhrFrom = null,
 		decimal? feeAmountKhrTo = null);
 
-	Task<List<EventRegistration>> SearchAsync(
+	Task<List<EventReg>> SearchAsync(
 		int pgSize = 0,
 		int pgNo = 0,
 		string? objectCode = null,
@@ -89,7 +93,7 @@ public interface IEventRegistrationRepos : IBaseRepos<EventRegistration>
 		decimal? feeAmountKhrTo = null);
 }
 
-public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegistration>(dbContext, EventRegistration.DatabaseObject), IEventRegistrationRepos
+public class EventRegRepos(IDbContext dbContext) : BaseRepos<EventReg>(dbContext, EventReg.DatabaseObject), IEventRegRepos
 {
 	public async Task<int> GetExistingCountAsync(int objId, int eventId, int invitationId)
     {
@@ -137,14 +141,14 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
 	}
 
 
-	public async Task<EventRegistration?> GetFullAsync(int id)
+	public async Task<EventReg?> GetFullAsync(int id)
     {
         DynamicParameters param = new();
         SqlBuilder sbSql = new();
         sbSql.Where("t.IsDeleted=0");
         sbSql.Where("t.Id=@Id");
 
-        sbSql.LeftJoin($"{EventInvitation.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
+        sbSql.LeftJoin($"{EventInvit.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
         sbSql.LeftJoin($"{Event.MsSqlTable} e ON e.Id=t.EventId");
 
         string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
@@ -152,7 +156,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
         using var cn = DbContext.DbCxn;
 
         
-        var dataList = (await cn.QueryAsync<EventRegistration, EventInvitation, Event, EventRegistration>(sql,
+        var dataList = (await cn.QueryAsync<EventReg, EventInvit, Event, EventReg>(sql,
                                 (obj, ei, e) =>
                                 {
                                     obj.Invitation = ei;
@@ -167,7 +171,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
             return null;
     }
 
-    public async Task<EventRegistration?> GetFullByInvitationAsync(int eventInvitationId)
+    public async Task<EventReg?> GetFullByInvitationAsync(int eventInvitationId)
     {
         DynamicParameters param = new();
         SqlBuilder sbSql = new();
@@ -175,14 +179,14 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
         sbSql.Where("t.EventInvitationId IS NOT NULL");
         sbSql.Where("t.EventInvitationId=@EventInvitationId");
 
-        sbSql.LeftJoin($"{EventInvitation.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
+        sbSql.LeftJoin($"{EventInvit.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
         sbSql.LeftJoin($"{Event.MsSqlTable} e ON e.Id=t.EventId");
 
         string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
         using var cn = DbContext.DbCxn;
 
-        var objList = (await cn.QueryAsync<EventRegistration, EventInvitation, Event, EventRegistration>(sql,
+        var objList = (await cn.QueryAsync<EventReg, EventInvit, Event, EventReg>(sql,
                                 (obj, ei, e) =>
                                 {
                                     obj.Invitation = ei;
@@ -197,7 +201,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
             return null;
     }
 
-    public async Task<int> InsertFullAsync(EventRegistration obj)
+    public async Task<int> InsertFullAsync(EventReg obj)
     {
         DateTime khTimestamp = DateTime.UtcNow.AddHours(7);
 
@@ -219,7 +223,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
             {
                 if (obj.EventInvitationId.HasValue)
                 {
-                    string updInvitationCmd = $"UPDATE {EventInvitation.MsSqlTable} SET [Status]=@Status, ModifiedDateTime=@ModifiedDateTime, ModifiedUser=@ModifiedUser WHERE Id=@InvitationId";
+                    string updInvitationCmd = $"UPDATE {EventInvit.MsSqlTable} SET [Status]=@Status, ModifiedDateTime=@ModifiedDateTime, ModifiedUser=@ModifiedUser WHERE Id=@InvitationId";
                     DynamicParameters updInvitationParam = new();
                     updInvitationParam.Add("@Status", EventInvitationStatuses.REGISTERED);
                     updInvitationParam.Add("@ModifiedDateTime", khTimestamp);
@@ -245,7 +249,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
         }
     }
 
-    public async Task<List<EventRegistration>> GetByEventAsync(int eventId, bool includeInvitationLink = false)
+    public async Task<List<EventReg>> GetByEventAsync(int eventId, bool includeInvitationLink = false)
     {
 		DynamicParameters param = new();
 		SqlBuilder sbSql = new();
@@ -259,9 +263,9 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
 
         if (includeInvitationLink)
         {
-            sbSql.LeftJoin($"{EventInvitation.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
+            sbSql.LeftJoin($"{EventInvit.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
 			string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
-            var dataList = (await cn.QueryAsync<EventRegistration, EventInvitation, EventRegistration>(sql, (r, i) =>
+            var dataList = (await cn.QueryAsync<EventReg, EventInvit, EventReg>(sql, (r, i) =>
             {
                 r.Invitation = i;
 
@@ -273,13 +277,13 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
         else
         {
 			string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
-            var dataList = (await cn.QueryAsync<EventRegistration>(sql, param)).AsList();
+            var dataList = (await cn.QueryAsync<EventReg>(sql, param)).AsList();
             return dataList;
 		}
 	}
 
 
-	public async Task<List<EventRegistration>> SearchByEventAsync(int eventId,
+	public async Task<List<EventReg>> SearchByEventAsync(int eventId,
         int pgSize = 0,
         int pgNo = 0,
         string? name = null,
@@ -452,7 +456,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
 
         using var cn = DbContext.DbCxn;
 
-        var result = (await cn.QueryAsync<EventRegistration>(sql, param)).AsList();
+        var result = (await cn.QueryAsync<EventReg>(sql, param)).AsList();
 
         return result;
     }
@@ -582,7 +586,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
 
         return pagination;
     }
-    public override async Task<List<EventRegistration>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null)
+    public override async Task<List<EventReg>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null)
     {
         if (pgNo < 0 && pgSize < 0)
             throw new ArgumentOutOfRangeException(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
@@ -613,7 +617,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
         }
         #endregion
 
-        sbSql.LeftJoin($"{EventInvitation.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
+        sbSql.LeftJoin($"{EventInvit.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
         sbSql.LeftJoin($"{Event.MsSqlTable} e ON e.Id=t.EventId");
 
         sbSql.OrderBy("ei.FullDisplayNameEn ASC")
@@ -637,7 +641,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
 
         using var cn = DbContext.DbCxn;
 
-        var result = (await cn.QueryAsync<EventRegistration, EventInvitation, Event, EventRegistration>(sql,
+        var result = (await cn.QueryAsync<EventReg, EventInvit, Event, EventReg>(sql,
                         (obj, ei, e) =>
                         {
                             obj.Invitation = ei;
@@ -680,7 +684,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
         }
         #endregion
 
-        sbSql.LeftJoin($"{EventInvitation.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
+        sbSql.LeftJoin($"{EventInvit.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
         sbSql.LeftJoin($"{Event.MsSqlTable} e ON e.Id=t.EventId");
 
         string sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
@@ -701,7 +705,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
         return pagination;
     }
 
-    public async Task<List<EventRegistration>> SearchAsync(
+    public async Task<List<EventReg>> SearchAsync(
         int pgSize = 0,
         int pgNo = 0,
         string? objectCode = null,
@@ -838,7 +842,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
         }
         #endregion
 
-        sbSql.LeftJoin($"{EventInvitation.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
+        sbSql.LeftJoin($"{EventInvit.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
         sbSql.LeftJoin($"{Event.MsSqlTable} e ON e.Id=t.EventId");
 
         sbSql.OrderBy("e.EventName ASC")
@@ -862,7 +866,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
 
         using var cn = DbContext.DbCxn;
 
-        var result = (await cn.QueryAsync<EventRegistration, EventInvitation, Event, EventRegistration>(sql,
+        var result = (await cn.QueryAsync<EventReg, EventInvit, Event, EventReg>(sql,
                                 (obj, ei, e) =>
                                 {
                                     obj.Invitation = ei;
@@ -1010,7 +1014,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
         }
         #endregion
 
-        sbSql.LeftJoin($"{EventInvitation.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
+        sbSql.LeftJoin($"{EventInvit.MsSqlTable} ei ON ei.Id=t.EventInvitationId");
         sbSql.LeftJoin($"{Event.MsSqlTable} e ON e.Id=t.EventId");
 
         string sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
@@ -1022,7 +1026,7 @@ public class EventRegistrationRepos(IDbContext dbContext) : BaseRepos<EventRegis
 
         DataPagination pagination = new()
         {
-            ObjectType = typeof(EventRegistration).Name,
+            ObjectType = typeof(EventReg).Name,
             PageSize = pgSize,
             PageCount = pageCount,
             RecordCount = (int)recordCount

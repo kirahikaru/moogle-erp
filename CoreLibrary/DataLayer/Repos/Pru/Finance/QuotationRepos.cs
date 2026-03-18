@@ -1,6 +1,7 @@
 ﻿using DataLayer.GlobalConstant.Pru;
 using DataLayer.Models.Pru.Finance;
 using static Dapper.SqlMapper;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.Pru.Finance;
 

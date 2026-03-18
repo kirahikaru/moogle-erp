@@ -1,4 +1,5 @@
-﻿namespace DataLayer.Models.SysCore;
+﻿using Dapper.Contrib.Extensions;
+namespace DataLayer.Models.SysCore;
 
 [Table("OccupationIndustry")]
 public class OccupationIndustry : AuditObject

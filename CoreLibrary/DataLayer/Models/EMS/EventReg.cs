@@ -1,16 +1,17 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
 using DataLayer.GlobalConstant;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Models.EMS;
 
 [Table("[ems].[EventRegistration]"), DisplayName("Event Registration")]
-public class EventRegistration : AuditObject
+public class EventReg : AuditObject
 {
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string SchemaName => SysDbSchemaNames.EVENT;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string MsSqlTableName => typeof(EventRegistration).Name;
+	public new static string MsSqlTableName => typeof(EventReg).Name;
 
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string PgTableName => "event_registration";
@@ -90,7 +91,7 @@ public class EventRegistration : AuditObject
     public Event? Event { get; set; }
 
 	[Computed, Write(false)]
-	public EventInvitation? Invitation { get; set; }
+	public EventInvit? Invitation { get; set; }
 
 	[Computed, Write(false)]
 	public Person? Person { get; set; }
@@ -156,7 +157,7 @@ public class EventRegistration : AuditObject
     }
     #endregion
 
-    public EventRegistration()
+    public EventReg()
     {
         IsCancelled = false;
         AttendanceCode = EventRegAttndCodes.PRESENT;

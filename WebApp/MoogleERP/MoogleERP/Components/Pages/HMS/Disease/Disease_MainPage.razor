@@ -74,7 +74,7 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<Disease>> ServerDataFunc(GridState<Disease> gridState)
+	protected override async Task<GridData<Disease>> ServerDataFunc(GridState<Disease> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<Disease>
 		{

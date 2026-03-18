@@ -1,19 +1,20 @@
-﻿using DataLayer.AuxComponents.DataAnnotations;
+﻿using Dapper.Contrib.Extensions;
+using DataLayer.AuxComponents.DataAnnotations;
 using DataLayer.GlobalConstant;
 
 namespace DataLayer.Models.EMS;
 
-[Table("[ems].[EventInvitation]"), DisplayName("Event Invitation")]
-public class EventInvitation : AuditObject
+[Table("[ems].[EventInvit]"), DisplayName("Event Invitation")]
+public class EventInvit : AuditObject
 {
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string SchemaName => SysDbSchemaNames.EVENT;
 
     [Computed, Write(false), ReadOnly(true)]
-    public new static string MsSqlTableName => typeof(EventInvitation).Name;
+    public new static string MsSqlTableName => typeof(EventInvit).Name;
 
 	[Computed, Write(false), ReadOnly(true)]
-	public new static string PgTableName => "event_invitation";
+	public new static string PgTableName => "event_invit";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);
@@ -104,7 +105,7 @@ public class EventInvitation : AuditObject
 	public Person? Person { get; set; }
 
 	[Computed, Write(false)]
-	public EventRegistration? Registration { get; set; }
+	public EventReg? Registration { get; set; }
 	#endregion
 
 	#region *** DYNAMIC PROPERTIES
@@ -276,7 +277,7 @@ public class EventInvitation : AuditObject
     }
     #endregion
 
-    public EventInvitation()
+    public EventInvit()
     {
         Status = EventInvitationStatuses.PENDING;
         LanguageOption = SystemLocalizationCultures.KHMER;

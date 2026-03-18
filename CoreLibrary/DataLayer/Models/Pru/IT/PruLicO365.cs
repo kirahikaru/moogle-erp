@@ -1,5 +1,5 @@
 ﻿using DataLayer.GlobalConstant.Pru;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.Pru.IT;
 
 [Table("[dbo].[PruLicO365]"), DisplayName("Pru O365 Licence")]

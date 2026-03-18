@@ -73,7 +73,7 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<Location>> ServerDataFunc(GridState<Location> gridState)
+	protected override async Task<GridData<Location>> ServerDataFunc(GridState<Location> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<Location>
 		{

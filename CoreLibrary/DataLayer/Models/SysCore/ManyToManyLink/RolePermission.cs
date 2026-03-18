@@ -1,5 +1,7 @@
 ﻿namespace DataLayer.Models.SysCore.ManyToManyLink;
 
+using Dapper.Contrib.Extensions;
+
 [Table("[dbo].[RolePermission]")]
 public class RolePermission : AuditObject
 {

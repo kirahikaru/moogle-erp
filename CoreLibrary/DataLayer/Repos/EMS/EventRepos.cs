@@ -2,6 +2,7 @@
 using DataLayer.Models.EMS;
 using DataLayer.Models.EMS.NonPersistent;
 using static Dapper.SqlMapper;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.EMS;
 

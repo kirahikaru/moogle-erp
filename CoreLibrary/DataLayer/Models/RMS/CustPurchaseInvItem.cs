@@ -1,5 +1,5 @@
 ﻿using DataLayer.GlobalConstant;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.RMS;
 
 [Table("[rms].[CustPurchaseInvItem]"), DisplayName("Customer Purchase Invoice Item")]

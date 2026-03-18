@@ -2,6 +2,7 @@
 using static Dapper.SqlMapper;
 using DataLayer.Models.Pru.Finance;
 using DataLayer.GlobalConstant.Pru;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.Pru.Finance;
 

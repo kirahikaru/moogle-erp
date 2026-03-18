@@ -1,4 +1,5 @@
-﻿namespace DataLayer.Repos.SysCore;
+﻿using Dapper.Contrib.Extensions;
+namespace DataLayer.Repos.SysCore;
 
 public interface IContactRepos : IBaseRepos<Contact>
 {

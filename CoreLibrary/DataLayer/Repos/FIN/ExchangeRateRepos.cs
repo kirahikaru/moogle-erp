@@ -1,5 +1,7 @@
 ﻿namespace DataLayer.Repos.FIN;
 
+using Dapper.Contrib.Extensions;
+
 public interface IExchangeRateRepos : IBaseRepos<ExchangeRate>
 {
 	Task<ExchangeRate?> GetRateAsync(string fromCurrencyCode, string toCurrencyCode, DateTime date);

@@ -54,7 +54,7 @@
                 </MudStack>
             </MudStack>
         </MudPaper>
-        <MudTabs Color="Color.Primary" Class="mt-3 moog-cruc-pg-mudtab" ActiveTabClass="moog-cruc-pg-mudtab-active" PanelClass="moog-cruc-pg-mudtab-panel" TabHeaderClass="moog-cruc-pg-mudtab-header" TabPanelClass="moog-cruc-pg-mudtab-tab-panel"
+        <MudTabs Color="Color.Primary" Class="mt-3 moog-cruc-pg-mudtab" ActiveTabClass="moog-cruc-pg-mudtab-active" TabHeaderClass="moog-cruc-pg-mudtab-header" TabPanelsClass="moog-cruc-pg-mudtab-tab-panel"
                  Style="height:calc(100vh - 185px);">
             <MudTabPanel Icon="material-symbols-rounded/home" Text="Main">
                 <MudPaper Class="rounded-0" Elevation="1" Height="calc(100vh - 220px)" Style="overflow-y: auto;">
@@ -155,7 +155,7 @@
                                 <MudStack Row="true" Spacing="0">
                                     <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
                                                   AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
-                                                  Label="EAN"MaxLength="13"
+                                                  Label="EAN" MaxLength="13"
                                                   @bind-Value="CurrentObject!.EAN" For="@(() => CurrentObject!.EAN)" />
                                     <MudTooltip Text="European Article Number. Here we refer to EAN-13."
                                                 Placement="Placement.Bottom" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="true" ShowOnHover="false" ShowOnFocus="false">
@@ -1106,9 +1106,11 @@
         }
     }
 
-    void CommittedItemSpecChanges(ItemSpec item)
+    Task<DataGridEditFormAction> CommittedItemSpecChanges(ItemSpec item)
     {
         _tempItemSpecToAdd = null;
+
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
     #endregion
 
@@ -1194,13 +1196,15 @@
         }
     }
 
-    void CommittedItemVarChanges(ItemVariation item)
+    Task<DataGridEditFormAction> CommittedItemVarChanges(ItemVariation item)
     {
         if (_tempItemVarToAdd != null)
         {
             CurrentObject!.Variations.Add(item);
             _tempItemVarToAdd = null;
         }
+
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
 
     void OnItemVarSizeUnitChanged(string value, ItemVariation itemVar)
@@ -1316,9 +1320,11 @@
         }
     }
 
-    void CommittedSupplierChanges(ItemSupplier supplier)
+    Task<DataGridEditFormAction> CommittedSupplierChanges(ItemSupplier supplier)
     {
         _tempSupplierToAdd = null;
+
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
 
     void OnSupplierChanged(int? supplierId, ItemSupplier itemSupplier)

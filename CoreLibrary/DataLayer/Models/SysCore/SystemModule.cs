@@ -1,4 +1,6 @@
-﻿namespace DataLayer.Models.SysCore;
+﻿using Dapper.Contrib.Extensions;
+
+namespace DataLayer.Models.SysCore;
 
 [Table("SystemModule"), DisplayName("System Module")]
 public class SystemModule : AuditObject, IParentChildHierarchyObject

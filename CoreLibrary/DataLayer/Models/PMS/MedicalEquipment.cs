@@ -1,7 +1,7 @@
 ﻿using DataLayer.AuxComponents.DataAnnotations;
 using DataLayer.GlobalConstant;
 using DataLayer.Models.RMS;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.PMS;
 
 [Table("[med].[MedicalEquipment]"), DisplayName("Medical Equipment")]

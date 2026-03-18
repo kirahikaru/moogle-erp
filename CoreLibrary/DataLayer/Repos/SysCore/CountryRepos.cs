@@ -1,6 +1,4 @@
-﻿using DataLayer.Models.SysCore.NonPersistent;
-
-namespace DataLayer.Repos.SysCore;
+﻿namespace DataLayer.Repos.SysCore;
 
 public interface ICountryRepos : IBaseRepos<Country>
 {

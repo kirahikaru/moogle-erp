@@ -1,5 +1,5 @@
 ﻿using DataLayer.Models.SysCore.ManyToManyLink;
-using DataLayer.Models.SysCore.NonPersistent;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.SysCore;
 

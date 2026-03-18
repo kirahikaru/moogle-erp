@@ -89,7 +89,7 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<CambodiaCommune>> ServerDataFunc(GridState<CambodiaCommune> gridState)
+	protected override async Task<GridData<CambodiaCommune>> ServerDataFunc(GridState<CambodiaCommune> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<CambodiaCommune>
 		{

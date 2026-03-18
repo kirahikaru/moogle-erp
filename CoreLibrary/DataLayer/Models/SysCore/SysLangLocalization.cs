@@ -1,4 +1,5 @@
-﻿namespace DataLayer.Models.SysCore;
+﻿using Dapper.Contrib.Extensions;
+namespace DataLayer.Models.SysCore;
 
 /// <summary>
 /// Source: https://lonewolfonline.net/list-net-culture-country-codes/

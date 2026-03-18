@@ -1,4 +1,6 @@
-﻿using DataLayer.AuxComponents.DataAnnotations;
+﻿
+using Dapper.Contrib.Extensions;
+using DataLayer.AuxComponents.DataAnnotations;
 using DataLayer.GlobalConstant;
 
 namespace DataLayer.Models.EMS;
@@ -70,10 +72,10 @@ public class Event : AuditObject
 
     #region *** LINKED OBJECTS ***
     [Computed, Write(false)]
-    public List<EventInvitation> Invitations { get; set; }
+    public List<EventInvit> Invitations { get; set; }
 
 	[Computed, Write(false)]
-	public List<EventRegistration> Registrations { get; set; }
+	public List<EventReg> Registrations { get; set; }
 
 	[Computed, Write(false)]
 	public Currency? FeeCurrency { get; set; }

@@ -26,8 +26,11 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable where T : class
 	[Inject]
 	public required IUowMoogleKhErp Uow { get; set; }
 
+	/// <summary>
+	/// PostgreSQL Unit of Work
+	/// </summary>
 	[Inject]
-	public required IUowMoogleKhErpPg PostgresUow { get; set; }
+	public required IUowMoogleKhErpPg UowPg { get; set; }
 
 	[Inject]
 	public required HotKeys HotKeys { get; set; }
@@ -106,7 +109,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable where T : class
 			case KeyboardKeys.ESCAPE:
 				{
 					//SearchText = "";
-					await UITextBoxSearch!.Clear();
+					await UITextBoxSearch!.ClearAsync();
 					//StateHasChanged();
 					await UITextBoxSearch!.FocusAsync();
 					await MainDataGrid!.ReloadServerData();
@@ -122,7 +125,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable where T : class
 			SelectedRowNo = -1;
 			return string.Empty;
 		}
-		else if (MainDataGrid.SelectedItem != null && MainDataGrid.SelectedItem.Equals(element))
+		else if (SelectedObject != null && SelectedObject.Equals(element))
 		{
 			SelectedRowNo = rowNumber;
 			return "moog-mud-datagrid-row selected";
@@ -133,7 +136,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable where T : class
 		}
 	}
 
-	protected virtual async Task<GridData<T>> ServerDataFunc(GridState<T> gridState)
+	protected virtual async Task<GridData<T>> ServerDataFunc(GridState<T> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<T>
 		{

@@ -1,5 +1,7 @@
 ﻿namespace DataLayer.Models.SysCore;
 
+using Dapper.Contrib.Extensions;
+
 [Table("BusinessEntity"), DisplayName("Business Entity")]
 public class BusinessEntity : AuditObject
 {

@@ -1,5 +1,6 @@
 ﻿namespace DataLayer.Models.Pru.Finance;
 
+using Dapper.Contrib.Extensions;
 /// <summary>
 /// Finance Actual Summary Entry
 /// </summary>

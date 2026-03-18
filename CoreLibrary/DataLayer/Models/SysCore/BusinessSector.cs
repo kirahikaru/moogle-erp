@@ -1,5 +1,7 @@
 ﻿namespace DataLayer.Models.SysCore;
 
+using Dapper.Contrib.Extensions;
+
 [Table("[dbo].[BusnSector]"), DisplayName("Business Sector")]
 public class BusinessSector : AuditObject, IParentChildHierarchyObject
 {

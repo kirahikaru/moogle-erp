@@ -1,5 +1,6 @@
 ﻿using DataLayer.Models.RMS;
 using System.Text.RegularExpressions;
+using Dapper.Contrib.Extensions;
 
 namespace DataLayer.Repos.RMS;
 

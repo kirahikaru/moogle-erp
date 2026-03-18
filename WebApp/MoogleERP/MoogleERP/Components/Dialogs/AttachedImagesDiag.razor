@@ -113,9 +113,9 @@
 
     }
 
-    void CommittedItemChanges(AttachedImage item)
+    Task<DataGridEditFormAction> CommittedItemChanges(AttachedImage item)
     {
-
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
 
     void OnItemAddClicked()

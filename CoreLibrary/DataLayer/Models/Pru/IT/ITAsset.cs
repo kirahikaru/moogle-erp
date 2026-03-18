@@ -1,6 +1,6 @@
 ﻿using DataLayer.GlobalConstant.Pru;
 using PruHR = DataLayer.Models.Pru.HR;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.Pru.IT;
 
 [Table("[dbo].[ITAsset]"), DisplayName("IT Asset")]

@@ -1,5 +1,5 @@
 ﻿using DataLayer.GlobalConstant;
-
+using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.FIN;
 
 [Table("[fin].[CustChgHistory]"), DisplayName("Customer Change History")]

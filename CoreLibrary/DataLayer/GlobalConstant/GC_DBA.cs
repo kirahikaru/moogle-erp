@@ -44,6 +44,11 @@ public static class SysDbSchemaNames
 	/// Hospital Management System
 	/// </summary>
 	public const string HOSPITAL = "hms";
+
+	/// <summary>
+	/// Tech Store Management
+	/// </summary>
+	public const string TECH_STORE = "tsm";
 }
 
 

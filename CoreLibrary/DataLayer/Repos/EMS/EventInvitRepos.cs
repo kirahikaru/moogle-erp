@@ -7,11 +7,11 @@ namespace DataLayer.Repos.EMS;
 /// <summary>
 /// Repository : Event Invitation
 /// </summary>
-public interface IEventInvitRepos : IBaseRepos<EventInvitation>
+public interface IEventInvitRepos : IBaseRepos<EventInvit>
 {
-	Task<EventInvitation?> GetFullAsync(int id);
+	Task<EventInvit?> GetFullAsync(int id);
 
-	Task<EventInvitation?> GetByAssignedBarcodeAsync(int eventId, string assignedBarcode);
+	Task<EventInvit?> GetByAssignedBarcodeAsync(int eventId, string assignedBarcode);
 
 	Task<int> GetExistingByBarcodeCountAsync(int objId, int eventId, string barcode);
 
@@ -21,7 +21,7 @@ public interface IEventInvitRepos : IBaseRepos<EventInvitation>
 
 	Task<int> GetAssignedBarcodeCountAsync(int eventId);
 
-	Task<List<EventInvitation>> GetByEventAsync(int eventId);
+	Task<List<EventInvit>> GetByEventAsync(int eventId);
 
 	Task<List<DropdownSelectItem>> GetCurrentInvitationGroupingAsync(int eventId);
 
@@ -31,7 +31,7 @@ public interface IEventInvitRepos : IBaseRepos<EventInvitation>
 
 	Task<List<DropdownSelectItem>> GetForRegistrationAsync(int eventId, int pgSize = 0, int pgNo = 0, string? searchText = null);
 
-	Task<List<EventInvitation>> SearchByEventAsync(int eventId,
+	Task<List<EventInvit>> SearchByEventAsync(int eventId,
 		int pgSize = 0,
 		int pgNo = 0,
 		string? name = null,
@@ -56,7 +56,7 @@ public interface IEventInvitRepos : IBaseRepos<EventInvitation>
 		bool? onlyNotYetRegistered = null,
 		List<string>? statuses = null);
 
-	Task<List<EventInvitation>> SearchAsync(
+	Task<List<EventInvit>> SearchAsync(
 		int pgSize = 0,
 		int pgNo = 0,
 		string? objectCode = null,
@@ -88,9 +88,9 @@ public interface IEventInvitRepos : IBaseRepos<EventInvitation>
 		string? grouping = null);
 }
 
-public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(dbContext, EventInvitation.DatabaseObject), IEventInvitRepos
+public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvit>(dbContext, EventInvit.DatabaseObject), IEventInvitRepos
 {
-	public async Task<EventInvitation?> GetFullAsync(int id)
+	public async Task<EventInvit?> GetFullAsync(int id)
     {
 		SqlBuilder sbSql = new();
         string sql = string.Empty;
@@ -112,7 +112,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
 
         using var cn = DbContext.DbCxn;
 
-        var objList = (await cn.QueryAsync<EventInvitation, Event, Person, EventInvitation>(sql,
+        var objList = (await cn.QueryAsync<EventInvit, Event, Person, EventInvit>(sql,
                                 (ei, e, p) =>
                                 {
                                     ei.Event = e;
@@ -194,7 +194,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
 		return count;
 	}
 
-	public async Task<EventInvitation?> GetByAssignedBarcodeAsync(int eventId, string assignedBarcode)
+	public async Task<EventInvit?> GetByAssignedBarcodeAsync(int eventId, string assignedBarcode)
     {
         SqlBuilder sbSql = new();
         sbSql.Where("t.IsDeleted=0");
@@ -210,7 +210,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
 
         using var cn = DbContext.DbCxn;
 
-        EventInvitation? data = await cn.QuerySingleOrDefaultAsync<EventInvitation>(sql, param);
+        EventInvit? data = await cn.QuerySingleOrDefaultAsync<EventInvit>(sql, param);
 
         return data;
     }
@@ -235,7 +235,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
         return count > 0;
     }
 
-	public async Task<List<EventInvitation>> GetByEventAsync(int eventId)
+	public async Task<List<EventInvit>> GetByEventAsync(int eventId)
     {
 		DynamicParameters param = new();
 		SqlBuilder sbSql = new();
@@ -247,7 +247,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
 
 		using var cn = DbContext.DbCxn;
 		string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
-		var dataList = (await cn.QueryAsync<EventInvitation>(sql, param)).AsList();
+		var dataList = (await cn.QueryAsync<EventInvit>(sql, param)).AsList();
 		return dataList;
 	}
 
@@ -354,7 +354,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
         return dataList;
     }
 
-    public override async Task<List<EventInvitation>> QuickSearchAsync(
+    public override async Task<List<EventInvit>> QuickSearchAsync(
         int pgSize = 0, int pgNo = 0, 
         string? searchText = null, 
         List<int> ? excludeIdList = null)
@@ -425,7 +425,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
 
         using var cn = DbContext.DbCxn;
 
-        List<EventInvitation> result = (await cn.QueryAsync<EventInvitation, Event, Person, EventInvitation>(sql,
+        List<EventInvit> result = (await cn.QueryAsync<EventInvit, Event, Person, EventInvit>(sql,
                                 (ei, e, p) =>
                                 {
                                     ei.Event = e;
@@ -497,7 +497,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
         return pagination;
     }
 
-    public async Task<List<EventInvitation>> SearchByEventAsync(int eventId,
+    public async Task<List<EventInvit>> SearchByEventAsync(int eventId,
         int pgSize = 0,
         int pgNo = 0,
         string? name = null,
@@ -644,7 +644,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
 
         using var cn = DbContext.DbCxn;
 
-        var result = (await cn.QueryAsync<EventInvitation, Person, EventInvitation>(sql,
+        var result = (await cn.QueryAsync<EventInvit, Person, EventInvit>(sql,
                                 (obj, p) =>
                                 {
                                     obj.Person = p;
@@ -792,7 +792,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
         return pagination;
     }
 
-    public async Task<List<EventInvitation>> SearchAsync(
+    public async Task<List<EventInvit>> SearchAsync(
         int pgSize = 0,
         int pgNo = 0,
         string? objectCode = null,
@@ -930,7 +930,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
 
         using var cn = DbContext.DbCxn;
 
-        List<EventInvitation> result = (await cn.QueryAsync<EventInvitation, Event, Person, EventInvitation>(sql,
+        List<EventInvit> result = (await cn.QueryAsync<EventInvit, Event, Person, EventInvit>(sql,
                                 (obj, e, p) =>
                                 {
                                     obj.Event = e;
@@ -1093,7 +1093,7 @@ public class EventInvitRepos(IDbContext dbContext) : BaseRepos<EventInvitation>(
         sbSql.Select("'Key' = t.ObjectCode");
         sbSql.Select("'Value'=dbo.GetCompleteDipslayName(t.Surname, t.GivenName, t.SurnameKh, t.GivenNameKh, t.Gender) COLLATE SQL_Latin1_General_CP1_CI_AS");
 
-        sbSql.LeftJoin($"{EventInvitation.MsSqlTable} ei ON ei.IsDeleted=0 AND ei.EventId=@EventId AND ei.PersonId=t.Id");
+        sbSql.LeftJoin($"{EventInvit.MsSqlTable} ei ON ei.IsDeleted=0 AND ei.EventId=@EventId AND ei.PersonId=t.Id");
         sbSql.Where("t.IsDeleted=0");
         sbSql.Where("ei.Id IS NULL");
         

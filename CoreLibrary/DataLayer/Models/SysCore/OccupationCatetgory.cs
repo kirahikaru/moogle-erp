@@ -1,4 +1,6 @@
 ﻿
+using Dapper.Contrib.Extensions;
+
 namespace DataLayer.Models.SysCore;
 
 [Table("OccupationCategory"), DisplayName("Occupation Category")]

@@ -1,5 +1,6 @@
 ﻿namespace DataLayer.Models.Pru.IT;
 
+using Dapper.Contrib.Extensions;
 [Table("[dbo].[ITAssetAuditTrail]"), DisplayName("IT Asset Audit Trail")]
 public class ITAssetAuditTrail : AuditObject
 {

@@ -158,7 +158,7 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<MoogHobby.Boardgame>> ServerDataFunc(GridState<MoogHobby.Boardgame> gridState)
+	protected override async Task<GridData<MoogHobby.Boardgame>> ServerDataFunc(GridState<MoogHobby.Boardgame> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<MoogHobby.Boardgame>
 		{

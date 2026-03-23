@@ -1,4 +1,5 @@
-﻿using DataLayer.Repos.EMS;
+﻿using DataLayer.Models.TSM;
+using DataLayer.Repos.EMS;
 using DataLayer.Repos.FIN;
 using DataLayer.Repos.HMS;
 using DataLayer.Repos.Hobby;
@@ -9,6 +10,7 @@ using DataLayer.Repos.RMS;
 using DataLayer.Repos.SysCore;
 using DataLayer.Repos.TSM;
 using Microsoft.Extensions.Options;
+using System.Net.NetworkInformation;
 
 namespace DataLayer.Repos;
 
@@ -123,8 +125,21 @@ public interface IUowMoogleKhErp : IUnitOfWork
 	#endregion
 
 	#region TSM - Tech Store Management
+    IChipsetRepos Chipsets { get; }
+    ICPURepos CPUs { get; }
+    IDeviceIOPortRepos DeviceIOPorts { get; }
+	IGPURepos GPUs { get; }
+	IHDDRepos HDDs { get; }
     ILaptopRepos Laptops { get; }
-    ILaptopSpecVarRepos LaptopSpecVars { get; }
+	ILaptopSpecVarRepos LaptopSpecVars { get; }
+    IMonitorRepos Monitors { get; }
+    IMotherboardRepos Motherboards { get; }
+    IPCCaseRepos PCCases { get; }
+    IPCCoolerRepos PCCoolers { get; }
+    IPSURepos PSUs { get; }
+	IRAMRepos RAMs { get; }
+	ISSDRepos SSDs { get; }
+    ITechSpecItemRepos TechSpecItems { get; }
 	#endregion
 
 }
@@ -228,8 +243,21 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
 		#endregion
 
 		#region TMS - Tech Store Management
-        Laptops = new LaptopRepos(DbContext);
+        Chipsets = new ChipsetRepos(DbContext);
+        CPUs = new CPURepos(DbContext);
+        DeviceIOPorts = new DeviceIOPortRepos(DbContext);
+        GPUs = new GPURepos(DbContext);
+        HDDs = new HDDRepos(DbContext);
+		Laptops = new LaptopRepos(DbContext);
         LaptopSpecVars = new LaptopSpecVarRepos(DbContext);
+        Monitors = new MonitorRepos(DbContext);
+        Motherboards = new MotherboardRepos(DbContext);
+        PCCases = new PCCaseRepos(DbContext);
+        PCCoolers = new PCCoolerRepos(DbContext);
+        PSUs = new PSURepos(DbContext);
+        RAMs = new RAMRepos(DbContext);
+        SSDs = new SSDRepos(DbContext);
+        TechSpecItems = new TechSpecItemRepos(DbContext);
 		#endregion
 	}
 
@@ -334,7 +362,20 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
 	#endregion
 
 	#region TSM - Tech Store Management
-    public ILaptopRepos Laptops { get; }
-    public ILaptopSpecVarRepos LaptopSpecVars { get; }
+	public IChipsetRepos Chipsets { get; }
+	public ICPURepos CPUs { get; }
+	public IDeviceIOPortRepos DeviceIOPorts { get; }
+	public IGPURepos GPUs { get; }
+	public IHDDRepos HDDs { get; }
+	public ILaptopRepos Laptops { get; }
+	public ILaptopSpecVarRepos LaptopSpecVars { get; }
+	public IMonitorRepos Monitors { get; }
+	public IMotherboardRepos Motherboards { get; }
+	public IPCCaseRepos PCCases { get; }
+	public IPCCoolerRepos PCCoolers { get; }
+	public IPSURepos PSUs { get; }
+	public IRAMRepos RAMs { get; }
+	public ISSDRepos SSDs { get; }
+    public ITechSpecItemRepos TechSpecItems { get; }
 	#endregion
 }

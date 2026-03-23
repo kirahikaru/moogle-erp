@@ -1,15 +1,15 @@
-﻿using DataLayer.Models.TSM;
+﻿using ModelTSM=DataLayer.Models.TSM;
 
 namespace DataLayer.Repos.TSM;
 
-public interface ICPURepos : IBaseRepos<CPU>
+public interface IMonitorRepos : IBaseRepos<ModelTSM.Monitor>
 {
-	Task<List<DropdownSelectItem>> GetForDropdownAsync(string formFactor);
+	
 }
 
-public class CPURepos(IDbContext dbContext) : BaseRepos<CPU>(dbContext, CPU.DatabaseObject), ICPURepos
+public class MonitorRepos(IDbContext dbContext) : BaseRepos<ModelTSM.Monitor>(dbContext, ModelTSM.Monitor.DatabaseObject), IMonitorRepos
 {
-	public override async Task<KeyValuePair<int, IEnumerable<CPU>>> SearchNewAsync(
+	public override async Task<KeyValuePair<int, IEnumerable<ModelTSM.Monitor>>> SearchNewAsync(
 		int pgSize = 0, int pgNo = 0, string? searchText = null,
 		IEnumerable<SqlSortCond>? sortConds = null,
 		IEnumerable<SqlFilterCond>? filterConds = null,
@@ -109,55 +109,9 @@ public class CPURepos(IDbContext dbContext) : BaseRepos<CPU>(dbContext, CPU.Data
 
 		using var cn = DbContext.DbCxn;
 
-		var dataList = await cn.QueryAsync<CPU>(sql, param);
+		var dataList = await cn.QueryAsync<ModelTSM.Monitor>(sql, param);
 
 		int dataCount = await cn.ExecuteScalarAsync<int>(sqlCount, param);
 		return new(dataCount, dataList);
-	}
-
-
-	public async Task<List<DropdownSelectItem>> GetForDropdownAsync(string formFactor)
-	{
-		SqlBuilder sbSql = new();
-
-		
-		DynamicParameters param = new();
-		string sql;
-
-		if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
-		{
-			sbSql.Select("t.id as \"Id\"");
-			sbSql.Select("t.object_code as \"Key\"");
-			sbSql.Select("t.object_name as \"Value\"");
-
-			sbSql.Where("t.is_deleted=false");
-			sbSql.Where("t.form_factor LIKE '%'||@form_factor||'%'");
-
-			sbSql.OrderBy("t.object_name ASC");
-
-			param.Add("@form_factor", formFactor, DbType.AnsiString);
-
-			sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.PgTable} t /**where**/ /**orderby**/").RawSql;
-		}
-		else if (DbContext.DbType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
-		{
-			sbSql.Select("t.Id");
-			sbSql.Select("'Key'=t.ObjectCode");
-			sbSql.Select("'Value'=t.ObjectName");
-
-			sbSql.Where("t.IsDeleted=0");
-
-			sbSql.OrderBy("t.ObjectName ASC");
-
-			sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
-		}
-		else
-			throw new NotImplementedException();
-
-		using var cn = DbContext.DbCxn;
-
-		var dataList = (await cn.QueryAsync<DropdownSelectItem>(sql, param)).AsList();
-
-		return dataList;
 	}
 }

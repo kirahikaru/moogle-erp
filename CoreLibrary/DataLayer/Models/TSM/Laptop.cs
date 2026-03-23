@@ -27,6 +27,15 @@ public class Laptop : AuditObject
 	public static DatabaseObj DatabaseObject => new(SchemaName, MsSqlTableName, PgTableName);
 
 	#region *** DATABASE FIELD ***
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'ID' is required.")]
+	[RegularExpression(@"^[a-zA-Z\d._-]{0,}$", ErrorMessage = "'ID' invalid format. Valid format input: Capital letter OR number OR . _ - sign")]
+	[MaxLength(80)]
+	public new string? ObjectCode { get; set; }
+
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'Name' is required.")]
+	[MaxLength(255)]
+	public new string? ObjectName { get; set; }
+
 	[Column("brand")]
 	public string? Brand { get; set; }
 	[Column("model")]
@@ -61,6 +70,8 @@ public class Laptop : AuditObject
 	public decimal? WeightKg { get; set; }
 	[Column("features")]
 	public string? Features { get; set; }
+	[Range(0, 99999, ErrorMessage ="'Number of Variation' can only be postive whole number.")]
+	public int VarCount { get; set; }
 
 	/// <summary>
 	/// Network & Communication
@@ -82,12 +93,6 @@ public class Laptop : AuditObject
 	public List<DeviceIOPort> IOPorts { get; set; }
 
 	[Computed, NotMapped]
-	public CPU? CPU { get; set; }
-
-	[Computed, NotMapped]
-	public GPU? GPU { get; set; }
-
-	[Computed, NotMapped]
 	public LaptopMemType? MemoryType { get; set; }
 
 	[Computed, NotMapped]
@@ -98,14 +103,7 @@ public class Laptop : AuditObject
 	#endregion
 
 	#region *** DYANMIC PROPERTIES ***
-	[Computed, NotMapped, Write(false)]
-	public string CPUName => CPU != null ? CPU.ObjectName??"-" : "-";
-
-	[Computed, NotMapped, Write(false)]
-	public string GPUName => GPU != null ? GPU.ObjectName ?? "-" : "-";
-
-	[Computed, NotMapped, Write(false)]
-	public string MemoryTypeName => MemoryType != null ? MemoryType.SpecCode ?? "-" : "-";
+	
 	#endregion
 
 	public Laptop()
@@ -113,6 +111,7 @@ public class Laptop : AuditObject
 		IOPorts = [];
 		SpecItems = [];
 		SpecVariations = [];
+		VarCount = 0;
 	}
 
 	#region Functions
@@ -142,6 +141,7 @@ public class Laptop : AuditObject
 			"keyboard_touchpad",
 			"features",
 			"notes",
+			"var_count",
 			"is_deleted",
 			"created_user",
 			"created_datetime",
@@ -183,6 +183,7 @@ public class Laptop : AuditObject
 			param.Add("@keyboard_touchpad", KeyboardTouchpad);
 			param.Add("@features", Features);
 			param.Add("@notes", Notes);
+			param.Add("@var_count", VarCount);
 			param.Add("@is_deleted", IsDeleted, DbType.Boolean);
 			param.Add("@created_user", CreatedUser);
 			param.Add("@created_datetime", CreatedDateTime);

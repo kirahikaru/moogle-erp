@@ -35,16 +35,22 @@ public class LaptopSpecVar : AuditObject
 	public int? LaptopId { get; set; }
 	public string? LaptopCode { get; set; }
 	public int? SeqNo { get; set; }
+	public string? Model { get; set; }
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'RAM Size (GB)' is required.")]
 	public int? RamSizeGb { get; set; }
 	public string? RamType { get; set; }
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'CPU' is required.")]
 	public int? CpuId { get; set; }
 	public string? CpuName { get; set; }
 	public int? GpuId { get; set; }
 	public string? GpuName { get; set; }
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'Storage' is required.")]
 	public int? StorageSizeGb { get; set; }
 	public string? StorageType { get; set; }
 	public string? Barcode { get; set; }
 	public int? ItemId { get; set; }
+	public decimal? MSRP { get; set; }
+	public string? Note { get; set; }
 	#endregion
 
 	#region *** LINKED OBJECTS ***
@@ -71,7 +77,7 @@ public class LaptopSpecVar : AuditObject
 			}
 
 			sb.Append(' ');
-			sb.Append(StorageType.NonNullValue());
+			sb.Append(LaptopStorageTypes.GetDisplayText(StorageType));
 			return sb.ToString().Trim();
 		}
 	}

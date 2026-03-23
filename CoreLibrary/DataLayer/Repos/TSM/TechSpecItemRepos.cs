@@ -2,14 +2,51 @@
 
 namespace DataLayer.Repos.TSM;
 
-public interface ICPURepos : IBaseRepos<CPU>
+public interface ITechSpecItemRepos : IBaseRepos<TechSpecItem>
 {
-	Task<List<DropdownSelectItem>> GetForDropdownAsync(string formFactor);
+	Task<List<TechSpecItem>> GetByObjectAsync(string linkedObjType, int linkedObjId);
 }
 
-public class CPURepos(IDbContext dbContext) : BaseRepos<CPU>(dbContext, CPU.DatabaseObject), ICPURepos
+public class TechSpecItemRepos(IDbContext dbContext) : BaseRepos<TechSpecItem>(dbContext, TechSpecItem.DatabaseObject), ITechSpecItemRepos
 {
-	public override async Task<KeyValuePair<int, IEnumerable<CPU>>> SearchNewAsync(
+	public async Task<List<TechSpecItem>> GetByObjectAsync(string linkedObjType, int linkedObjId)
+	{
+		DynamicParameters param = new();
+		SqlBuilder sbSql = new();
+		string sql;
+
+		if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
+		{
+			sbSql.Where("t.is_deleted=false");
+			sbSql.Where("t.linked_object_id=@linked_object_id");
+			sbSql.Where("t.linked_object_type=@linked_object_type");
+			param.Add("@linked_object_id", linkedObjId);
+			param.Add("@linked_object_type", linkedObjType, DbType.AnsiString);
+
+			sbSql.OrderBy("t.order_no ASC");
+
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.PgTable} t /**where**/ /**orderby**/").RawSql;
+		}
+		else
+		{
+			sbSql.Where("t.IsDeleted=0");
+			sbSql.Where("t.LinkedObjectId=@LinkedObjectId");
+			sbSql.Where("t.LinkedObjectType=@LinkedObjectType");
+			param.Add("@LinkedObjectId", linkedObjId);
+			param.Add("@LinkedObjectType", linkedObjType, DbType.AnsiString);
+
+			sbSql.OrderBy("t.OrderNo ASC");
+
+			sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.PgTable} t /**where**/ /**orderby**/").RawSql;
+		}
+
+		using var cn = DbContext.DbCxn;
+
+		var dataList = (await cn.QueryAsync<TechSpecItem>(sql, param)).AsList();
+		return dataList;
+	}
+
+	public override async Task<KeyValuePair<int, IEnumerable<TechSpecItem>>> SearchNewAsync(
 		int pgSize = 0, int pgNo = 0, string? searchText = null,
 		IEnumerable<SqlSortCond>? sortConds = null,
 		IEnumerable<SqlFilterCond>? filterConds = null,
@@ -109,55 +146,9 @@ public class CPURepos(IDbContext dbContext) : BaseRepos<CPU>(dbContext, CPU.Data
 
 		using var cn = DbContext.DbCxn;
 
-		var dataList = await cn.QueryAsync<CPU>(sql, param);
+		var dataList = await cn.QueryAsync<TechSpecItem>(sql, param);
 
 		int dataCount = await cn.ExecuteScalarAsync<int>(sqlCount, param);
 		return new(dataCount, dataList);
-	}
-
-
-	public async Task<List<DropdownSelectItem>> GetForDropdownAsync(string formFactor)
-	{
-		SqlBuilder sbSql = new();
-
-		
-		DynamicParameters param = new();
-		string sql;
-
-		if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
-		{
-			sbSql.Select("t.id as \"Id\"");
-			sbSql.Select("t.object_code as \"Key\"");
-			sbSql.Select("t.object_name as \"Value\"");
-
-			sbSql.Where("t.is_deleted=false");
-			sbSql.Where("t.form_factor LIKE '%'||@form_factor||'%'");
-
-			sbSql.OrderBy("t.object_name ASC");
-
-			param.Add("@form_factor", formFactor, DbType.AnsiString);
-
-			sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.PgTable} t /**where**/ /**orderby**/").RawSql;
-		}
-		else if (DbContext.DbType.Is(DatabaseTypes.MSSQL, DatabaseTypes.AZURE_SQL))
-		{
-			sbSql.Select("t.Id");
-			sbSql.Select("'Key'=t.ObjectCode");
-			sbSql.Select("'Value'=t.ObjectName");
-
-			sbSql.Where("t.IsDeleted=0");
-
-			sbSql.OrderBy("t.ObjectName ASC");
-
-			sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
-		}
-		else
-			throw new NotImplementedException();
-
-		using var cn = DbContext.DbCxn;
-
-		var dataList = (await cn.QueryAsync<DropdownSelectItem>(sql, param)).AsList();
-
-		return dataList;
 	}
 }

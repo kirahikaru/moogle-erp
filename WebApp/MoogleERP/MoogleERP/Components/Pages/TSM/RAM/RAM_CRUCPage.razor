@@ -1,0 +1,517 @@
+﻿@page "/tsm/ram/{CRUCMode}"
+@page "/tsm/ram/{CRUCMode}/{id:int}"
+
+@inherits CRUCPageBase<RAM>
+
+@if (CurrentObject != null && CurrentEditContext != null)
+{
+    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" >
+        <DataAnnotationsValidator />
+        <MudPaper Class="moog-pg-banner mt-3" Elevation="1">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="0">
+                    <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
+                    @if (CRUCMode == CRUDCModes.READ)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Success" Class=@($"status-chip-tiny") T="string" Style="margin-top:-5px">View</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.UPDATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">Update</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CREATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CLONE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New (Clone)</MudChip>
+                    }
+                </MudStack>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="2">
+                    @if (IsViewMode)
+                    {
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base moog-btn-gray" Color="Color.Dark"
+                                   Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/close">
+                            Close
+                        </MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
+                                   Disabled=@IsSaving OnClick="@(() => Save(false))" StartIcon="material-symbols-rounded/save_as">
+                            Save
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
+                                   Disabled=@IsSaving OnClick="@(() => Save(true))" StartIcon="material-symbols-rounded/save">
+                            Save & Close
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base moog-btn-gray" Color="Color.Default"
+                                   Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/cancel">
+                            Cancel
+                        </MudButton>
+                    }
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+        <MudTabs Color="Color.Primary" Class="mt-3 moog-cruc-pg-mudtab" ActiveTabClass="moog-cruc-pg-mudtab-active" PanelClass="moog-cruc-pg-mudtab-panel" TabHeaderClass="moog-cruc-pg-mudtab-header" TabPanelClass="moog-cruc-pg-mudtab-tab-panel"
+                 Style="height:calc(100vh - 185px);">
+            <MudTabPanel Icon="material-symbols-rounded/home" Text="Main">
+                <MudPaper Class="rounded-0" Elevation="1" Height="calc(100vh - 220px)" Style="overflow-y: auto;">
+                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" StretchItems="StretchItems.All" Spacing="1">
+                        <MudGrid Spacing="3" Class="pa-3">
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                              Label="Name" @ref=_mtfObjName
+                                              @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" />
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true" 
+                                              Label="ID" 
+                                              @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" Style="text-transform:uppercase" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              Label="Brand"
+                                              @bind-Value="CurrentObject!.Brand" For="@(() => CurrentObject!.Brand)" />
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              Label="Model"
+                                              @bind-Value="CurrentObject!.Model" For="@(() => CurrentObject!.Model)" />
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Class="moog-mud-form-field bordered moog-ui-datepicker" Required="false"
+                                               AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                               Label="Release Date" Placeholder="Release Date" DateFormat="dd-MMM-yyyy"
+                                               @bind-Date="CurrentObject!.ReleaseDate" For="@(() => CurrentObject!.ReleaseDate)" />
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              Label="Release On"
+                                              @bind-Value="CurrentObject!.ReleaseDateText" For="@(() => CurrentObject!.ReleaseDateText)" />
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              Label="Capacity"
+                                              @bind-Value="CurrentObject!.CapacityText" For="@(() => CurrentObject!.CapacityText)" />
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                 AdornmentText="GB" Adornment="Adornment.End"
+                                                 Label="Capacity" Step="1"
+                                                 @bind-Value="CurrentObject!.CapacityGb" T="int?" For="(() => CurrentObject.CapacityGb)"
+                                                 Style="text-align:right" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              Label="Memory Type"
+                                              @bind-Value="CurrentObject!.MemoryType" For="@(() => CurrentObject!.MemoryType)" />
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                 AdornmentText="Ghz" Adornment="Adornment.End"
+                                                 Label="SPD Speed" Step="1"
+                                                 @bind-Value="CurrentObject!.SPDSpeed" T="int?" For="(() => CurrentObject.SPDSpeed)"
+                                                 Style="text-align:right" />
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                 AdornmentText="MT/s" Adornment="Adornment.End"
+                                                 Label="Tested Speed" Step="1"
+                                                 @bind-Value="CurrentObject!.TestedSpeed" T="int?" For="(() => CurrentObject.TestedSpeed)"
+                                                 Style="text-align:right" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              Label="Product Info URL"
+                                              @bind-Value="CurrentObject!.ProductInfoUrl" For="@(() => CurrentObject!.ProductInfoUrl)" />
+                            </MudItem>
+                            <MudItem xs="12" Class="mt-3"></MudItem>
+                            <MudItem xs="12" Style="padding:4px 12px; background-color:var(--ssv-pharma-blue-100)">
+                                <MudText Typo="Typo.h1" Style="font-size:18px; font-weight:700; color:var(--ssv-pharma-blue)">Technical Specifications</MudText>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudStack Spacing="2" Justify=Justify.FlexStart>
+                                    @if (!IsViewMode)
+                                    {
+                                        <MudStack Row="true" Spacing="2" Justify=Justify.FlexStart>
+                                            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Primary" DropShadow="false" FullWidth="false" Class="moog-btn-base moog-btn-tight moog-btn-primary-light" StartIcon="material-symbols-rounded/add_circle"
+                                                       OnClick="AddTechSpec" Disabled="!_isEditingTechSpecItem">
+                                                Add Spec
+                                            </MudButton>
+                                            <MudSwitchM3 ReadOnly=@IsViewMode Class="moog-mud-switch ml-2" Color="@(_isEditingTechSpecItem? Color.Success: Color.Dark)"
+                                                         ThumbIcon="@Icons.Material.Rounded.Check" ThumbOffIcon="@Icons.Material.Rounded.Close" Size="Size.Small"
+                                                         Label=@(_isEditingTechSpecItem ? "Edit ON" : "Edit OFF")
+                                                         @bind-Value="_isEditingTechSpecItem" Style=@(_isEditingTechSpecItem ? "color:#00C853; font-weight:600" : "color:#B0BEC5") />
+                                        </MudStack>
+                                    }
+                                    @* EditDialogOptions=@(new() { BackdropClick = false, MaxWidth = MaxWidth.Medium, FullWidth = true }) *@
+                                    <MudDataGrid Class="moog-mud-datagrid" Dense="true" Hover="true" FixedHeader="true" Striped="false" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None"
+                                                 Items="@CurrentObject!.SpecItems" T="TechSpecItem" @ref="_techSpecGrid" NoRecordsContent="_gridNoRecord" Style="width:100%" QuickFilter="_quickTechSpecFilter"
+                                                 ReadOnly=@(IsViewMode || !_isEditingTechSpecItem) EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
+                                                 StartedEditingItem="@StartedEditingItemSpec" CanceledEditingItem="@CanceledEditingItemSpec" CommittedItemChanges="@CommittedItemSpecChanges">
+                                        <Columns>
+                                            <PropertyColumn Title="No." Property="x => x.OrderNo" Sortable="false" Editable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                            CellStyle="text-align:right" />
+                                            <PropertyColumn Title="Type" Property="x => x.ObjectName" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  Placeholder="Spec Type"
+                                                                  @bind-Value=item.Item.ObjectName For="@(() => item.Item.ObjectName)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Spec Desc" Property="x => x.SpecDesc" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  Placeholder="Spec Value"
+                                                                  @bind-Value=item.Item.SpecDesc For="@(() => item.Item.SpecDesc)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Value" Property="x => x.SpecValue" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderStyle="width:100px; max-width:80px" Context="item">
+                                                <EditTemplate>
+                                                    <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                     Placeholder="Qty" Format="#,##0.##" Step="0.1M"
+                                                                     @bind-Value="item.Item.SpecValue" T="decimal?" For="(() => item.Item.SpecValue)"
+                                                                     Style="text-align:right" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Unit" Property="x => x.UnitCode" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  Placeholder="Unit"
+                                                                  @bind-Value=item.Item.UnitCode For="@(() => item.Item.UnitCode)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                            CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
+                                                            Context="item">
+                                                <CellTemplate>
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveTechSpecUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveTechSpecDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveTechSpec(item.Item))" />
+                                                </CellTemplate>
+                                                <EditTemplate>
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveTechSpecUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveTechSpecDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveTechSpec(item.Item))" />
+                                                </EditTemplate>
+                                            </TemplateColumn>
+                                        </Columns>
+                                    </MudDataGrid>
+                                </MudStack>
+                            </MudItem>
+                        </MudGrid>
+                    </MudStack>
+                </MudPaper>
+                <MudPaper Height="26px" Elevation="1"
+                          Style="padding:0px; background-color:var(--material-blue-gray-50); border-top-left-radius:0px; border-top-right-radius:0px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1" Style="height:100%; padding: 0px 10px">
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)">Created by </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@CurrentObject!.CreatedUser</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">@CurrentObject!.CreatedUser</MudChip> *@
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)"> on </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@(CurrentObject!.CreatedDateTimeText)</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">
+                                @(CurrentObject!.CreatedDateTime is null ? " - " : CurrentObject!.CreatedDateTime!.Value.ToString("dd-MMM-yyyy HH:mm:ss"))
+                            </MudChip> *@
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)">| Last modified by </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@CurrentObject!.ModifiedUser</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">@CurrentObject!.ModifiedUser</MudChip> *@
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)"> on </MudText>
+                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@(CurrentObject!.ModifiedDateTimeText)</MudText>
+                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">
+                                @(CurrentObject!.ModifiedDateTime is null ? " - " : CurrentObject!.ModifiedDateTime!.Value.ToString("dd-MMM-yyyy HH:mm:ss"))
+                            </MudChip> *@
+                    </MudStack>
+                </MudPaper>
+            </MudTabPanel>
+            <MudTabPanel Icon="material-symbols-rounded/info" Text="Other Info">
+                <MudPaper Class="rounded-0" Elevation="1" Height="calc(100vh - 194px)" Style="overflow-y: auto; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px">
+                    <MudGrid Spacing="3" Class="pa-3">
+                        <MudItem xs="12" Style="padding:4px 12px; background-color:var(--ssv-pharma-blue-100)">
+                            
+                        </MudItem>
+                        <MudItem xs="12">
+                            
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudTabPanel>
+        </MudTabs>
+    </EditForm>
+}
+
+@code {
+
+    #region UI PARAM
+    RenderFragment _gridNoRecord = @<p>No record</p>;
+    
+    List<DropDownListItem> _countryList = [];
+
+    IEnumerable<string> _brandList = [];
+    MudTextField<string>? _mtfObjName;
+    
+    List<DropdownSelectItem> _currencyList = [];
+
+    MudDataGrid<TechSpecItem> _techSpecGrid = new();
+    TechSpecItem? _tempTechSpecToAdd;
+    bool _isEditingTechSpecItem = true;
+    #endregion
+
+    #region PAGE LIFECYCLE FUNCTIONS
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        UrlPrefix = "/tsm/ram";
+        return base.SetParametersAsync(parameters);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        switch (CRUCMode)
+        {
+            case CRUDCModes.READ:
+                {
+                    CurrentObject = await UowPg.RAMs.GetAsync(Id);
+                    IsViewMode = true;
+                }
+                break;
+            case CRUDCModes.CREATE:
+                {
+                    CurrentObject = new();
+                }
+                break;
+            case CRUDCModes.UPDATE:
+                CurrentObject = await UowPg.RAMs.GetAsync(Id);
+                break;
+            case CRUDCModes.CLONE:
+                {
+                    var tempObj = await UowPg.RAMs.GetAsync(Id);
+                    CurrentObject = tempObj!.DeepClone();
+
+                    CurrentObject!.Id = 0;
+                }
+                break;
+        }
+
+        if (CurrentObject != null && CurrentObject.Id> 0)
+        {
+            CurrentObject.SpecItems = await UowPg.TechSpecItems.GetByObjectAsync(CurrentObject.GetType().Name, CurrentObject.Id);
+        }
+
+        CurrentEditContext = new EditContext(CurrentObject!);
+
+        await PopulatedUIControls();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (_mtfObjName != null && !IsViewMode)
+                await _mtfObjName!.FocusAsync();
+        }
+    }
+    #endregion
+
+    #region UI FUNCTIONS
+    async Task<IEnumerable<string>> SearchBrandName(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        if (string.IsNullOrEmpty(value))
+            return _brandList;
+        else
+            return _brandList.Where(x => x.Contains(value, StringComparison.OrdinalIgnoreCase));
+    }
+    #endregion
+
+    #region Item Specification
+    // quick filter - filter globally across multiple columns with the same input
+    private Func<TechSpecItem, bool> _quickTechSpecFilter => x =>
+    {
+        return !x.IsDeleted;
+    };
+
+    void AddTechSpec()
+    {
+        _tempTechSpecToAdd = new()
+        {
+            OrderNo = CurrentObject!.SpecItems.Count + 1
+        };
+
+        CurrentObject!.SpecItems.Add(_tempTechSpecToAdd);
+        // _itemDataGrid.SetEditingItemAsync(_tempItemToAdd);
+    }
+
+    void MoveTechSpecUp(TechSpecItem techSpec)
+    {
+        if (CurrentObject!.SpecItems.Count > 1 && techSpec.OrderNo!.Value > 1)
+        {
+            techSpec.OrderNo--;
+
+            TechSpecItem? a = CurrentObject!.SpecItems.FirstOrDefault(x => x.IsDeleted == false && x.OrderNo is not null && x.OrderNo == techSpec.OrderNo && x != techSpec);
+
+            if (a != null)
+                a!.OrderNo++;
+
+            CurrentObject!.SpecItems = CurrentObject!.SpecItems.OrderBy(x => x.OrderNo).ToList();
+        }
+    }
+
+    void MoveTechSpecDown(TechSpecItem techSpec)
+    {
+        if (CurrentObject!.SpecItems.Count > 1 && CurrentObject!.SpecItems.Count != techSpec.OrderNo!.Value)
+        {
+            techSpec.OrderNo++;
+
+            TechSpecItem? a = CurrentObject!.SpecItems.FirstOrDefault(x => x.IsDeleted == false && x.OrderNo is not null && x.OrderNo == techSpec.OrderNo && x != techSpec);
+
+            if (a != null)
+                a!.OrderNo--;
+
+            CurrentObject!.SpecItems = CurrentObject!.SpecItems.OrderBy(x => x.OrderNo).ToList();
+        }
+    }
+
+    void RemoveTechSpec(TechSpecItem techSpec)
+    {
+        if (techSpec.Id == 0)
+        {
+            CurrentObject!.SpecItems.Remove(techSpec);
+
+            foreach (var var in CurrentObject!.SpecItems.Where(x => !x.IsDeleted && x.OrderNo > techSpec.OrderNo))
+            {
+                var.OrderNo--;
+            }
+        }
+        else if (techSpec.Id > 0)
+        {
+            foreach (var var in CurrentObject!.SpecItems.Where(x => !x.IsDeleted && x.OrderNo > techSpec.OrderNo))
+                var.OrderNo--;
+
+            techSpec.OrderNo = null;
+            techSpec.IsDeleted = true;
+        }
+    }
+
+    void StartedEditingItemSpec(TechSpecItem techSpec)
+    {
+
+    }
+
+    void CanceledEditingItemSpec(TechSpecItem techSpec)
+    {
+        if (_tempTechSpecToAdd != null)
+        {
+            CurrentObject!.SpecItems.RemoveAt(CurrentObject!.SpecItems.FindIndex(x => x.OrderNo == techSpec.OrderNo));
+            _tempTechSpecToAdd = null;
+        }
+    }
+
+    Task<DataGridEditFormAction> CommittedItemSpecChanges(TechSpecItem techSpec)
+    {
+        _tempTechSpecToAdd = null;
+
+        return Task.FromResult(DataGridEditFormAction.Close);
+    }
+    #endregion
+
+    #region DB UPDATE FUNCTIONS
+    protected override async Task ValidatePreSave()
+    {
+        InvalidMsgList.Clear();
+
+        bool isDuplicated = await UowPg.RAMs.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+
+        if (isDuplicated)
+        {
+            InvalidMsgList.Add("ObjectCode_Duplicate", $"Record with ObjectCode='{CurrentObject.ObjectCode}' is already existed.");
+        }
+    }
+
+    protected override Task PreSaveProcessing()
+    {
+        CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
+
+        if (CurrentObject!.ReleaseDate.HasValue)
+            CurrentObject!.ReleaseDateText = CurrentObject!.ReleaseDate.Value.ToString("dd-MMM-yyyy");
+
+        return base.PreSaveProcessing();
+    }
+
+    protected override async Task<bool> SaveAndCommitProcessing()
+    {
+        DateTime timestamp = DateTime.Now;
+
+        if (CurrentObject!.Id == 0)
+        {
+            CurrentObject!.CreatedUser = AuditTrailUser;
+            CurrentObject!.CreatedDateTime = timestamp;
+            CurrentObject!.ModifiedUser = AuditTrailUser;
+            CurrentObject!.ModifiedDateTime = timestamp;
+            int objId = await UowPg.RAMs.ManualInsertAsync(RAM.GetPgFieldList(UowPg.DbContext.DbType), CurrentObject.GetParamValues(UowPg.DbContext.DbType));
+
+            if (objId > 0)
+            {
+                foreach (TechSpecItem specItem in CurrentObject.SpecItems)
+                {
+                    if (specItem.IsDeleted) continue;
+
+                    int specItemId = await UowPg.TechSpecItems.ManualInsertAsync(TechSpecItem.GetPgFieldList(UowPg.DbContext.DbType), specItem.GetParamValues(UowPg.DbContext.DbType));
+                }
+            }
+
+            return objId > 0;
+        }
+        else if (CurrentObject!.Id > 0)
+        {
+            CurrentObject!.ModifiedUser = AuditTrailUser;
+            CurrentObject!.ModifiedDateTime = timestamp;
+            int updCount = await UowPg.RAMs.ManualUpdateAsync(RAM.GetPgFieldList(UowPg.DbContext.DbType), CurrentObject.GetParamValues(UowPg.DbContext.DbType, true));
+
+            if (updCount > 0)
+            {
+                foreach (TechSpecItem specItem in CurrentObject.SpecItems)
+                {
+                    if (specItem.Id == 0 & specItem.IsDeleted) continue;
+
+                    if (specItem.Id > 0)
+                    {
+                        int specUpdCount = await UowPg.TechSpecItems.ManualUpdateAsync(TechSpecItem.GetPgFieldList(UowPg.DbContext.DbType), specItem.GetParamValues(UowPg.DbContext.DbType, true));
+                    }
+                    else if (specItem.Id == 0)
+                    {
+                        int specItemId = await UowPg.TechSpecItems.ManualInsertAsync(TechSpecItem.GetPgFieldList(UowPg.DbContext.DbType), specItem.GetParamValues(UowPg.DbContext.DbType));
+                    }
+                }
+            }
+
+            return updCount > 0;
+        }
+        else
+            return false;
+    }
+    #endregion
+
+    #region INTERNAL FUNCTIONS
+    async Task PopulatedUIControls()
+    {
+        _brandList = await Uow.Brands.GetAllBrandNamesAsync();
+        _countryList = await Uow.Countries.GetForDropdownSelect1Async();
+        _currencyList = await Uow.Currencies.GetForDropdownSelect1Async(null);
+    }
+    #endregion
+}

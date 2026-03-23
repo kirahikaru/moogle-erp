@@ -1,5 +1,6 @@
-﻿using DataLayer.GlobalConstant;
-using Dapper.Contrib.Extensions;
+﻿using Dapper.Contrib.Extensions;
+using DataLayer.GlobalConstant;
+using DataLayer.Models.RMS;
 
 namespace DataLayer.Models.TSM;
 
@@ -63,4 +64,61 @@ public class TechSpecItem : AuditObject
 	{
 		SpecItems = [];
 	}
+
+	#region Functions
+	public static List<string> GetPgFieldList(string dbType)
+	{
+		if (dbType == DatabaseTypes.POSTGRESQL)
+		{
+			return [
+			"object_code",
+			"object_name",
+			"order_no",
+			"linked_object_id",
+			"linked_object_type",
+			"unit_code",
+			"unit_symbol",
+			"spec_value",
+			"spec_desc",
+			"remark",
+			"is_deleted",
+			"created_user",
+			"created_datetime",
+			"modified_user",
+			"modified_datetime"
+			];
+		}
+		else
+			return [];
+	}
+
+	public DynamicParameters GetParamValues(string dbType, bool inclId = false)
+	{
+		DynamicParameters param = new();
+
+		if (dbType == DatabaseTypes.POSTGRESQL)
+		{
+			if (inclId)
+				param.Add("@id", Id);
+
+			param.Add("@object_code", ObjectCode);
+			param.Add("@object_name", ObjectName);
+			param.Add("@order_no", OrderNo);
+			param.Add("@linked_object_id", LinkedObjectId);
+			param.Add("@linked_object_type", LinkedObjectType);
+			param.Add("@unit_code", UnitCode);
+			param.Add("@unit_symbol", UnitSymbol);
+			param.Add("@spec_value", SpecValue);
+			param.Add("@spec_desc", SpecDesc);
+			param.Add("@remark", Remark);
+			param.Add("@is_deleted", IsDeleted);
+			param.Add("@created_user", CreatedUser);
+			param.Add("@created_datetime", CreatedDateTime);
+			param.Add("@modified_user", ModifiedUser);
+			param.Add("@modified_datetime", ModifiedDateTime);
+		}
+
+		return param;
+	}
+	#endregion
 }

@@ -770,6 +770,7 @@
                                             <CellTemplate>
                                                 <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveSupplierUp(item.Item))" />
                                                 <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveSupplierDown(item.Item))" />
+                                                <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" Color="Color.Info" OnClick="item.Actions.StartEditingItemAsync" />
                                                 <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveSupplier(item.Item))" />
                                             </CellTemplate>
                                             <EditTemplate>

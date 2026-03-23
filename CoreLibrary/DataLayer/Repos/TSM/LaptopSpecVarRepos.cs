@@ -4,11 +4,34 @@ namespace DataLayer.Repos.TSM;
 
 public interface ILaptopSpecVarRepos : IBaseRepos<LaptopSpecVar>
 {
-	
+	Task<List<LaptopSpecVar>> GetByLaptopAsync(int laptopId);
 }
 
 public class LaptopSpecVarRepos(IDbContext dbContext) : BaseRepos<LaptopSpecVar>(dbContext, LaptopSpecVar.DatabaseObject), ILaptopSpecVarRepos
 {
+	public async Task<List<LaptopSpecVar>> GetByLaptopAsync(int laptopId)
+	{
+		DynamicParameters param = new();
+		SqlBuilder sbSql = new();
+		string sql;
+		if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
+		{
+			sql = $"SELECT * FROM {DbObject.PgTable} WHERE is_deleted=false AND laptop_id=@laptop_id ORDER BY seq_no ASC";
+			param.Add("@laptop_id", laptopId);
+		}
+		else
+		{
+			sql = $"SELECT * FROM {DbObject.MsSqlTable} WHERE IsDeleted=0 AND LaptopId=@LaptopId ORDER BY SeqNo ASC";
+			param.Add("@LaptopId", laptopId);
+		}
+
+		using var cn = DbContext.DbCxn;
+
+		var dataList = (await cn.QueryAsync<LaptopSpecVar>(sql, param)).AsList();
+
+		return dataList;
+	}
+
 	public override async Task<KeyValuePair<int, IEnumerable<LaptopSpecVar>>> SearchNewAsync(
         int pgSize = 0, int pgNo = 0, string? searchText = null, 
         IEnumerable<SqlSortCond>? sortConds = null, 

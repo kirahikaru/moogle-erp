@@ -1,5 +1,36 @@
 ﻿namespace DataLayer.GlobalConstant;
 
+public static class CPUFormFactors
+{
+	public const string LAPTOP = "LAPTOP";
+	public const string DESKTOP = "DESKTOP";
+	public const string LAPTOP_DESKTOP = "LAPTOP-DESKTOP";
+
+	public static string GetDisplayText(string? formFactor)
+	{
+		return formFactor switch
+		{
+			LAPTOP => "Laptop",
+			DESKTOP => "Desktop",
+			LAPTOP_DESKTOP => "Laptop, Desktop",
+			_ => "",
+		};
+
+	}
+
+	public static List<DropdownSelectItem> GetForDropdown()
+	{
+		List<DropdownSelectItem> list =
+			[
+				new DropdownSelectItem { Key = LAPTOP, Value = GetDisplayText(LAPTOP) },
+				new DropdownSelectItem { Key = DESKTOP, Value = GetDisplayText(DESKTOP) },
+				new DropdownSelectItem { Key = LAPTOP_DESKTOP, Value = GetDisplayText(LAPTOP_DESKTOP) }
+			];
+
+		return list;
+	}
+}
+
 public static class RAMSizes
 {
     public static List<DropdownSelectItem> GetForDropdown()
@@ -50,4 +81,30 @@ public static class RAMTypes
 				return [];
 		}
     }
+}
+
+public static class LaptopStorageTypes
+{
+	public const string SSD_M2_NVME_PCIE4 = "SSD-M.2_NVMe_PCIe_4.0";
+
+	public static string GetDisplayText(string? storageType)
+	{
+		switch (storageType)
+		{
+			case SSD_M2_NVME_PCIE4:
+				return "M.2 NVMe™ PCIe® 4.0 SSD";
+			default:
+				return "";
+		}
+	}
+
+	public static List<DropdownSelectItem> GetForDropdown()
+	{
+		List<DropdownSelectItem> list =
+			[
+				new DropdownSelectItem { Key = SSD_M2_NVME_PCIE4, Value = GetDisplayText(SSD_M2_NVME_PCIE4) },
+			];
+
+		return list;
+	}
 }

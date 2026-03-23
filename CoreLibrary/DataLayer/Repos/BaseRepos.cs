@@ -1,5 +1,7 @@
 ﻿//using DapperExtensions;
 using Dapper.Contrib.Extensions;
+using DataLayer.AuxComponents;
+using DataLayer.Models.TSM;
 using System.Reflection;
 using System.Resources;
 
@@ -27,7 +29,10 @@ public interface IBaseRepos<TEntity> where TEntity : AuditObject
 	Task<int> GetPageCountAsync(int pageSize);
 	Task<List<TEntity>> GetAllAsync();
 	Task<int> InsertAsync(TEntity entity);
+
+	Task<int> ManualInsertAsync(List<string> fields, DynamicParameters param);
 	Task<bool> UpdateAsync(TEntity entity);
+	Task<int> ManualUpdateAsync(List<string> fields, DynamicParameters param);
 	Task<int> DeleteAsync(int id, string username);
 	Task<int> HardDeleteAsync(int id);
 	Task<bool> IsDuplicateCodeAsync(int objectId, string objectCode);
@@ -266,7 +271,13 @@ public class BaseRepos<TEntity>(IDbContext dbContext, DatabaseObj dbObj) : IBase
     {
         using var cn = DbContext.DbCxn;
 
-        return await cn.GetAsync<TEntity>(id);
+		if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
+		{
+			string sql = $"SELECT * FROM {DbObject.PgTable} WHERE id=@id AND is_deleted=false";
+			return await cn.QuerySingleOrDefaultAsync<TEntity?>(sql, new { id });
+		}
+		else
+			return await cn.GetAsync<TEntity>(id);
     }
 
     public virtual async Task<List<TEntity>> GetManyAsync(List<int> idList)
@@ -369,7 +380,7 @@ public class BaseRepos<TEntity>(IDbContext dbContext, DatabaseObj dbObj) : IBase
         return (await cn.ExecuteScalarAsync<int>(sql)) / pageSize;
     }
 
-    public async Task<int> InsertAsync(TEntity entity)
+    public virtual async Task<int> InsertAsync(TEntity entity)
     {
 
         //string insSql = GenerateInsertQuery();
@@ -379,6 +390,15 @@ public class BaseRepos<TEntity>(IDbContext dbContext, DatabaseObj dbObj) : IBase
         //int insCount = await cn.ExecuteAsync(insSql, entity);
         return await cn.InsertAsync(entity);
     }
+
+	public async Task<int> ManualInsertAsync(List<string> fields, DynamicParameters param)
+	{
+		string insSql = DapperSqlBuilder.GenInsertSql(DbContext.DbType == DatabaseTypes.POSTGRESQL ? DbObject.PgTable : DbObject.MsSqlTable, fields, DbContext.DbType);
+
+		using var cn = DbContext.DbCxn;
+
+		return await cn.ExecuteScalarAsync<int>(insSql, param);
+	}
 
     public async Task<bool> UpdateAsync(TEntity entity)
     {
@@ -391,6 +411,13 @@ public class BaseRepos<TEntity>(IDbContext dbContext, DatabaseObj dbObj) : IBase
         using var cn = DbContext.DbCxn;
         return await cn.UpdateAsync(entity);
     }
+
+	public async Task<int> ManualUpdateAsync(List<string> fields, DynamicParameters param)
+	{
+		string updSql = DapperSqlBuilder.GenUpdateSql(DbContext.DbType == DatabaseTypes.POSTGRESQL ? DbObject.PgTable : DbObject.MsSqlTable, fields, DbContext.DbType);
+		using var cn = DbContext.DbCxn;
+		return await cn.ExecuteAsync(updSql, param);
+	}
 
     public async Task<int> DeleteAsync(int id, string username)
     {
@@ -530,12 +557,10 @@ public class BaseRepos<TEntity>(IDbContext dbContext, DatabaseObj dbObj) : IBase
         SqlBuilder sbSql = new();
 
         using var cn = DbContext.DbCxn;
-        
-        List<DropdownSelectItem> result = new();
+
+		List<DropdownSelectItem> result = [];
         DynamicParameters param = new();
         string sql;
-
-		
 
         if (DbContext.DbType.Is(DatabaseTypes.POSTGRESQL))
         {

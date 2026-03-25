@@ -108,3 +108,9 @@ public static class LaptopStorageTypes
 		return list;
 	}
 }
+
+public static class StorageDriveTypes
+{
+	public const string HDD = "HDD";
+	public const string SSD = "SSD";
+}

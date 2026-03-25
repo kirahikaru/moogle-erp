@@ -139,6 +139,7 @@ public interface IUowMoogleKhErp : IUnitOfWork
     IPSURepos PSUs { get; }
 	IRAMRepos RAMs { get; }
 	ISSDRepos SSDs { get; }
+    IStorageDriveOptionRepos StorageDriveOptions { get; }
     ITechSpecItemRepos TechSpecItems { get; }
 	#endregion
 
@@ -257,6 +258,7 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
         PSUs = new PSURepos(DbContext);
         RAMs = new RAMRepos(DbContext);
         SSDs = new SSDRepos(DbContext);
+        StorageDriveOptions = new StorageDriveOptionRepos(DbContext);
         TechSpecItems = new TechSpecItemRepos(DbContext);
 		#endregion
 	}
@@ -376,6 +378,7 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
 	public IPSURepos PSUs { get; }
 	public IRAMRepos RAMs { get; }
 	public ISSDRepos SSDs { get; }
-    public ITechSpecItemRepos TechSpecItems { get; }
+    public IStorageDriveOptionRepos StorageDriveOptions { get; }
+	public ITechSpecItemRepos TechSpecItems { get; }
 	#endregion
 }

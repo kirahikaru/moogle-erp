@@ -1,5 +1,4 @@
-﻿using DataLayer.Models.Tech;
-using DataLayer.Models.TSM;
+﻿using DataLayer.Models.TSM;
 
 namespace DataLayer.Repos.TSM;
 

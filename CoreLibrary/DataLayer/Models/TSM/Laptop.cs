@@ -1,5 +1,4 @@
 ﻿using DataLayer.GlobalConstant;
-using DataLayer.Models.Tech;
 using System.ComponentModel.DataAnnotations.Schema;
 using Dapper.Contrib.Extensions;
 
@@ -86,6 +85,9 @@ public class Laptop : AuditObject
 	public string? KeyboardTouchpad { get; set; }
 	[Column("notes")]
 	public string? Notes { get; set; }
+
+	public string? TechSpecInfoUrl { get; set; }
+	public string? ProductInfoUrl { get; set; }
 	#endregion
 
 	#region *** LINKED OBJECTS ***

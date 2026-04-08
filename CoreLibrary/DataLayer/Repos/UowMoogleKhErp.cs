@@ -135,7 +135,7 @@ public interface IUowMoogleKhErp : IUnitOfWork
     IMonitorRepos Monitors { get; }
     IMotherboardRepos Motherboards { get; }
     IPCCaseRepos PCCases { get; }
-    IPCCoolerRepos PCCoolers { get; }
+    IPCComponentRepos PCComponents { get; }
     IPSURepos PSUs { get; }
 	IRAMRepos RAMs { get; }
 	ISSDRepos SSDs { get; }
@@ -254,7 +254,7 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
         Monitors = new MonitorRepos(DbContext);
         Motherboards = new MotherboardRepos(DbContext);
         PCCases = new PCCaseRepos(DbContext);
-        PCCoolers = new PCCoolerRepos(DbContext);
+        PCComponents = new PCComponentRepos(DbContext);
         PSUs = new PSURepos(DbContext);
         RAMs = new RAMRepos(DbContext);
         SSDs = new SSDRepos(DbContext);
@@ -374,7 +374,7 @@ public class UowMoogleKhErp : UnitOfWork, IUowMoogleKhErp
 	public IMonitorRepos Monitors { get; }
 	public IMotherboardRepos Motherboards { get; }
 	public IPCCaseRepos PCCases { get; }
-	public IPCCoolerRepos PCCoolers { get; }
+	public IPCComponentRepos PCComponents { get; }
 	public IPSURepos PSUs { get; }
 	public IRAMRepos RAMs { get; }
 	public ISSDRepos SSDs { get; }

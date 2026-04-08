@@ -1,16 +1,15 @@
-﻿using DataLayer.Models.Tech;
-using DataLayer.Models.TSM;
+﻿using DataLayer.Models.TSM;
 
 namespace DataLayer.Repos.TSM;
 
-public interface IPCCoolerRepos : IBaseRepos<PCCooler>
+public interface IPCComponentRepos : IBaseRepos<PCComponent>
 {
 	
 }
 
-public class PCCoolerRepos(IDbContext dbContext) : BaseRepos<PCCooler>(dbContext, PCCooler.DatabaseObject), IPCCoolerRepos
+public class PCComponentRepos(IDbContext dbContext) : BaseRepos<PCComponent>(dbContext, PCComponent.DatabaseObject), IPCComponentRepos
 {
-	public override async Task<KeyValuePair<int, IEnumerable<PCCooler>>> SearchNewAsync(
+	public override async Task<KeyValuePair<int, IEnumerable<PCComponent>>> SearchNewAsync(
 		int pgSize = 0, int pgNo = 0, string? searchText = null,
 		IEnumerable<SqlSortCond>? sortConds = null,
 		IEnumerable<SqlFilterCond>? filterConds = null,
@@ -110,7 +109,7 @@ public class PCCoolerRepos(IDbContext dbContext) : BaseRepos<PCCooler>(dbContext
 
 		using var cn = DbContext.DbCxn;
 
-		var dataList = await cn.QueryAsync<PCCooler>(sql, param);
+		var dataList = await cn.QueryAsync<PCComponent>(sql, param);
 
 		int dataCount = await cn.ExecuteScalarAsync<int>(sqlCount, param);
 		return new(dataCount, dataList);

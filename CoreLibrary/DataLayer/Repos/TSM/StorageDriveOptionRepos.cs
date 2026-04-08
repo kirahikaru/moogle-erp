@@ -16,15 +16,15 @@ public class StorageDriveOptionRepos(IDbContext dbContext) : BaseRepos<StorageDr
 		string sql;
 		if (DbContext.DbType == DatabaseTypes.POSTGRESQL)
 		{
-			sql = $"SELECT * FROM {DbObject.PgTable} t WHERE t.is_deleted=false AND t.storage_type=@storage_type AND t.id=@id";
+			sql = $"SELECT * FROM {DbObject.PgTable} t WHERE t.is_deleted=false AND t.storage_type=@storage_type AND t.storage_drive_id=@storage_drive_id";
 			param.Add("@storage_type", storageType, DbType.AnsiString);
-			param.Add("@id", storageDriveId);
+			param.Add("@storage_drive_id", storageDriveId);
 		}
 		else
 		{
-			sql = $"SELECT * FROM {DbObject.PgTable} t WHERE t.IsDeleted=0 AND t.StorageType=@StorageType AND t.Id=@Id";
+			sql = $"SELECT * FROM {DbObject.PgTable} t WHERE t.IsDeleted=0 AND t.StorageType=@StorageType AND t.StorageDriveId=@StorageDriveId";
 			param.Add("@StorageType", storageType, DbType.AnsiString);
-			param.Add("@Id", storageDriveId);
+			param.Add("@StorageDriveId", storageDriveId);
 		}
 
 		using var cn = DbContext.DbCxn;

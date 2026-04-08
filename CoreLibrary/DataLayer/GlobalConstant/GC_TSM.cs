@@ -41,6 +41,7 @@ public static class RAMSizes
 				new DropdownSelectItem { Id = 16, Value = "16 GB" },
 				new DropdownSelectItem { Id = 32, Value = "32 GB" },
 				new DropdownSelectItem { Id = 64, Value = "64 GB" },
+				new DropdownSelectItem { Id = 96, Value = "96 GB" },
 				new DropdownSelectItem { Id = 128, Value = "128 GB" },
 				new DropdownSelectItem { Id = 256, Value = "256 GB" },
 			];

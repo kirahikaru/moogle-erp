@@ -65,7 +65,7 @@
                                               Label="Name" @ref=_mtfObjName
                                               @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" />
                             </MudItem>
-                            <MudItem xs="2">
+                            <MudItem xs="1">
                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true" 
                                               Label="ID" 
                                               @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" Style="text-transform:uppercase" />
@@ -85,23 +85,13 @@
                                               Label="Serie Name"
                                               @bind-Value="CurrentObject!.SerieName" For="@(() => CurrentObject!.SerieName)" />
                             </MudItem>
-                            <MudItem xs="2">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
-                                              Label="Dimension (LxWxH)"
-                                              @bind-Value="CurrentObject!.DimensionLWH" For="@(() => CurrentObject!.DimensionLWH)" />
-                            </MudItem>
-                            <MudItem xs="2">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
-                                              Label="Serie Name"
-                                              @bind-Value="CurrentObject!.SerieName" For="@(() => CurrentObject!.SerieName)" />
-                            </MudItem>
-                            <MudItem xs="2">
+                            <MudItem xs="1">
                                 <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Class="moog-mud-form-field bordered moog-ui-datepicker" Required="false"
                                                AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
                                                Label="Release Date" Placeholder="Release Date" DateFormat="dd-MMM-yyyy"
                                                @bind-Date="CurrentObject!.ReleaseDate" For="@(() => CurrentObject!.ReleaseDate)" />
                             </MudItem>
-                            <MudItem xs="2">
+                            <MudItem xs="1">
                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
                                               Label="Release On"
                                               @bind-Value="CurrentObject!.ReleaseDateText" For="@(() => CurrentObject!.ReleaseDateText)" />
@@ -110,6 +100,11 @@
                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
                                               Label="Form Factor"
                                               @bind-Value="CurrentObject!.FormFactor" For="@(() => CurrentObject!.FormFactor)" />
+                            </MudItem>
+                            <MudItem xs="1">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                              Label="Dimension (LxWxH)"
+                                              @bind-Value="CurrentObject!.DimensionLWH" For="@(() => CurrentObject!.DimensionLWH)" />
                             </MudItem>
                             <MudItem xs="2">
                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
@@ -149,26 +144,34 @@
                                               Label="Interface"
                                               @bind-Value="CurrentObject!.Interface" For="@(() => CurrentObject!.Interface)" />
                             </MudItem>
-                            <MudItem xs="6">
+                            <MudItem xs="8"></MudItem>
+                            <MudItem xs="4">
                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Lines="8"
                                               Label="Certifications" Placeholder="Note..."
                                               @bind-Value="CurrentObject!.Certification" For="@(() => CurrentObject!.Certification)" />
                             </MudItem>
-                            <MudItem xs="6">
+                            <MudItem xs="4">
                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Lines="8"
                                               Label="Product Features" Placeholder="Note..."
                                               @bind-Value="CurrentObject!.ProductFeatures" For="@(() => CurrentObject!.ProductFeatures)" />
                             </MudItem>
-                            <MudItem xs="6">
+                            <MudItem xs="4">
                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Lines="8"
                                               Label="Note" Placeholder="Note..."
                                               @bind-Value="CurrentObject!.Note" For="@(() => CurrentObject!.Note)" />
                             </MudItem>
+                            
                             <MudItem xs="6">
                                 <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
                                               AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                               Label="Product Info URL"
                                               @bind-Value="CurrentObject!.ProductInfoUrl" For="@(() => CurrentObject!.ProductInfoUrl)" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                                              AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              Label="Product Info URL"
+                                              @bind-Value="CurrentObject!.TechSpecInfoUrl" For="@(() => CurrentObject!.TechSpecInfoUrl)" />
                             </MudItem>
 
                             <MudItem xs="12" Class="mt-3"></MudItem>
@@ -191,64 +194,119 @@
                                         </MudStack>
                                     }
                                     @* EditDialogOptions=@(new() { BackdropClick = false, MaxWidth = MaxWidth.Medium, FullWidth = true }) *@
-                                    <MudDataGrid Class="moog-mud-datagrid" Dense="true" Hover="true" FixedHeader="true" Striped="true" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None"
-                                                 Items="@CurrentObject!.Options" T="StorageDriveOption" @ref="_techSpecGrid" NoRecordsContent="_gridNoRecord" Style="width:100%" QuickFilter="_quickTechSpecFilter"
+                                    <MudDataGrid Class="moog-mud-datagrid" Dense="true" Hover="true" FixedHeader="true" Striped="@(!_isEditingStorageDriveOpt)" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None"
+                                                 Items="@CurrentObject!.Options" T="StorageDriveOption" @ref="_storageDriveOptGrid" NoRecordsContent="_gridNoRecord" Style="width:100%" QuickFilter="_quickStorageDriveOptionFilter"
                                                  ReadOnly=@(IsViewMode || !_isEditingStorageDriveOpt) EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
-                                                 StartedEditingItem="@StartedEditingItemSpec" CanceledEditingItem="@CanceledEditingItemSpec" CommittedItemChanges="@CommittedItemSpecChanges">
+                                                 StartedEditingItem="@StartedEditingStorageDriveOption" CanceledEditingItem="@CanceledEditingStorageDriveOption" CommittedItemChanges="@CommittedStorageDriveOptionChanges">
                                         <Columns>
-                                            <PropertyColumn Title="No." Property="x => x.OrderNo" Sortable="false" Editable="false" Hidden="true"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                            <PropertyColumn Title="No." Property="x => x.SeqNo" Sortable="false" Editable="false" Hidden="true"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingStorageDriveOpt)  ? " spacious" : " data-align-top inline-editing"))
                                                             CellStyle="text-align:right" />
                                             <PropertyColumn Title="Type" Property="x => x.ObjectName" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingStorageDriveOpt) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
-                                                                  Placeholder="Spec Type"
+                                                                  Placeholder="Option Name"
                                                                   @bind-Value=item.Item.ObjectName For="@(() => item.Item.ObjectName)" OnlyValidateIfDirty="true" MaxLength="255" />
                                                 </EditTemplate>
                                             </PropertyColumn>
-                                            <PropertyColumn Title="Spec Desc" Property="x => x.SpecDesc" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
+                                            <PropertyColumn Title="Capacity" Property="x => x.CapacityText" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingStorageDriveOpt) ? " spacious" : " data-align-top inline-editing"))
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2">
+                                                        <div style="max-width:80px">
+                                                            <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
+                                                                             Step="1"
+                                                                             @bind-Value="item.Item.Capacity" T="int?" For="(() => item.Item.Capacity)"
+                                                                             Style="text-align:right" />
+                                                        </div>
+                                                        <div style="max-width:80px">
+                                                            <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                          Placeholder="Unit"
+                                                                          @bind-Value=item.Item.CapacityUnit For="@(() => item.Item.CapacityUnit)" OnlyValidateIfDirty="true" />
+                                                        </div>
+                                                    </MudStack>
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Colors" Property="x => x.Colors" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingStorageDriveOpt) ? " spacious" : " data-align-top inline-editing"))
+                                                            Context="item">
+                                                <EditTemplate>
+                                                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2">
+                                                        <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                      Placeholder="Colors"
+                                                                      @bind-Value=item.Item.Colors For="@(() => item.Item.Colors)" OnlyValidateIfDirty="true" />
+                                                    </MudStack>
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Warranty" Property="x => x.Warranty" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingStorageDriveOpt) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderStyle="width:300px; max-width:100px" Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  @bind-Value=item.Item.Warranty For="@(() => item.Item.Warranty)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Region" Property="x => x.Region" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingStorageDriveOpt) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderStyle="width:300px; max-width:120px" Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  Placeholder="Region"
+                                                                  @bind-Value=item.Item.Region For="@(() => item.Item.Region)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Barcode" Property="x => x.Barcode" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingStorageDriveOpt) ? " spacious reddit-mono-400" : " data-align-top inline-editing"))
+                                                            HeaderStyle="width:300px; max-width:150px" Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  Placeholder="Barcode"
+                                                                  @bind-Value=item.Item.Barcode For="@(() => item.Item.Barcode)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="EAN" Property="x => x.BarcodeEAN" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingStorageDriveOpt) ? " spacious reddit-mono-400" : " data-align-top inline-editing"))
+                                                            HeaderStyle="width:300px; max-width:150px" Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  Placeholder="EAN"
+                                                                  @bind-Value=item.Item.BarcodeEAN For="@(() => item.Item.BarcodeEAN)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="UPC" Property="x => x.BarcodeUPC" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingStorageDriveOpt) ? " spacious reddit-mono-400" : " data-align-top inline-editing"))
+                                                            HeaderStyle="width:300px; max-width:150px" Context="item">
+                                                <EditTemplate>
+                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                                  Placeholder="UPC"
+                                                                  @bind-Value=item.Item.BarcodeUPC For="@(() => item.Item.BarcodeUPC)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                </EditTemplate>
+                                            </PropertyColumn>
+                                            <PropertyColumn Title="Remark" Property="x => x.Remark" Sortable="false"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingStorageDriveOpt) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
-                                                                  Placeholder="Spec Value"
-                                                                  @bind-Value=item.Item.SpecDesc For="@(() => item.Item.SpecDesc)" OnlyValidateIfDirty="true" MaxLength="255" />
-                                                </EditTemplate>
-                                            </PropertyColumn>
-                                            <PropertyColumn Title="Value" Property="x => x.SpecValue" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
-                                                            HeaderStyle="width:100px; max-width:80px" Context="item">
-                                                <EditTemplate>
-                                                    <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
-                                                                     Placeholder="Qty" Format="#,##0.##" Step="0.1M"
-                                                                     @bind-Value="item.Item.SpecValue" T="decimal?" For="(() => item.Item.SpecValue)"
-                                                                     Style="text-align:right" />
-                                                </EditTemplate>
-                                            </PropertyColumn>
-                                            <PropertyColumn Title="Unit" Property="x => x.UnitCode" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode ? " spacious" : " data-align-top inline-editing"))
-                                                            Context="item">
-                                                <EditTemplate>
-                                                    <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
-                                                                  Placeholder="Unit"
-                                                                  @bind-Value=item.Item.UnitCode For="@(() => item.Item.UnitCode)" OnlyValidateIfDirty="true" MaxLength="255" />
+                                                                  Placeholder="Remark..."
+                                                                  @bind-Value=item.Item.Remark For="@(() => item.Item.Remark)" OnlyValidateIfDirty="true" />
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
                                                             HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
-                                                            CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
+                                                            HeaderStyle="min-width:90px" CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
                                                             Context="item">
                                                 <CellTemplate>
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveTechSpecUp(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveTechSpecDown(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveTechSpec(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveStorageDriveOptionUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveStorageDriveOptionDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveStorageDriveOption(item.Item))" />
                                                 </CellTemplate>
                                                 <EditTemplate>
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveTechSpecUp(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveTechSpecDown(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveTechSpec(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveStorageDriveOptionUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveStorageDriveOptionDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveStorageDriveOption(item.Item))" />
                                                 </EditTemplate>
                                             </TemplateColumn>
                                         </Columns>
@@ -480,8 +538,8 @@
     DeviceIOPort? _tempIOPortToAdd;
     bool _isEditingIOPort = true;
 
-    MudDataGrid<DeviceIOPort> _storageDriveOptGrid = new();
-    DeviceIOPort? _tempStorageDriveOptToAdd;
+    MudDataGrid<StorageDriveOption> _storageDriveOptGrid = new();
+    StorageDriveOption? _tempStorageDriveOptToAdd;
     bool _isEditingStorageDriveOpt = true;
     #endregion
 
@@ -569,78 +627,78 @@
             SeqNo = CurrentObject!.Options.Count + 1
         };
 
-        CurrentObject!.IOPorts.Add(_tempStorageDriveOptToAdd);
+        CurrentObject!.Options.Add(_tempStorageDriveOptToAdd);
         // _itemDataGrid.SetEditingItemAsync(_tempItemToAdd);
     }
 
-    void MoveStorageDriveOptionUp(StorageDriveOption ioPort)
+    void MoveStorageDriveOptionUp(StorageDriveOption sdo)
     {
-        if (CurrentObject!.IOPorts.Count > 1 && ioPort.SeqNo!.Value > 1)
+        if (CurrentObject!.Options.Count > 1 && sdo.SeqNo!.Value > 1)
         {
-            ioPort.SeqNo--;
+            sdo.SeqNo--;
 
-            DeviceIOPort? a = CurrentObject!.IOPorts.FirstOrDefault(x => x.IsDeleted == false && x.SeqNo is not null && x.SeqNo == ioPort.SeqNo && x != ioPort);
+            StorageDriveOption? a = CurrentObject!.Options.FirstOrDefault(x => x.IsDeleted == false && x.SeqNo is not null && x.SeqNo == sdo.SeqNo && x != sdo);
 
             if (a != null)
                 a!.SeqNo++;
 
-            CurrentObject!.IOPorts = CurrentObject!.IOPorts.OrderBy(x => x.SeqNo).ToList();
+            CurrentObject!.Options = CurrentObject!.Options.OrderBy(x => x.SeqNo).ToList();
         }
     }
 
-    void MoveIOPortDown(StorageDriveOption ioPort)
+    void MoveStorageDriveOptionDown(StorageDriveOption sdo)
     {
-        if (CurrentObject!.IOPorts.Count > 1 && CurrentObject!.IOPorts.Count != ioPort.SeqNo!.Value)
+        if (CurrentObject!.Options.Count > 1 && CurrentObject!.Options.Count != sdo.SeqNo!.Value)
         {
-            ioPort.SeqNo++;
+            sdo.SeqNo++;
 
-            DeviceIOPort? a = CurrentObject!.IOPorts.FirstOrDefault(x => x.IsDeleted == false && x.SeqNo is not null && x.SeqNo == ioPort.SeqNo && x != ioPort);
+            StorageDriveOption? a = CurrentObject!.Options.FirstOrDefault(x => x.IsDeleted == false && x.SeqNo is not null && x.SeqNo == sdo.SeqNo && x != sdo);
 
             if (a != null)
                 a!.SeqNo--;
 
-            CurrentObject!.IOPorts = CurrentObject!.IOPorts.OrderBy(x => x.SeqNo).ToList();
+            CurrentObject!.Options = CurrentObject!.Options.OrderBy(x => x.SeqNo).ToList();
         }
     }
 
-    void RemoveIOPort(DeviceIOPort ioPort)
+    void RemoveStorageDriveOption(StorageDriveOption sdo)
     {
-        if (ioPort.Id == 0)
+        if (sdo.Id == 0)
         {
-            CurrentObject!.IOPorts.Remove(ioPort);
+            CurrentObject!.Options.Remove(sdo);
 
-            foreach (var var in CurrentObject!.IOPorts.Where(x => !x.IsDeleted && x.SeqNo > ioPort.SeqNo))
+            foreach (var var in CurrentObject!.Options.Where(x => !x.IsDeleted && x.SeqNo > sdo.SeqNo))
             {
                 var.SeqNo--;
             }
         }
-        else if (ioPort.Id > 0)
+        else if (sdo.Id > 0)
         {
-            foreach (var var in CurrentObject!.IOPorts.Where(x => !x.IsDeleted && x.SeqNo > ioPort.SeqNo))
+            foreach (var var in CurrentObject!.Options.Where(x => !x.IsDeleted && x.SeqNo > sdo.SeqNo))
                 var.SeqNo--;
 
-            ioPort.SeqNo = null;
-            ioPort.IsDeleted = true;
+            sdo.SeqNo = null;
+            sdo.IsDeleted = true;
         }
     }
 
-    void StartedEditingIOPort(DeviceIOPort ioPort)
+    void StartedEditingStorageDriveOption(StorageDriveOption ioPort)
     {
 
     }
 
-    void CanceledEditingIOPort(DeviceIOPort ioPort)
+    void CanceledEditingStorageDriveOption(StorageDriveOption ioPort)
     {
-        if (_tempIOPortToAdd != null)
+        if (_tempStorageDriveOptToAdd != null)
         {
-            CurrentObject!.IOPorts.RemoveAt(CurrentObject!.IOPorts.FindIndex(x => x.SeqNo == ioPort.SeqNo));
-            _tempIOPortToAdd = null;
+            CurrentObject!.Options.RemoveAt(CurrentObject!.Options.FindIndex(x => x.SeqNo == ioPort.SeqNo));
+            _tempStorageDriveOptToAdd = null;
         }
     }
 
-    Task<DataGridEditFormAction> CommittedIOPortChanges(DeviceIOPort ioPort)
+    Task<DataGridEditFormAction> CommittedStorageDriveOptionChanges(StorageDriveOption ioPort)
     {
-        _tempIOPortToAdd = null;
+        _tempStorageDriveOptToAdd = null;
 
         return Task.FromResult(DataGridEditFormAction.Close);
     }
@@ -981,7 +1039,7 @@
                         sdo.StorageDriveId = CurrentObject.Id;
                         sdo.ModifiedDateTime = CurrentObject.ModifiedDateTime;
                         sdo.ModifiedUser = CurrentObject.ModifiedUser;
-                        int ioPortUpdCount = await UowPg.DeviceIOPorts.ManualUpdateAsync(DeviceIOPort.GetPgFieldList(UowPg.DbContext.DbType), sdo.GetParamValues(UowPg.DbContext.DbType, true));
+                        int sdoUpdCount = await UowPg.StorageDriveOptions.ManualUpdateAsync(StorageDriveOption.GetPgFieldList(UowPg.DbContext.DbType), sdo.GetParamValues(UowPg.DbContext.DbType, true));
                     }
                     else if (sdo.Id == 0)
                     {
@@ -992,7 +1050,7 @@
                         sdo.ModifiedDateTime = CurrentObject.ModifiedDateTime;
                         sdo.ModifiedUser = CurrentObject.ModifiedUser;
 
-                        int ioPortId = await UowPg.DeviceIOPorts.ManualInsertAsync(DeviceIOPort.GetPgFieldList(UowPg.DbContext.DbType), sdo.GetParamValues(UowPg.DbContext.DbType));
+                        int sdoId = await UowPg.StorageDriveOptions.ManualInsertAsync(StorageDriveOption.GetPgFieldList(UowPg.DbContext.DbType), sdo.GetParamValues(UowPg.DbContext.DbType));
                     }
                 }
             }

@@ -28,9 +28,12 @@ public class StorageDriveOption : AuditObject
 
 	#region *** DATABASE FIELD ***
 	public int? SeqNo { get; set; }
-	public int? Capacity { get; set; }
 	public string? StorageType { get; set; }
 	public int? StorageDriveId { get; set; }
+	[Range(1, 999999, ErrorMessage = "'Capacity' must be positive whole number.")]
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'Capacity' is required.")]
+	public int? Capacity { get; set; }
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'Capacity' is required.")]
 	public string? CapacityUnit { get; set; }
 	public int? ItemId { get; set; }
 	public string? Colors { get; set; }
@@ -54,7 +57,8 @@ public class StorageDriveOption : AuditObject
 	#endregion
 
 	#region *** DYANMIC PROPERTIES ***
-
+	[Computed, Write(false), ReadOnly(true)]
+	public string CapacityText => Capacity.HasValue && !string.IsNullOrEmpty(CapacityUnit) ? $"{Capacity} {CapacityUnit}" : string.Empty;
 	#endregion
 
 	public StorageDriveOption()
@@ -62,6 +66,7 @@ public class StorageDriveOption : AuditObject
 		IOPorts = [];
 		SpecItems = [];
 		StorageOptions = [];
+		CapacityUnit = "TB";
 	}
 
 	#region Functions

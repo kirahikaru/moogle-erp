@@ -1,23 +1,22 @@
 ﻿using Dapper.Contrib.Extensions;
 using DataLayer.GlobalConstant;
 using DataLayer.Models.RMS;
-
 namespace DataLayer.Models.TSM;
 
 /// <summary>
-/// SSD | Solid-State Drives
+/// 
 /// </summary>
-[Table("[vts].[SSD]")]
-public class SSD : AuditObject
+[Table("[vts].[PCComp]")]
+public class PCComponent : AuditObject
 {
 	[Computed, Write(false), ReadOnly(true)]
 	public new static string SchemaName => SysDbSchemaNames.TECH_STORE;
 
 	[Computed, ReadOnly(true), Write(false)]
-	public new static string MsSqlTableName => $"{typeof(SSD).Name}";
+	public new static string MsSqlTableName => $"PCComp";
 
 	[Computed, ReadOnly(true), Write(false)]
-	public new static string PgTableName => $"ssd";
+	public new static string PgTableName => $"pc_comp";
 
 	[Computed, Write(false), ReadOnly(true)]
 	public static string MsSqlTable => DatabaseObj.GetTable(SchemaName, MsSqlTableName, DatabaseTypes.MSSQL);
@@ -29,6 +28,7 @@ public class SSD : AuditObject
 	public static DatabaseObj DatabaseObject => new(SchemaName, MsSqlTableName, PgTableName);
 
 	#region *** DATABASE FIELD ***
+	public string? ComponentType { get; set; }
 	public string? Brand { get; set; }
 	public string? Model { get; set; }
 	public string? SerieName { get; set; }
@@ -38,11 +38,6 @@ public class SSD : AuditObject
 	public string? FormFactor { get; set; }
 	public string? Interface { get; set; }
 	public decimal? WeightKg { get; set; }
-	public string? StorageMemory { get; set; }
-	public int? SeqWriteSpeed { get; set; }
-	public int? SeqReadSpeed { get; set; }
-	public int? RandomRead { get; set; }
-	public int? RandomWrite { get; set; }
 	public string? TechSpecInfoUrl { get; set; }
 	public string? ProductInfoUrl { get; set; }
 	public string? Note { get; set; }
@@ -54,24 +49,15 @@ public class SSD : AuditObject
 
 	[Computed, Write(false)]
 	public List<TechSpecItem> SpecItems { get; set; }
-	[Computed, Write(false)]
-	public List<StorageDriveOption> Options { get; set; }
 	#endregion
 
 	#region *** DYANMIC PROPERTIES ***
-	[Computed, Write(false), ReadOnly(true)]
-	public string WeightKgText => WeightKg.HasValue ? $"{WeightKg}kg" : string.Empty;
-	[Computed, Write(false), ReadOnly(true)]
-	public string SeqWriteSpeedText=> SeqWriteSpeed.HasValue ? $"{SeqWriteSpeed}MB/s" : string.Empty;
-	[Computed, Write(false), ReadOnly(true)]
-	public string SeqReadSpeedText => SeqReadSpeed.HasValue ? $"{SeqReadSpeed}MB/s" : string.Empty;
 	#endregion
 
-	public SSD()
+	public PCComponent()
 	{
 		IOPorts = [];
 		SpecItems = [];
-		Options = [];
 	}
 
 	#region Functions
@@ -82,6 +68,7 @@ public class SSD : AuditObject
 			return [
 			"object_code",
 			"object_name",
+			"component_type",
 			"brand",
 			"model",
 			"serie_name",
@@ -91,11 +78,6 @@ public class SSD : AuditObject
 			"form_factor",
 			"interface",
 			"weight_kg",
-			"storage_momory",
-			"seq_write_speed",
-			"seq_read_speed",
-			"random_read",
-			"random_write",
 			"tech_spec_info_url",
 			"product_info_url",
 			"note",
@@ -121,6 +103,7 @@ public class SSD : AuditObject
 
 			param.Add("@object_code", ObjectCode);
 			param.Add("@object_name", ObjectName);
+			param.Add("@component_type", ComponentType);
 			param.Add("@brand", Brand);
 			param.Add("@model", Model);
 			param.Add("@serie_name", SerieName);
@@ -130,11 +113,6 @@ public class SSD : AuditObject
 			param.Add("@form_factor", FormFactor);
 			param.Add("@interface", Interface);
 			param.Add("@weight_kg", WeightKg);
-			param.Add("@storage_momory", StorageMemory);
-			param.Add("@seq_write_speed", SeqWriteSpeed);
-			param.Add("@seq_read_speed", SeqReadSpeed);
-			param.Add("@random_read", RandomRead);
-			param.Add("@random_write", RandomWrite);
 			param.Add("@tech_spec_info_url", TechSpecInfoUrl);
 			param.Add("@product_info_url", ProductInfoUrl);
 			param.Add("@note", Note);

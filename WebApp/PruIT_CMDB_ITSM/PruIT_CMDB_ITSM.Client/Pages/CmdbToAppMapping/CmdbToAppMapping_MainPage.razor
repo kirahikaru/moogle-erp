@@ -124,7 +124,7 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<CmdbToAppMapping>> ServerDataFunc(GridState<CmdbToAppMapping> gridState)
+	protected override async Task<GridData<CmdbToAppMapping>> ServerDataFunc(GridState<CmdbToAppMapping> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<CmdbToAppMapping>
 			{

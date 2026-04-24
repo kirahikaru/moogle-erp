@@ -956,10 +956,12 @@
         }
     }
 
-    void CommittedItemChanges(InvoiceItem item)
+    private Task<DataGridEditFormAction> CommittedItemChanges(InvoiceItem item)
     {
         _tempItemToAdd = null;
         item.TotalAmount = item.UnitPrice!.Value * item.Quantity!.Value;
+
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
 
     void StartedEditingExpItem(ExpenseItem item)
@@ -976,9 +978,11 @@
         }
     }
 
-    void CommittedExpItemChanges(ExpenseItem item)
+    Task<DataGridEditFormAction> CommittedExpItemChanges(ExpenseItem item)
     {
         _tempExpItemToAdd = null;
+
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
 
     private async Task OnLBUChanged(string lbu)

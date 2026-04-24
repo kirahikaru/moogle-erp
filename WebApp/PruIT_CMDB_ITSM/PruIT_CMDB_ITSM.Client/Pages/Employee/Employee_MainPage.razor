@@ -197,7 +197,7 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<PruHR.Employee>> ServerDataFunc(GridState<PruHR.Employee> gridState)
+	protected override async Task<GridData<PruHR.Employee>> ServerDataFunc(GridState<PruHR.Employee> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<PruHR.Employee>
 			{

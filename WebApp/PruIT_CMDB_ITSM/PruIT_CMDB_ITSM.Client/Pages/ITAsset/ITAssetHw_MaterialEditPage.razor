@@ -602,9 +602,11 @@
         }
     }
 
-    void CommittedItemChanges(ITAssetAuditTrail item)
+    Task<DataGridEditFormAction> CommittedItemChanges(ITAssetAuditTrail item)
     {
         _tempItemToAdd = null;
+
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
     #endregion
 

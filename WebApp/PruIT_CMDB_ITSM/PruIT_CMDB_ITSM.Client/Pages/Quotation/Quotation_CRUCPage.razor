@@ -422,10 +422,11 @@
         }
     }
 
-    void CommittedItemChanges(QuotationItem item)
+    Task<DataGridEditFormAction> CommittedItemChanges(QuotationItem item)
     {
         _tempItemToAdd = null;
         item.TotalAmount = item.UnitPrice!.Value * item.Quantity!.Value;
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
 
     private async Task OnLBUChanged(string lbu)

@@ -139,7 +139,7 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<PruCoreInfraStack>> ServerDataFunc(GridState<PruCoreInfraStack> gridState)
+	protected override async Task<GridData<PruCoreInfraStack>> ServerDataFunc(GridState<PruCoreInfraStack> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<PruCoreInfraStack>
 			{

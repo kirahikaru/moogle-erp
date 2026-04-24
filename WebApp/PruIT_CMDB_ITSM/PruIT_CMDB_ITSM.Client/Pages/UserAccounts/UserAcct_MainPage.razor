@@ -152,7 +152,7 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<PruIT.UserAccount>> ServerDataFunc(GridState<PruIT.UserAccount> gridState)
+	protected override async Task<GridData<PruIT.UserAccount>> ServerDataFunc(GridState<PruIT.UserAccount> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<PruIT.UserAccount>
 			{

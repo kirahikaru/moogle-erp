@@ -190,7 +190,7 @@
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		
+
 	}
 	#endregion
 
@@ -232,7 +232,7 @@
 	{
 		_tempItemToAdd = new()
 		{
-			
+
 		};
 
 		_budgetItemList.Add(_tempItemToAdd);
@@ -295,9 +295,11 @@
 		}
 	}
 
-	void CommittedItemChanges(BudgetItem item)
+	Task<DataGridEditFormAction> CommittedItemChanges(BudgetItem item)
 	{
 		_tempItemToAdd = null;
+
+		return Task.FromResult(DataGridEditFormAction.Close);
 	}
 
 	public async ValueTask EditRecordHotKeyPressed()

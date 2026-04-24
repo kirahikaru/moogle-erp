@@ -122,7 +122,7 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<ITAssetCategory>> ServerDataFunc(GridState<ITAssetCategory> gridState)
+	protected override async Task<GridData<ITAssetCategory>> ServerDataFunc(GridState<ITAssetCategory> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<ITAssetCategory>
 			{

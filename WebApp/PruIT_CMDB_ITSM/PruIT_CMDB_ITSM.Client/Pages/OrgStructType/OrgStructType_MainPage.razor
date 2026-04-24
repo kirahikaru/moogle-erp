@@ -119,7 +119,7 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<OrgStructType>> ServerDataFunc(GridState<OrgStructType> gridState)
+	protected override async Task<GridData<OrgStructType>> ServerDataFunc(GridState<OrgStructType> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<OrgStructType>
 			{

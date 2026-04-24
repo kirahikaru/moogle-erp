@@ -129,7 +129,7 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<FinActSummEntry>> ServerDataFunc(GridState<FinActSummEntry> gridState)
+	protected override async Task<GridData<FinActSummEntry>> ServerDataFunc(GridState<FinActSummEntry> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<FinActSummEntry>
 			{

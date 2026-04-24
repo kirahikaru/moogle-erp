@@ -117,7 +117,7 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<FinActivityTracker>> ServerDataFunc(GridState<FinActivityTracker> gridState)
+	protected override async Task<GridData<FinActivityTracker>> ServerDataFunc(GridState<FinActivityTracker> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<FinActivityTracker>
 			{

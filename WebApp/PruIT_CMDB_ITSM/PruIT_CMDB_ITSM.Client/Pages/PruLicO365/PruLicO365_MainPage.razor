@@ -161,7 +161,7 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<PruLicO365>> ServerDataFunc(GridState<PruLicO365> gridState)
+	protected override async Task<GridData<PruLicO365>> ServerDataFunc(GridState<PruLicO365> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<PruLicO365>
 			{

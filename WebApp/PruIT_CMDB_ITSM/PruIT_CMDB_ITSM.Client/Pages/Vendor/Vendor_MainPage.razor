@@ -155,7 +155,7 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<Vendor>> ServerDataFunc(GridState<Vendor> gridState)
+	protected override async Task<GridData<Vendor>> ServerDataFunc(GridState<Vendor> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<Vendor>
 			{

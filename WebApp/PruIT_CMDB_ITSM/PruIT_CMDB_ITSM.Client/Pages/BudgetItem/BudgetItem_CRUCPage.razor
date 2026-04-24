@@ -472,18 +472,21 @@
 
     }
 
-    void CanceledEditingExpItem(ExpenseItem item)
+    Task<DataGridEditFormAction> CanceledEditingExpItem(ExpenseItem item)
     {
         if (_tempExpItemToAdd != null)
         {
             CurrentObject!.ExpenseItems.RemoveAt(CurrentObject!.ExpenseItems.FindIndex(x => x.OrderNo == item.OrderNo));
             _tempExpItemToAdd = null;
         }
+
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
 
-    void CommittedExpItemChanges(ExpenseItem item)
+    Task<DataGridEditFormAction> CommittedExpItemChanges(ExpenseItem item)
     {
         _tempExpItemToAdd = null;
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
     #endregion
 

@@ -448,10 +448,12 @@
         }
     }
 
-    void CommittedItemChanges(PurchaseOrderItem item)
+    Task<DataGridEditFormAction> CommittedItemChanges(PurchaseOrderItem item)
     {
         _tempItemToAdd = null;
         item.TotalAmount = item.UnitPrice!.Value * item.Quantity!.Value;
+
+        return Task.FromResult(DataGridEditFormAction.Close);
     }
 
     private async Task OnLBUChanged(string lbu)

@@ -111,7 +111,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable
 				await MainDataGrid!.ReloadServerData();
 				break;
 			case "Escape":
-				await UITextBoxSearch!.Clear();
+				await UITextBoxSearch!.ClearAsync();
 				await UITextBoxSearch!.FocusAsync();
 				await MainDataGrid!.ReloadServerData();
 				break;
@@ -144,7 +144,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable
 		}
 	}
 
-	protected virtual async Task<GridData<T>> ServerDataFunc(GridState<T> gridState)
+	protected virtual async Task<GridData<T>> ServerDataFunc(GridState<T> gridState, CancellationToken token)
 	{
 		try
 		{
@@ -250,7 +250,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable
 
 	public virtual async Task OnSearchClicked()
 	{
-		await UITextBoxSearch!.Clear();
+		await UITextBoxSearch!.ClearAsync();
 		await UITextBoxSearch!.FocusAsync();
 		await MainDataGrid!.ReloadServerData();
 	}

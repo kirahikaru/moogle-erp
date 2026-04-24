@@ -1,9 +1,5 @@
 ﻿using Dapper.Contrib.Extensions;
 using DataLayer.GlobalConstant;
-using DataLayer.Models.RMS;
-using MongoDB.Driver.Core.Misc;
-using System.Drawing;
-using static Azure.Core.HttpHeader;
 namespace DataLayer.Models.TSM;
 
 /// <summary>

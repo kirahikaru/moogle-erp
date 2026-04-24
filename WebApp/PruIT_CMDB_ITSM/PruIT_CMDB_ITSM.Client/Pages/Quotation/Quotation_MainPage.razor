@@ -138,7 +138,7 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<Quotation>> ServerDataFunc(GridState<Quotation> gridState)
+	protected override async Task<GridData<Quotation>> ServerDataFunc(GridState<Quotation> gridState, CancellationToken token)
 	{
 		if (IsSearching) return new GridData<Quotation>
 			{

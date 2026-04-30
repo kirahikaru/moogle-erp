@@ -3,7 +3,8 @@
     <MudNavLink Href="" Class="pru-mud-nav-item-l1" Match="NavLinkMatch.All" Icon="material-symbols-rounded/home" IconColor="Color.Primary">
         Home
     </MudNavLink>
-    <MudNavGroup Title="Finance" Expanded="true" Icon="material-symbols-rounded/account_balance" IconColor="Color.Primary" Class="pru-mud-nav-grp-l1">
+    <MudNavGroup Title="Finance" Expanded="true" Icon="material-symbols-rounded/account_balance" IconColor="Color.Primary" Class="pru-mud-nav-grp-l1"
+                 ExpandIcon="material-symbols-rounded/keyboard_arrow_down">
         <MudNavLink Href="/fin/budget-line/main" Icon="material-symbols-rounded/account_balance_wallet" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
             Budget Line
         </MudNavLink>
@@ -32,7 +33,8 @@
             GL Entry
         </MudNavLink>
     </MudNavGroup>
-    <MudNavGroup Title="IT Assets" Expanded="true" Icon="material-symbols-rounded/warehouse" IconColor=@Color.Primary Class="pru-mud-nav-grp-l1">
+    <MudNavGroup Title="IT Assets" Expanded="true" Icon="material-symbols-rounded/warehouse" IconColor=@Color.Primary Class="pru-mud-nav-grp-l1"
+                 ExpandIcon="material-symbols-rounded/keyboard_arrow_down">
         <MudNavLink Href="/itasset/hardware/main" Icon="material-symbols-rounded/home_storage" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
             IT Asset (Hardware)
         </MudNavLink>
@@ -50,7 +52,8 @@
             IT Asset Category
         </MudNavLink>
     </MudNavGroup>
-    <MudNavGroup Title="Cloud CMDB" Expanded="true" Icon="material-symbols-rounded/cloud" IconColor=@Color.Primary Class="pru-mud-nav-grp-l1">
+    <MudNavGroup Title="Cloud CMDB" Expanded="true" Icon="material-symbols-rounded/cloud" IconColor=@Color.Primary Class="pru-mud-nav-grp-l1"
+                 ExpandIcon="material-symbols-rounded/keyboard_arrow_down">
         <MudNavLink Href="/it/pru-core-project/main" Icon="material-symbols-rounded/home_storage" Match="NavLinkMatch.Prefix" IconColor="Color.Primary" Class="pru-mud-nav-item-l2">
             PruCORE Projects
         </MudNavLink>
@@ -67,22 +70,23 @@
     <MudNavLink Href="/hr/employee/main" Class="pru-mud-nav-item-l1" Icon="material-symbols-rounded/people" Match="NavLinkMatch.Prefix" IconColor="Color.Primary">
         Employee
     </MudNavLink>
-    <MudNavLink Href="/server/main" Class="pru-mud-nav-item-l1" Icon="material-symbols-rounded/storage" Match="NavLinkMatch.Prefix" Disabled="true">
+    <MudNavLink Href="/server/main" Class="pru-mud-nav-item-l1" Icon="material-symbols-rounded/storage" Match="NavLinkMatch.Prefix" Disabled="true" >
         Servers
     </MudNavLink>
-    <MudNavGroup Icon="material-symbols-rounded/settings" Title="Settings" Expanded="false" Disabled="true" Class="pru-mud-nav-grp-l1">
-        <MudNavLink Href="/users" Match="NavLinkMatch.Prefix">Users</MudNavLink>
-        <MudNavLink Href="/security" Match="NavLinkMatch.Prefix">Security</MudNavLink>
-    </MudNavGroup>
-    <MudNavGroup Title="Core Setup" Expanded="true" Icon="material-symbols-rounded/warehouse" IconColor=@Color.Primary Class="pru-mud-nav-grp-l1">
-        <MudNavLink Href="/core/org-struct-type/main" Class="pru-mud-nav-item-l1" Icon="material-symbols-rounded/people" Match="NavLinkMatch.Prefix" IconColor="Color.Primary">
+    <MudNavGroup Title="Core Setup" Expanded="true" Icon="material-symbols-rounded/warehouse" IconColor=@Color.Primary Class="pru-mud-nav-grp-l1"
+                 ExpandIcon="material-symbols-rounded/keyboard_arrow_down">
+        <MudNavLink Href="/core/org-struct-type/main" Class="pru-mud-nav-item-l2" Icon="material-symbols-rounded/people" Match="NavLinkMatch.Prefix" IconColor="Color.Primary">
             Organization Structure Type
         </MudNavLink>
-        <MudNavLink Href="/core/org-struct/main" Class="pru-mud-nav-item-l1" Icon="material-symbols-rounded/people" Match="NavLinkMatch.Prefix" IconColor="Color.Primary">
+        <MudNavLink Href="/core/org-struct/main" Class="pru-mud-nav-item-l2" Icon="material-symbols-rounded/people" Match="NavLinkMatch.Prefix" IconColor="Color.Primary">
             Organization Structure
         </MudNavLink>
     </MudNavGroup>
-    <MudNavLink Href="/about" Match="NavLinkMatch.Prefix" Disabled="true">About</MudNavLink>
+    <MudNavGroup Icon="material-symbols-rounded/settings" Title="Settings" Expanded="false" Class="pru-mud-nav-grp-l1"
+                 ExpandIcon="material-symbols-rounded/keyboard_arrow_down">
+        <MudNavLink Href="/users" Match="NavLinkMatch.Prefix">Users</MudNavLink>
+        <MudNavLink Href="/security" Match="NavLinkMatch.Prefix">Security</MudNavLink>
+    </MudNavGroup>
 </MudNavMenu>
 
 @* <div class="top-row ps-3 navbar navbar-dark">

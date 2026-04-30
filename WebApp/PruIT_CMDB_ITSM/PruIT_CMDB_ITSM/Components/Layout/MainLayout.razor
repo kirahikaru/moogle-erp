@@ -5,14 +5,23 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudLayout>
-    <MudAppBar Elevation="1">
-        <MudText Typo="Typo.h5" Class="ml-3">IT Administration ERP</MudText>
+    <MudAppBar Elevation="0" Style="background-color:white; border-bottom:solid 1px var(--tw-gray-200);">
+        <MudText Typo="Typo.h5" Class="ml-3" Style="color:var(--pru-red-default); font-weight:800;">PRU</MudText>
+        <MudText Typo="Typo.h5" Style="color:var(--tw-gray-500); font-weight:300;">ITAdminERP</MudText>
         <MudSpacer />
-        <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle" />
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        @* <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle" /> *@
+        @* <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" /> *@
+        <MudStack Row="true" Spacing="4" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd">
+            <MudIconButton Icon="material-symbols-rounded/menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"
+                           Style="padding:4px" />
+            <MudStack Row="true" Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
+                <MudIconButton Icon="material-symbols-rounded/language" Color="Color.Primary" Size="Size.Small"
+                               Style="padding:2px;" />
+                <MudText Typo="Typo.body1" Color="Color.Primary" Style="font-weight:600;">@(_lang.ToUpper())</MudText>
+            </MudStack>
+        </MudStack>
     </MudAppBar>
-    <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Width="260px">
+    <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0" Width="280px" Style="border-right:solid 1px var(--tw-gray-200); padding:10px;">
         <NavMenu />
         <MudSpacer />
         <MudText Typo="Typo.body1" Class="ml-2" Style="font-size:7pt; color:var(--pru-red-default);">
@@ -22,7 +31,7 @@
             &copy; 2025 Copy Right Company
         </MudText>
     </MudDrawer>
-    <MudMainContent Class="pt-19 pa-3" Style="height:100vh; background-color:#FAFAFA">
+    <MudMainContent Style="height:100vh; background-color:var(--tw-gray-50); padding: 85px 22px 18px 18px;">
         @Body
     </MudMainContent>
 </MudLayout>
@@ -52,6 +61,8 @@
 @code {
     private bool _drawerOpen = true;
     private bool _isDarkMode = false;
+    string _lang = "en";
+
     private MudTheme? _theme = null;
 
     protected override void OnInitialized()
@@ -67,7 +78,12 @@
                 Body1 = new Body1Typography()
                 {
                     FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                    FontSize = "10pt"
+                    FontSize = "12px"
+                },
+                Body2 = new Body2Typography()
+                {
+                    FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+                    FontSize = "12px"
                 },
                 H4 = new H4Typography()
                 {
@@ -109,12 +125,14 @@
 
     private readonly PaletteLight _pruLightPalette = new()
     {
-        Primary = "#ED1B2E", //pru-red-default
+        Primary = "#364153", // Tailwind Gray 700
+        // Primary = "#ED1B2E", //pru-red-default
         Secondary = "#687379", //pru-gray-default
         TextPrimary = "#343A3C",
         Black = "#110e2d",
-        AppbarText = "#FFFFFF",
-        AppbarBackground = "#ED1B2E",
+        AppbarText = "#364153",
+        // AppbarBackground = "#ED1B2E",
+        AppbarBackground = "#FFFFFF",
         DrawerBackground = "#ffffff",
         GrayLight = "#e8e8e8",
         GrayLighter = "#f9f9f9",

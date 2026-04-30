@@ -22,179 +22,121 @@ input[type="text" i] {
 
 /*#endregion */
 
+.pru-card-header-banner {
+    border-radius: var(--pru-base-card-radius) !important;
+    background-color:var(--pru-red-tw-50) !important;
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+}
+
+.pru-std-card-white {
+    border-radius: var(--pru-base-card-radius) !important;
+    background-color: #FFFFFF !important;
+}
+
 .pru-mud-form-field {
-    & .mud-input {
-
-        & input.mud-input-root,
-        div.mud-input-slot.mud-input-root {
-            color: var(--pru-gray-tw-600);
-            line-height: 100%;
-            font-size: 10pt;
-            line-height: 16px;
-            padding: 8px 0px 8px 0px;
-        }
-
-        &>textarea.mud-input-root {
-            line-height: 16px;
-            font-size: 10pt;
-            padding: 7px 9px;
-            margin: 0px;
-        }
-
-        & .mud-input-adornment-start {
-            margin-left: 0px;
-        }
-
-        & input.mud-input-root-adorned-start {
-            padding: 8px 0 8px;
-        }
-
-        &.mud-input-underline {
-            &:hover:not(.mud-disabled):before {
-                border-bottom: 1px solid var(--pru-red-default);
-            }
-
-            &:after {
-                border-bottom: 1px solid var(--pru-red-default);
-            }
-        }
-
-        :focus-within~label.mud-input-label.mud-input-label-inputcontrol {
-            color: var(--pru-navy-default);
-        }
-
-        >.mud-icon-button-edge-margin-end {
-            margin-inline-end: 2px;
-        }
-
-        & .mud-icon-button-label {
-            color: var(--pru-gray-tw-300);
-
-            & .material-symbols-rounded {
-                font-size: 20px;
-                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            }
-        }
-
-        & .mud-input-adornment {
-            & .mud-icon-button {
-                padding: 4px;
-            }
-
-            & .material-symbols-rounded {
-                color: var(--pru-red-default);
-                font-size: 20px;
-                font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-            }
-        }
-
-        &.mud-disabled {
-            background-color: var(--pru-gray-tw-50);
-
-            &>input {
-                cursor: not-allowed;
-                padding-left: 6px;
-            }
-        }
-    }
-
-    &.mud-input-control {
-        &.mud-input-required>.mud-input-control-input-container>.mud-input-label::after {
-            color: var(--pru-red-tw-600);
-            font-weight: 600;
-            content: "*";
-        }
-    }
-
-    /* & .mud-input-control {
-        &.mud-input-required > .mud-input-control-input-container > .mud-input-label::after {
-            color: var(--pru-red-tw-600);
-            font-weight: 600;
-            content: "*";
-        }
-    } */
-
-    & .mud-input-helper-text {
-        font-size: 8pt;
-        line-height: 100%;
-    }
-
     &.bordered {
-
         /* For MudDatePicker is slightly different from  */
-        &>.mud-input-control {
-            &>.mud-input-control-input-container {
-                &>div.mud-input.mud-input-text {
+        > .mud-input-control-input-container {
+            > .mud-input {
+                border: 1px solid var(--tw-gray-300) !important;
+                border-radius: 8px;
+                height: 32px;
+                > .mud-input-root {
+                    font-size: 12px;
+                    /* height: 100%; */
+                    padding: 8px 12px;
+                    
+                }
+
+                > .mud-input-adornment {
+                    > .material-symbols-rounded {
+                        color: var(--tw-gray-500);
+                        font-size: 20px;
+                        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 100, 'opsz' 24;
+                    }
+                }
+
+                > .mud-input-adornment-start {
+                    margin-inline-end: -8px;
+                    margin-inline-start: 6px;
+                }
+
+                &.mud-input-text {
                     &.mud-input-text-with-label {
                         margin-top: 18px;
-                        border: 1px solid var(--pru-gray-tw-100);
-                        border-radius: 6px;
+                    }
+                }
+
+                &.mud-input-underline {
+                    &::before {
+                        border-bottom: none;
+                    }
+                    &::after {
+                        border-bottom: none;
+                    }
+                }
+
+                > .mud-icon-button-edge-margin-end {
+                    margin-inline-end: 2px;
+                }
+
+                > .mud-icon-button {
+                    > .mud-icon-button-label {
+                        .mud-icon-root {
+                            color: var(--tw-gray-400);
+                        }
                     }
                 }
             }
 
-        }
-
-        &>.mud-input-control-input-container {
-            &>div.mud-input.mud-input-text {
-                border-radius: 6px;
-                border: 1px solid var(--pru-gray-tw-100);
-
-                &:focus-within {
-                    border: 1px solid var(--pru-red-tw-300);
-                    box-shadow: 0 0 2px 1px var(--pru-red-tw-100);
+            > .mud-shrink {
+                ~label.mud-input-label {
+                    &.mud-input-label-inputcontrol {
+                        font-size: 14px;
+                        margin-left: 4px;
+                        color:var(--tw-gray-700);
+                        font-weight: 500;
+                    }
                 }
+            }
 
-                &:focus-within {
-                    /* background-color: var(--pru-red-tw-50); */
-                    background-color: white;
-                }
-
-                &.mud-input-text-with-label {
-                    margin-top: 18px;
+            &:focus-within {
+                > .mud-input {
+                    outline: 1.5px solid var(--tw-gray-500);
                 }
             }
         }
 
-        & .mud-input {
-
-            & input.mud-input-root,
-            div.mud-input-slot.mud-input-root {
-                font-size: 10pt;
-                line-height: 18px;
-                padding: 7px 0px 7px 10px;
-                height: unset;
-                /* border-right: solid 1px var(--mud-palette-lines-inputs);
-                border-top: solid 1px var(--mud-palette-lines-inputs); */
-            }
-
-            & .mud-input-adornment-start {
-                margin-right: -6px;
-                margin-inline-end: -6px;
-                margin-inline-start: 6px;
-            }
-
-            &.mud-input-underline {
-                border: none;
-
-                &:hover:not(.mud-disabled):before {
-                    border: none;
+        > .mud-input-control-helper-container {
+            > .mud-input-helper-text {
+                font-size: 10px;
+                line-height: 100%;
+                &.mud-input-error {
+                    font-style: italic;
                 }
-
-                &::before {
-                    border: none;
-                }
-
-                &::after {
-                    border: none;
-                }
-
             }
         }
 
-        & .mud-icon-button-size-small {
-            padding: 0px;
-            margin-right: 4px;
+        &.mud-input-control {
+            &.mud-input-required {
+                > .mud-input-control-input-container {
+
+                    &:focus-within {
+                        > .mud-input {
+                            outline: 1.5px solid var(--pru-red-default);
+                        }
+                    }
+
+                    > .mud-input-label {
+                        &::after {
+                            color: var(--pru-red-default);
+                            font-weight: 800;
+                            content: "*";
+                        }
+                    }
+                }
+            }
+            
         }
     }
 
@@ -220,71 +162,20 @@ input[type="text" i] {
         }
     }
 
-    &.pru-ui-combo-box {
-        & .mud-icon-button-edge-margin-end {
-            margin-right: -4px;
-            margin-inline-end: -4px;
-        }
-
-        & .mud-input-adornment {
-            margin-right: 4px;
-
-            & .mud-icon-button {
-                padding: 4px;
-
-            }
-
-            & .material-symbols-rounded {
-                color: var(--pru-gray-tw-500);
-                font-size: 20px;
-                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            }
-        }
-    }
-
     &.pru-ui-select {
-        & .mud-input {
-
-            & input.mud-input-root,
-            div.mud-input-slot.mud-input-root {
-                font-size: 10pt;
-                padding: 7px 0px 7px 9px;
-                height: unset;
-                /* border-right: solid 1px var(--mud-palette-lines-inputs);
-                border-top: solid 1px var(--mud-palette-lines-inputs); */
-            }
-        }
-
         & .mud-icon-button-size-small {
             padding: 0px;
-            margin-right: -4px;
+            margin-right: -2px;
         }
 
         & .mud-input-adornment {
             margin-right: 4px;
 
-            & .mud-icon-button {
-                padding: 4px;
-
-            }
-
-            & .material-symbols-rounded {
-                color: var(--pru-gray-tw-500);
+            > .material-symbols-rounded {
+                color: var(--tw-gray-500);
                 font-size: 20px;
                 font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
             }
-        }
-    }
-
-    &.pru-ui-datepicker {
-        & .mud-input-adornment-end {
-            margin-left: -6px;
-            margin-inline-start: -6px;
-        }
-
-        & .mud-icon-button-edge-end {
-            margin-right: 0px;
-            margin-inline-end: 0px;
         }
     }
 
@@ -294,16 +185,300 @@ input[type="text" i] {
     }
 }
 
-.pru-btn-base {
-    &.in-pg-action {
-        padding: 2px 8px;
+.pru-ui-datepicker {
+    > .mud-input-control {
+        > .mud-input-control-input-container {
+            > .mud-input {
+                font-size: 12px;
+                line-height: 100%;
+                border-radius: 8px;
+                border: 1px solid var(--tw-gray-300);
+                height: 32px;
 
-        & .mud-button-label {
-            text-transform: none;
+                > .mud-input-root {
+                    padding: 10px 12px;
+                }
+
+                &:focus-within {
+                    &.mud-input-underline::after {
+                        transition: none;
+                        border: none;
+                    }    
+                }
+
+                &.mud-input-underline {
+                    &:before {
+                        transition: none;
+                        border: none;
+                    }
+
+                    &.mud-input-error {
+                        &::after {
+                            transform: none;
+                            border: none;
+                        }
+                    }
+                }
+                &.mud-input-text {
+                    &.mud-input-text-with-label {
+                        margin-top: 18px;
+                    }
+                }
+
+                &:focus-within {
+                    outline: 1.5px solid var(--tw-gray-500);
+                }
+
+                > .mud-icon-button-size-small {
+                    padding: 2px;
+
+                    &.mud-icon-button-edge-end {
+                        margin-inline-end: 0px;
+                        margin-inline-start: -10px;
+                    }
+                }
+
+                & .mud-input-adornment-end {
+                    > .mud-icon-button {
+                        padding: 4px;
+                        margin-right: 2px;
+
+                        & .material-symbols-rounded {
+                            color: var(--tw-gray-700);
+                            font-size: 20px;
+                            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+                        }
+                    }
+                    margin-left: -6px;
+                    margin-inline-start: -6px;
+                }
+            }
+
+            > .mud-shrink {
+                ~label.mud-input-label {
+                    &.mud-input-label-inputcontrol {
+                        font-size: 14px;
+                        margin-left: 4px;
+                        color:var(--tw-gray-700);
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+
+        > .mud-input-control-helper-container {
+            margin-top: 0px;
+            > .mud-input-helper-text {
+                height: 100%;
+                font-style: italic;
+                font-size: 10px;
+            }
+        }
+
+        &.mud-input-required {
+            > .mud-input-control-input-container {
+                > .mud-input-label {
+                    &::after {
+                        color: var(--pru-red-default);
+                        font-weight: 800;
+                        content: "*";
+                    }
+                }
+            }
         }
     }
 
+    & .mud-icon-button-edge-end {
+        margin-right: 0px;
+        margin-inline-end: 0px;
+    }
+}
+
+.pru-ui-combobox {
+    > .mud-input-control-input-container {
+        > .mud-input {
+            font-size: 12px;
+            line-height: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--tw-gray-300);
+            height: 32px;
+            &.mud-input-underline {
+                &::before {
+                    transition: none;
+                    border-bottom: none;
+                }
+                &::after {
+                    transition: none;
+                    border-bottom: none;
+                }
+            }
+
+            &.mud-input-text {
+                &.mud-input-text-with-label {
+                    margin-top: 18px !important;
+                }
+            }
+        }
+
+        > .mud-shrink {
+            ~label.mud-input-label {
+                &.mud-input-label-inputcontrol {
+                    font-size: 14px;
+                    margin-left: 4px;
+                    color:var(--tw-gray-700);
+                    font-weight: 500;
+                }
+            }
+        }
+
+        &:hover {
+             > .mud-input {
+                &.mud-input-underline {
+                    &::before {
+                        transition: none;
+                        border-bottom: none;
+                    }
+                    &::after {
+                        transition: none;
+                        border-bottom: none;
+                    }
+                }
+             }
+        }
+
+        &:focus-within {
+            > .mud-input {
+                outline: 1.5px solid var(--tw-gray-500);
+            }
+        }
+    }
+
+    > .mud-input-control-helper-container {
+        > .mud-input-helper-text {
+            font-size: 10px;
+            line-height: 100%;
+            &.mud-input-error {
+                font-style: italic;
+            }
+        }
+    }
+
+    &.mud-input-control {
+        &.mud-input-required {
+            > .mud-input-control-input-container {
+                &:focus-within {
+                    > .mud-input {
+                        outline: 1.5px solid var(--pru-red-default);
+                    }
+                }
+            }
+        }
+        
+    }
+}
+
+.pru-ui-combobox-popover {
+    box-shadow: var(--mud-elevation-3) !important;
+
+    & .mud-combobox-item {
+        min-height: 36px;
+
+    }
+
+    & .mud-combobox-item-gutters {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+.pru-ui-combobox-input {
+    font-size: 12px;
+    padding: 8px 0px 8px 12px;
+}
+
+.pru-mud-icon-btn {
+    border: 1px solid var(--tw-gray-200) !important;
+    background-color: var(--tw-gray-100) !important;
+    padding: 2px !important;
+
+    & .material-symbols-rounded {
+        color: var(--tw-gray-700);
+        font-size: 16px;
+        font-variation-settings:
+            'FILL' 0,
+            'wght' 500,
+            'GRAD' 200,
+            'opsz' 48;
+        }
+
+    &:hover {
+        background-color: var(--tw-gray-700) !important;
+
+        & .material-symbols-rounded {
+            color: #FFFFFF;
+        }
+    }
+    
+    
+    &.info-light {
+        border: 1px solid var(--tw-sky-100) !important;
+        background-color: var(--tw-sky-50) !important;
+
+        & .material-symbols-rounded {
+            color: var(--tw-sky-600);
+        }
+
+        &:hover {
+            background-color: var(--tw-sky-600) !important;
+
+            & .material-symbols-rounded {
+                color: #FFFFFF;
+            }
+        }
+    }
+
+    &.error-light {
+        border: 1px solid var(--tw-red-100) !important;
+        background-color: var(--tw-red-50) !important;
+
+        & .material-symbols-rounded {
+            color: var(--tw-red-600);
+        }
+
+        &:hover {
+            background-color: var(--tw-red-600) !important;
+
+            & .material-symbols-rounded {
+                color: #FFFFFF;
+            }
+        }
+    }
+
+    &.success-light {
+        border: 1px solid var(--tw-green-100) !important;
+        background-color: var(--tw-green-50) !important;
+
+        & .material-symbols-rounded {
+            color: var(--tw-green-600);
+        }
+
+        &:hover {
+            background-color: var(--tw-green-600) !important;
+
+            & .material-symbols-rounded {
+                color: #FFFFFF;
+            }
+        }
+    }
+}
+
+.pru-btn-base {
+    border-radius: 8px !important;
+    padding: 4px 12px !important;
+
     & .mud-button-label {
+        font-size: 12px;
+
         & .mud-button-icon-start {
             &.mud-button-icon-size-small {
                 margin-inline-end: 4px;
@@ -314,6 +489,27 @@ input[type="text" i] {
                         'wght' 300,
                         'GRAD' 0,
                         'opsz' 24;
+                }
+            }
+        }
+    }
+
+    &.small {
+        padding: 3px 9px !important;
+        
+        & .mud-button-label {
+            font-size: 11px;
+            font-weight: 600;
+
+            & .mud-button-icon-size-small {
+                margin-inline-end: 2px;
+
+                & .material-symbols-rounded {
+                font-variation-settings:
+                    'FILL' 0,
+                    'wght' 300,
+                    'GRAD' 100,
+                    'opsz' 24;
                 }
             }
         }
@@ -399,28 +595,39 @@ input[type="text" i] {
 }
 
 .pru-alert-validation {
+    font-size: 12px;
+    line-height: 100%;
     padding: 0px 8px !important;
-    border: 1px solid var(--pru-red-default);
-    color: var(--pru-red-default);
-    background-color: #FAFAFA;
+    border: 1px solid var(--tw-yellow-400) !important;
+    border-radius: 6px !important;
+    background-color: var(--tw-yellow-50) !important;
+
+    > .justify-start {
+        align-items: center;
+    }
 
     & .mud-alert-icon {
-        padding: 4px 0px;
+        padding: 6px 0px;
         margin-right: 6px;
         margin-inline-end: 6px;
 
+        > .material-symbols-rounded {
+            color: var(--tw-yellow-600);
+            font-size: 18px;
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }        
+
         &.mud-alert-icon-left {
-            color: var(--pru-red-default);
+            margin-inline-end: 4px;
         }
     }
 
     & .mud-alert-message {
+        color: var(--tw-yellow-600);
         padding: 6px 0px;
     }
 
-    & .material-symbols-rounded {
-        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-    }
+    
 }
 
 .pru-ui-autocomplete-popover {
@@ -451,35 +658,22 @@ input[type="text" i] {
     }
 }
 
-.pru-ui-combo-box-popover {
-    box-shadow: var(--mud-elevation-3) !important;
-
-    & .mud-combobox-item {
-        min-height: 36px;
-
-    }
-
-    & .mud-combobox-item-gutters {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-}
-
 /*#region MudDataGrid */
 .pru-mud-datagrid {
-    border: solid 1px var(--pru-gray-tw-100);
+    border-radius: 0px !important;
+    border-bottom: 1.5px solid var(--tw-gray-200);
+    border-right: 1px solid white;
 
     & .mud-table-container {
         width: auto !important;
     }
 
     &.main-pg {
-        height: calc(100vh - 253px);
+        height: calc(100vh - 255px);
         overflow: hidden;
 
         & .mud-drop-container {
-            width: calc(100vw - 310px);
-            height: calc(100vh - 290px);
+            height: calc(100vh - 295px);
             overflow-y: auto;
         }
     }
@@ -500,11 +694,11 @@ input[type="text" i] {
 
 .pru-mud-datagrid-hdr {
     font-weight: 600 !important;
-    padding-inline-start: 6px !important;
-    padding-inline-end: 6px !important;
+    padding-inline-start: 12px !important;
+    padding-inline-end: 12px !important;
     /* padding-top:4px !important;
     padding-bottom:4px !important; */
-    padding: 6px 10px 6px 10px !important;
+    padding: 8px 12px 8px 12px !important;
     line-height: 100% !important;
 
     & .mud-menu {
@@ -520,19 +714,25 @@ input[type="text" i] {
     }
 
     &.cruc-pg-items {
-        padding: 8px 10px 8px 10px !important;
-        background-color: var(--pru-gray-tw-50) !important;
-        border-right: solid 1px var(--pru-gray-tw-100);
+        background-color: var(--tw-gray-100) !important;
+        border-top: 1px solid var(--tw-gray-400);
+        border-bottom: 1px solid var(--tw-gray-400);
+        border-right: 1px solid var(--tw-gray-300);
 
         & .column-header {
+            color: var(--tw-gray-600) !important;
+            font-size: 12px !important;
             color: var(--pru-red-default);
         }
     }
 
     &.main-pg {
-        border-right: 1px solid #FFFFFF !important;
-        background-color: var(--pru-gray-default) !important;
-        color: #FFFFFF !important;
+        /* border-right: 1px solid #FFFFFF !important; */
+        background-color: var(--tw-gray-100) !important;
+        color: var(--tw-gray-600) !important;
+        border-top: 1px solid var(--tw-gray-200);
+        border-bottom: 1px solid var(--tw-gray-200);
+        font-size: 12px !important;
     }
 
     & .mud-icon-root.mud-svg-icon {
@@ -557,9 +757,12 @@ input[type="text" i] {
 }
 
 .pru-mud-datagrid-cell {
-    padding: 6px 10px !important;
-    font-size: 10pt !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
     line-height: 120% !important;
+    background-color: white !important;
+    border-right: 1px dotted var(--tw-gray-200);
+    color: var(--tw-gray-700);
 
     &.data-align-top {
         vertical-align: top !important;
@@ -574,10 +777,10 @@ input[type="text" i] {
 }
 
 .pru-mud-datagrid-pager {
-    height: 36px;
+    height: 28px;
 
     & .mud-icon-button {
-        padding: 4px;
+        padding: 2px;
     }
 }
 
@@ -592,10 +795,16 @@ input[type="text" i] {
 
 /*#region Mad Nav Menu */
 .pru-mud-nav-grp-l1 {
+    & .mud-expanded {
+        border: solid 1px var(--tw-gray-200);
+        background-color: var(--tw-gray-100);
+    }
     & .mud-nav-link {
-        padding: 6px 8px;
+        padding: 8px 12px;
+        margin-bottom: 4px;
         display: flex;
         align-items: center;
+        border-radius: 10px;
         /* border-bottom: 1px solid var(--pru-gray-tw-50); */
 
         & :not(.mud-nav-link-disabled) {
@@ -604,33 +813,18 @@ input[type="text" i] {
             }
         }
 
-        & :focus:not(.mud-nav-link-disabled) {
-            background-color: var(--pru-red-lighter);
+        &:focus-visible {
+            background-color: var(--tw-gray-100) !important;
         }
 
         &:hover {
-            border-right: solid 3px var(--pru-red-default);
-            background-color: var(--pru-red-tw-50) !important;
-
-            &>.mud-nav-link-text {
-                color: var(--pru-red-default);
-            }
-
-            & :not(.mud-nav-link-disabled) {
-
-                & .mud-nav-link-icon.mud-nav-link-icon-default {
-                    color: white;
-                }
-            }
-
-            & .mud-nav-link-expand-icon {
-                color: white;
-            }
+            background-color: var(--tw-gray-100) !important;
         }
 
         &>.mud-nav-link-text {
-            font-weight: 600;
-            color: var(--pru-red-default);
+            font-weight: 500;
+            line-height: 0%;
+            color: var(--tw-gray-700);
             margin-inline-start: 8px;
         }
 
@@ -640,15 +834,15 @@ input[type="text" i] {
     }
 
     & .mud-icon-root {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-items: start;
         justify-content: start;
         font-variation-settings:
             'FILL' 0,
-            'wght' 200,
+            'wght' 300,
             'GRAD' 0,
             'opsz' 24;
     }
@@ -664,33 +858,24 @@ input[type="text" i] {
 
 .pru-mud-nav-item-l1 {
     & .mud-nav-link {
-        padding: 8px 10px;
+        font-weight: 500;
+        padding: 8px 12px;
+        margin-bottom: 4px;
         display: flex;
         align-items: center;
-        color: var(--pru-red-default);
+        color: var(--tw-gray-700);
         transition: none !important;
+        border-radius: 10px;
 
         /* border-bottom: solid 1px var(--pru-gray-tw-50); */
         & .mud-nav-link-text {
-            font-weight: 400;
-            margin-inline-start: 4px;
-        }
-
-        &.active:not(.mud-nav-link-disabled) {
-            background-color: var(--pru-red-50) !important;
-
-            border-right: solid 3px var(--pru-red-default);
-            border-left: solid 1px var(--pru-red-default);
-
-            & .mud-nav-link-text {
-                color: var(--pru-red-default);
-                font-weight: 500;
-            }
+            font-weight: 500;
+            margin-inline-start: 8px;
         }
 
         &:hover {
-            border-right: solid 3px var(--pru-red-default);
-            background-color: var(--pru-red-tw-50) !important;
+            /* border-right: solid 3px var(--pru-red-default); */
+            background-color: var(--tw-gray-100) !important;
 
             &.active:not(.mud-nav-link-disabled) {
                 background-color: var(--pru-red-tw-50) !important;
@@ -699,6 +884,10 @@ input[type="text" i] {
             & .mud-nav-link-text {
                 font-weight: 500;
             }
+        }
+
+        & .mud-nav-link-text {
+            line-height: 0%;
         }
 
         & :not(.mud-nav-link-disabled) {
@@ -717,31 +906,56 @@ input[type="text" i] {
     }
 
     & .mud-icon-root {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
     & .material-symbols-rounded {
-        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 22;
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
     }
 
     & .mud-nav-link-disabled {
         background-color: var(--pru-gray-tw-50);
         user-select: none;
     }
+
+    & .active {
+        background-color: var(--pru-red-tw-50) !important;
+
+        &:hover {
+            background-color: var(--pru-red-tw-50) !important;
+        }
+
+        /* border-right: solid 3px var(--pru-red-default);
+        border-left: solid 1px var(--pru-red-default); */
+
+        & .mud-nav-link-text {
+            color: var(--pru-red-default);
+            line-height: 80%;
+        }
+
+        & .mud-primary-text {
+            color: var(--pru-red-default) !important;
+        }
+    }
 }
 
 .pru-mud-nav-item-l2 {
     & .mud-nav-link {
-        padding: 6px 8px;
+        padding-inline-start: 10px !important;
+        margin-left: 6px;
         display: flex;
         align-items: center;
         /* border-bottom: var(--pru-gray-tw-100) 1px solid; */
         background-color: #FFF !important;
         transition: none !important;
+        border: none;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        border-left: solid 1px var(--tw-gray-300);
 
         & :not(.mud-nav-link-disabled) {
             & .mud-icon-root.mud-svg-icon {
@@ -753,44 +967,44 @@ input[type="text" i] {
             }
         }
 
-        &.active:not(.mud-nav-link-disabled) {
-            background-color: #FFF !important;
-            background-color: var(--pru-red-tw-50) !important;
-
-            border-right: solid 3px var(--pru-red-default);
-            border-left: solid 1px var(--pru-red-default);
-
-            & .mud-icon-root.mud-svg-icon {
-                fill: var(--pru-red-default);
-            }
-
-            & .mud-nav-link-text {
-                font-weight: 400;
-                color: var(--pru-red-default);
-            }
-        }
-
         & .mud-nav-link-text {
-            font-weight: 400;
+            /* font-weight: 400; */
             margin-inline-start: 4px;
         }
 
-        &:hover {
-            /* border-top: solid 1px var(--pru-gray-tw-100);
-            border-bottom: solid 1px var(--pru-gray-tw-100); */
-            /* box-shadow: inset 0 0 0 2px white; */
-            border-right: solid 3px var(--pru-red-default) !important;
-            background-color: var(--pru-red-tw-50) !important;
+        &:focus-visible {
+            background-color: var(--tw-gray-100) !important;
+        }
 
-            &.active:not(.mud-nav-link-disabled) {
-                background-color: var(--pru-gray-tw-100) !important;
-            }
+        &:hover {
+            /* border-right: solid 3px var(--pru-red-default) !important; */
+            background-color: var(--tw-gray-100) !important;
+        }
+    }
+
+    & .active {
+        background-color: var(--pru-red-tw-50) !important;
+
+        /* border-right: solid 3px var(--pru-red-default);
+        border-left: solid 1px var(--pru-red-default); */
+
+        &:hover {
+            background-color: var(--pru-red-tw-50) !important;
+        }
+
+        & .mud-nav-link-text {
+            color: var(--pru-red-default);
+            line-height: 80%;
+        }
+
+        & .mud-primary-text {
+            color: var(--pru-red-default) !important;
         }
     }
 
     & .mud-icon-root {
         width: 24px;
-        height: 20px;
+        height: 24px;
         display: flex;
         align-items: center;
         justify-content: start;
@@ -802,8 +1016,41 @@ input[type="text" i] {
 /*#region MudTab */
 .pru-mud-tab {
     & .mud-tab {
-        min-height: 40px;
+        min-height: 36px;
+        line-height: 100%;
         font-size: 12pt;
+        padding: 0px 12px;
+        border: 1px solid var(--tw-gray-200);
+        background-color: var(--tw-gray-50);
+        
+        color: var(--tw-gray-300);
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        font-size: 14px !important;
+        line-height: 100% !important;
+
+        & .mud-tab-icon-text {
+            margin-right: 2px;
+        }
+
+        &.mud-tab-active {
+            font-weight: 600;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            color: var(--tw-gray-700);
+            background-color: #FFFFFF;
+            border-top: solid 1px var(--tw-gray-700);
+            border-right: solid 1px var(--tw-gray-700);
+            border-left: solid 1px var(--tw-gray-700);
+
+            & .material-symbols-rounded {
+                font-variation-settings: 'FILL' 0, 'wght' 250, 'GRAD' 80, 'opsz' 36;
+            }
+        }
+    }
+
+    & .mud-tab-slider {
+        background: none !important;
     }
 
     & .mud-tabs-tabbar {
@@ -814,39 +1061,19 @@ input[type="text" i] {
         }
     }
 
-    & .mud-tab {
-        & .mud-tab-icon-text {
-            margin-right: 2px;
-        }
-
-        &.mud-tab-active {
-            font-weight: 700;
-            background-color: #FEF2F3;
-            border-top: solid 1px #ffc5ca;
-            border-right: solid 1px #ffc5ca;
-            border-left: solid 1px #ffc5ca;
-
-            & .material-symbols-rounded {
-                font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-            }
-        }
-    }
-
-    & .mud-tabs-panels {
-        height: calc(100vh - 200px);
-    }
-
-    & .material-symbols-rounded {
-        font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+    > .material-symbols-rounded {
+        font-variation-settings: 'FILL' 0, 'wght' 250, 'GRAD' 80, 'opsz' 36;
     }
 }
 
 .pru-mud-tab-panel {
-    padding: 0px;
-    font-weight: 400;
-    color: #687379;
-    background-color: #f5f6f6;
-    border: solid 1px #cdd2d4;
+    border: 1px solid var(--tw-gray-200);
+    background-color: var(--tw-gray-200);
+    
+    color: var(--tw-gray-400);
+    
+    font-size: 14px !important;
+    line-height: 100% !important;
 
     & .mud-tab-badge {
         margin-left: 0px;

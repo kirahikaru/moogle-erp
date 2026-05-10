@@ -1,6 +1,6 @@
 ﻿@page "/him/my-stuff/main"
 @inherits MainPageBase<OwnedItem>
-<MudPaper Class="moog-pg-banner mt-3 px-3 py-4" Elevation="1">
+<MudPaper Class="moog-pg-banner mt-4 px-4 py-4" Elevation="0">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
 		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
@@ -9,18 +9,18 @@
 		</MudButton>
     </MudStack>
 </MudPaper>
-<MudPaper Class="mt-3 pa-3 overflow-y-auto rounded-lg" Elevation="1" Height="calc(100vh - 165px)">
-    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
-        <MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="moog-mud-form-field bordered"
+<MudPaper Class="mt-5 overflow-y-auto" Elevation="0" Height="calc(100vh - 200px)" Style="background-color: var(--tw-gray-50); border-radius: 16px; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;">
+    <MudStack Class="ma-4" Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
+        <MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="moog-form-field"
                       AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
-                      Placeholder="Search text here..." HelperText="<Search input instruction here>"
+                      Placeholder="Search text here..." 
                       @bind-Value="SearchText" OnKeyDown="OnSearchTextBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
         <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-btn-base"
 				   StartIcon="material-symbols-rounded/search" OnClick="OnSearchClicked">Search</MudButton>
     </MudStack>
-    <MudDataGrid Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage="50" Elevation="0"
-                 ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple"
-                 Class="mt-2 moog-mud-datagrid main-pg"
+    <MudDataGrid Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage="50" Elevation="0" ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple" 
+				 Class="mt-2 moog-mud-datagrid main-pg" 
+				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-mud-datagrid-row"
                  @ref="MainDataGrid" ServerData="ServerDataFunc"
                  T="OwnedItem">
         <Columns>
@@ -59,7 +59,7 @@
                             HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
                             HeaderStyle="min-width:180px" />
             <PropertyColumn Title="S/N" Property="x => x.SerialNumber" 
-				HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400"
+				HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell moog-font-mono"
 							HeaderStyle="min-width:180px" />
             <PropertyColumn Title="Price" Property="x => x.PurchasedPrice" Format="$ #,##0.00"
                             HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="text-align:right" />
@@ -80,25 +80,25 @@
                 </CellTemplate>
             </TemplateColumn>
             <TemplateColumn Title="State" Sortable="false" Filterable="false"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="text-align:center" Context="rowData">
+                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="text-align:center; padding:0px !important;" Context="rowData">
                 <CellTemplate>
                     @* @(ObjectStates.GetDisplayText(rowData.Item.ObjectState).ToUpper()) *@
-                    <MudChip Size="Size.Small" T="string" Class=@($"status-chip-tiny") Style=@_stateLightStyles[rowData.Item.ObjectState!]>
+					<MudChip Size="Size.Small" T="string" Class=@_statesCssClasses[rowData.Item.ObjectState!]>
                         @(ObjectStates.GetDisplayText(rowData.Item.ObjectState).ToUpper())
                     </MudChip>
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Title="Barcode" Property="x => x.Barcode"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
-            <PropertyColumn Title="ID" Property="x => x.ObjectCode" HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
-            <TemplateColumn Title="Action" HeaderClass="moog-mud-datagrid-hdr main-pg" Sortable="false" Filterable="false" StickyRight="true"
-                            CellClass="moog-mud-datagrid-cell" CellStyle="padding-inline-end:4px; padding-inline-start:4px">
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell moog-font-mono" />
+			<PropertyColumn Title="ID" Property="x => x.ObjectCode" HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell moog-font-mono" />
+            <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="padding: 0px 10px !important;">
                 <CellTemplate>
                     <MudStack Row="true" Spacing="1">
-						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
-						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
-						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
-						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(args => DeleteRecord(context.Item))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action color-sky" Icon="far fa-edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action color-sky" Icon="far fa-copy" Size="Size.Small" Color="Color.Success" OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action color-green" Icon="far fa-eye" Size="Size.Small" Color="Color.Info" OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action colol-red" Icon="far fa-trash-alt" Size="Size.Small" Color="Color.Error" OnClick="@(args => DeleteRecord(context.Item))" />
                     </MudStack>
                 </CellTemplate>
             </TemplateColumn>
@@ -113,19 +113,19 @@
 	#region UI VARIABLES
 
 	Dictionary<string, string> _statesCssClasses = new() {
-		{ ObjectStates.NEW, "status-chip-pink-light" },
-		{ ObjectStates.BNIB, "status-chip-pink-light" },
-		{ ObjectStates.IN_USE, "status-chip-green-light" },
-		{ ObjectStates.LOANED, "status-chip-amber-light"},
-		{ ObjectStates.UNKNOWN, "status-chip-brown-light"},
-		{ ObjectStates.OTHER, "status-chip-brown-light"},
-		{ ObjectStates.DRAFT, "status-chip-teal-light"},
-		{ ObjectStates.GIFTED_OTHER, "status-chip-blue-gray-light"},
-		{ ObjectStates.SOLD, "status-chip-blue-gray-light"},
-		{ ObjectStates.WRITTEN_OFF, "status-chip-blue-gray-light"},
-		{ ObjectStates.IN_STASH, "status-chip-purple-light" },
-		{ ObjectStates.BROKEN, "status-chip-blue-gray-light" },
-		{ ObjectStates.RARELY_USED, "status-chip-amber-light" },
+		{ ObjectStates.NEW, "status-chip-tiny status-chip-pink-light" },
+		{ ObjectStates.BNIB, "status-chip-tiny status-chip-sky-light" },
+		{ ObjectStates.IN_USE, "status-chip-tiny status-chip-green-light" },
+		{ ObjectStates.LOANED, "status-chip-tiny status-chip-amber-light"},
+		{ ObjectStates.UNKNOWN, "status-chip-tiny status-chip-gray-light"},
+		{ ObjectStates.OTHER, "status-chip-tiny status-chip-gray-light"},
+		{ ObjectStates.DRAFT, "status-chip-tiny status-chip-stone-light"},
+		{ ObjectStates.GIFTED_OTHER, "status-chip-tiny status-chip-purple-light"},
+		{ ObjectStates.SOLD, "status-chip-tiny status-chip-pink-light"},
+		{ ObjectStates.WRITTEN_OFF, "status-chip-tiny status-chip-slate-light"},
+		{ ObjectStates.IN_STASH, "status-chip-tiny status-chip-purple-light" },
+		{ ObjectStates.BROKEN, "status-chip-tiny status-chip-slate-light" },
+		{ ObjectStates.RARELY_USED, "status-chip-tiny status-chip-amber-light" },
 	};
 
 	Dictionary<string, string> _stateLightStyles = [];

@@ -1,7 +1,7 @@
 ﻿@page "/rms/item/main"
 
 @inherits MainPageBase<Item>
-<MudPaper Class="moog-pg-banner mt-3 px-3 py-4" Elevation="1">
+<MudPaper Class="moog-pg-banner mt-4 px-4 py-4" Elevation="0">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
 		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
@@ -10,17 +10,17 @@
         </MudButton>
     </MudStack>
 </MudPaper>
-<MudPaper Class="mt-3 pa-3 overflow-y-auto rounded-lg" Elevation="1" Height="calc(100vh - 165px)">
-    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None" Spacing="2">
-        <MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="moog-mud-form-field bordered"
-                      AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
-                      Placeholder="Search text here..." HelperText="<Search input instruction here>"
-                      @bind-Value="SearchText" OnKeyDown="OnSearchTextBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
+<MudPaper Class="mt-5 overflow-y-auto" Elevation="0" Height="calc(100vh - 200px)" Style="background-color: var(--tw-gray-50); border-radius: 16px; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;">
+	<MudStack Class="ma-4" Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
+		<MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="moog-form-field"
+					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
+					  Placeholder="Search text here..."
+					  @bind-Value="SearchText" OnKeyDown="OnSearchTextBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
 		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-btn-base"
 				   StartIcon="material-symbols-rounded/search" OnClick="OnSearchClicked">Search</MudButton>
-    </MudStack>
+	</MudStack>
 	<MudDataGrid Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage="50" Elevation="0"
-                 ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple"
+                 ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple" 
 				 Class="mt-2 moog-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" 
 				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-mud-datagrid-row"
 				 T="Item">
@@ -30,7 +30,7 @@
 			<PropertyColumn Title="Name (Khmer)" Property="x => x.ObjectNameKh"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell hanuman-regular" />
 			<PropertyColumn Title="Barcode" Property="x => x.Barcode"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell moog-font-mono" />
 			<TemplateColumn Title="Category" HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" Context="rowData">
 				<CellTemplate>
 					<span>@(rowData.Item.Category != null ? rowData.Item.Category.ObjectName : "-")</span>
@@ -58,14 +58,13 @@
 			<PropertyColumn Title="WSP" Property="x => x.WholeSaleUnitPriceText"
                             HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="text-align:right" />
 			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
-							HeaderStyle="max-width: 120px; width:500px; justify-items:center" CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
+							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="padding: 0px 10px !important;">
 				<CellTemplate>
 					<MudStack Row="true" Spacing="1">
-						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
-						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
-						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
-						<MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(args => DeleteRecord(context.Item))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action color-sky" Icon="far fa-edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action color-sky" Icon="far fa-copy" Size="Size.Small" Color="Color.Success" OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action color-green" Icon="far fa-eye" Size="Size.Small" Color="Color.Info" OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
+						<MudIconButton Class="moog-ico-btn-datagrid-action colol-red" Icon="far fa-trash-alt" Size="Size.Small" Color="Color.Error" OnClick="@(args => DeleteRecord(context.Item))" />
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>

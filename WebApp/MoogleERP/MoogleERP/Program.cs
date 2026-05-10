@@ -1,8 +1,5 @@
 using CurrieTechnologies.Razor.SweetAlert2;
-using Dapper.Contrib.Extensions;
-using Dapper.FastCrud;
 using DataLayer.Infrastructure;
-using DataLayer.Models.TSM;
 using DataLayer.Repos;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MoogleERP.Components;
@@ -10,23 +7,23 @@ using MudBlazor.Services;
 using MudExtensions.Services;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 
-Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+//Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
-OrmConfiguration.DefaultDialect = SqlDialect.PostgreSql;
+//OrmConfiguration.DefaultDialect = SqlDialect.PostgreSql;
 
-OrmConfiguration.RegisterEntity<Laptop>()
-	.SetTableName("laptop")
-	.SetSchemaName("tsm");
+//OrmConfiguration.RegisterEntity<Laptop>()
+//	.SetTableName("laptop")
+//	.SetSchemaName("tsm");
 
-SqlMapperExtensions.TableNameMapper = (type) =>
-{
-	if (type == typeof(Laptop))
-	{
-		return "tsm.laptop";
-	};
+//SqlMapperExtensions.TableNameMapper = (type) =>
+//{
+//	if (type == typeof(Laptop))
+//	{
+//		return "tsm.laptop";
+//	};
 
-	return type.Name;
-};
+//	return type.Name;
+//};
 
 var builder = WebApplication.CreateBuilder(args);
 

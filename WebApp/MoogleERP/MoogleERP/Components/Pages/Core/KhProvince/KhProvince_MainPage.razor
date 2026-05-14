@@ -1,6 +1,6 @@
 ﻿@page "/core/kh-province/main"
 
-@inherits MainPageBase<CambodiaProvince>
+@inherits MainPageBase<KhProvince>
 <MudPaper Class="moog-pg-banner mt-3 px-3 py-4" Elevation="1">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
@@ -23,7 +23,7 @@
                  ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple"
 				 Class="mt-2 moog-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" 
 				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-mud-datagrid-row"
-				 T="CambodiaProvince">
+				 T="KhProvince">
 		<Columns>
 			<PropertyColumn Title="Name" Property="x => x.ObjectName" StickyLeft="true"
 							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
@@ -50,7 +50,7 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="CambodiaProvince" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
+			<MudDataGridPager T="KhProvince" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
 		</PagerContent>
     </MudDataGrid>
 </MudPaper>
@@ -78,9 +78,9 @@
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<CambodiaProvince>> ServerDataFunc(GridState<CambodiaProvince> gridState, CancellationToken token)
+	protected override async Task<GridData<KhProvince>> ServerDataFunc(GridState<KhProvince> gridState, CancellationToken token)
 	{
-		if (IsSearching) return new GridData<CambodiaProvince>
+		if (IsSearching) return new GridData<KhProvince>
 		{
 			Items = [],
 			TotalItems = 0
@@ -119,7 +119,7 @@
 			//	.Take(gridState.Count)
 			//	.ToList();
 
-			return new GridData<CambodiaProvince>
+			return new GridData<KhProvince>
 			{
 				Items = MainDataList,
 				TotalItems = totalItemCount
@@ -129,7 +129,7 @@
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
 
-			return new GridData<CambodiaProvince>
+			return new GridData<KhProvince>
 			{
 				Items = [],
 				TotalItems = 0

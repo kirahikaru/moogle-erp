@@ -117,19 +117,19 @@ public class Person : AuditObject
 
     [Computed]
     [Description("ignore")]
-    public CambodiaAddress? WorkAddress { get; set; }
+    public KhAddress? WorkAddress { get; set; }
 
     [Computed]
     [Description("ignore")]
-    public CambodiaAddress? BirthAddress { get; set; }
+    public KhAddress? BirthAddress { get; set; }
 
     [Computed]
     [Description("ignore")]
-    public CambodiaAddress? ResidentialAddress { get; set; }
+    public KhAddress? ResidentialAddress { get; set; }
 
     [Computed]
     [Description("ignore")]
-    public CambodiaAddress? PostalAddress { get; set; }
+    public KhAddress? PostalAddress { get; set; }
 
     [Computed]
     [Description("ignore"), ReadOnly(true)]

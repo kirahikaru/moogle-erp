@@ -47,7 +47,7 @@ public class Merchant : AuditObject, IParentChildHierarchyObject
 	public Address? Address { get; set; }
 
     [Computed, Write(false)]
-    public CambodiaAddress? CambodiaAddress { get; set; }
+    public KhAddress? CambodiaAddress { get; set; }
 
 	[Computed, Write(false)]
 	public Merchant? Parent { get; set; }

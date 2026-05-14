@@ -47,7 +47,7 @@ public class SupplierBranch : AuditObject
 	public Address? Address { get; set; }
 
 	[Computed, Write(false)]
-	public CambodiaAddress? CambodiaAddress { get; set; }
+	public KhAddress? CambodiaAddress { get; set; }
     #endregion
 
     public SupplierBranch() : base()

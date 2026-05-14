@@ -40,8 +40,8 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
         sbSql.Where("t.Id=@Id");
 		param.Add("@Id", id);
 
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
 		sbSql.LeftJoin($"{Address.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegAddrId");
 		sbSql.LeftJoin($"{Address.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddrId");
 		sbSql.LeftJoin($"{DropdownDataList.MsSqlTable} ft ON ft.IsDeleted=0 AND ft.Id=t.FacilityTypeDdlId");
@@ -50,7 +50,7 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
 
 		string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
-        var dataList = (await cn.QueryAsync<HealthcareFacility, CambodiaAddress, CambodiaAddress, Address, Address, DropdownDataList, HealthcareFacility>(
+        var dataList = (await cn.QueryAsync<HealthcareFacility, KhAddress, KhAddress, Address, Address, DropdownDataList, HealthcareFacility>(
                 sql, (obj, regKhAddr, mainBranchKhAddr, regAddr, mainBranchAddr, facilityType) =>
                 {
                     obj.RegKhAddress = regKhAddr;
@@ -421,8 +421,8 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
         }
 		#endregion
 
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
 		sbSql.LeftJoin($"{Address.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegAddrId");
 		sbSql.LeftJoin($"{Address.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddrId");
 		sbSql.LeftJoin($"{DropdownDataList.MsSqlTable} ft ON ft.IsDeleted=0 AND ft.Id=t.FacilityTypeDdlId");
@@ -447,7 +447,7 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
 
 		using var cn = DbContext.DbCxn;
 
-		var dataList = (await cn.QueryAsync<HealthcareFacility, CambodiaAddress, CambodiaAddress, Address, Address, DropdownDataList, HealthcareFacility>(
+		var dataList = (await cn.QueryAsync<HealthcareFacility, KhAddress, KhAddress, Address, Address, DropdownDataList, HealthcareFacility>(
 				sql, (obj, regKhAddr, mainBranchKhAddr, regAddr, mainBranchAddr, facilityType) =>
 				{
 					obj.RegKhAddress = regKhAddr;
@@ -533,8 +533,8 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
 		}
 		#endregion
 
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
 		sbSql.LeftJoin($"{Address.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegAddrId");
 		sbSql.LeftJoin($"{Address.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddrId");
 		sbSql.LeftJoin($"{DropdownDataList.MsSqlTable} ft ON ft.IsDeleted=0 AND ft.Id=t.FacilityTypeDdlId");
@@ -629,8 +629,8 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
 		}
 		#endregion
 
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} regKhAddr ON regKhAddr.IsDeleted=0 AND regKhAddr.Id=t.RegKhAddrId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} mbKhAddr ON mbKhAddr.IsDeleted=0 AND mbKhAddr.Id=t.MainBranchKhAddrId");
 		sbSql.LeftJoin($"{Address.MsSqlTable} regAddr ON regAddr.IsDeleted=0 AND regAddr.Id=t.RegAddrId");
 		sbSql.LeftJoin($"{Address.MsSqlTable} mbAddr ON mbAddr.IsDeleted=0 AND mbAddr.Id=t.MainBranchAddrId");
 		sbSql.LeftJoin($"{DropdownDataList.MsSqlTable} ft ON ft.IsDeleted=0 AND ft.Id=t.FacilityTypeDdlId");
@@ -654,7 +654,7 @@ public class HealthcareFacilityRepos(IDbContext dbContext) : BaseRepos<Healthcar
 
 		using var cn = DbContext.DbCxn;
 
-		var dataList = (await cn.QueryAsync<HealthcareFacility, CambodiaAddress, CambodiaAddress, Address, Address, DropdownDataList, HealthcareFacility>(
+		var dataList = (await cn.QueryAsync<HealthcareFacility, KhAddress, KhAddress, Address, Address, DropdownDataList, HealthcareFacility>(
 				sql, (obj, regKhAddr, mainBranchKhAddr, regAddr, mainBranchAddr, facilityType) =>
 				{
 					obj.RegKhAddress = regKhAddr;

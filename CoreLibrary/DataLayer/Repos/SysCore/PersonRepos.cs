@@ -96,16 +96,16 @@ public class PersonRepos(IDbContext dbContext) : BaseRepos<Person>(dbContext, Pe
         sbSql.Where("t.IsDeleted=0");
         sbSql.Where("t.Id=@Id");
 
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} ba ON ba.IsDeleted=0 AND ba.Id=t.BirthAddressId");
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} wa ON wa.IsDeleted=0 AND wa.Id=t.WorkAddressId");
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} ra ON ra.IsDeleted=0 AND ra.Id=t.ResidentialAddressId");
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} pa ON pa.IsDeleted=0 AND pa.Id=t.PostalAddressId");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} ba ON ba.IsDeleted=0 AND ba.Id=t.BirthAddressId");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} wa ON wa.IsDeleted=0 AND wa.Id=t.WorkAddressId");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} ra ON ra.IsDeleted=0 AND ra.Id=t.ResidentialAddressId");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} pa ON pa.IsDeleted=0 AND pa.Id=t.PostalAddressId");
 
         string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
         using var cn = DbContext.DbCxn;
 
-        List<Person> result = (await cn.QueryAsync<Person, CambodiaAddress, CambodiaAddress, CambodiaAddress, CambodiaAddress, Person>(sql, (p, ba, wa, ra, pa) =>
+        List<Person> result = (await cn.QueryAsync<Person, KhAddress, KhAddress, KhAddress, KhAddress, Person>(sql, (p, ba, wa, ra, pa) =>
         {
             if (ba != null)
                 p.BirthAddress = ba;

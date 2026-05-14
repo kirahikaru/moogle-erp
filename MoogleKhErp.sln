@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data Backup", "Data Backup"
 		Data Backup\vic-global-db-20251208.zip = Data Backup\vic-global-db-20251208.zip
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoogleMAUI", "MauiApp\MoogleMAUI\MoogleMAUI.csproj", "{04CF0E56-9A84-4A72-A7B9-DE2A9A217A08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,11 @@ Global
 		{D9E1F6BB-B53D-400D-95FA-EFE6CEAD020C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9E1F6BB-B53D-400D-95FA-EFE6CEAD020C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9E1F6BB-B53D-400D-95FA-EFE6CEAD020C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04CF0E56-9A84-4A72-A7B9-DE2A9A217A08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04CF0E56-9A84-4A72-A7B9-DE2A9A217A08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04CF0E56-9A84-4A72-A7B9-DE2A9A217A08}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{04CF0E56-9A84-4A72-A7B9-DE2A9A217A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04CF0E56-9A84-4A72-A7B9-DE2A9A217A08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

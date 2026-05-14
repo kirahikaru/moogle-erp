@@ -87,10 +87,10 @@ public class HealthcareFacility : AuditObject
 	/// Registered Local Address
 	/// </summary>
 	[Computed, Write(false)]
-	public CambodiaAddress? RegKhAddress { get; set; }
+	public KhAddress? RegKhAddress { get; set; }
 
 	[Computed, Write(false)]
-	public CambodiaAddress? MainBranchKhAddress { get; set; }
+	public KhAddress? MainBranchKhAddress { get; set; }
 
 	[Computed, Write(false)]
 	public DropdownDataList? FacilityType { get; set; }

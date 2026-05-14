@@ -317,7 +317,7 @@ public class MessageLogRepos(IDbContext dbContext) : BaseRepos<MessageLog>(dbCon
 
         DataPagination pagination = new()
         {
-            ObjectType = typeof(CambodiaProvince).Name,
+            ObjectType = typeof(KhProvince).Name,
             PageSize = pgSize,
             PageCount = pageCount,
             RecordCount = (int)recordCount

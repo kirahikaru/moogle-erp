@@ -9,9 +9,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PruIT_CMDB_ITSM.Client\PruIT_CMDB_ITSM.Client.csproj" />
-    <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="9.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.7" />
+    <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="9.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.8" />
     <PackageReference Include="MudBlazor" Version="9.4.0" />
+    <PackageReference Include="SharpCompress" Version="0.48.0" />
   </ItemGroup>
 
 </Project>

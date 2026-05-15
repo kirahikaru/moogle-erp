@@ -2,11 +2,11 @@
 
 namespace DataLayer.Repos.SysCore;
 
-public interface IObjectStateConfigRepos : IBaseRepos<ObjectStateConfig>
+public interface IObjStateConfigRepos : IBaseRepos<ObjStateConfig>
 {
-	Task<IEnumerable<ObjectStateConfig>> GetAsync(string objectClassName, string objectFieldName);
+	Task<IEnumerable<ObjStateConfig>> GetAsync(string objectClassName, string objectFieldName);
 
-	Task<KeyValuePair<int, IEnumerable<ObjectStateConfig>>> SearchAsync(
+	Task<KeyValuePair<int, IEnumerable<ObjStateConfig>>> SearchAsync(
 		int pgSize = 0,
 		int pgNo = 0,
 		string? searchText = null,
@@ -15,9 +15,9 @@ public interface IObjectStateConfigRepos : IBaseRepos<ObjectStateConfig>
 		List<int>? excludeIdList = null);
 }
 
-public class ObjectStateConfigRepos(IDbContext dbContext) : BaseRepos<ObjectStateConfig>(dbContext, Notification.DatabaseObject), IObjectStateConfigRepos
+public class ObjStateConfigRepos(IDbContext dbContext) : BaseRepos<ObjStateConfig>(dbContext, Notification.DatabaseObject), IObjStateConfigRepos
 {
-	public async Task<IEnumerable<ObjectStateConfig>> GetAsync(string objectClassName, string objectFieldName)
+	public async Task<IEnumerable<ObjStateConfig>> GetAsync(string objectClassName, string objectFieldName)
 	{
 		SqlBuilder sbSql = new();
 		DynamicParameters param = new();
@@ -31,11 +31,11 @@ public class ObjectStateConfigRepos(IDbContext dbContext) : BaseRepos<ObjectStat
 		string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 
 		using var cn = DbContext.DbCxn;
-		var dataList = await cn.QueryAsync<ObjectStateConfig>(sql, param);
+		var dataList = await cn.QueryAsync<ObjStateConfig>(sql, param);
 		return dataList;
 	}
 
-	public async Task<KeyValuePair<int, IEnumerable<ObjectStateConfig>>> SearchAsync(
+	public async Task<KeyValuePair<int, IEnumerable<ObjStateConfig>>> SearchAsync(
 		int pgSize = 0,
 		int pgNo = 0,
 		string? searchText = null,
@@ -104,11 +104,11 @@ public class ObjectStateConfigRepos(IDbContext dbContext) : BaseRepos<ObjectStat
 
 		using var cn = DbContext.DbCxn;
 
-		var dataList = (await cn.QueryAsync<ObjectStateConfig>(sql, param)).AsList();
+		var dataList = (await cn.QueryAsync<ObjStateConfig>(sql, param)).AsList();
 
 		string countSql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
 		int count = await cn.ExecuteScalarAsync<int>(countSql, param);
 
-		return new KeyValuePair<int, IEnumerable<ObjectStateConfig>>(count, dataList);
+		return new KeyValuePair<int, IEnumerable<ObjStateConfig>>(count, dataList);
 	}
 }

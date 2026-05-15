@@ -7,7 +7,7 @@
 namespace DataLayer.Models.SysCore;
 
 [Table("ObjStatusAuditTrail"), DisplayName("Object Status Audit Trail")]
-public class ObjectStatusAuditTrail : AuditObject
+public class ObjStatusAuditTrail : AuditObject
 {
 	[Computed, ReadOnly(true), Write(false)]
 	public new static string MsSqlTableName => $"ObjStatusAuditTrail";

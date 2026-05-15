@@ -9,9 +9,9 @@ public interface IKhVillageRepos : IBaseRepos<KhVillage>
 
 	Task<List<DropDownListItem>> GetForDropdownSelect1Async(int? khCommuneId = null, string? searchText = null);
 
-	new Task<List<SearchItemCambodiaVillage>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null);
+	new Task<List<SearchItemKhVillage>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null);
 
-	Task<List<SearchItemCambodiaVillage>> SearchAsync(
+	Task<List<SearchItemKhVillage>> SearchAsync(
 		int pgSize = 0, int pgNo = 0,
 		string? objectCode = null,
 		string? objectName = null,
@@ -177,7 +177,7 @@ public class KhVillageRepos(IDbContext dbContext) : BaseRepos<KhVillage>(dbConte
 		return new(dataCount, dataList);
 	}
 
-	public new async Task<List<SearchItemCambodiaVillage>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null)
+	public new async Task<List<SearchItemKhVillage>> QuickSearchAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, List<int>? excludeIdList = null)
 	{
 		if (pgNo < 0 && pgSize < 0)
 			throw new ArgumentOutOfRangeException(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
@@ -257,7 +257,7 @@ public class KhVillageRepos(IDbContext dbContext) : BaseRepos<KhVillage>(dbConte
 		}
 
 		using var cn = DbContext.DbCxn;
-        var dataList = (await cn.QueryAsync<SearchItemCambodiaVillage>(sql, param, commandTimeout: 180)).AsList();
+        var dataList = (await cn.QueryAsync<SearchItemKhVillage>(sql, param, commandTimeout: 180)).AsList();
         //var dataList = (await cn.QueryAsync<CambodiaVillage, CambodiaCommune, CambodiaDistrict, CambodiaProvince, CambodiaVillage>(sql,
         //								(obj, c, d, p) =>
         //								{
@@ -275,7 +275,7 @@ public class KhVillageRepos(IDbContext dbContext) : BaseRepos<KhVillage>(dbConte
         return dataList;
 	}
 
-	public async Task<List<SearchItemCambodiaVillage>> SearchAsync(
+	public async Task<List<SearchItemKhVillage>> SearchAsync(
         int pgSize = 0, int pgNo = 0,
         string? objectCode = null,
         string? objectName = null,
@@ -380,7 +380,7 @@ public class KhVillageRepos(IDbContext dbContext) : BaseRepos<KhVillage>(dbConte
 
         using var cn = DbContext.DbCxn;
 
-        var dataList = (await cn.QueryAsync<SearchItemCambodiaVillage>(sql, param)).AsList();
+        var dataList = (await cn.QueryAsync<SearchItemKhVillage>(sql, param)).AsList();
 
         //var dataList = (await cn.QueryAsync<CambodiaVillage, CambodiaCommune, CambodiaDistrict, CambodiaProvince, CambodiaVillage>(sql,
         //								(obj, c, d, p) =>

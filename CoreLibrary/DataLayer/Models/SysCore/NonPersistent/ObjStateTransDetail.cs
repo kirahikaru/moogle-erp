@@ -1,6 +1,6 @@
 ﻿namespace DataLayer.Models.SysCore.NonPersistent;
 
-public class ObjectStateTransitionDetail
+public class ObjStateTransDetail
 {
     public int? ObjectId { get; set; }
     public string? ObjectType { get; set; }

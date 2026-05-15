@@ -1,7 +1,7 @@
 ﻿namespace DataLayer.Models.SysCore.NonPersistent;
 
 [DisplayName("Cambodia Village")]
-public class SearchItemCambodiaVillage
+public class SearchItemKhVillage
 {
     public int? Id { get; set; }
     public string? ObjectCode { get; set; }

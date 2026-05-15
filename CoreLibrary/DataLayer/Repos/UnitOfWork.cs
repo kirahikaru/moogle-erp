@@ -12,16 +12,16 @@ public interface IUnitOfWork : IDisposable
 	IBusinessEntityRepos BusinessEntities { get; }
 	IBusinessSectorRepos BusinessSectors { get; }
 	ICalendarRepos Calendars { get; }
-	ICambodiaAddressRepos CambodiaAddresses { get; }
-	ICambodiaCommuneRepos CambodiaCommunes { get; }
-	ICambodiaDistrictRepos CambodiaDistricts { get; }
-	ICambodiaProvinceRepos CambodiaProvinces { get; }
-	ICambodiaVillageRepos CambodiaVillages { get; }
+	IKhAddressRepos KhAddresses { get; }
+	IKhCommuneRepos KhCommunes { get; }
+	IKhDistrictRepos KhDistricts { get; }
+	IKhProvinceRepos KhProvinces { get; }
+	IKhVillageRepos KhVillages { get; }
 
 	/// <summary>
 	/// Cambodia Country Structure
 	/// </summary>
-	ICambodiaCtyStructRepos CambodiaCtyStructs { get; }
+	IKhCtyStructRepos KhCtyStructs { get; }
 	IContactRepos Contacts { get; }
 	IContactPhoneRepos ContactPhones { get; }
 	ICountryRepos Countries { get; }
@@ -47,9 +47,9 @@ public interface IUnitOfWork : IDisposable
 	IMessageLogRepos MessageLogs { get; }
 	IMsngrConvoHistoryRepos MsngrConvoHistories { get; }
 	INotificationRepos Notifications { get; }
-    IObjectStateConfigRepos ObjectStateConfigs { get; }
-	IObjectStateHistoryRepos ObjectStateHistories { get; }
-	IObjectStatusAuditTrailRepos ObjectStatusAuditTrails { get; }
+    IObjStateConfigRepos ObjStateConfigs { get; }
+	IObjStateHistoryRepos ObjStateHistories { get; }
+	IObjStatusAuditTrailRepos ObjStatusAuditTrails { get; }
 	IOccupationRepos Occupations { get; }
 	/// <summary>
 	/// Occupation Category
@@ -196,12 +196,12 @@ public class UnitOfWork : IUnitOfWork
         BusinessEntities = new BusinessEntityRepos(DbContext);
         BusinessSectors = new BusinessSectorRepos(DbContext);
         Calendars = new CalendarRepos(DbContext);
-        CambodiaAddresses = new KhAddressRepos(DbContext);
-        CambodiaCommunes = new KhCommuneRepos(DbContext);
-        CambodiaDistricts = new KhDistrictRepos(DbContext);
-        CambodiaProvinces = new KhProvinceRepos(DbContext);
-        CambodiaVillages = new KhVillageRepos(DbContext);
-		CambodiaCtyStructs = new KhCtyStructRepos(DbContext);
+        KhAddresses = new KhAddressRepos(DbContext);
+        KhCommunes = new KhCommuneRepos(DbContext);
+        KhDistricts = new KhDistrictRepos(DbContext);
+        KhProvinces = new KhProvinceRepos(DbContext);
+        KhVillages = new KhVillageRepos(DbContext);
+		KhCtyStructs = new KhCtyStructRepos(DbContext);
         Contacts = new ContactRepos(DbContext);
         ContactPhones = new ContactPhoneRepos(DbContext);
         Countries = new CountryRepos(DbContext);
@@ -221,9 +221,9 @@ public class UnitOfWork : IUnitOfWork
         MessageLogs = new MessageLogRepos(DbContext);
         MsngrConvoHistories = new MsngrConvoHistoryRepos(DbContext);
         Notifications = new NotificationRepos(DbContext);
-		ObjectStateConfigs = new ObjectStateConfigRepos(DbContext);
-		ObjectStateHistories = new ObjectStateHistoryRepos(DbContext);
-        ObjectStatusAuditTrails = new ObjectStatusAuditTrailRepos(DbContext);
+		ObjStateConfigs = new ObjStateConfigRepos(DbContext);
+		ObjStateHistories = new ObjStateHistoryRepos(DbContext);
+        ObjStatusAuditTrails = new ObjStatusAuditTrailRepos(DbContext);
         Occupations = new OccupationRepos(DbContext);
         OccpCategories = new OccpCategoryRepos(DbContext);
         OccpIndustries = new OccpIndustryRepos(DbContext);
@@ -261,12 +261,12 @@ public class UnitOfWork : IUnitOfWork
     public IBusinessEntityRepos BusinessEntities { get; }
     public IBusinessSectorRepos BusinessSectors { get; }
     public ICalendarRepos Calendars { get; }
-    public ICambodiaAddressRepos CambodiaAddresses { get; }
-    public ICambodiaCommuneRepos CambodiaCommunes { get; }
-    public ICambodiaDistrictRepos CambodiaDistricts { get; }
-    public ICambodiaProvinceRepos CambodiaProvinces { get; }
-    public ICambodiaVillageRepos CambodiaVillages { get; }
-    public ICambodiaCtyStructRepos CambodiaCtyStructs { get; }
+    public IKhAddressRepos KhAddresses { get; }
+    public IKhCommuneRepos KhCommunes { get; }
+    public IKhDistrictRepos KhDistricts { get; }
+    public IKhProvinceRepos KhProvinces { get; }
+    public IKhVillageRepos KhVillages { get; }
+    public IKhCtyStructRepos KhCtyStructs { get; }
     public IContactRepos Contacts { get; }
     public IContactPhoneRepos ContactPhones { get; }
     public ICountryRepos Countries { get; }
@@ -288,9 +288,9 @@ public class UnitOfWork : IUnitOfWork
     public IMessageLogRepos MessageLogs { get; }
     public IMsngrConvoHistoryRepos MsngrConvoHistories { get; }
     public INotificationRepos Notifications { get; }
-	public IObjectStateConfigRepos ObjectStateConfigs { get; }
-	public IObjectStateHistoryRepos ObjectStateHistories { get; }
-    public IObjectStatusAuditTrailRepos ObjectStatusAuditTrails { get; }
+	public IObjStateConfigRepos ObjStateConfigs { get; }
+	public IObjStateHistoryRepos ObjStateHistories { get; }
+    public IObjStatusAuditTrailRepos ObjStatusAuditTrails { get; }
     public IOccupationRepos Occupations { get; }
     public IOccpCategoryRepos OccpCategories { get; }
     public IOccpIndustryRepos OccpIndustries { get; }

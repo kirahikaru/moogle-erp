@@ -83,7 +83,7 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
 
         if (dataList != null && dataList.Count != 0)
         {
-            dataList[0].AuditTrails = (await cn.QueryAsync<ObjectStateHistory>($"SELECT * FROM {ObjectStateHistory.MsSqlTable} WHERE IsDeleted=0 AND ObjectName=@ObjectName AND ObjectId=@ObjectId ORDER BY EffectiveDate DESC, CreatedDateTime DESC",
+            dataList[0].AuditTrails = (await cn.QueryAsync<ObjStateHistory>($"SELECT * FROM {ObjStateHistory.MsSqlTable} WHERE IsDeleted=0 AND ObjectName=@ObjectName AND ObjectId=@ObjectId ORDER BY EffectiveDate DESC, CreatedDateTime DESC",
                     new { ObjectName = dataList[0].GetType().Name, ObjectId= dataList[0].Id })).AsList();
 
 			return dataList[0];

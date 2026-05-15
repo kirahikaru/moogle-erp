@@ -3,10 +3,10 @@
 namespace DataLayer.Models.SysCore;
 
 [Table("[dbo].[ObjectStateConfig]"), DisplayName("Object State Config")]
-public class ObjectStateConfig : AuditObject
+public class ObjStateConfig : AuditObject
 {
 	[Computed, ReadOnly(true), Write(false)]
-	public static string TableName => $"{typeof(ObjectStateConfig).Name}";
+	public static string TableName => $"{typeof(ObjStateConfig).Name}";
 
 	[Computed, ReadOnly(true), Write(false)]
 	public new static string PgTableName => $"object_state_config";

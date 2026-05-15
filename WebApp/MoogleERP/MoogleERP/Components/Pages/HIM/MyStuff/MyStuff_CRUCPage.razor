@@ -290,7 +290,7 @@
                 </MudPaper>
             </MudTabPanel>
             <MudTabPanel Icon="material-symbols-rounded/info" Text="Other Info">
-                <MudDataGrid Class="main-pg-datagrid mt-2" T="ObjectStateHistory" Items="CurrentObject!.AuditTrails" Dense="true" Hover="true" FixedHeader="true" Striped="true" 
+                <MudDataGrid Class="main-pg-datagrid mt-2" T="ObjStateHistory" Items="CurrentObject!.AuditTrails" Dense="true" Hover="true" FixedHeader="true" Striped="true" 
 			                ColumnResizeMode="ResizeMode.Container" Height="calc(100vh - 270px)" >
 		            <Columns>
                         <PropertyColumn Property="x => x.EffectiveDate" Title="Date" Format="dd-MMM-yyyy" HeaderClass="mud-datagrid-hdr" HeaderStyle=@DataGridHdrStyle CellClass="mud-datagrid-cell" />
@@ -628,7 +628,7 @@
 
                 if (_objStateTranDetail != null)
                 {
-                    ObjectStateHistory objStateHist = new()
+                    ObjStateHistory objStateHist = new()
                     {
                         ObjectId = objId,
                         ObjectName = _objStateTranDetail.ObjectType,
@@ -670,7 +670,7 @@
 
             if (isUpdated && _objStateTranDetail != null)
             {
-                ObjectStateHistory objStateHist = new()
+                ObjStateHistory objStateHist = new()
                 {
                     ObjectId = CurrentObject.Id,
                     ObjectName = _objStateTranDetail.ObjectType,

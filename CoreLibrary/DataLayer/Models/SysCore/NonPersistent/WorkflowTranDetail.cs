@@ -2,7 +2,10 @@
 
 namespace DataLayer.Models.SysCore.NonPersistent;
 
-public class WorkflowTransitionDetail
+/// <summary>
+/// Workflow Transition Detail
+/// </summary>
+public class WorkflowTranDetail
 {
     public int? ObjectId { get; set; }
     public string? ObjectType { get; set; }

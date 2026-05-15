@@ -2,7 +2,7 @@
 namespace DataLayer.Models.SysCore;
 
 [Table("ObjStateHist"), DisplayName("Object State History")]
-public class ObjectStateHistory : AuditObject
+public class ObjStateHistory : AuditObject
 {
 	[Computed, ReadOnly(true), Write(false)]
 	public new static string MsSqlTableName => $"ObjStateHist";

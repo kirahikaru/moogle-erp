@@ -110,7 +110,7 @@ public class OwnedItem : AuditObject
 	public Country? ManufacturedCountry { get; set; }
 
 	[Computed, Write(false)]
-	public List<ObjectStateHistory> AuditTrails { get; set; }
+	public List<ObjStateHistory> AuditTrails { get; set; }
 	#endregion
 
 	#region *** DYANMIC PROPERTIES ***

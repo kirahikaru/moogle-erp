@@ -149,7 +149,7 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 				if (obj.CorrespAddrId != null || obj.ResAddrId != null)
 					await cn.UpdateAsync(obj);
 
-                ObjectStatusAuditTrail statusChgAudit = new()
+                ObjStatusAuditTrail statusChgAudit = new()
                 {
                     ObjectCode = obj.ObjectCode,
                     ObjectName = obj.GetType().Name,
@@ -183,7 +183,7 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 
                     if (updEmployeeCount > 0)
                     {
-                        ObjectStatusAuditTrail activateStatusChgAudit = new()
+                        ObjStatusAuditTrail activateStatusChgAudit = new()
                         {
                             ObjectCode = obj.ObjectCode,
                             ObjectName = obj.GetType().Name,
@@ -326,7 +326,7 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 
         try
         {
-            ObjectStatusAuditTrail? statusChgAudit = null;
+            ObjStatusAuditTrail? statusChgAudit = null;
 
             if (EmployeeStatuses.IsValid(endStatus))
             {

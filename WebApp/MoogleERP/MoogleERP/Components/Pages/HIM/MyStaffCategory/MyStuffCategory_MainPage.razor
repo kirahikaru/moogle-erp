@@ -1,7 +1,7 @@
 ﻿@page "/him/my-stuff-ctg/main"
 @using DataLayer.AuxComponents.Extensions
 @inherits MainPageBase<OwnedItemCategory>
-<MudPaper Class="moog-pg-banner mt-3 px-3 py-4" Elevation="1">
+<MudPaper Class="moog-pg-banner mt-4 px-4 py-4" Elevation="0">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
 		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
@@ -10,15 +10,15 @@
         </MudButton>
     </MudStack>
 </MudPaper>
-<MudPaper Class="mt-3 pa-3 overflow-y-auto rounded-lg" Elevation="1" Height="calc(100vh - 165px)">
-    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None" Spacing="2">
-        <MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="moog-mud-form-field bordered"
-                      AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
-                      Placeholder="Search text here..." HelperText="<Search input instruction here>"
-                      @bind-Value="SearchText" OnKeyDown="OnSearchTextBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
+<MudPaper Class="mt-5 overflow-y-auto" Elevation="0" Height="calc(100vh - 200px)" Style="background-color: var(--tw-gray-50); border-radius: 16px; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;">
+	<MudStack Class="ma-4" Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
+		<MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="moog-form-field"
+					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
+					  Placeholder="Search text here..."
+					  @bind-Value="SearchText" OnKeyDown="OnSearchTextBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
 		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-btn-base"
 				   StartIcon="material-symbols-rounded/search" OnClick="OnSearchClicked">Search</MudButton>
-    </MudStack>
+	</MudStack>
 	<MudDataGrid Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage="50" Elevation="0"
                  ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple"
 				 Class="mt-2 moog-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" 

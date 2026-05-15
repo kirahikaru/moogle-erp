@@ -950,6 +950,26 @@ public static class ObjectStateActions
 	public const string STASH = "STASH";
     public const string USE_RARELY = "USE-RARELY";
 
+    public static Dictionary<string, string> GetActionIconList()
+    {
+		return new Dictionary<string, string>()
+		{
+			{ RETURN, "fad fa-undo-alt" },
+			{ LOSE, "fad fa-compass-slash" },
+			{ PURCHASE, "fad fa-money-bill-wave" },
+			{ BROKE, "fad fa-box-fragile" },
+			{ GIVEN_OTHER, "fad fa-gift" },
+			{ ADD_WISHLIST, "fad fa-heart-square" },
+			{ SAVE_DRAFT, "fad fa-save" },
+			{ SELL, "fad fa-comments-dollar"},
+			{ LEND_OUT, "fad fa-hand-holding-box" },
+			{ STASH, "fa fa-box" },
+			{ USE_RARELY, "fad fa-user-clock" },
+			{ START_USING, "fad fa-play-circle" },
+			{ WRITE_OFF, "fad fa-money-check-edit" }
+		};
+	}
+
     public static Dictionary<string, string> GetActionMaterialIconList()
     {
         return new Dictionary<string, string>()

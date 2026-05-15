@@ -249,6 +249,7 @@
                 }
 
                 &:focus-within {
+                    outline: 1.5px solid var(--tw-gray-500);
                     &.mud-input-underline::after {
                         transition: none;
                         border: none;
@@ -272,10 +273,6 @@
                     &.mud-input-text-with-label {
                         margin-top: 18px;
                     }
-                }
-
-                &:focus-within {
-                    outline: 1.5px solid var(--tw-gray-500);
                 }
 
                 > .mud-icon-button-size-small {

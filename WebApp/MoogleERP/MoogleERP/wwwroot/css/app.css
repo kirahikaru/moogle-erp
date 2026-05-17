@@ -1,5 +1,10 @@
 ﻿/*@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');*/
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+/* 
+    To unlock Inter's advanced OpenType features in CSS, you need to use the font-feature-settings property. 
+    While Google Fonts hosts the Inter typeface, their subsets sometimes lack advanced features. 
+    For full functionality, consider downloading the font directly from the Inter GitHub Repository.
+ */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Victor+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Delius&family=Hanuman:wght@100..900&family=Reddit+Mono:wght@200..900&display=swap');
@@ -13,8 +18,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Delius&family=Reddit+Mono:wght@200..900&display=swap');
 
+/* Google Sans Code */
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght,MONO@0,300..800,0..1;1,300..800,0..1&display=swap');
+
+
+@supports (font-variation-settings: normal) {
+  :root { font-family: 'Inter var', sans-serif; }
+}
 
 :root {
+    font-family: 'Inter', sans-serif;
+    font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'liga' 1, 'calt' 1; /* fix for Chrome */
+
+    --fs-moog-base: 0.875rem; 
+    --moog-font-base: 'Inter', sans-serif;
+    --moog-font-base-kh: "Koh Santepheap", sans-serif;
+
     --ssv-pharma-blue: #0B83CD;
     --ssv-pharma-blue-50: #F1F8FE;
     --ssv-pharma-blue-100: #E1F1FD;
@@ -28,10 +48,7 @@
     --ssv-pharma-blue-900: #10456A;
     --ssv-pharma-blue-950: #0B2C46;
     --ssv-pharma-green: #01A54E;
-    --vic-en-font-size-base: 10pt;
-    --vic-en-font-base: 'Inter', sans-serif;
-    --vic-kh-font-size-base: 12pt;
-    --vic-kh-font-base: "Koh Santepheap", sans-serif;
+    
     /*PRUDENTIAL THEME COLORS */
     --pru-red: #ED1B2E;
     --pru-light-grey: #F7F7F7;
@@ -62,6 +79,7 @@
     --metronic-gray-800: #3F4254;
     --metronic-gray-900: #181C32;
     /*#endregion*/
+
     /*#region MATERIAL COLOR PALLETTE */
     --material-blue-50: #E3F2FD;
     --material-blue-100: #BBDEFB;
@@ -338,12 +356,9 @@
     --google-green-950: #03301d;
 }
 
-body {
-    height: 100vh;
-    margin: 0;
-    padding: 0;
+html, body {
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'liga' 1, 'calt' 1; /* fix for Chrome */
 }
-
 
 /*#region FONT: Bebas Neue*/
 .bebas-neue {
@@ -821,4 +836,70 @@ body {
   font-style: normal;
 }
 
+/*#endregion */
+
+/*#region FONT: Google Sans Code  */
+.google-sans-code-300 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+.google-sans-code-400 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+.google-sans-code-500 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+.google-sans-code-600 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+
+.google-sans-code-700 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+.google-sans-code-800 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+.google-sans-code-900 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
 /*#endregion */

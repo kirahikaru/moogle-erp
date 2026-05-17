@@ -4,7 +4,7 @@
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
-<MudLayout>
+<MudLayout Style="display: flex; flex-direction: column">
     <MudAppBar Elevation="0" Color="@Color.Inherit">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">Moogle</MudText>
@@ -16,7 +16,7 @@
     <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0" Width="300px" Style="border-right:1px solid var(--tw-gray-100);">
         <NavMenu />
     </MudDrawer>
-    <MudMainContent Class="pt-18 pa-5">
+    <MudMainContent Class="moog-mudmaincontent">
         @Body
     </MudMainContent>
 </MudLayout>
@@ -55,43 +55,8 @@
 
         _theme = new()
         {
-            Typography = new Typography()
-            {
-                Body1 = new Body1Typography()
-                {
-                    FontFamily = new[] { "Inter", "sans-serif" },
-                    FontSize = "12px"
-                },
-                Body2 = new Body1Typography()
-                {
-                    FontFamily = new[] { "Inter", "sans-serif" },
-                    FontSize = "12px"
-                },
-                H4 = new H4Typography()
-                {
-                    FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                    FontWeight = "800",
-                    FontSize = "36px",
-                },
-                H5 = new H5Typography()
-                {
-                    FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                    FontWeight = "700",
-                    FontSize = "28px"
-                },
-                H6 = new H6Typography()
-                {
-                    FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                    FontWeight = "600",
-                    FontSize = "32px"
-                },
-                Default = new DefaultTypography()
-                {
-                    FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                    FontSize = "10pt"
-                }
-            },
-            PaletteLight = _ssvPalleteLight,
+            Typography = _moogTypography,
+            PaletteLight = _moogPalleteLight,
             PaletteDark = _darkPalette,
             LayoutProperties = new LayoutProperties()
         };
@@ -107,7 +72,56 @@
         _isDarkMode = !_isDarkMode;
     }
 
-    private readonly PaletteLight _ssvPalleteLight = new()
+    private readonly Typography _moogTypography = new Typography()
+        {
+            Body1 = new Body1Typography()
+            {
+                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+                FontSize = "0.875rem"
+            },
+            Body2 = new Body1Typography()
+            {
+                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+                FontSize = "0.875rem"
+            },
+            H1 = new H1Typography()
+            {
+                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+            },
+            H2 = new H1Typography()
+            {
+                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+            },
+            H3 = new H1Typography()
+            {
+                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+            },
+            H4 = new H4Typography()
+            {
+                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+                FontWeight = "800",
+                FontSize = "36px",
+            },
+            H5 = new H5Typography()
+            {
+                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+                FontWeight = "700",
+                FontSize = "28px"
+            },
+            H6 = new H6Typography()
+            {
+                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+                FontWeight = "600",
+                FontSize = "32px"
+            },
+            Default = new DefaultTypography()
+            {
+                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+                FontSize = "10pt"
+            }
+        };
+
+    private readonly PaletteLight _moogPalleteLight = new()
     {
         AppbarBackground = "#0B83CD", //Suon Sovann Pharma Blue
         Primary = "#0B83CD", //Suon Sovann Pharma Blue

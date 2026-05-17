@@ -1,5 +1,10 @@
 ﻿/*@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');*/
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+/* 
+    To unlock Inter's advanced OpenType features in CSS, you need to use the font-feature-settings property. 
+    While Google Fonts hosts the Inter typeface, their subsets sometimes lack advanced features. 
+    For full functionality, consider downloading the font directly from the Inter GitHub Repository.
+ */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Victor+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Delius&family=Hanuman:wght@100..900&family=Reddit+Mono:wght@200..900&display=swap');
@@ -16,6 +21,8 @@
 
 
 :root {
+    font-family: 'Inter', sans-serif;
+    font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
     --base-font-size: 0.875rem;
     --base-font-size-md: 0.875rem;
     --base-font-family: 'Inter', sans-serif;
@@ -66,6 +73,7 @@
     --metronic-gray-700: #5E6278;
     --metronic-gray-800: #3F4254;
     --metronic-gray-900: #181C32;
+    /*#endregion */
 
     --telegram-blue: #24A1DE;
     --facebook-blue: #1877f2;
@@ -90,6 +98,7 @@
     --google-green-900: #115636;
     --google-green-950: #03301d;
 
+    /*#region Tailwing Colors */
     --tw-red-50: #FEF2F2;
     --tw-red-100: #FFE2E2;
     --tw-red-200: #FFC9C9;
@@ -332,12 +341,11 @@
     --tw-slate-800: #1D293D;
     --tw-slate-900: #0F172B;
     --tw-slate-950: #020618;
+    /*#endregion */
 }
 
-body {
-    height: 100vh;
-    margin: 0;
-    padding: 0;
+html, body {
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'liga' 1, 'calt' 1; /* fix for Chrome */
 }
 
 .moog-font-mono {

@@ -204,7 +204,7 @@ input[type="text" i] {
                     &.mud-input-underline::after {
                         transition: none;
                         border: none;
-                    }    
+                    }
                 }
 
                 &.mud-input-underline {

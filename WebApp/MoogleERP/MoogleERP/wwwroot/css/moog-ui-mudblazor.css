@@ -38,11 +38,22 @@
 
 /*#endregion */
 
+.moog-mudmaincontent {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--mud-appbar-height));
+    margin-top: 64px;
+    background-color: green;
+    /* margin-top: var(--mud-appbar-height); */
+    padding: 20px;
+}
+
+/*#region MudNav Mud Navigation */
 .mud-navmenu.mud-navmenu-margin-dense .mud-nav-link {
     margin: 0px 0;
 }
 
-.moog-nav-grp-l1 {
+.moog-mudnavgroup-l1 {
     padding: 0px 10px 0px 14px;
     > .mud-nav-link {
         display: flex;
@@ -103,7 +114,7 @@
     }
 }
 
-.moog-nav-grp-l2 {
+.moog-mudnavgroup-l2 {
     padding-left: 10px;
     > .mud-nav-link {
         display: flex;
@@ -162,7 +173,7 @@
     }
 }
 
-.moog-nav-item-l0 {
+.moog-mudnavlink-l1 {
     > .mud-nav-link {
         color: var(--tw-gray-600);
         display: flex;
@@ -217,7 +228,7 @@
     }
 }
 
-.moog-nav-item-l1 {
+.moog-mudnavlink-l2 {
     margin-left: 10px;
     margin-top: 4px;
     padding-right: 10px;
@@ -280,7 +291,7 @@
     }
 }
 
-.moog-nav-item-l2 {
+.moog-mudnavlink-l3 {
     margin-left: 10px;
     margin-top: 4px;
     padding-right: 10px;
@@ -343,6 +354,7 @@
         }
     }
 }
+/*#endregion */
 
 .moog-form-field {
 
@@ -1207,7 +1219,7 @@
 }
 
 /*#region MudDataGrid */
-.moog-mud-datagrid {
+.moog-muddatagrid {
     border: solid 1px var(--material-gray-300);
     border-radius: 0px;
 
@@ -1268,7 +1280,7 @@
     }
 }
 
-.moog-mud-datagrid-hdr {
+.moog-muddatagrid-hdr {
     font-weight:600 !important;
     padding-inline-start: 6px !important;
     padding-inline-end: 6px !important;
@@ -1332,7 +1344,7 @@
     }
 }
 
-.moog-mud-datagrid-row {
+.moog-muddatagrid-row {
     &.selected {
         border-left: var(--ssv-pharma-blue) 2px solid;
 

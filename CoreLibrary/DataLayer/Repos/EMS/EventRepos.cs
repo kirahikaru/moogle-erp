@@ -29,7 +29,7 @@ public interface IEventRepos : IBaseRepos<Event>
 		DateTime? fromDateTime = null,
 		DateTime? toDateTime = null);
 
-	Task<int> SaveAndTransitWorkflowAsync(Event obj, WorkflowTransitionDetail wtd);
+	Task<int> SaveAndTransitWorkflowAsync(Event obj, WorkflowTranDetail wtd);
 
 	Task<List<DropdownSelectItem>> GetValidEventForInvitationAsync(string? searchText = null);
 	Task<List<DropdownSelectItem>> GetValidEventForRegistrationAsync(string? searchText = null);
@@ -334,7 +334,7 @@ public class EventRepos(IDbContext dbContext) : BaseRepos<Event>(dbContext, Even
         return pagination;
     }
 
-    public async Task<int> SaveAndTransitWorkflowAsync(Event obj, WorkflowTransitionDetail wtd)
+    public async Task<int> SaveAndTransitWorkflowAsync(Event obj, WorkflowTranDetail wtd)
     {
         if (string.IsNullOrEmpty(wtd.CurrentWorkflowStatus) || string.IsNullOrEmpty(wtd.WorkflowAction))
             throw new Exception("Current Workflow Status and Workflow Action cannot be null.");

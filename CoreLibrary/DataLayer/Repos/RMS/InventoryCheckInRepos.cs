@@ -9,7 +9,7 @@ public interface IInventoryCheckInRepos : IBaseWorkflowEnabledRepos<InventoryChe
 	Task<InventoryCheckIn?> GetFullAsync(int objId);
 	Task<int> InsertFullAsync(InventoryCheckIn obj);
 	Task<bool> UpdateFullAsync(InventoryCheckIn obj);
-	Task<int> SaveAndTransitWorkflowAsync(InventoryCheckIn obj, WorkflowTransitionDetail wtd);
+	Task<int> SaveAndTransitWorkflowAsync(InventoryCheckIn obj, WorkflowTranDetail wtd);
 
 	Task<List<InventoryCheckIn>> SearchAsync(
 		int pgSize = 0, int pgNo = 0,
@@ -541,7 +541,7 @@ public class InventoryCheckInRepos(IDbContext dbContext) : BaseWorkflowEnabledRe
         return pagination;
     }
 
-    public async Task<int> SaveAndTransitWorkflowAsync(InventoryCheckIn obj, WorkflowTransitionDetail wtd)
+    public async Task<int> SaveAndTransitWorkflowAsync(InventoryCheckIn obj, WorkflowTranDetail wtd)
     {
         if (string.IsNullOrEmpty(wtd.CurrentWorkflowStatus) || string.IsNullOrEmpty(wtd.WorkflowAction))
             throw new Exception("Current Workflow Status and Workflow Action cannot be null.");

@@ -23,10 +23,10 @@
                         }
                         else
                         {
-                            <MudSelect T="ObjectStateConfig" @bind-Value=_fromState Clearable="true" ReadOnly="true" Dense="true" Class="form-field-base">
-                                @foreach (ObjectStateConfig state in _validStateList)
+                            <MudSelect T="ObjStateConfig" @bind-Value=_fromState Clearable="true" ReadOnly="true" Dense="true" Class="form-field-base">
+                                @foreach (ObjStateConfig state in _validStateList)
                                 {
-                                    <MudSelectItem T="ObjectStateConfig" Value=@state>@state.ObjectName</MudSelectItem>
+                                    <MudSelectItem T="ObjStateConfig" Value=@state>@state.ObjectName</MudSelectItem>
                                 }
                             </MudSelect>
                         }
@@ -37,12 +37,12 @@
                         }
                         else
                         {
-                            <MudSelect T="ObjectStateConfig" @bind-Value=_toState Clearable="true" Dense="true" Class="form-field-base">
-                                @foreach (ObjectStateConfig state in _validStateList)
+                            <MudSelect T="ObjStateConfig" @bind-Value=_toState Clearable="true" Dense="true" Class="form-field-base">
+                                @foreach (ObjStateConfig state in _validStateList)
                                 {
                                     @if (string.IsNullOrEmpty(state.ValidSourceObjectStates) || state.ValidSourceObjectStates!.Contains(TransitionDetail!.CurrentState ?? "???"))
                                     {
-                                        <MudSelectItem T="ObjectStateConfig" Value=@state>@state.ObjectName</MudSelectItem>
+                                        <MudSelectItem T="ObjStateConfig" Value=@state>@state.ObjectName</MudSelectItem>
                                     }
                                 }
                             </MudSelect>
@@ -63,22 +63,22 @@
 @code {
     [CascadingParameter]
     private IMudDialogInstance? MudDialog { get; set; }
-    ObjectStateConfig? _fromState;
-    ObjectStateConfig? _toState;
-    IEnumerable<ObjectStateConfig> _stateList = [];
+    ObjStateConfig? _fromState;
+    ObjStateConfig? _toState;
+    IEnumerable<ObjStateConfig> _stateList = [];
     IEnumerable<DropdownSelectItem> _validNextStateList = [];
 
     [Parameter]
-    public ObjectStateTransitionDetail? TransitionDetail { get; set; }
+    public ObjectStateTransDetail? TransitionDetail { get; set; }
 
-    IEnumerable<ObjectStateConfig> _validStateList = [];
+    IEnumerable<ObjStateConfig> _validStateList = [];
 
     protected override async Task OnInitializedAsync()
     {
         if (TransitionDetail != null)
         {
 
-            _stateList = await Uow.ObjectStateConfigs.GetAsync(TransitionDetail!.ObjectClassName!, TransitionDetail!.ObjectFieldName!);
+            _stateList = await Uow.ObjStateConfigs.GetAsync(TransitionDetail!.ObjectClassName!, TransitionDetail!.ObjectFieldName!);
 
             if (TransitionDetail!.EffectiveDate is null)
                 TransitionDetail!.EffectiveDate = DateTime.Today;

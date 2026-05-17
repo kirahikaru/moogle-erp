@@ -1,5 +1,9 @@
 ﻿namespace DataLayer.Repos.SysCore;
 
+
+/// <summary>
+/// Repoistory : Attached Image
+/// </summary>
 public interface IAttachedImageRepos : IBaseRepos<AttachedImage>
 {
 	Task<List<AttachedImage>> GetByLinkedObjectAsync(int linkedObjectId, string linkedObjectType);

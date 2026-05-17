@@ -15,8 +15,8 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddSweetAlert2();
 builder.Services.AddHotKeys2();
-builder.Services.Configure<DatabaseConfig>("PruITSqlConnection", builder.Configuration.GetSection("DatabaseConnectionConfig:PruITSqlConnection"));
-builder.Services.Configure<DatabaseConfig>("PruITPostgreSqlConnection", builder.Configuration.GetSection("DatabaseConnectionConfig:PruITPostgreSqlConnection"));
+builder.Services.Configure<DatabaseConfig>("PruITSqlConnection", builder.Configuration.GetSection("DbConnConfig:PruITSqlConnection"));
+builder.Services.Configure<DatabaseConfig>("PruITPostgreSqlConnection", builder.Configuration.GetSection("DbConnConfig:PruITPostgreSqlConnection"));
 builder.Services.AddSingleton<IUowPruIT, UowPruIT>();
 builder.Services.AddMudServices();
 builder.Services.AddMudExtensions();

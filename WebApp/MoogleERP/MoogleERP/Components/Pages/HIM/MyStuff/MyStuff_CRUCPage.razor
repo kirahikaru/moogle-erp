@@ -305,45 +305,42 @@
                     </MudStack>
                 </MudPaper>
             </MudTabPanel>
-            <MudTabPanel Icon="fad fa-info-circle" Text="Other Info">
-                <MudPaper Class="pa-4" Elevation="0" Square="true" Height="calc(100vh - 275px + 30px)" 
-                          Style="overflow-y: auto; border-bottom-left-radius:16px; border-bottom-right-radius:16px; background-color: var(--tw-gray-50); scrollbar-width:auto; scrollbar-color:var(--tw-gray-300) var(--tw-gray-50)">
-                    <MudDataGrid Class="main-pg-datagrid mt-2" T="ObjectStateHistory" Items="CurrentObject!.AuditTrails" Dense="true" Hover="true" FixedHeader="true" Striped="true"
-                                 ColumnResizeMode="ResizeMode.Container" >
-                        <Columns>
-                            <PropertyColumn Property="x => x.EffectiveDate" Title="Date" Format="dd-MMM-yyyy" HeaderClass="mud-datagrid-hdr" HeaderStyle=@DataGridHdrStyle CellClass="mud-datagrid-cell" />
-                            <TemplateColumn Title="Action" HeaderClass="mud-datagrid-hdr" Sortable="false" Filterable="false" HeaderStyle=@DataGridHdrStyle
-                                            CellClass="mud-datagrid-cell" CellStyle="text-align:center" Context="rowData">
-                                <CellTemplate>
-                                    @* @(ObjectStates.GetDisplayText(rowData.Item.ObjectState).ToUpper()) *@
-                                    <MudChip Size="Size.Small" T="string" Class=@($"status-chip-tiny") Style=@_actionBtnStyles[rowData.Item.ActionCode!]>
-                                        @(ObjectStateActions.GetDisplayText(rowData.Item.ActionCode).ToUpper())
-                                    </MudChip>
-                                </CellTemplate>
-                            </TemplateColumn>
-                            <TemplateColumn Title="From Status" HeaderClass="mud-datagrid-hdr" Sortable="false" Filterable="false" HeaderStyle=@DataGridHdrStyle
-                                            CellClass="mud-datagrid-cell" CellStyle="text-align:center" Context="rowData">
-                                <CellTemplate>
-                                    @* @(ObjectStates.GetDisplayText(rowData.Item.ObjectState).ToUpper()) *@
-                                    <MudChip Size="Size.Small" T="string" Class=@($"status-chip-tiny") Style=@_stateStyleList[rowData.Item.FromStatus!]>
-                                        @(ObjectStates.GetDisplayText(rowData.Item.FromStatus).ToUpper())
-                                    </MudChip>
-                                </CellTemplate>
-                            </TemplateColumn>
-                            <TemplateColumn Title="To Status" HeaderClass="mud-datagrid-hdr" Sortable="false" Filterable="false" HeaderStyle=@DataGridHdrStyle
-                                            CellClass="mud-datagrid-cell" CellStyle="text-align:center" Context="rowData">
-                                <CellTemplate>
-                                    @* @(ObjectStates.GetDisplayText(rowData.Item.ObjectState).ToUpper()) *@
-                                    <MudChip Size="Size.Small" T="string" Class=@($"status-chip-tiny") Style=@_stateStyleList[rowData.Item.ToStatus!]>
-                                        @(ObjectStates.GetDisplayText(rowData.Item.ToStatus).ToUpper())
-                                    </MudChip>
-                                </CellTemplate>
-                            </TemplateColumn>
-                            <PropertyColumn Property="x => x.Remark" HeaderClass="mud-datagrid-hdr" HeaderStyle=@DataGridHdrStyle CellClass="mud-datagrid-cell" />
-                            <PropertyColumn Property="x => x.CreatedDateTime" Title="Created On" Format="dd-MMM-yyyy HH:mm:ss" HeaderClass="mud-datagrid-hdr" HeaderStyle=@DataGridHdrStyle CellClass="mud-datagrid-cell" />
-                        </Columns>
-                    </MudDataGrid>
-                </MudPaper>
+            <MudTabPanel Icon="material-symbols-rounded/info" Text="Other Info">
+                <MudDataGrid Class="main-pg-datagrid mt-2" T="ObjectStateHistory" Items="CurrentObject!.AuditTrails" Dense="true" Hover="true" FixedHeader="true" Striped="true" 
+			                ColumnResizeMode="ResizeMode.Container" Height="calc(100vh - 270px)" >
+		            <Columns>
+                        <PropertyColumn Property="x => x.EffectiveDate" Title="Date" Format="dd-MMM-yyyy" HeaderClass="mud-datagrid-hdr" HeaderStyle=@DataGridHdrStyle CellClass="mud-datagrid-cell" />
+                        <TemplateColumn Title="Action" HeaderClass="mud-datagrid-hdr" Sortable="false" Filterable="false" HeaderStyle=@DataGridHdrStyle
+                                        CellClass="mud-datagrid-cell" CellStyle="text-align:center" Context="rowData">
+                            <CellTemplate>
+                                @* @(ObjectStates.GetDisplayText(rowData.Item.ObjectState).ToUpper()) *@
+                                <MudChip Size="Size.Small" T="string" Class=@($"status-chip-tiny") Style=@_actionBtnStyles[rowData.Item.ActionCode!]>
+                                    @(ObjectStateActions.GetDisplayText(rowData.Item.ActionCode).ToUpper())
+                                </MudChip>
+                            </CellTemplate>
+                        </TemplateColumn>
+                        <TemplateColumn Title="From Status" HeaderClass="mud-datagrid-hdr" Sortable="false" Filterable="false" HeaderStyle=@DataGridHdrStyle
+                                        CellClass="mud-datagrid-cell" CellStyle="text-align:center" Context="rowData">
+                            <CellTemplate>
+                                @* @(ObjectStates.GetDisplayText(rowData.Item.ObjectState).ToUpper()) *@
+                                <MudChip Size="Size.Small" T="string" Class=@($"status-chip-tiny") Style=@_stateStyleList[rowData.Item.FromStatus!]>
+                                    @(ObjectStates.GetDisplayText(rowData.Item.FromStatus).ToUpper())
+                                </MudChip>
+                            </CellTemplate>
+                        </TemplateColumn>
+                        <TemplateColumn Title="To Status" HeaderClass="mud-datagrid-hdr" Sortable="false" Filterable="false" HeaderStyle=@DataGridHdrStyle
+                                        CellClass="mud-datagrid-cell" CellStyle="text-align:center" Context="rowData">
+                            <CellTemplate>
+                                @* @(ObjectStates.GetDisplayText(rowData.Item.ObjectState).ToUpper()) *@
+                                <MudChip Size="Size.Small" T="string" Class=@($"status-chip-tiny") Style=@_stateStyleList[rowData.Item.ToStatus!]>
+                                    @(ObjectStates.GetDisplayText(rowData.Item.ToStatus).ToUpper())
+                                </MudChip>
+                            </CellTemplate>
+                        </TemplateColumn>
+                        <PropertyColumn Property="x => x.Remark" HeaderClass="mud-datagrid-hdr" HeaderStyle=@DataGridHdrStyle CellClass="mud-datagrid-cell" />
+			            <PropertyColumn Property="x => x.CreatedDateTime" Title="Created On" Format="dd-MMM-yyyy HH:mm:ss" HeaderClass="mud-datagrid-hdr" HeaderStyle=@DataGridHdrStyle CellClass="mud-datagrid-cell" />			                
+		            </Columns>
+                </MudDataGrid>
             </MudTabPanel>
         </MudTabs>
     </EditForm>
@@ -647,7 +644,7 @@
 
                 if (_objStateTranDetail != null)
                 {
-                    ObjectStateHistory objStateHist = new()
+                    ObjStateHistory objStateHist = new()
                     {
                         ObjectId = objId,
                         ObjectName = _objStateTranDetail.ObjectType,
@@ -689,7 +686,7 @@
 
             if (isUpdated && _objStateTranDetail != null)
             {
-                ObjectStateHistory objStateHist = new()
+                ObjStateHistory objStateHist = new()
                 {
                     ObjectId = CurrentObject.Id,
                     ObjectName = _objStateTranDetail.ObjectType,

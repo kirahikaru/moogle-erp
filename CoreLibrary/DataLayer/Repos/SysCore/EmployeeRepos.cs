@@ -149,7 +149,7 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 				if (obj.CorrespAddrId != null || obj.ResAddrId != null)
 					await cn.UpdateAsync(obj);
 
-                ObjectStatusAuditTrail statusChgAudit = new()
+                ObjStatusAuditTrail statusChgAudit = new()
                 {
                     ObjectCode = obj.ObjectCode,
                     ObjectName = obj.GetType().Name,
@@ -183,7 +183,7 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 
                     if (updEmployeeCount > 0)
                     {
-                        ObjectStatusAuditTrail activateStatusChgAudit = new()
+                        ObjStatusAuditTrail activateStatusChgAudit = new()
                         {
                             ObjectCode = obj.ObjectCode,
                             ObjectName = obj.GetType().Name,
@@ -228,8 +228,8 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 		DynamicParameters param = new();
 		param.Add("@Id", objId);
 
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} resAdd ON resAdd.IsDeleted=0 AND resAdd.Id=t.ResidentialAddressId");
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} corAdd ON corAdd.IsDeleted=0 AND corAdd.Id=t.CorrespondentAddressId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} resAdd ON resAdd.IsDeleted=0 AND resAdd.Id=t.ResidentialAddressId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} corAdd ON corAdd.IsDeleted=0 AND corAdd.Id=t.CorrespondentAddressId");
 		sbSql.LeftJoin($"{OrgStruct.MsSqlTable} org ON org.IsDeleted=0 AND org.Id=t.OrgStructId");
 
 		sbSql.Where("t.IsDeleted=0");
@@ -239,7 +239,7 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 
 		using var cn = DbContext.DbCxn;
 
-		Employee? data = (await cn.QueryAsync<Employee, CambodiaAddress, CambodiaAddress, OrgStruct, Employee>(
+		Employee? data = (await cn.QueryAsync<Employee, KhAddress, KhAddress, OrgStruct, Employee>(
 				sql, (obj, residentialAddress, correspondentAddress, orgStruct) =>
 				{
 					obj.ResidentialAddress = residentialAddress;
@@ -273,8 +273,8 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
         DynamicParameters param = new();
         param.Add("@ObjectCode", objectCode, DbType.AnsiString);
 
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} resAdd ON resAdd.IsDeleted=0 AND resAdd.Id=t.ResidentialAddressId");
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} corAdd ON corAdd.IsDeleted=0 AND corAdd.Id=t.CorrespondentAddressId");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} resAdd ON resAdd.IsDeleted=0 AND resAdd.Id=t.ResidentialAddressId");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} corAdd ON corAdd.IsDeleted=0 AND corAdd.Id=t.CorrespondentAddressId");
         sbSql.LeftJoin($"{OrgStruct.MsSqlTable} org ON org.IsDeleted=0 AND org.Id=t.OrgStructId");
 
         sbSql.Where("t.IsDeleted=0");
@@ -284,7 +284,7 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 
         using var cn = DbContext.DbCxn;
 
-        Employee? data = (await cn.QueryAsync<Employee, CambodiaAddress, CambodiaAddress, OrgStruct, Employee>(
+        Employee? data = (await cn.QueryAsync<Employee, KhAddress, KhAddress, OrgStruct, Employee>(
                 sql, (obj, residentialAddress, correspondentAddress, orgStruct) =>
                 {
                     obj.ResidentialAddress = residentialAddress;
@@ -326,7 +326,7 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 
         try
         {
-            ObjectStatusAuditTrail? statusChgAudit = null;
+            ObjStatusAuditTrail? statusChgAudit = null;
 
             if (EmployeeStatuses.IsValid(endStatus))
             {
@@ -482,8 +482,8 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 		}
 		#endregion
 
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} resAdd ON resAdd.IsDeleted=0 AND resAdd.Id=t.ResAddrId");
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} corAdd ON corAdd.IsDeleted=0 AND corAdd.Id=t.CorrespAddrId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} resAdd ON resAdd.IsDeleted=0 AND resAdd.Id=t.ResAddrId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} corAdd ON corAdd.IsDeleted=0 AND corAdd.Id=t.CorrespAddrId");
 		sbSql.LeftJoin($"{OrgStruct.MsSqlTable} org ON org.IsDeleted=0 AND org.Id=t.OrgStructId");
 
 		foreach (string order in GetSearchOrderbBy())
@@ -508,7 +508,7 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 
 		using var cn = DbContext.DbCxn;
 
-		var dataList = (await cn.QueryAsync<Employee, CambodiaAddress, CambodiaAddress, OrgStruct, Employee>(
+		var dataList = (await cn.QueryAsync<Employee, KhAddress, KhAddress, OrgStruct, Employee>(
 				sql, (obj, resAddr, correspAddr, orgStruct) =>
 				{
 					obj.ResidentialAddress = resAddr;
@@ -1154,8 +1154,8 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
         }
         #endregion
 
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} resAdd ON resAdd.IsDeleted=0 AND resAdd.Id=t.ResidentialAddressId");
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} corAdd ON corAdd.IsDeleted=0 AND corAdd.Id=t.CorrespondentAddressId");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} resAdd ON resAdd.IsDeleted=0 AND resAdd.Id=t.ResidentialAddressId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} corAdd ON corAdd.IsDeleted=0 AND corAdd.Id=t.CorrespondentAddressId");
 		sbSql.LeftJoin($"{OrgStruct.MsSqlTable} org ON org.IsDeleted=0 AND org.Id=t.OrgStructId");
 
 		sbSql.OrderBy("t.ObjectName ASC");
@@ -1178,7 +1178,7 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
 
 		using var cn = DbContext.DbCxn;
 
-		List<Employee> dataList = (await cn.QueryAsync<Employee, CambodiaAddress, CambodiaAddress, OrgStruct, Employee>(
+		List<Employee> dataList = (await cn.QueryAsync<Employee, KhAddress, KhAddress, OrgStruct, Employee>(
 				sql, (obj, residentialAddress, correspondentAddress, orgStruct) =>
 				{
 					obj.ResidentialAddress = residentialAddress;
@@ -1456,8 +1456,8 @@ public class EmployeeRepos(IDbContext dbContext) : BaseRepos<Employee>(dbContext
         }
         #endregion
 
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} resAdd ON resAdd.IsDeleted=0 AND resAdd.Id=t.ResidentialAddressId");
-		sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} corAdd ON corAdd.IsDeleted=0 AND corAdd.Id=t.CorrespondentAddressId");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} resAdd ON resAdd.IsDeleted=0 AND resAdd.Id=t.ResidentialAddressId");
+		sbSql.LeftJoin($"{KhAddress.MsSqlTable} corAdd ON corAdd.IsDeleted=0 AND corAdd.Id=t.CorrespondentAddressId");
 		sbSql.LeftJoin($"{OrgStruct.MsSqlTable} org ON org.IsDeleted=0 AND org.Id=t.OrgStructId");
 
 		string sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;

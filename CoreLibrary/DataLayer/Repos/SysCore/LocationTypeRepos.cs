@@ -279,7 +279,7 @@ public class LocationTypeRepos(IDbContext dbContext) : BaseRepos<LocationType>(d
 
         DataPagination pagination = new()
         {
-            ObjectType = typeof(CambodiaProvince).Name,
+            ObjectType = typeof(KhProvince).Name,
             PageSize = pgSize,
             PageCount = pageCount,
             RecordCount = (int)recordCount

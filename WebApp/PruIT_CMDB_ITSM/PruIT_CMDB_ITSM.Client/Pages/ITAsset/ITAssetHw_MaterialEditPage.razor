@@ -535,9 +535,9 @@
         objStd.CurrentStateText = CurrentObject!.AssetStateText;
         objStd.ObjectClassName = CurrentObject.GetType().Name;
         objStd.ObjectFieldName = nameof(CurrentObject.AssetState);
-        var diagParam = new DialogParameters<ObjectStateTransitDiag>();
+        var diagParam = new DialogParameters<ObjStateTransDiag>();
         diagParam.Add(x => x.TransitionDetail, objStd);
-        var diag = await MudDiagSvc.ShowAsync<ObjectStateTransitDiag>();
+        var diag = await MudDiagSvc.ShowAsync<ObjStateTransDiag>();
         var result = await diag.Result;
 
         if (!result!.Canceled)
@@ -554,10 +554,10 @@
         objStd.ObjectClassName = CurrentObject.GetType().Name;
         objStd.ObjectFieldName = nameof(CurrentObject.LifeCycleStatus);
 
-        var diagParam = new DialogParameters<ObjectStateTransitDiag>();
+        var diagParam = new DialogParameters<ObjStateTransDiag>();
         diagParam.Add(x => x.TransitionDetail, objStd);
 
-        var diag = await MudDiagSvc.ShowAsync<ObjectStateTransitDiag>("Update Life Cycle Status", diagParam);
+        var diag = await MudDiagSvc.ShowAsync<ObjStateTransDiag>("Update Life Cycle Status", diagParam);
         var result = await diag.Result;
 
         if (!result!.Canceled)

@@ -32,12 +32,12 @@ public class MerchantRepos(IDbContext dbContext) : BaseRepos<Merchant>(dbContext
         sbSql.Where("t.Id=@Id");
         sbSql.LeftJoin($"{Merchant.MsSqlTable} pr ON pr.Id=t.ParentId");
         sbSql.LeftJoin($"{Address.MsSqlTable} addr ON addr.Id=t.AddressId");
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} khAddr ON khAddr.Id=t.CambodiaAddressId");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} khAddr ON khAddr.Id=t.CambodiaAddressId");
 
         using var cn = DbContext.DbCxn;
         string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
-        var data = (await cn.QueryAsync<Merchant, Merchant, Address, CambodiaAddress, Merchant>(sql,
+        var data = (await cn.QueryAsync<Merchant, Merchant, Address, KhAddress, Merchant>(sql,
                             (obj, m, addr, khAddr) =>
                             {
                                 obj.Parent = m;

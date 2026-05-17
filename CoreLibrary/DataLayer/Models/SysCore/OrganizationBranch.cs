@@ -56,7 +56,7 @@ public class OrganizationBranch : AuditObject
 	public Address? Address { get; set; }
 
 	[Computed, Write(false)]
-	public CambodiaAddress? CambodiaAddress { get; set; }
+	public KhAddress? CambodiaAddress { get; set; }
     #endregion
 
     #region *** DYNAMIC PROPERTIES ***

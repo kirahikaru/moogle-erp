@@ -21,7 +21,8 @@
             </MudStack>
         </MudStack>
     </MudAppBar>
-    <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0" Width="280px" Style="border-right:solid 1px var(--tw-gray-200); padding:10px;">
+    <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0" Width="300px"
+               Style="border-right:solid 1px var(--tw-gray-200); padding:10px; scrollbar-color: var(--tw-gray-300) var(--tw-gray-50); scrollbar-width:auto">
         <NavMenu />
         <MudSpacer />
         <MudText Typo="Typo.body1" Class="ml-2" Style="font-size:7pt; color:var(--pru-red-default);">
@@ -73,42 +74,7 @@
         {
             PaletteLight = _pruLightPalette,
             PaletteDark = _darkPalette,
-            Typography = new Typography()
-            {
-                Body1 = new Body1Typography()
-                {
-                    FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                    FontSize = "12px"
-                },
-                Body2 = new Body2Typography()
-                {
-                    FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                    FontSize = "12px"
-                },
-                H4 = new H4Typography()
-                {
-                    FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                    FontWeight = "800",
-                    FontSize = "36px",
-                },
-                H5 = new H5Typography()
-                {
-                    FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                    FontWeight = "700",
-                    FontSize = "28px"
-                },
-                H6 = new H6Typography()
-                {
-                    FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                    FontWeight = "600",
-                    FontSize = "32px"
-                },
-                Default = new DefaultTypography()
-                {
-                    FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                    FontSize = "10pt"
-                }
-            },
+            Typography = _pruTypography,
             LayoutProperties = new LayoutProperties()
         };
     }
@@ -123,17 +89,56 @@
         _isDarkMode = !_isDarkMode;
     }
 
+    private readonly Typography _pruTypography = new()
+        {
+            Body1 = new Body1Typography()
+            {
+                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+
+                FontSize = "12px"
+            },
+            Body2 = new Body2Typography()
+            {
+                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+                FontSize = "12px"
+            },
+            H4 = new H4Typography()
+            {
+                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+                FontWeight = "800",
+                FontSize = "36px",
+            },
+            H5 = new H5Typography()
+            {
+                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+                FontWeight = "700",
+                FontSize = "28px"
+            },
+            H6 = new H6Typography()
+            {
+                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+                FontWeight = "600",
+                FontSize = "32px"
+            },
+            Default = new DefaultTypography()
+            {
+                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+                FontSize = "10pt"
+            }
+        };
+
     private readonly PaletteLight _pruLightPalette = new()
     {
+        AppbarText = "#364153", // Tailwnid Gray 700
         Primary = "#364153", // Tailwind Gray 700
         // Primary = "#ED1B2E", //pru-red-default
         Secondary = "#687379", //pru-gray-default
         TextPrimary = "#343A3C",
         Black = "#110e2d",
-        AppbarText = "#364153",
+        
         // AppbarBackground = "#ED1B2E",
         AppbarBackground = "#FFFFFF",
-        DrawerBackground = "#ffffff",
+        DrawerBackground = "#FFFFFF",
         GrayLight = "#e8e8e8",
         GrayLighter = "#f9f9f9",
     };

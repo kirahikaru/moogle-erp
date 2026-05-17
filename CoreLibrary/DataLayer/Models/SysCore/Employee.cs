@@ -149,11 +149,11 @@ public class Employee : AuditObject
 
 	[Computed]
 	[Description("ignore")]
-	public CambodiaAddress? ResidentialAddress { get; set; }
+	public KhAddress? ResidentialAddress { get; set; }
 
 	[Computed]
 	[Description("ignore")]
-	public CambodiaAddress? CorrespondentAddress { get; set; }
+	public KhAddress? CorrespondentAddress { get; set; }
 
 	[Computed]
 	[Description("ignore")]

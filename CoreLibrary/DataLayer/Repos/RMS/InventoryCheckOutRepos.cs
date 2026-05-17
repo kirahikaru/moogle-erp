@@ -8,7 +8,7 @@ public interface IInventoryCheckOutRepos : IBaseWorkflowEnabledRepos<InventoryCh
 {
 	Task<InventoryCheckOut?> GetFullAsync(int objId);
 	Task<bool> UpdateFullAsync(InventoryCheckOut obj);
-	Task<int> SaveAndTransitWorkflowAsync(InventoryCheckOut obj, WorkflowTransitionDetail wtd);
+	Task<int> SaveAndTransitWorkflowAsync(InventoryCheckOut obj, WorkflowTranDetail wtd);
 
 	Task<List<InventoryCheckOut>> SearchAsync(
 		int pgSize = 0, int pgNo = 0,
@@ -128,7 +128,7 @@ public class InventoryCheckOutRepos(IDbContext dbContext) : BaseWorkflowEnabledR
         return !isError;
     }
 
-    public async Task<int> SaveAndTransitWorkflowAsync(InventoryCheckOut obj, WorkflowTransitionDetail wtd)
+    public async Task<int> SaveAndTransitWorkflowAsync(InventoryCheckOut obj, WorkflowTranDetail wtd)
     {
         if (string.IsNullOrEmpty(wtd.CurrentWorkflowStatus) || string.IsNullOrEmpty(wtd.WorkflowAction))
             throw new Exception("Current Workflow Status and Workflow Action cannot be null.");

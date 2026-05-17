@@ -275,7 +275,7 @@ public class AddressRepos(IDbContext dbContext) : BaseRepos<Address>(dbContext, 
 
         DataPagination pagination = new()
         {
-            ObjectType = typeof(CambodiaProvince).Name,
+            ObjectType = typeof(KhProvince).Name,
             PageSize = pgSize,
             PageCount = pageCount,
             RecordCount = (int)recordCount

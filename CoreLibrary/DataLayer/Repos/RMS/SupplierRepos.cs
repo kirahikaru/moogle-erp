@@ -38,7 +38,7 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
         var sql = $"SELECT * FROM {Supplier.MsSqlTable} WHERE IsDeleted=0 AND Id=@Id; " +
                   $"SELECT * FROM {SupplierBranch.MsSqlTable} WHERE IsDeleted=0 AND SupplierId=@Id; " +
                   $"SELECT * FROM {Contact.MsSqlTable} WHERE IsDeleted=0 AND LinkedObjectType=@LinkedObjectType AND LinkedObjectId=@Id; " +
-                  $"SELECT * FROM {CambodiaAddress.MsSqlTable} WHERE IsDeleted=0 AND LinkedObjectType=@LinkedObjectType AND LinkedObjectId=@Id; ";
+                  $"SELECT * FROM {KhAddress.MsSqlTable} WHERE IsDeleted=0 AND LinkedObjectType=@LinkedObjectType AND LinkedObjectId=@Id; ";
 
         DynamicParameters param = new();
         param.Add("@LinkedObjectType", typeof(Supplier).Name, DbType.AnsiString);
@@ -53,7 +53,7 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
         {
             obj.Branches = (await multi.ReadAsync<SupplierBranch>()).AsList();
             obj.Contacts = (await multi.ReadAsync<Contact>()).AsList();
-            obj.MainKhAddress = await multi.ReadSingleOrDefaultAsync<CambodiaAddress>();
+            obj.MainKhAddress = await multi.ReadSingleOrDefaultAsync<KhAddress>();
         }
 
         return obj;
@@ -408,7 +408,7 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
         }
         #endregion
 
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} khAddr ON khAddr.IsDeleted=0 AND khAddr.LinkedObjectType='Supplier' AND khAddr.LinkedObjectId=t.Id");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} khAddr ON khAddr.IsDeleted=0 AND khAddr.LinkedObjectType='Supplier' AND khAddr.LinkedObjectId=t.Id");
 
         sbSql.OrderBy("t.ObjectName ASC, t.ObjectNameKh ASC");
 
@@ -431,7 +431,7 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
 
         using var cn = DbContext.DbCxn;
 
-        var dataList = (await cn.QueryAsync<Supplier, CambodiaAddress, Supplier>(sql,
+        var dataList = (await cn.QueryAsync<Supplier, KhAddress, Supplier>(sql,
                             (obj, khAddr) => {
                                 obj.MainKhAddress = khAddr;
 
@@ -503,7 +503,7 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
         }
         #endregion
 
-        sbSql.LeftJoin($"{CambodiaAddress.MsSqlTable} khAddr ON khAddr.IsDeleted=0 AND khAddr.LinkedObjectType='Supplier' AND khAddr.LinkedObjectId=t.Id");
+        sbSql.LeftJoin($"{KhAddress.MsSqlTable} khAddr ON khAddr.IsDeleted=0 AND khAddr.LinkedObjectType='Supplier' AND khAddr.LinkedObjectId=t.Id");
 
         sbSql.OrderBy("t.ObjectName ASC, t.ObjectNameKh ASC");
 
@@ -525,7 +525,7 @@ public class SupplierRepos(IDbContext dbContext) : BaseRepos<Supplier>(dbContext
 
         using var cn = DbContext.DbCxn;
 
-        var dataList = (await cn.QueryAsync<Supplier, CambodiaAddress, Supplier>(sql, 
+        var dataList = (await cn.QueryAsync<Supplier, KhAddress, Supplier>(sql, 
                             (obj, khAddr) => {
                                 obj.MainKhAddress = khAddr;
 

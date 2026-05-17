@@ -6,9 +6,9 @@
 @inject SweetAlertService Swal
 @inherits MainPageBase<BudgetItem>
 
-<MudPaper Class="px-4 py-3 rounded" Width="100%" Elevation="0" Square="true" Style="background-color:#FFFDE7; border: solid 1px var(--pru-gray-tw-100)">
+<MudPaper Class="px-5 py-2 pru-card-header-banner" Width="100%" Elevation="0" Outlined="true">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-		<div style="color:var(--pru-red-default); font-size:28px;">
+		<div style="color:var(--pru-red-default); font-size:30px;">
 			<span style="font-weight:800">@HeaderTitle</span>
 			@* <span style="font-weight:400"> | Software</span> *@
 		</div>
@@ -17,14 +17,15 @@
 	</MudStack>
 </MudPaper>
 
-<MudPaper Class="pa-3 mt-3 rounded overflow-y-auto" Width="100%" Elevation="0" Square="true" Height="calc(100vh - 170px)">
-	<MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
+<MudPaper Class="mt-5 pru-std-card-white" Width="100%" Outlined="true" Elevation="0" Height="calc(100vh - 180px)" Style="overflow-y:hidden">
+	<MudStack Class="m-3" Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
 		<MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="pru-mud-form-field bordered"
 					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
-					  Placeholder="Search text here..." HelperText="<Search input instruction here>" Style="padding: 2px 0px 2px 0px"
+					  Placeholder="Search text here..." 
 					  @bind-Value="SearchText" OnKeyDown="OnSearchBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
 		<MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/search" Size="Size.Small" Color="Color.Primary" DropShadow="false" OnClick="OnSearchClicked" Class="pru-btn-base">Search</MudButton>
 		<MudSelect Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true"
+				   AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" ClearIcon="material-symbols-rounded/close"
 				   Label="Year" T="int" FullWidth="false" Style="max-width:100px"
 				   @bind-Value=_budgetYr >
 			@foreach (int yr in _budgetYrList)
@@ -33,8 +34,8 @@
 			}
 		</MudSelect>
 	</MudStack>
-	<MudDataGrid Class="mt-2 pru-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage=50
-				 ColumnResizeMode="ResizeMode.Container" HorizontalScrollbar="true" Elevation="0" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true"
+	<MudDataGrid Class="mt-2 pru-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" Dense="true" Hover="true" Bordered="false" Square="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage="50" Elevation="0"
+				 ColumnResizeMode="ResizeMode.Container" HorizontalScrollbar="true" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true" Height="calc(100vh - 300px)"
 				 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" T="BudgetItem">
 		<Columns>
 			@* <PropertyColumn Property="x => x.LBU" Title="LBU" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" /> *@
@@ -120,10 +121,10 @@
 							CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
                 <CellTemplate>
                     <MudStack Row="true" Spacing="1">
-                        <MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
-						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
-						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
-						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
+						<MudIconButton Class="pru-mud-icon-btn info-light" Icon="material-symbols-rounded/edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" aria-label="edit" />
+						<MudIconButton Class="pru-mud-icon-btn" Icon="material-symbols-rounded/file_copy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" aria-label="clone" />
+						<MudIconButton Class="pru-mud-icon-btn success-light" Icon="material-symbols-rounded/visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" aria-label="view" />
+						<MudIconButton Class="pru-mud-icon-btn error-light" Icon="material-symbols-rounded/delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" aria-label="delete" />
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>

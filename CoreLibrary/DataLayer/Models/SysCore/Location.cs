@@ -57,7 +57,7 @@ public class Location : AuditObject, IParentChildHierarchyObject
 	public List<Location> Childs { get; set; }
 
 	[Computed, Write(false)]
-	public CambodiaAddress? CambodiaAddress { get; set; }
+	public KhAddress? CambodiaAddress { get; set; }
 
 	[Computed, Write(false)]
 	public Address? Address { get; set; }

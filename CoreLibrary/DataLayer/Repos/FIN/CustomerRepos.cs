@@ -193,7 +193,7 @@ public class CustomerRepos(IDbContext dbContext) : BaseRepos<Customer>(dbContext
 
             if (objId > 0)
             {
-                ObjectStatusAuditTrail statusChgAudit = new()
+                ObjStatusAuditTrail statusChgAudit = new()
                 {
                     ObjectCode = obj.ObjectCode,
                     ObjectName = obj.GetType().Name,
@@ -227,7 +227,7 @@ public class CustomerRepos(IDbContext dbContext) : BaseRepos<Customer>(dbContext
 
                     if (updCustomerCount > 0)
                     {
-                        ObjectStatusAuditTrail activateStatusChgAudit = new()
+                        ObjStatusAuditTrail activateStatusChgAudit = new()
                         {
                             ObjectCode = obj.ObjectCode,
                             ObjectName = obj.GetType().Name,
@@ -297,7 +297,7 @@ public class CustomerRepos(IDbContext dbContext) : BaseRepos<Customer>(dbContext
 
         try
         {
-            ObjectStatusAuditTrail? statusChgAudit = null;
+            ObjStatusAuditTrail? statusChgAudit = null;
 
             if (CustomerStatuses.IsValid(endStatus))
             {

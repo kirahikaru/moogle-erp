@@ -91,7 +91,7 @@ public class BusinessEntity : AuditObject
 
     [Computed]
     [Description("ignore")]
-    public CambodiaAddress? MainKhAddress { get; set; }
+    public KhAddress? MainKhAddress { get; set; }
 
     [Computed]
     [Description("ignore"), ReadOnly(true)]

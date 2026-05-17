@@ -102,7 +102,7 @@ public class Supplier : AuditObject
 	public Address? MainAddress { get; set; }
 
 	[Computed, Write(false), ReadOnly(true)]
-	public CambodiaAddress? MainKhAddress { get; set; }
+	public KhAddress? MainKhAddress { get; set; }
 
 	[Computed, Write(false), ReadOnly(true)]
 	public List<ItemSupplier> SaleItems { get; set; }

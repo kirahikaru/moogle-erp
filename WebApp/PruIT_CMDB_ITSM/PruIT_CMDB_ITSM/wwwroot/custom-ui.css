@@ -3,21 +3,45 @@
  */
 
 /*#region MUD OVERWRITE STYLE */
-.mud-list-item-gutters {
-    padding: 2px 10px;
-}
 
-.mud-combobox-item-gutters {
-    padding: 2px 10px;
-}
+.mud-dialog-container {
+    > .mud-dialog {
+        border-radius: 16px;
+        background-color: var(--tw-gray-50);
 
-.mud-combobox-item {
-    min-height: 36px;
-}
+        & .mud-dialog-content {
+            padding: 24px 24px;
+        }
 
-input[type="text" i] {
-    padding-block: 0px;
-    padding-inline: 0px;
+        & .mud-dialog-actions {
+            padding: 0px 24px 18px 24px;
+            justify-content: center;
+
+            > .mud-button {
+                border-radius: 8px;
+                padding: 6px 12px;
+            }
+
+            > .mud-button-filled {
+                box-shadow: none;
+                &.mud-button-filled-default {
+                    color: #FFFFFF;
+                    background-color: var(--tw-gray-500);
+                    &:hover {
+                        color: var(--tw-gray-100);
+                        background-color: var(--tw-gray-700);
+                    }
+                }
+                &.mud-button-filled-primary {
+                    background-color: var(--pru-red-default);
+                    &:hover {
+                        color: var(--pru-red-tw-100);
+                        background-color: var(--pru-red-tw-800);
+                    }
+                }
+            }
+        }
+    }
 }
 
 /*#endregion */
@@ -40,12 +64,23 @@ input[type="text" i] {
             > .mud-input {
                 border: 1px solid var(--tw-gray-300) !important;
                 border-radius: 8px;
-                height: 32px;
-                > .mud-input-root {
+                > input.mud-input-root {
+                    font-size: 12px;
+                    line-height: 100%;
+                    padding: 10px 12px;
+                }
+
+                > textarea.mud-input-root {
                     font-size: 12px;
                     /* height: 100%; */
                     padding: 8px 12px;
-                    
+                    margin: 0px;
+                }
+
+                > div.mud-input-root {
+                    font-size: 12px;
+                    line-height: 100%;
+                    padding: 10px 12px;
                 }
 
                 > .mud-input-adornment {
@@ -77,14 +112,28 @@ input[type="text" i] {
                 }
 
                 > .mud-icon-button-edge-margin-end {
+                    margin-left: -14px;
                     margin-inline-end: 2px;
                 }
 
                 > .mud-icon-button {
+                    
                     > .mud-icon-button-label {
                         .mud-icon-root {
                             color: var(--tw-gray-400);
                         }
+
+                        > .material-symbols-rounded {
+                            font-size: 20px;
+                        }
+                    }
+                }
+
+                > .mud-icon-button-size-small {
+                    padding: 0px;
+
+                    &.mud-icon-button-edge-end {
+                        margin-inline-start: -10px;
                     }
                 }
             }
@@ -193,10 +242,10 @@ input[type="text" i] {
                 line-height: 100%;
                 border-radius: 8px;
                 border: 1px solid var(--tw-gray-300);
-                height: 32px;
 
                 > .mud-input-root {
                     padding: 10px 12px;
+                    line-height: 100%;
                 }
 
                 &:focus-within {
@@ -293,23 +342,12 @@ input[type="text" i] {
 
 .pru-ui-combobox {
     > .mud-input-control-input-container {
-        > .mud-input {
-            font-size: 12px;
-            line-height: 100%;
-            border-radius: 8px;
-            border: 1px solid var(--tw-gray-300);
-            height: 32px;
-            &.mud-input-underline {
-                &::before {
-                    transition: none;
-                    border-bottom: none;
-                }
-                &::after {
-                    transition: none;
-                    border-bottom: none;
+        > div.mud-input {
+            &.mud-input-text {
+                &.mud-input-text-with-label {
+                    margin-top: 18px;
                 }
             }
-
             &.mud-input-text {
                 &.mud-input-text-with-label {
                     margin-top: 18px !important;
@@ -375,22 +413,104 @@ input[type="text" i] {
 }
 
 .pru-ui-combobox-popover {
-    box-shadow: var(--mud-elevation-3) !important;
+    box-shadow: var(--mud-elevation-1) !important;
+    border-radius: 8px !important;
+    > div {
+        scrollbar-width: auto;
+        scrollbar-color: var(--tw-gray-300) var(--tw-gray-50);
+
+        > .mud-combobox-item-hilight {
+            background-color: transparent !important;
+        }
+    }
 
     & .mud-combobox-item {
         min-height: 36px;
 
+        &:hover {
+            background-color: var(--pru-red-tw-50) !important;
+            color: var(--pru-red-default);
+        }
     }
 
     & .mud-combobox-item-gutters {
-        padding-left: 10px;
+        padding-left: 12px;
         padding-right: 10px;
     }
 }
 
 .pru-ui-combobox-input {
+    border-radius: 8px;
+    border: 1px solid var(--tw-gray-300);
+    height: 32px;
+    > div {
+        > .mud-input {
+            > input.mud-input-root {
+                font-size: 12px;
+                padding: 9px 0px 9px 12px !important;
+                line-height: 100%;
+                height: auto;
+            }
+
+            > div.mud-input-root {
+                height: auto;
+                padding: 0px
+            }
+
+            &.mud-input-text {
+                &.mud-input-text-with-label {
+                    margin-top: 18px !important;
+                }
+            }
+        }
+    }
+
+    &.mud-input {
+        &.mud-input-underline {
+            &::before {
+                transition: none;
+                border-bottom: none;
+            }
+            &::after {
+                transition: none;
+                border-bottom: none;
+            }
+        }
+    }
+
+    &div.mud-input {
+        &.mud-input-text {
+            &.mud-input-text-with-label {
+                margin-top: 18px;
+            }
+        }
+    }
+
+    & .mud-icon-button-edge-margin-end {
+        margin-right: 6px;
+        margin-inline-end: 6px;
+    }
+
+    & .mud-icon-button {
+        color: var(--tw-gray-400);
+    }
+
+    & .mud-icon-button-size-small {
+        padding: 0px;
+        font-size: 12px;
+    }
+}
+
+.pru-ui-combobox-highlight {
     font-size: 12px;
-    padding: 8px 0px 8px 12px;
+}
+
+.pru-ui-combobox-template {
+    font-size: 12px;
+}
+
+.pru-ui-combobox-chip {
+    opacity: 1;
 }
 
 .pru-mud-icon-btn {
@@ -642,16 +762,22 @@ input[type="text" i] {
 }
 
 .pru-ui-select-popover {
-    box-shadow: var(--mud-elevation-3) !important;
+    box-shadow: var(--mud-elevation-1) !important;
+    border-radius: 8px !important;
 
     & .mud-list-item-gutters {
-        padding-left: 10px;
+        padding-left: 12px;
         padding-right: 10px;
     }
 
     & .mud-list-item {
         padding-top: 4px;
         padding-bottom: 4px;
+
+        &:hover {
+            background-color: var(--pru-red-tw-50);
+            color: var(--pru-red-default);
+        }
     }
 }
 
@@ -665,13 +791,24 @@ input[type="text" i] {
         width: auto !important;
     }
 
+    & .mud-table-root .mud-table-head * .mud-table-cell {
+        &:first-child {
+            border-radius: 0px !important;
+        }
+
+        &:last-child {
+            border-radius: 0px !important;
+        }
+    }
+
     &.main-pg {
-        height: calc(100vh - 255px);
         overflow: hidden;
 
         & .mud-drop-container {
-            height: calc(100vh - 295px);
+            height: 100%;
             overflow-y: auto;
+            scrollbar-color: var(--tw-gray-300) var(--tw-gray-50);
+            scrollbar-width: auto;
         }
     }
 
@@ -703,7 +840,7 @@ input[type="text" i] {
     }
 
     & .mud-icon-button-size-small {
-        padding: 0px;
+        padding: 2px;
     }
 
     & .mud-icon-size-small {
@@ -730,10 +867,49 @@ input[type="text" i] {
         border-top: 1px solid var(--tw-gray-200);
         border-bottom: 1px solid var(--tw-gray-200);
         font-size: 12px !important;
-    }
 
-    & .mud-icon-root.mud-svg-icon {
-        color: #fff;
+        > .column-header {
+            > .column-options {
+                > .sort-direction-icon {
+                    opacity: 1;
+                }
+
+                > .mud-icon-button {
+                    color: var(--tw-gray-400);
+
+                    &:hover {
+                        color: var(--tw-gray-700) !important;
+                    }
+                }
+
+                > .mud-button-root {
+                    color: var(--tw-gray-400);
+                }
+
+                > .mud-menu {
+                    > .mud-icon-button {
+                        color: var(--tw-gray-400);
+                        
+                        &:hover {
+                            color: var(--tw-gray-700) !important;
+                        }
+
+                        > .mud-icon-button-label {
+                            opacity: 1;
+                        }
+                    }
+                    
+                }
+            }
+
+            &:hover {
+                > .column-options {
+                    > .drag-icon-options {
+                        color: transparent;
+                    }
+                }
+            }
+        }
     }
 
     & .invisible {
@@ -788,6 +964,9 @@ input[type="text" i] {
     }
 }
 
+.pru-datagrid-edit-diag-bg {
+    background-color: green;
+}
 /*#endregion  */
 
 /*#region Mad Nav Menu */
@@ -981,9 +1160,8 @@ input[type="text" i] {
 
     & .active {
         background-color: var(--pru-red-tw-50) !important;
-
-        /* border-right: solid 3px var(--pru-red-default);
-        border-left: solid 1px var(--pru-red-default); */
+        border-left: solid 1px var(--pru-red-default);
+        /* border-right: solid 3px var(--pru-red-default); */
 
         &:hover {
             background-color: var(--pru-red-tw-50) !important;
@@ -1011,87 +1189,90 @@ input[type="text" i] {
 /*#endregion MudNavMenu */
 
 /*#region MudTab */
-.pru-mud-tab {
-    & .mud-tab {
-        min-height: 36px;
-        line-height: 100%;
-        font-size: 12pt;
-        padding: 0px 12px;
-        border: 1px solid var(--tw-gray-200);
-        background-color: var(--tw-gray-50);
-        
-        color: var(--tw-gray-300);
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        font-size: 14px !important;
-        line-height: 100% !important;
+.pru-mudtab {
+    background-color: transparent;
 
-        & .mud-tab-icon-text {
-            margin-right: 2px;
-        }
-
-        &.mud-tab-active {
-            font-weight: 600;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            color: var(--tw-gray-700);
-            background-color: #FFFFFF;
-            border-top: solid 1px var(--tw-gray-700);
-            border-right: solid 1px var(--tw-gray-700);
-            border-left: solid 1px var(--tw-gray-700);
-
-            & .material-symbols-rounded {
-                font-variation-settings: 'FILL' 0, 'wght' 250, 'GRAD' 80, 'opsz' 36;
+    > .mud-tabs-tabbar {
+        > .mud-tabs-tabbar-inner {
+            > .mud-tabs-tabbar-content {
+                > .mud-tabs-tabbar-wrapper {
+                    > .mud-tab-slider {
+                        background-color: var(--tw-gray-300);
+                    }
+                }
             }
         }
     }
+}
 
-    & .mud-tab-slider {
-        background: none !important;
-    }
+.pru-mudtab-active {
+    background-color: white !important;
+    color: var(--pru-red-default) !important;
+    border: 1px solid var(--tw-gray-300);
 
-    & .mud-tabs-tabbar {
-        background-color: transparent;
-
-        & .mud-tabs-tabbar-inner {
-            min-height: 36px;
-        }
-    }
-
-    > .material-symbols-rounded {
-        font-variation-settings: 'FILL' 0, 'wght' 250, 'GRAD' 80, 'opsz' 36;
+    &:hover {
+        background-color: white !important;
+        color: var(--pru-red-default) !important;
     }
 }
 
-.pru-mud-tab-panel {
-    border: 1px solid var(--tw-gray-200);
-    background-color: var(--tw-gray-200);
-    
+.pru-mudtab-hdr {
+    background-color: transparent !important;
+    border-bottom: 1px solid var(--tw-gray-300);
+    > .mud-tabs-tabbar-inner {
+        min-height: 36px !important;
+        > .mud-tabs-tabbar-content {
+            background-color: transparent;
+        }
+    }
+}
+
+.pru-mudtab-btn {
+    background-color: green;
+}
+
+.pru-mudtab-tabpanel {
+    background-color: transparent;
+}
+
+.pru-mudtabpanel {
+    background-color: var(--tw-gray-100);
     color: var(--tw-gray-400);
-    
-    font-size: 14px !important;
-    line-height: 100% !important;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    min-height: 40px !important;
+    line-height: 22px;
 
-    & .mud-tab-badge {
-        margin-left: 0px;
-        margin-inline-start: 5px;
-        margin-bottom: 6px;
+    > .material-symbols-rounded {
+        font-size: 22px;
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 150, 'opsz' 36;
     }
 
-    & .mud-badge {
-        height: 14px;
-        min-width: 16px;
-        padding: 0px;
-        font-size: 10px;
-        font-weight: 700;
+    > .mud-tab-icon-text {
+        margin-right: 4px !important;
+        margin-inline-end: 4px !important;
     }
 
-    & .mud-theme-primary {
-        background-color: var(--pru-red-tw-100) !important;
-        color: var(--pru-red-default) !important;
-        
-        border: 1px solid var(--pru-red-default) !important;
+    &:hover {
+        background-color: var(--tw-gray-200);
+        color: var(--tw-gray-700);
     }
+}
+
+.pru-mudtabpanel-panel {
+    border: none;
+    background-color: transparent;
+}
+
+.pru-mudpaper-status-bar {
+    background-color:var(--tw-gray-50) !important; 
+    border-top-left-radius: 0px !important; 
+    border-top-right-radius:0px !important; 
+    border-bottom-left-radius:var(--pru-base-card-radius) !important;  
+    border-bottom-right-radius:var(--pru-base-card-radius)  !important;
+    border-left: 1px solid var(--tw-gray-300);
+    border-right: 1px solid var(--tw-gray-300);
+    border-bottom: 1px solid var(--tw-gray-300);
 }
 
 /*#endregion MudTab */

@@ -325,7 +325,7 @@ public class DropdownDataListRepos(IDbContext dbContext) : BaseRepos<DropdownDat
 
         DataPagination pagination = new()
         {
-            ObjectType = typeof(CambodiaProvince).Name,
+            ObjectType = typeof(KhProvince).Name,
             PageSize = pgSize,
             PageCount = pageCount,
             RecordCount = (int)recordCount

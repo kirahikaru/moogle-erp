@@ -452,7 +452,7 @@
         _countryList = await Uow.Countries.GetForDropdownSelect1Async();
 
         if (CurrentObject!.MainKhAddrId.HasValue)
-            CurrentObject!.MainKhAddress = await Uow.CambodiaAddresses.GetAsync(CurrentObject!.MainKhAddrId.Value);
+            CurrentObject!.MainKhAddress = await Uow.KhAddresses.GetAsync(CurrentObject!.MainKhAddrId.Value);
 
         if (CurrentObject!.MainAddrId.HasValue)
             CurrentObject!.MainAddress = await Uow.Addresses.GetAsync(CurrentObject!.MainAddrId.Value);

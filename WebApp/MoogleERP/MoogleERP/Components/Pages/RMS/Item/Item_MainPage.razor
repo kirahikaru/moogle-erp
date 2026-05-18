@@ -1,47 +1,49 @@
 ﻿@page "/rms/item/main"
 
 @inherits MainPageBase<Item>
-<MudPaper Class="moog-pg-banner mt-4 px-4 py-4" Elevation="0">
-    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-        <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
-		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
-				   StartIcon="material-symbols-rounded/add_circle" OnClick="@(args => PerformCRUC(CRUDCModes.CREATE))">
-            Add New
-        </MudButton>
-    </MudStack>
+<MudPaper Class="moog-pg-banner" Elevation="0">
+	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+		<MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
+		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary"
+				   StartIcon="far fa-plus-circle" OnClick="@(args => PerformCRUC(CRUDCModes.CREATE))">
+			Add New
+		</MudButton>
+	</MudStack>
 </MudPaper>
-<MudPaper Class="mt-5 overflow-y-auto" Elevation="0" Height="calc(100vh - 200px)" Style="background-color: var(--tw-gray-50); border-radius: 16px; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;">
+<MudPaper Class="moog-mudpaper-main-pg-content mt-5 overflow-y-auto" Elevation="0" Height="100%" Style="display: flex; flex-direction:column">
 	<MudStack Class="ma-4" Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
-		<MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="moog-form-field"
+		<MudTextField Clearable="true" Immediate="true" ReadOnly="false" Required="false" ShrinkLabel="true" Variant="Variant.Text"
+					  Class="moog-mudform-input"
 					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
+					  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
 					  Placeholder="Search text here..."
 					  @bind-Value="SearchText" OnKeyDown="OnSearchTextBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
-		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-btn-base"
+		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-mudbutton"
 				   StartIcon="material-symbols-rounded/search" OnClick="OnSearchClicked">Search</MudButton>
 	</MudStack>
-	<MudDataGrid Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage="50" Elevation="0"
-                 ColumnResizeMode="ResizeMode.Container" SortMode="SortMode.Multiple" 
-				 Class="mt-2 moog-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" 
-				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-mud-datagrid-row"
-				 T="Item">
+	<MudDataGrid Bordered="false" Dense="true" FixedHeader="true" Hover="true" Loading=@IsSearching MultiSelection="false" Square="true" Striped="true" 
+				 ColumnResizeMode="ResizeMode.Container" Elevation="0" RowsPerPage="50" SortMode="SortMode.Multiple"
+				 Class="moog-muddatagrid moog-main-pg" Height="calc(100% - 38px)"
+				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-muddatagrid-row"
+				 @ref="MainDataGrid" ServerData="ServerDataFunc" T="Item">
 		<Columns>
-			<PropertyColumn Title="Name" Property="x => x.ObjectName" 
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<PropertyColumn Title="Name (Khmer)" Property="x => x.ObjectNameKh"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell hanuman-regular" />
-			<PropertyColumn Title="Barcode" Property="x => x.Barcode"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell moog-font-mono" />
-			<TemplateColumn Title="Category" HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" Context="rowData">
+			<PropertyColumn Title="Name" Property="x => x.ObjectName" Editable="false" Filterable="false" Resizable="true" Sortable="false"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+			<PropertyColumn Title="Name (Khmer)" Property="x => x.ObjectNameKh" Editable="false" Filterable="false" Resizable="true" Sortable="false"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell hanuman-regular" />
+			<PropertyColumn Title="Barcode" Property="x => x.Barcode" Editable="false" Filterable="false" Resizable="true" Sortable="false"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
+			<TemplateColumn Title="Category" HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" Context="rowData">
 				<CellTemplate>
 					<span>@(rowData.Item.Category != null ? rowData.Item.Category.ObjectName : "-")</span>
 				</CellTemplate>
 			</TemplateColumn>
-			<PropertyColumn Title="Brand" Property="x => x.Brand"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<PropertyColumn Title="Model" Property="x => x.Model"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-			<TemplateColumn Title="Made In" Sortable="false" Filterable="false" 
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" 
+			<PropertyColumn Title="Brand" Property="x => x.Brand" Editable="false" Filterable="false" Resizable="true" Sortable="false"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+			<PropertyColumn Title="Model" Property="x => x.Model" Editable="false" Filterable="false" Resizable="true" Sortable="false"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+			<TemplateColumn Title="Made In" Editable="false" Filterable="false" Resizable="true" Sortable="false"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" 
 							Context="rowData">
 				<CellTemplate>
 					@if (rowData.Item.ManufacturedCountry != null && !string.IsNullOrEmpty(rowData.Item.ManufacturedCountry.FlagIconPath))
@@ -53,24 +55,32 @@
 					}
 				</CellTemplate>
 			</TemplateColumn>
-            <PropertyColumn Title="RMP" Property="x => x.RetailUnitPriceText"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="text-align:right" />
-			<PropertyColumn Title="WSP" Property="x => x.WholeSaleUnitPriceText"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="text-align:right" />
-			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="padding: 0px 10px !important;">
+			<PropertyColumn Title="RMP" Property="x => x.RetailUnitPriceText" Editable="false" Filterable="false" Resizable="true" Sortable="false"
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="text-align:right" />
+			<PropertyColumn Title="WSP" Property="x => x.WholeSaleUnitPriceText" Editable="false" Filterable="false" Resizable="true" Sortable="false"
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="text-align:right" />
+			<TemplateColumn Title="Action" Editable="false" Filterable="false" Resizable="true" Sortable="false"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="padding: 0px 10px !important;">
 				<CellTemplate>
-					<MudStack Row="true" Spacing="1">
-						<MudIconButton Class="moog-ico-btn-datagrid-action color-sky" Icon="far fa-edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
-						<MudIconButton Class="moog-ico-btn-datagrid-action color-sky" Icon="far fa-copy" Size="Size.Small" Color="Color.Success" OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
-						<MudIconButton Class="moog-ico-btn-datagrid-action color-green" Icon="far fa-eye" Size="Size.Small" Color="Color.Info" OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
-						<MudIconButton Class="moog-ico-btn-datagrid-action colol-red" Icon="far fa-trash-alt" Size="Size.Small" Color="Color.Error" OnClick="@(args => DeleteRecord(context.Item))" />
+					<MudStack Row="true" Spacing="0">
+						<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
+									   Icon="far fa-edit"
+									   OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
+						<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
+									   Icon="far fa-copy"
+									   OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
+						<MudIconButton Size="Size.Small" Color="Color.Info" Class="moog-muddatagrid-icon-btn"
+									   Icon="far fa-eye"
+									   OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
+						<MudIconButton Size="Size.Small" Color="Color.Error" Class="moog-muddatagrid-icon-btn"
+									   Icon="far fa-trash-alt"
+									   OnClick="@(args => DeleteRecord(context.Item))" />
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="Item" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
+			<MudDataGridPager T="Item" Class="moog-muddatagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
 		</PagerContent>
     </MudDataGrid>
 </MudPaper>

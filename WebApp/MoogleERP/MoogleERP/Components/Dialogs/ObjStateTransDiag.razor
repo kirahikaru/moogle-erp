@@ -85,7 +85,7 @@
     private IMudDialogInstance? MudDialog { get; set; }
 
     [Parameter]
-    public ObjectStateTransitionDetail? TransitionDetail { get; set; }
+    public ObjStateTransDetail? TransitionDetail { get; set; }
 
     [Parameter]
     public User? LoggedInUser { get; set; }
@@ -120,7 +120,7 @@
         if (errorList.Count() > 0)
             return;
 
-        MudDialog!.Close(DialogResult.Ok<ObjectStateTransitionDetail>(this.TransitionDetail!, this.TransitionDetail!.GetType()));
+        MudDialog!.Close(DialogResult.Ok<ObjStateTransDetail>(this.TransitionDetail!, this.TransitionDetail!.GetType()));
     }
 
     private void InvalidSaveClick(EditContext editContext)

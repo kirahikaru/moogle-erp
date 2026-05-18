@@ -118,21 +118,21 @@
     {
         if (Value != null)
         {
-            _khProvinceList = await Uow.CambodiaProvinces.GetForDropdownSelect1Aysnc();
+            _khProvinceList = await Uow.KhProvinces.GetForDropdownSelect1Aysnc();
 
             if (Value.KhProvinceId is not null)
             {
-                _khDistrictList = await Uow.CambodiaDistricts.GetForDropdownSelect1Async(Value.KhProvinceId.Value);
+                _khDistrictList = await Uow.KhDistricts.GetForDropdownSelect1Async(Value.KhProvinceId.Value);
             }
 
             if (Value.KhDistrictId is not null)
             {
-                _khCommuneList = await Uow.CambodiaCommunes.GetForDropdownSelect1Async(Value.KhDistrictId.Value);
+                _khCommuneList = await Uow.KhCommunes.GetForDropdownSelect1Async(Value.KhDistrictId.Value);
             }
 
             if (Value.KhCommuneId is not null)
             {
-                _khVillageList = await Uow.CambodiaVillages.GetForDropdownSelect1Async(Value.KhCommuneId.Value);
+                _khVillageList = await Uow.KhVillages.GetForDropdownSelect1Async(Value.KhCommuneId.Value);
             }
         };
     }
@@ -164,7 +164,7 @@
             Value!.KhCommuneId = null;
             Value!.KhVillageId = null;
 
-            _khDistrictList = await Uow.CambodiaDistricts.GetForDropdownSelect1Async(provinceId.Value);
+            _khDistrictList = await Uow.KhDistricts.GetForDropdownSelect1Async(provinceId.Value);
             _khCommuneList = [];
             _khVillageList = [];
         }
@@ -194,7 +194,7 @@
             Value!.KhCommuneId = null;
             Value!.KhVillageId = null;
 
-            _khCommuneList = await Uow.CambodiaCommunes.GetForDropdownSelect1Async(districtId!.Value); ;
+            _khCommuneList = await Uow.KhCommunes.GetForDropdownSelect1Async(districtId!.Value); ;
             _khVillageList = [];
         }
     }
@@ -221,7 +221,7 @@
 
             Value!.KhVillageId = null;
 
-            _khVillageList = await Uow.CambodiaVillages.GetForDropdownSelect1Async(communeId.Value);
+            _khVillageList = await Uow.KhVillages.GetForDropdownSelect1Async(communeId.Value);
         }
     }
 

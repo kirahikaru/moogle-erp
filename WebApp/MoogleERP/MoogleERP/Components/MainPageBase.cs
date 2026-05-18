@@ -128,7 +128,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable where T : class
 		else if (SelectedObject != null && SelectedObject.Equals(element))
 		{
 			SelectedRowNo = rowNumber;
-			return "moog-mud-datagrid-row selected";
+			return "moog-mud-datagrid-row moog-muddatagrid-row-selected";
 		}
 		else
 		{

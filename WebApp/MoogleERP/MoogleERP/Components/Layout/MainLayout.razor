@@ -73,62 +73,72 @@
     }
 
     private readonly Typography _moogTypography = new Typography()
+    {
+        Body1 = new Body1Typography()
         {
-            Body1 = new Body1Typography()
-            {
-                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
-                FontSize = "0.875rem"
-            },
-            Body2 = new Body1Typography()
-            {
-                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
-                FontSize = "0.875rem"
-            },
-            H1 = new H1Typography()
-            {
-                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
-            },
-            H2 = new H1Typography()
-            {
-                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
-            },
-            H3 = new H1Typography()
-            {
-                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
-            },
-            H4 = new H4Typography()
-            {
-                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
-                FontWeight = "800",
-                FontSize = "36px",
-            },
-            H5 = new H5Typography()
-            {
-                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
-                FontWeight = "700",
-                FontSize = "28px"
-            },
-            H6 = new H6Typography()
-            {
-                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
-                FontWeight = "600",
-                FontSize = "32px"
-            },
-            Default = new DefaultTypography()
-            {
-                FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
-                FontSize = "10pt"
-            }
-        };
+            FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+            FontSize = "0.875rem"
+        },
+        Body2 = new Body1Typography()
+        {
+            FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+            FontSize = "0.875rem"
+        },
+        H1 = new H1Typography()
+        {
+            FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+        },
+        H2 = new H1Typography()
+        {
+            FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+        },
+        H3 = new H1Typography()
+        {
+            FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+        },
+        H4 = new H4Typography()
+        {
+            FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+            FontWeight = "800",
+            FontSize = "36px",
+        },
+        H5 = new H5Typography()
+        {
+            FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+            FontWeight = "700",
+            FontSize = "28px"
+        },
+        H6 = new H6Typography()
+        {
+            FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+            FontWeight = "600",
+            FontSize = "32px"
+        },
+        Default = new DefaultTypography()
+        {
+            FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+            FontSize = "10pt"
+        },
+        Subtitle1 = new Subtitle1Typography()
+        {
+            FontFamily = new[] { "Inter", "Inter Fallback", "sans-serif" },
+            FontSize = "0.6875rem",
+            LineHeight = "100%"
+        },
+    };
 
     private readonly PaletteLight _moogPalleteLight = new()
     {
         AppbarBackground = "#0B83CD", //Suon Sovann Pharma Blue
         Primary = "#0B83CD", //Suon Sovann Pharma Blue
-        ActionDefault = "#90A4AE",
         GrayDefault = "#CFD8DC",
+        GrayDark = "#4A5565", // Tailwind Gray 600
+        GrayLighter = "#F9FAFB", // Tailwind Gray 50
+        ActionDefault = "#90A4AE",
         Error = "#EA4335", //google red
-        Info = "#4285F4", //google blue
+        Info = "#0084D1", //Tailwind Sky 600
+        Success = "#009966", //Tailwind Emerald 600
+        Warning = "#D08700", //Tailwind Yellow 600
         DrawerBackground = "#FFFFFF"
     };
 

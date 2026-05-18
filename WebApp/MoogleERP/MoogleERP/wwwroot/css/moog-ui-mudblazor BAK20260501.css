@@ -309,7 +309,7 @@ input[type="text" i] {
     box-shadow: var(--mud-elevation-1);
 }
 
-.moog-ui-autocomplete-popover {
+.moog-mudautocomplete-popover {
     box-shadow: var(--mud-elevation-1);
 }
 
@@ -530,7 +530,7 @@ input[type="text" i] {
 
 /*#endregion */
 
-.moog-mud-datagrid-pager {
+.moog-muddatagrid-pager {
     height:36px;
 
     & .mud-icon-button {

@@ -5,9 +5,9 @@
 
 @if (CurrentObject != null && CurrentEditContext != null)
 {
-    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" >
+    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column;">
         <DataAnnotationsValidator />
-        <MudPaper Class="moog-pg-banner mt-4 px-4 py-4" Elevation="0">
+        <MudPaper Class="moog-pg-banner" Elevation="0">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                 <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="0">
                     <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
@@ -31,22 +31,22 @@
                 <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="2">
                     @if (IsViewMode)
                     {
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base moog-btn-gray" Color="Color.Dark"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Dark"
                                    Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/close">
                             Close
                         </MudButton>
                     }
                     else
                     {
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" DropShadow="false" Class="moog-mudbutton"
                                    Disabled=@IsSaving OnClick="@(() => Save(false))" StartIcon="material-symbols-rounded/save_as">
                             Save
                         </MudButton>
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" DropShadow="false" Class="moog-mudbutton"
                                    Disabled=@IsSaving OnClick="@(() => Save(true))" StartIcon="material-symbols-rounded/save">
                             Save & Close
                         </MudButton>
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base moog-btn-gray" Color="Color.Default"
+                        <MudButton Variant="Variant.Filled" Color="Color.Default" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" 
                                    Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/cancel">
                             Cancel
                         </MudButton>
@@ -54,29 +54,35 @@
                 </MudStack>
             </MudStack>
         </MudPaper>
-        <MudTabs Color="Color.Primary" Class="mt-4 moog-mudtab" ActiveTabClass="moog-mudtab-tab-active" TabButtonsClass="moog-mudtab-tab-btn" TabHeaderClass="moog-mudtab-tab-hdr" TabPanelsClass="moog-mudtab-tab-panel">
+        <MudTabs Color="Color.Primary" Class="moog-mudtab mt-4" ActiveTabClass="moog-mudtab-tab-active" TabButtonsClass="moog-mudtab-tab-btn" TabHeaderClass="moog-mudtab-tab-hdr" TabPanelsClass="moog-mudtab-tab-panel">
             <MudTabPanel Icon="fad fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
-                <MudPaper Elevation="0" Square="true" Height="calc(100vh - 275px)" Style="overflow-y: auto; background-color: var(--tw-gray-50); scrollbar-width:auto; scrollbar-color:var(--tw-gray-300) var(--tw-gray-50)">
+                <MudPaper Elevation="0" Square="true" Height="calc(100% - var(--moog-cruc-pg-status-bar-height))" Style="overflow-y: auto; background-color: var(--tw-gray-50); scrollbar-width:auto; scrollbar-color:var(--tw-gray-300) var(--tw-gray-50)">
                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" StretchItems="StretchItems.All" Spacing="1">
                         <MudGrid Spacing="4" Class="py-4 px-4" Style="margin-left:-8px">
                             <MudItem xs="6">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Required="true"
+                                <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               Label="Name" @ref=_mtfObjName
                                               @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" />
                             </MudItem>
                             <MudItem xs="4">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field lang-kh"
+                                <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               Label="Name (Kh)" Placeholder="ឈ្មោះខ្មែរ"
                                               @bind-Value="CurrentObject!.ObjectNameKh" For="@(() => CurrentObject!.ObjectNameKh)"  />
                             </MudItem>
                             <MudItem xs="2">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Required="true" 
+                                <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               Label="ID" 
                                               @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" Style="text-transform:uppercase" />
                             </MudItem>
                             <MudItem xs="4">
-                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                                             Class="moog-mud-combobox" PopoverClass="moog-mud-combobox-popover" TemplateClass="moog-mud-combobox-template" HighlightClass="moog-mud-combobox-highlight"
+                                <MudComboBox Clearable="true" Editable="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password"
+                                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight"
                                              Label="Category" T="int?"
                                              ToStringFunc="@(e => (e is null || e!.Value < 0) ? "" : _itemCategoryList.SingleOrDefault<DropdownSelectItem>(x => x.Id == e)?.Value)"
                                              @bind-Value="CurrentObject!.ItemCategoryId" For="@(() => CurrentObject!.ItemCategoryId)">
@@ -95,8 +101,8 @@
                                         <MudSelectItem T="string" Value="@cty.ObjectCode">@cty.ObjectName</MudSelectItem>
                                     }
                                 </MudSelect> *@
-                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                                             Class="moog-mud-combobox" PopoverClass="moog-mud-combobox-popover" TemplateClass="moog-mud-combobox-template" HighlightClass="moog-mud-combobox-highlight"
+                                <MudComboBox Clearable="true" Editable="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password"
+                                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight"
                                              Label="Made In" T="string" 
                                              @bind-Value="@CurrentObject.MfgCountryCode" @bind-Text=@_selectedCountryName
                                              ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _countryList.SingleOrDefault<DropDownListItem>(x => x.ObjectCode == e)?.ObjectName)">
@@ -109,21 +115,27 @@
                                 </MudComboBox>
                             </MudItem>
                             <MudItem xs="4">
-                                <MudAutocomplete Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-form-field" FullWidth="true" PopoverClass="moog-ui-autocomplete-popover"
-                                                 AdornmentIcon="material-symbols-rounded/keyboard_arrow_down"
-                                                 CoerceText="true" CoerceValue="true" DebounceInterval="300"
+                                <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                 Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
+                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 AdornmentIcon="fa-solid fa-angle-down"
+                                                 DebounceInterval="300"
                                                  Label="Brand" T="string"
                                                  @bind-Value="CurrentObject!.Brand" For="@(() => CurrentObject!.Brand)"
                                                  SearchFunc="@SearchBrandName" />
                             </MudItem>
                             <MudItem xs="4">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field"
+                                <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               Label="Model" 
                                               @bind-Value="CurrentObject!.Model" For="@(() => CurrentObject!.Model)" />
                             </MudItem>
                             <MudItem xs="4">
                                 <MudStack Row="true" Spacing="0">
-                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field"
+                                    <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                  Class="moog-mudform-input"
+                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                   AdornmentIcon="material-symbols-rounded/confirmation_number" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                                   Label="MPN"
                                                   @bind-Value="CurrentObject!.MPN" For="@(() => CurrentObject!.MPN)" />
@@ -135,7 +147,9 @@
                             </MudItem>
                             <MudItem xs="4">
                                 <MudStack Row="true" Spacing="0">
-                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field"
+                                    <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                  Class="moog-mudform-input"
+                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                   AdornmentIcon="material-symbols-rounded/confirmation_number" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                                   Label="SKU"
                                                   @bind-Value="CurrentObject!.SKU" For="@(() => CurrentObject!.SKU)" />
@@ -146,14 +160,18 @@
                                 </MudStack>
                             </MudItem>
                             <MudItem xs="3">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Required="false"
+                                <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                               Label="Barcode"
                                               @bind-Value="CurrentObject!.Barcode" For="@(() => CurrentObject!.Barcode)" />
                             </MudItem>
                             <MudItem xs="3">
                                 <MudStack Row="true" Spacing="0">
-                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Required="false"
+                                    <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                  Class="moog-mudform-input"
+                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                   AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                                   Label="EAN" MaxLength="13"
                                                   @bind-Value="CurrentObject!.EAN" For="@(() => CurrentObject!.EAN)" />
@@ -165,7 +183,9 @@
                             </MudItem>
                             <MudItem xs="3">
                                 <MudStack Row="true" Spacing="0" >
-                                    <MudTextField ReadOnly=@IsViewMode ShrinkLabel="true" Clearable="true" Class="moog-form-field" Required="false"
+                                    <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                  Class="moog-mudform-input"
+                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                   AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
                                                   Label="ISBN" HelperTextOnFocus="false" MaxLength="13"
                                                   @bind-Value="CurrentObject!.ISBN" For="@(() => CurrentObject!.ISBN)" />
@@ -177,7 +197,9 @@
                             </MudItem>
                             <MudItem xs="3">
                                 <MudStack Row="true" Spacing="0" >
-                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Required="false"
+                                    <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                  Class="moog-mudform-input"
+                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                   AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                                   Label="UPC"
                                                   @bind-Value="CurrentObject!.UPC" For="@(() => CurrentObject!.UPC)" />
@@ -188,32 +210,41 @@
                                 </MudStack>
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field"
+                                <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                               Label="Info Link"
                                               @bind-Value="CurrentObject!.InfoLink" For="@(() => CurrentObject!.InfoLink)" />
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field"
+                                <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                               Label="Purchase Link"
                                               @bind-Value="CurrentObject!.PurchaseLink" For="@(() => CurrentObject!.PurchaseLink)" />
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Required="false" 
+                                <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               Label="Short Name" Placeholder="Short Name for receipt printing purpose due to limited character"
                                               @bind-Value="CurrentObject!.ShortName" For="@(() => CurrentObject!.ShortName)" />
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Required="false"
+                                <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               Label="Short Name (Kh)" Placeholder="Short Name for receipt printing purpose due to limited character"
                                               @bind-Value="CurrentObject!.ShortNameKh" For="@(() => CurrentObject!.ShortNameKh)" />
                             </MudItem>
                             <MudItem xs="2">
-                                <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" 
-                                           Class="moog-form-field" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
-                                           AdornmentIcon="material-symbols-rounded/keyboard_arrow_down"
-                                           Label="Item Unit" T="string"
+                                <MudSelect Clearable="true" FitContent="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" 
+                                           Class="moog-mudform-input" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
+                                           ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                           AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
+                                           Label="Item Unit" Placeholder="Select a unit..." T="string"
                                            Value="@CurrentObject!.UnitCode" ValueChanged="OnItemUnitChanged">
                                     @foreach (var uom in _itemUnitList)
                                     {
@@ -223,27 +254,34 @@
                             </MudItem>
                             <MudItem xs="7">
                                 <MudStack Row=true Spacing="2" Justify="Justify.FlexStart">
-                                    <MudSelect ReadOnly=@IsViewMode ShrinkLabel="true" Clearable="true"
-                                               Class="moog-form-field" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
-                                               AdornmentIcon="material-symbols-rounded/keyboard_arrow_down"
-                                               Label="Size Unit" T="string"
+                                    <MudSelect Clearable="true" FitContent="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                               Class="moog-mudform-input" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
+                                               ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                               AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
+                                               Label="Size Unit" Placeholder="Select a unit" T="string"
                                                Value="@CurrentObject!.DimensionUnitCode" For="(() => CurrentObject.DimensionUnitCode)" ValueChanged="OnDimensionUnitChanged">
                                         @foreach (var uom in _dimensionUnitList)
                                         {
                                             <MudSelectItem T="string" Value="@uom.ObjectCode">@uom.NameWithSymbol</MudSelectItem>
                                         }
                                     </MudSelect>
-                                    <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
+                                    <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                     Class="moog-mudform-input"
+                                                     ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                      Adornment="Adornment.End" AdornmentText="@_dimensionUnitSymbol"
                                                      Label="Height" T="decimal?" Placeholder="Height"
                                                      @bind-Value="CurrentObject!.DimensionHeight" For="(() => CurrentObject.DimensionHeight)"
                                                      Step="0.1M" Format="#,##0.##" />
-                                    <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
+                                    <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                     Class="moog-mudform-input"
+                                                     ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                      Adornment="Adornment.End" AdornmentText="@_dimensionUnitSymbol"
                                                      Label="Length" Placeholder="Length" T="decimal?"
                                                      @bind-Value="CurrentObject!.DimensionLength" For="(() => CurrentObject.DimensionLength)"
                                                      Step="0.1M" Format="#,##0.##" />
-                                    <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
+                                    <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                     Class="moog-mudform-input"
+                                                     ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                      Adornment="Adornment.End" AdornmentText="@_dimensionUnitSymbol"
                                                      Label="Width" Placeholder="Width" T="decimal?"
                                                      @bind-Value="CurrentObject!.DimensionWidth" For="(() => CurrentObject.DimensionWidth)" 
@@ -252,9 +290,10 @@
                             </MudItem>
                             <MudItem xs="3">
                                 <MudStack Row=true Spacing="2" Justify="Justify.FlexStart">
-                                    <MudSelect ReadOnly=@IsViewMode ShrinkLabel="true" Clearable="true" 
-                                               Class="moog-form-field" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
-                                               AdornmentIcon="material-symbols-rounded/keyboard_arrow_down"
+                                    <MudSelect Clearable="true" FitContent="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                               Class="moog-mudform-input" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
+                                               ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                               AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
                                                Label="Weight Unit" T="string"
                                                Value="@CurrentObject!.WeightUnitCode" ValueChanged="OnWeightUnitChanged"
                                                For="(() => CurrentObject.WeightUnitCode)">
@@ -263,7 +302,9 @@
                                             <MudSelectItem T="string" Value="@wt.ObjectCode">@wt.NameWithSymbol</MudSelectItem>
                                         }
                                     </MudSelect>
-                                    <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
+                                    <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                     Class="moog-mudform-input"
+                                                     ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                      AdornmentText="@_weightUnitSymbol" Adornment="Adornment.End"
                                                      Label="Weight" Placeholder="Weight" T="decimal?"
                                                      @bind-Value="CurrentObject!.ItemWeight" For="(() => CurrentObject.ItemWeight)" 
@@ -271,8 +312,8 @@
                                 </MudStack>
                             </MudItem>
                             <MudItem xs="6">
-                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password" Required="false"
-                                             Class="moog-mud-combobox" PopoverClass="moog-mud-combobox-popover" TemplateClass="moog-mud-combobox-template" HighlightClass="moog-mud-combobox-highlight"
+                                <MudComboBox Clearable="true" Editable="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text"
+                                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight" autocomplete="new-password"
                                              Label="Manufacturer" T="int?"
                                              ToStringFunc="@(e => (e is null || e!.Value < 0) ? "" : _busnEntList.SingleOrDefault<DropdownSelectItem>(x => x.Id == e)?.Value)"
                                              Value="@CurrentObject!.MfgBusnEntId" For="@(() => @CurrentObject!.MfgBusnEntId)"
@@ -284,8 +325,8 @@
                                 </MudComboBox>
                             </MudItem>
                             <MudItem xs="6">
-                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password" Required="false"
-                                             Class="moog-mud-combobox" PopoverClass="moog-mud-combobox-popover" TemplateClass="moog-mud-combobox-template" HighlightClass="moog-mud-combobox-highlight"
+                                <MudComboBox Clearable="true" Editable="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text" 
+                                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight" autocomplete="new-password"
                                              Label="Distributor" T="int?"
                                              ToStringFunc="@(e => (e is null || e!.Value < 0) ? "" : _busnEntList.SingleOrDefault<DropdownSelectItem>(x => x.Id == e)?.Value)"
                                              Value="@CurrentObject!.DistBusnEntId" For="@(() => @CurrentObject!.DistBusnEntId)"
@@ -297,12 +338,16 @@
                                 </MudComboBox>
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Lines="8"
+                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               Label="Item Description" Placeholder="Description..." 
                                               @bind-Value="CurrentObject!.Description" For="@(() => CurrentObject!.Description)" />
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Lines="8"
+                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               Label="Item Content" Placeholder="Content..."
                                               @bind-Value="CurrentObject!.ContentDesc" For="@(() => CurrentObject!.ContentDesc)" />
                             </MudItem>
@@ -315,7 +360,7 @@
                                     @if (!IsViewMode)
                                     {
                                         <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify=Justify.FlexStart>
-                                            <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" FullWidth="false" Class="moog-btn-base moog-btn-tight"
+                                            <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" FullWidth="false" Class="moog-mudbutton"
                                                        StartIcon="material-symbols-rounded/add"
                                                        OnClick="AddItemSpec" Disabled="!_isEditingSpec">
                                                 Add Spec
@@ -327,16 +372,18 @@
                                         </MudStack>
                                     }
                                     @* EditDialogOptions=@(new() { BackdropClick = false, MaxWidth = MaxWidth.Medium, FullWidth = true }) *@
-                                    <MudDataGrid Class="moog-mud-datagrid" Dense="true" Hover="true" FixedHeader="true" Striped="false" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None"
-                                                 Items="@CurrentObject!.Specs" T="ItemSpec" @ref="_itemSpecsGrid" NoRecordsContent="_gridNoRecord" Style="width:100%" QuickFilter="_quickItemSpecFilter"
-                                                 ReadOnly=@(IsViewMode || !_isEditingSpec) EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell" 
-                                                 StartedEditingItem="@StartedEditingItemSpec" CanceledEditingItem="@CanceledEditingItemSpec" CommittedItemChanges="@CommittedItemSpecChanges">
+                                    <MudDataGrid Bordered="false" Dense="true" FixedHeader="true" Hover="true" Loading="false" MultiSelection="false" Square="true" Striped="true"
+                                                 ColumnResizeMode="ResizeMode.None" Elevation="0" SortMode="SortMode.Multiple" RowsPerPage="50"
+                                                 ReadOnly=@(IsViewMode || !_isEditingSpec) EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
+                                                 StartedEditingItem="@StartedEditingItemSpec" CanceledEditingItem="@CanceledEditingItemSpec" CommittedItemChanges="@CommittedItemSpecChanges"
+                                                 NoRecordsContent="_gridNoRecord" Style="width:100%" 
+                                                 Items="@CurrentObject!.Specs" @ref="_itemSpecsGrid" T="ItemSpec" QuickFilter="_quickItemSpecFilter">
                                         <Columns>
-                                            <PropertyColumn Title="No." Property="x => x.OrderNo" Sortable="false" Editable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell spacious")
+                                            <PropertyColumn Title="No." Property="x => x.OrderNo" Editable="false" Filterable="false" Resizable="true" Sortable="false"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell moog-muddatagrid-cell-spacious")
                                                             CellStyle="text-align:right" />
                                             <PropertyColumn Title="Type" Property="x => x.ObjectName" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (!_isEditingSpec ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (!_isEditingSpec ? " moog-muddatagrid-cell-spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-form-field" Required="true"
@@ -345,7 +392,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Spec Value" Property="x => x.SpecText" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (!_isEditingSpec ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (!_isEditingSpec ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-form-field" Required="true"
@@ -354,7 +401,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Value" Property="x => x.SpecValue" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (!_isEditingSpec ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (!_isEditingSpec ? " spacious" : " data-align-top inline-editing"))
                                                             HeaderStyle="width:100px; max-width:80px" Context="item">
                                                 <EditTemplate>
                                                     <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
@@ -364,7 +411,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Unit" Property="x => x.SpecUnit" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (!_isEditingSpec ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (!_isEditingSpec ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-form-field" Required="true"
@@ -373,19 +420,31 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false" StickyRight="true"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell inline-editing"
                                                             HeaderStyle="max-width: 110px; width:300px"
                                                             CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
                                                             Context="item">
                                                 <CellTemplate>
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action color-sky" Icon="fa-solid fa-up" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemSpecUp(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action color-sky" Icon="fa-solid fa-down" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemSpecDown(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action color-red" Icon="far fa-trash-alt" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItemSpec(item.Item))" />
+                                                    <MudIconButton Size="@Size.Small" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+                                                                   Icon="fa-solid fa-up"
+                                                                   OnClick="@(() => MoveItemSpecUp(item.Item))" />
+                                                    <MudIconButton Color="Color.Primary" Size="@Size.Small" Class="moog-muddatagrid-icon-btn"
+                                                                   Icon="fa-solid fa-down"
+                                                                   OnClick="@(() => MoveItemSpecDown(item.Item))" />
+                                                    <MudIconButton Size="@Size.Small" Color="Color.Error" Class="moog-muddatagrid-icon-btn"
+                                                                   Icon="far fa-trash-alt"
+                                                                   OnClick="@(() => RemoveItemSpec(item.Item))" />
                                                 </CellTemplate>
                                                 <EditTemplate>
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action color-sky" Icon="fa-solid fa-up" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemSpecUp(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action color-sky" Icon="fa-solid fa-down" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemSpecDown(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action color-red" Icon="far fa-trash-alt" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItemSpec(item.Item))" />
+                                                    <MudIconButton Size="@Size.Small" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+                                                                   Icon="fa-solid fa-up"
+                                                                   OnClick="@(() => MoveItemSpecUp(item.Item))" />
+                                                    <MudIconButton Color="Color.Primary" Size="@Size.Small" Class="moog-muddatagrid-icon-btn"
+                                                                   Icon="fa-solid fa-down"
+                                                                   OnClick="@(() => MoveItemSpecDown(item.Item))" />
+                                                    <MudIconButton Size="@Size.Small" Color="Color.Error" Class="moog-muddatagrid-icon-btn"
+                                                                   Icon="far fa-trash-alt"
+                                                                   OnClick="@(() => RemoveItemSpec(item.Item))" />
                                                 </EditTemplate>
                                             </TemplateColumn>
                                         </Columns>
@@ -419,14 +478,14 @@
                                                  StartedEditingItem="@StartedEditingItemVar" CanceledEditingItem="@CanceledEditingItemVar" CommittedItemChanges="@CommittedItemVarChanges">
                                         <Columns>
                                             <PropertyColumn Title="No." Property="x => x.SeqNo" Sortable="false" Editable="false" Hidden="true"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell spacious data-align-top"
                                                             CellStyle="text-align:right" Context="item">
                                                             <EditTemplate>
 
                                                             </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Name" Property="x => x.ObjectName" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell spacious data-align-top"
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" StretchItems="StretchItems.None" Class="mt-3">
@@ -443,13 +502,13 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Barcode" Property="x => x.Barcode" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell spacious data-align-top"
                                                             Context="item">
                                                 <EditTemplate>
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Description" Property="x => x.Desc" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell spacious data-align-top"
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-form-field mt-3" Required="false"
@@ -458,7 +517,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Color" Property="x => x.ColorDesc" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell spacious data-align-top"
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Class="mt-3">
@@ -472,14 +531,14 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Size Desc" Property="x => x.SizeDesc" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell spacious data-align-top"
                                                             Context="item">
                                                 <EditTemplate>
 
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Size" Property="x => x.DimensionText" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell spacious data-align-top"
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Class="mt-3">
@@ -511,7 +570,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Weight" Property="x => x.WeightText" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell spacious data-align-top"
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" StretchItems="StretchItems.None" Class="mt-3">
@@ -535,12 +594,12 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="RMP" Property="x => x.RetailUnitPriceText" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell spacious data-align-top"
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" StretchItems="StretchItems.None" Class="mt-3">
                                                         <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                                                                     Class="moog-mud-combobox" PopoverClass="moog-mud-combobox-popover" TemplateClass="moog-mud-combobox-template" HighlightClass="moog-mud-combobox-highlight"
+                                                                     Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight"
                                                                      Label="Currency" T="string"
                                                                      ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _currencyList.SingleOrDefault<DropdownSelectItem>(x => x.Key == e)?.Value)"
                                                                      @bind-Value="CurrentObject!.CurrencyCode" For="@(() => CurrentObject!.CurrencyCode)">
@@ -561,7 +620,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="WSP" Property="x => x.WholeSaleUnitPriceText" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell spacious data-align-top"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell spacious data-align-top"
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" StretchItems="StretchItems.None" Class="mt-3">
@@ -577,7 +636,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false" StickyRight="true"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                            HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell inline-editing"
                                                             HeaderStyle="width:300px; max-wdith:110px"
                                                             CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
                                                             Context="item">
@@ -646,7 +705,7 @@
                         </MudPaper>
                     </MudStack>
                 </MudPaper>
-                <MudPaper Height="32px" Elevation="0"
+                <MudPaper Height="var(--moog-cruc-pg-status-bar-height)" Elevation="0"
                           Style="padding:0px; background-color:var(--tw-gray-100); border-top-left-radius:0px; border-top-right-radius:0px; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px">
                     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1" Style="height:100%; padding: 0px 16px">
                         @if (CurrentObject.Id > 0)
@@ -671,9 +730,9 @@
                     </MudStack>
                 </MudPaper>
             </MudTabPanel>
-            <MudTabPanel Icon="fad fa-info-circle" Text="Other Info">
-                <MudPaper Class="pa-4" Elevation="0" Square="true" Height="calc(100vh - 275px + 30px)"
-                          Style="overflow-y: auto; border-bottom-left-radius:16px; border-bottom-right-radius:16px; background-color: var(--tw-gray-50); scrollbar-width:auto; scrollbar-color:var(--tw-gray-300) var(--tw-gray-50)">
+            <MudTabPanel Icon="fad fa-circle-info" Text="Other Info" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
+                <MudPaper Elevation="0" Square="true" Height="100%" 
+                          Style="overflow-y: auto; background-color: var(--tw-gray-50); scrollbar-width:auto; scrollbar-color:var(--tw-gray-300) var(--tw-gray-50); border-bottom-left-radius: 16px; border-bottom-right-radius: 16px">
                     <MudGrid Spacing="3" Class="pa-3">
                         <MudItem xs="12" Style="padding:4px 12px; background-color:var(--ssv-pharma-blue-100)">
                             <MudText Typo="Typo.h1" Style="font-size:18px; font-weight:700; color:var(--ssv-pharma-blue)">Supplier</MudText>
@@ -700,14 +759,14 @@
                                              StartedEditingItem="@StartedEditingSupplier" CanceledEditingItem="@CanceledEditingSupplier" CommittedItemChanges="@CommittedSupplierChanges">
                                     <Columns>
                                         <PropertyColumn Title="No." Property="x => x.SeqNo" Sortable="false" Editable="false"
-                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
                                                         Style="width: 100px; max-width:40px" CellStyle="text-align:right" />
                                         <PropertyColumn Title="Supplier" Property="x => x.SupplierName" Sortable="false"
-                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
                                                         Context="item">
                                             <EditTemplate>
                                                 <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password" Required="true"
-                                                             Class="moog-mud-combobox" PopoverClass="moog-mud-combobox-popover" TemplateClass="moog-mud-combobox-template" HighlightClass="moog-mud-combobox-highlight"
+                                                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight"
                                                              T="int?"
                                                              ToStringFunc="@(e => (e is null || e!.Value < 0) ? "" : _supplierList.SingleOrDefault<Supplier>(x => x.Id == e)?.ObjectName)"
                                                              Value="item.Item.SupplierId" For="@(() => item.Item.SupplierId)"
@@ -720,7 +779,7 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Description" Property="x => x.ObjectName" Sortable="false"
-                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
                                                         Context="item">
                                             <EditTemplate>
                                                 <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-form-field" Required="false"
@@ -729,7 +788,7 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="ID" Property="x => x.ObjectCode" Sortable="false"
-                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
                                                         Context="item">
                                             <CellTemplate>
                                                 <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" StretchItems="StretchItems.None" Spacing="2">
@@ -749,11 +808,11 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Currency" Property="x => x.UnitPriceCurrencyCode" Sortable="false"
-                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
                                                         HeaderStyle="width:300px; max-width:140px" Context="item">
                                             <EditTemplate>
                                                 <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                                                             Class="moog-mud-combobox" PopoverClass="moog-mud-combobox-popover" TemplateClass="moog-mud-combobox-template" HighlightClass="moog-mud-combobox-highlight"
+                                                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight"
                                                              T="string"
                                                              ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _currencyList.SingleOrDefault<DropdownSelectItem>(x => x.Key == e)?.Value)"
                                                              @bind-Value="item.Item.UnitPriceCurrencyCode" For="@(() => item.Item.UnitPriceCurrencyCode)">
@@ -765,7 +824,7 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Unit Price" Property="x => x.UnitPriceText" Sortable="false"
-                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
                                                         HeaderStyle="width:300px; max-width:140px" CellStyle=@((IsViewMode || !_isEditingSupplier) ? "text-align:right" : "")
                                                         Context="item">
                                             <EditTemplate>
@@ -776,7 +835,7 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Unit Price (US$)" Property="x => x.UnitPriceUsdText" Sortable="false"
-                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
                                                         HeaderStyle="width:300px; max-width:140px" CellStyle=@((IsViewMode || !_isEditingSupplier) ? "text-align:right" : "")
                                                         Context="item">
                                             <EditTemplate>
@@ -788,7 +847,7 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Unit Price (KHR)" Property="x => x.UnitPriceKhrText" Sortable="false"
-                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
+                                                        HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSupplier) ? " spacious" : " data-align-top inline-editing"))
                                                         HeaderStyle="width:300px; max-width:180px" Context="item" CellStyle=@((IsViewMode || !_isEditingSupplier) ? "text-align:right" : "")>
                                             <EditTemplate>
                                                 <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
@@ -797,7 +856,7 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
-                                                        HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                        HeaderClass="moog-muddatagrid-hdr mud-cruc-pg" CellClass="moog-muddatagrid-cell inline-editing"
                                                         CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
                                                         HeaderStyle="width:300px; max-width:100px" Context="item">
                                             <CellTemplate>

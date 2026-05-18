@@ -4,6 +4,29 @@
 
 /*#region MUD OVERWRITE STYLE */
 
+.mud-button-filled.mud-button-filled-primary {
+    background-color: var(--ssv-pharma-blue);
+    color: #FFFFFF;
+    box-shadow: none;
+
+    &:hover {
+        background-color: var(--ssv-pharma-blue-700);
+        box-shadow: none;
+    }
+}
+
+.mud-chip-container {
+    &:has(.moog-pg-banner-chip) {
+        & .mud-chip-size-small {
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            height: 20px;
+        }
+    }
+}
+
+
 .mud-dialog {
     border-radius: 18px;
     background-color: var(--tw-gray-50);
@@ -43,9 +66,15 @@
     flex-direction: column;
     height: calc(100vh - var(--mud-appbar-height));
     margin-top: 64px;
-    background-color: green;
+    background-color: #FFFFFF;
     /* margin-top: var(--mud-appbar-height); */
     padding: 20px;
+}
+
+.moog-mudpaper-main-pg-content {
+    background-color: var(--tw-gray-50); 
+    border-radius: 16px; 
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
 }
 
 /*#region MudNav Mud Navigation */
@@ -356,7 +385,7 @@
 }
 /*#endregion */
 
-.moog-form-field {
+.moog-mudform-input {
 
     > .mud-input-control-input-container {
         /* > .mud-input:focus-within~label.mud-input-label.mud-input-label-inputcontrol
@@ -372,7 +401,7 @@
                 font-size: var(--base-font-size);
                 color:var(--tw-gray-700);
                 padding: 12px 18px;
-                margin-top: -1px;
+                height: auto;
 
                 &::placeholder {
                     color: var(--tw-gray-400);
@@ -381,9 +410,8 @@
 
             > textarea.mud-input-root {
                 font-size: var(--base-font-size);
-                padding: 12px 16px;
-                padding: 12px 18px;
-                margin-top: -1px;
+                padding: 16px 20px;
+                margin-top: 0px;
 
                 &::placeholder {
                     color: var(--tw-gray-400);
@@ -393,11 +421,16 @@
             > div.mud-input-root {
                 font-size: var(--base-font-size);
                 color:var(--tw-gray-700);
-                padding: 12px 18px;
-                margin-top: -1px;
+                padding: 13.8px 18px;
 
                 &::placeholder {
                     color: var(--tw-gray-400);
+                }
+            }
+
+            > div.mud-input-slot {
+                &.mud-input-root {
+                    height: auto;
                 }
             }
 
@@ -411,7 +444,7 @@
                 }
 
                 > .mud-icon-default {
-                    color: var(--tw-gray-700) !important;
+                    color: var(--tw-gray-500);
                 }
 
                 > .mud-icon-button-edge-end {
@@ -431,6 +464,7 @@
             > .mud-input-adornment-end {
                 margin-left: -4px;
                 margin-inline-start: -8px;
+                margin-inline-end: 12px;
             }
 
             > .mud-input-adornment-start {
@@ -454,6 +488,14 @@
                     color: var(--tw-gray-400);
                     font-size: 24px;
                     font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 100, 'opsz' 48;
+                }
+            }
+
+            > .mud-input-clear-button  {
+                > .mud-icon-button-label {
+                    > .mud-icon-size-small {
+                        font-size: 16px;
+                    }
                 }
             }
 
@@ -514,7 +556,7 @@
                 &.mud-input-label-inputcontrol {
                     color:var(--tw-gray-500);
                     font-size: 1rem;
-                    margin-left: 20px;
+                    margin-left: 16px;
                 }
             }
         }
@@ -757,7 +799,7 @@
     }
 }
 
-.moog-mud-datepicker {
+.moog-muddatepicker {
     > .mud-input-control {
         > .mud-input-control-input-container {
             > .mud-input {
@@ -769,8 +811,17 @@
 
                 > input.mud-input-root {
                     padding: 12px 18px;
+                    height: auto;
                     &::placeholder {
                        color: var(--tw-gray-400);
+                    }
+                }
+
+                > .mud-icon-button {
+                    > .mud-icon-button-label {
+                        > .mud-icon-size-small {
+                            font-size: 16px;
+                        }
                     }
                 }
 
@@ -874,8 +925,24 @@
     }
 }
 
+.moog-muddatepicker-action {
+    background-color: red;
+}
+
+.moog-muddatepicker-toolbar {
+    background-color: red;
+}
+
 .moog-mudselect-input {
     background-color: transparent;
+
+    > .mud-icon-default {
+        color: var(--tw-gray-400) !important;
+    }
+
+    > .mud-icon-size-small {
+        font-size: 16px;
+    }
 
     > .mud-icon-default {
         color: var(--tw-gray-400) !important;
@@ -910,12 +977,46 @@
     box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 }
 
-.moog-ui-autocomplete-popover {
+/*#region MudAutocomplete */
+
+.moog-mudautocomplete-popover {
     border-radius: 12px;
     box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+    background-color: #FFFFFF;
     scrollbar-width: auto;
     scrollbar-color: var(--tw-gray-300) var(--tw-gray-50);
 }
+
+.moog-mudautocomplete-input {
+    > .mud-input-adornment-end {
+        margin-inline-start: -12px !important;
+    }
+    
+    background-color: transparent;
+    > .mud-icon-button {
+        > .mud-icon-button-label {
+            > .mud-icon-size-small {
+                font-size: 16px;
+            }
+        }
+    }
+
+    > .mud-icon-button-edge-end{
+        margin-inline-end: -6px !important;
+    }
+}
+
+.moog-mudautocomplete-list {
+    background-color: transparent;
+    scrollbar-width: auto;
+    scrollbar-color: var(--tw-gray-300) var(--tw-gray-50);
+}
+
+.moog-mudautocomplete-listitem {
+    background-color: transparent;
+}
+
+/*#endregion */
 
 /*#region MudBlazor OVERWRITE Custom Style */
 .moog-thin-icon-mud-ardornment-start {
@@ -1059,7 +1160,7 @@
     }
 }
 
-.moog-btn-base {
+.moog-mudbutton {
     border-radius: 1.5rem;
     padding: 4px 14px;
     & .mud-button-label {
@@ -1119,9 +1220,21 @@
             background-color: var(--tw-gray-700);
         }
     }
+
+    &:has(~ .mud-button-filled-size-small) {
+        font-size: 12px;
+        > .mud-button-label {
+            > .mud-button-icon-start {
+                &.mud-button-icon-size-small {
+                    font-size: 12px;
+                }
+            }
+        }
+    }
 }
 
-.moog-mud-combobox {
+/*#region MudComboBox */
+.moog-mudcombobox {
     > .mud-input-control-input-container {
         > .mud-input {
             border: 1px solid var(--tw-gray-200) !important;
@@ -1132,7 +1245,7 @@
                 font-size: var(--base-font-size);
                 color:var(--tw-gray-700);
                 padding: 12px 18px;
-                margin-top: -1px;
+                height: auto;
 
                 &::placeholder {
                     color: var(--tw-gray-400);
@@ -1187,7 +1300,7 @@
     }
 }
 
-.moog-mud-combobox-popover {
+.moog-mudcombobox-popover {
     border-radius: 12px;
     box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
     > div {
@@ -1210,13 +1323,14 @@
     }
 }
 
-.moog-mud-combobox-template {
+.moog-mudcombobox-template {
     background-color: green;
 }
 
-.moog-mud-combobox-highlight {
+.moog-mudcombobox-highlight {
     background-color: green;
 }
+/*#endregion */
 
 /*#region MudDataGrid */
 .moog-muddatagrid {
@@ -1225,11 +1339,11 @@
 
     & .mud-table-cell {
         &.sticky-left {
-            background-color: transparent;
+            background-color: #FFFFFF;
         }
 
         &.sticky-right {
-            background-color: transparent;
+            background-color: #FFFFFF;
         }
     }
 
@@ -1237,16 +1351,16 @@
         width: auto !important;
     }
 
-    &.main-pg {
-        height: calc(100vh - 275px);
+    &.moog-main-pg {
         overflow: hidden;
+        height: 100%;
         
         > .mud-table-container {
             > .mud-drop-container {
                 scrollbar-width: auto;
                 scrollbar-color: var(--tw-gray-300) var(--tw-gray-50);
                 width: 100%;
-                height: calc(100vh - 310px);
+                height: 100%;
                 overflow-y:auto;
 
                 > .mud-table-root {
@@ -1255,6 +1369,10 @@
                             background-color: var(--tw-gray-50);
 
                             & .mud-table-cell {
+                                &.sticky-left {
+                                    background-color: var(--tw-gray-50);
+                                    border-radius: 1px solid var(--tw-gray-200);
+                                }
                                 &.sticky-right {
                                     background-color: var(--tw-gray-50);
                                 }
@@ -1286,7 +1404,7 @@
     padding-inline-end: 6px !important;
     /* padding-top:4px !important;
     padding-bottom:4px !important; */
-    padding: 12px 8px 12px 8px !important;
+    padding: 12px 8px 12px 16px !important;
     line-height:100% !important;
     
     & .column-options {
@@ -1320,7 +1438,7 @@
         }
     }
 
-    &.cruc-pg-items {
+    &.moog-cruc-pg {
         background-color: var(--ssv-pharma-blue-50) !important;
         border-top: solid 1px var(--ssv-pharma-blue-200);
         border-bottom: solid 1px var(--ssv-pharma-blue-200);
@@ -1329,7 +1447,7 @@
         }
     }
 
-    &.main-pg {
+    &.moog-main-pg {
         border-top: 1px solid var(--tw-gray-300);
         border-bottom: 1px solid var(--tw-gray-300);
         background-color:var(--tw-gray-100) !important;
@@ -1345,7 +1463,7 @@
 }
 
 .moog-muddatagrid-row {
-    &.selected {
+    &.moog-muddatagrid-row-selected {
         border-left: var(--ssv-pharma-blue) 2px solid;
 
         &>.mud-table-cell {
@@ -1357,7 +1475,7 @@
 
 /*#endregion */
 
-.moog-mud-datagrid-pager {
+.moog-muddatagrid-pager {
     height:36px;
 
     & .mud-icon-button {
@@ -1365,7 +1483,7 @@
     }
 }
 
-.moog-ico-btn-datagrid-action {
+.moog-muddatagrid-icon-btn {
     font-size: 10px;
     padding: 6px;
     > .mud-icon-button-label {
@@ -1407,8 +1525,8 @@
     }
 }
 
-.moog-mud-datagrid-cell {
-    padding: 12px 10px !important;
+.moog-muddatagrid-cell {
+    padding: 12px 16px !important;
     font-size: var(--base-font-size) !important;
     line-height: 120% !important;
 
@@ -1423,7 +1541,7 @@
         padding: 4px 4px !important;
     }
 
-    &.spacious {
+    &.moog-muddatagrid-cell-spacious {
         padding: 8px 10px 8px 10px !important;
     }
 }
@@ -1491,6 +1609,11 @@
     background-color: var(--ssv-pharma-blue-50);
     border-radius: 16px;
     padding: 20px 24px !important;
+}
+
+.moog-pg-banner-chip {
+    padding: 0px 12px;
+    font-size: 10px;
 }
 
 .moog-muditem-subsect-title {
@@ -1657,6 +1780,8 @@
 
 .moog-mudtab {
     background:transparent;
+    height: 100%;
+    overflow: hidden;
 }
 
 .moog-mudtab-tab-hdr {
@@ -1720,6 +1845,7 @@
     min-height: 40px;
     padding: 0px;
     font-size: 16px;
+    height: 100%;
 
     & .mud-tab-icon-text {
         margin-right: 3px !important;
@@ -1742,6 +1868,7 @@
 
 .moog-mudtabpanel-panel {
     background-color: transparent;
+    height: 100%;
 }
 
 

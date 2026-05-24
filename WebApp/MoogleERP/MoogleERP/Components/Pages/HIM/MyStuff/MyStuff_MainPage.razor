@@ -90,11 +90,13 @@
                     </MudChip>
                 </CellTemplate>
             </TemplateColumn>
-            <PropertyColumn Title="Barcode" Property="x => x.Barcode"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
-			<PropertyColumn Title="ID" Property="x => x.ObjectCode" HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
+			<PropertyColumn Title="Barcode" Property="x => x.Barcode" Sortable="false" Filterable="true" 
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
+            <PropertyColumn Title="ID" Property="x => x.ObjectCode" Sortable="false" Filterable="true"
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
             <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="padding: 0px 10px !important;">
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
+                            HeaderStyle="width:300px; max-width:120px" CellStyle="padding: 0px 10px !important;">
                 <CellTemplate>
                     <MudStack Row="true" Spacing="0">
                         <MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
@@ -104,7 +106,7 @@
                                        Icon="far fa-copy"
                                        OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
                         <MudIconButton Size="Size.Small" Color="Color.Info" Class="moog-muddatagrid-icon-btn"
-                                       Icon="far fa-eye" 
+                                       Icon="far fa-eye"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
                         <MudIconButton Size="Size.Small" Color="Color.Error" Class="moog-muddatagrid-icon-btn"
                                        Icon="far fa-trash-alt" 

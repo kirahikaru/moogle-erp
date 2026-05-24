@@ -59,8 +59,11 @@
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="text-align:right" />
 			<PropertyColumn Title="WSP" Property="x => x.WholeSaleUnitPriceText" Editable="false" Filterable="false" Resizable="true" Sortable="false"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="text-align:right" />
+			<PropertyColumn Title="ID" Property="x => x.ObjectCode" Sortable="false" Filterable="true"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
 			<TemplateColumn Title="Action" Editable="false" Filterable="false" Resizable="true" Sortable="false"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="padding: 0px 10px !important;">
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" 
+							HeaderStyle="width:300px; max-width:120px" CellStyle="padding: 0px 10px !important;">
 				<CellTemplate>
 					<MudStack Row="true" Spacing="0">
 						<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"

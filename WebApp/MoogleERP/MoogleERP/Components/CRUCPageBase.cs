@@ -59,6 +59,8 @@ public class CRUCPageBase<T> : ComponentBase
 
 	public string? UrlPrefix { get; set; }
 	protected bool IsSaving { get; set; }
+	protected bool IsInitDone { get; set; }
+	protected int InitCount { get; set; }
 	public Dictionary<string, string> InvalidMsgList { get; set; }
 
 	public string AuditTrailUser => LoggedInUser != null ? LoggedInUser.UserNameAndUserID : "Public";

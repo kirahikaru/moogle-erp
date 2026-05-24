@@ -13,19 +13,19 @@
                     <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
                     @if (CRUCMode == CRUDCModes.READ)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" >VIEW</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-8px" >VIEW</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.UPDATE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string">UPDATE</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-8px">UPDATE</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.CREATE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string">NEW</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-8px">NEW</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.CLONE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string">NEW (Clone)</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-8px">NEW (Clone)</MudChip>
                     }
                 </MudStack>
                 <MudStack Spacing="2">
@@ -75,7 +75,7 @@
         </MudPaper>
         <MudTabs Color="Color.Primary" Class="moog-mudtab mt-4" ActiveTabClass="moog-mudtab-tab-active" TabButtonsClass="moog-mudtab-tab-btn" TabHeaderClass="moog-mudtab-tab-hdr" TabPanelsClass="moog-mudtab-tab-panel">
             <MudTabPanel Icon="fad fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
-                <MudPaper Elevation="0" Square="true" Height="calc(100% - var(--moog-cruc-pg-status-bar-height))" Style="overflow-y: auto; background-color: var(--tw-gray-50); scrollbar-width:auto; scrollbar-color:var(--tw-gray-300) var(--tw-gray-50)">
+                <MudPaper Class="moog-mudpaper-cruc-pg-tab-content" Elevation="0" Square="true" Height="calc(100% - var(--moog-cruc-pg-status-bar-height))" >
                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" StretchItems="StretchItems.All" Spacing="1">
                         <MudGrid Spacing="4" Class="py-4 px-4" Style="margin-left:-8px">
                             <MudItem xs="6">
@@ -315,8 +315,7 @@
                         </MudPaper>
                     </MudStack>
                 </MudPaper>
-                <MudPaper Height="var(--moog-cruc-pg-status-bar-height)" Elevation="0"
-                          Style="padding:0px; background-color:var(--tw-gray-100); border-top-left-radius:0px; border-top-right-radius:0px; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px">
+                <MudPaper Class="moog-mudpaper-cruc-pg-status" Height="var(--moog-cruc-pg-status-bar-height)" Elevation="0">
                     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1" Style="height:100%; padding: 0px 16px">
                         @if (CurrentObject.Id > 0)
                         {
@@ -324,7 +323,7 @@
                             <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@CurrentObject!.CreatedUser</MudText>
                             <MudText Typo="Typo.subtitle1" Color="Color.Default" > on </MudText>
                             <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@(CurrentObject!.CreatedDateTimeText)</MudText>
-                            <MudText Typo="Typo.subtitle1" Color="Color.Default">| Last modified by </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default" >| Last modified by </MudText>
                             <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@CurrentObject!.ModifiedUser</MudText>
                             <MudText Typo="Typo.subtitle1" Color="Color.Default"> on </MudText>
                             <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@(CurrentObject!.ModifiedDateTimeText)</MudText>

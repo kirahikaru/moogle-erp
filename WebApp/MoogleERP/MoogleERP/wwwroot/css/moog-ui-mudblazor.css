@@ -4,15 +4,33 @@
 
 /*#region MUD OVERWRITE STYLE */
 
-.mud-button-filled.mud-button-filled-primary {
-    background-color: var(--ssv-pharma-blue);
-    color: #FFFFFF;
-    box-shadow: none;
-
-    &:hover {
-        background-color: var(--ssv-pharma-blue-700);
+.mud-button-filled {
+    &.mud-button-filled-primary {
+        background-color: var(--ssv-pharma-blue);
+        color: #FFFFFF;
         box-shadow: none;
+
+        &:hover {
+            background-color: var(--ssv-pharma-blue-700);
+            box-shadow: none;
+        }
     }
+    
+    &.mud-button-filled-default {
+        background-color: var(--tw-gray-500);
+        color: #FFFFFF;
+        box-shadow: none;
+
+        &:hover {
+            background-color: var(--tw-gray-600);
+            box-shadow: none;
+        }
+    }
+}
+
+.mud-button-filled-size-small {
+    padding: 4px 16px;
+    font: 12px;
 }
 
 .mud-chip-container {
@@ -75,6 +93,25 @@
     background-color: var(--tw-gray-50); 
     border-radius: 16px; 
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+}
+
+/* CRUC Page Status Bar */
+.moog-mudpaper-cruc-pg-tab-content {
+    overflow-y: auto; 
+    background-color: var(--tw-gray-50); 
+    scrollbar-width:auto; 
+    scrollbar-color:var(--tw-gray-300) var(--tw-gray-50); 
+    border-bottom-left-radius: 16px; 
+    border-bottom-right-radius: 16px
+}
+
+.moog-mudpaper-cruc-pg-status {
+    padding:0px; 
+    background-color:var(--tw-gray-100); 
+    border-top-left-radius:0px; 
+    border-top-right-radius:0px; 
+    border-bottom-left-radius: 16px; 
+    border-bottom-right-radius: 16px
 }
 
 /*#region MudNav Mud Navigation */
@@ -440,7 +477,7 @@
                 }
 
                 > .mud-primary-text {
-                    color: var(--tw-gray-700) !important;
+                    color: var(--tw-gray-700);
                 }
 
                 > .mud-icon-default {
@@ -455,22 +492,26 @@
 
             > .mud-icon-button-size-small {
                 &.mud-icon-button-edge-end {
-                    margin-inline-end: 8px;
+                    margin-inline-end: 6px;
                     margin-inline-start: -14px;
-                    padding: 1px;
                 }
             }
 
             > .mud-input-adornment-end {
-                margin-left: -4px;
+                margin-left: -8px;
                 margin-inline-start: -8px;
-                margin-inline-end: 12px;
+                margin-inline-end: unset;
+
+                > button.mud-icon-button-edge-end {
+                    margin-right: 0px;
+                    margin-inline-end: 8px;
+                }
             }
 
-            > .mud-input-adornment-start {
+            /* > .mud-input-adornment-start {
                 margin-inline-end: -10px;
                 margin-inline-start: 12px;
-            }
+            } */
 
             > .mud-text {
                 > .mud-input-adornment-text {
@@ -540,8 +581,17 @@
                 }
             }
 
-            & .mud-icon-button-edge-margin-end {
-                margin-inline-start: -20px;
+            > button.mud-icon-button-edge-margin-end {
+                margin-right: 10px;
+                margin-inline-end: 10px;
+                margin-inline-start: -12px;
+            }
+        }
+
+        > .mud-input-adorned-start {
+            > .mud-input-adornment-start {
+                margin-inline-end: -10px;
+                margin-inline-start: 12px;
             }
         }
 
@@ -935,6 +985,16 @@
 
 .moog-mudselect-input {
     background-color: transparent;
+    
+    & div.mud-input-adornment-end {
+        margin-left: -4px !important;
+        margin-inline-start: -8px !important;
+        margin-inline-end: 12px !important;
+    }
+    
+    & .mud-primary-text {
+        color: var(--tw-gray-400) !important;
+    }
 
     > .mud-icon-default {
         color: var(--tw-gray-400) !important;
@@ -988,9 +1048,9 @@
 }
 
 .moog-mudautocomplete-input {
-    > .mud-input-adornment-end {
+    /* > .mud-input-adornment-end {
         margin-inline-start: -12px !important;
-    }
+    } */
     
     background-color: transparent;
     > .mud-icon-button {
@@ -1001,9 +1061,11 @@
         }
     }
 
-    > .mud-icon-button-edge-end{
-        margin-inline-end: -6px !important;
-    }
+    /* > .mud-icon-button-size-small {
+        &.mud-icon-button-edge-end{
+            margin-inline-end: -6px !important;
+        }
+    } */
 }
 
 .moog-mudautocomplete-list {
@@ -1162,13 +1224,16 @@
 
 .moog-mudbutton {
     border-radius: 1.5rem;
-    padding: 4px 14px;
-    & .mud-button-label {
+    > .mud-button-label {
         font-weight: 400;
         text-transform: none;
-        & .mud-button-icon-start {
+        > .mud-button-icon-start {
             &.mud-button-icon-size-small {
-                margin-inline-end: 4px;
+                >*:first-child {
+                    font-size: 16px;
+                }
+                
+                margin-inline-end: 6px;
 
                 & .material-symbols-rounded {
                     font-variation-settings:
@@ -1177,6 +1242,8 @@
                         'GRAD' 0,
                         'opsz' 24;
                 }
+
+                
             }
         }
     }
@@ -1244,7 +1311,7 @@
             & input.mud-input-root {
                 font-size: var(--base-font-size);
                 color:var(--tw-gray-700);
-                padding: 12px 18px;
+                padding: 12px 12px 12px 18px;
                 height: auto;
 
                 &::placeholder {
@@ -1281,6 +1348,10 @@
                     border-bottom: none;
                 }
             }
+
+            & .mud-icon-button-edge-margin-end {
+                margin-inline-start: -12px;
+            }
         }
 
         > .mud-input-label {
@@ -1305,13 +1376,15 @@
     box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
     > div {
         scrollbar-color: var(--tw-gray-300) var(--tw-gray-50);
+        scrollbar-width: auto;
 
         > .mud-combobox-item-gutters {
             padding: 4px 14px;
         }
 
         > .mud-combobox-item-hilight {
-            background-color: transparent !important;
+            background-color: var(--ssv-pharma-blue-50) !important;
+            color: var(--ssv-pharma-blue);
         }
 
         > .mud-combobox-item-clickable {
@@ -1330,6 +1403,15 @@
 .moog-mudcombobox-highlight {
     background-color: green;
 }
+
+.moog-mudcombobox-input {
+    background-color: transparent;
+}
+
+.moog-mudcombobox-chip {
+    line-height: 100%;
+}
+
 /*#endregion */
 
 /*#region MudDataGrid */
@@ -1618,9 +1700,16 @@
 
 .moog-muditem-subsect-title {
     padding:6px 12px; 
+    padding-top: 6px !important;
     background: linear-gradient(90deg,rgba(225, 241, 253, 1) 0%, rgba(255, 255, 255, 0) 75%); 
     margin: -8px; 
-    border-bottom: 1px solid var(--ssv-pharma-blue-200)
+    border-bottom: 1px solid var(--ssv-pharma-blue-200);
+
+    > .mud-typography-h1 {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--ssv-pharma-blue);
+    }
 }
 
 

@@ -799,7 +799,7 @@
 
     private async Task OnAssetStateClicked()
     {
-        ObjectStateTransitionDetail objStd = new();
+        ObjStateTransDetail objStd = new();
         objStd.CurrentState = CurrentObject!.AssetState;
         objStd.CurrentStateText = CurrentObject!.AssetStateText;
         objStd.ObjectClassName = CurrentObject.GetType().Name;
@@ -817,7 +817,7 @@
 
     private async Task OnLifeCycleStatusClicked()
     {
-        ObjectStateTransitionDetail objStd = new();
+        ObjStateTransDetail objStd = new();
         objStd.CurrentState = CurrentObject!.LifeCycleStatus;
         objStd.CurrentStateText = CurrentObject!.LifeCycleStatusText;
         objStd.ObjectClassName = CurrentObject.GetType().Name;

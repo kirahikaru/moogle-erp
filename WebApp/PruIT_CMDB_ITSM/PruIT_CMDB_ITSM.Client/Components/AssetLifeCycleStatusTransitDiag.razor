@@ -69,7 +69,7 @@
     IEnumerable<DropdownSelectItem> _validNextStateList = [];
 
     [Parameter]
-    public ObjectStateTransDetail? TransitionDetail { get; set; }
+    public ObjStateTransDetail? TransitionDetail { get; set; }
 
     IEnumerable<ObjStateConfig> _validStateList = [];
 
@@ -88,7 +88,7 @@
 
     private void Confirm()
     {
-        MudDialog!.Close<ObjectStateTransitionDetail>(TransitionDetail!);
+        MudDialog!.Close<ObjStateTransDetail>(TransitionDetail!);
     }
 
     private void Cancel()

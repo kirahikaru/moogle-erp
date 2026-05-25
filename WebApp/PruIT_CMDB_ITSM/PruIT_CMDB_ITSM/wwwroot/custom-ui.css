@@ -46,6 +46,10 @@
 
 /*#endregion */
 
+.pru-ui-font-mono {
+    font-family: "Google Sans Code", monospace !important;
+}
+
 .pru-card-header-banner {
     border-radius: var(--pru-base-card-radius) !important;
     background-color:var(--pru-red-tw-50) !important;

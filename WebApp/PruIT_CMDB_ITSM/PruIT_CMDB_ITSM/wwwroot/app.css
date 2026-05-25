@@ -3,6 +3,8 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Reddit+Mono:wght@200..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&display=swap');
 
 
 :root {
@@ -537,6 +539,98 @@ h1:focus {
     font-weight: 900;
     font-style: normal;
 }
+
+/*#region Google San Code */
+.google-sans-400 {
+  font-family: "Google Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "GRAD" 0;
+}
+
+.google-sans-500 {
+  font-family: "Google Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings:
+    "GRAD" 0;
+}
+
+.google-sans-600 {
+  font-family: "Google Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings:
+    "GRAD" 0;
+}
+
+.google-sans-700 {
+  font-family: "Google Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings:
+    "GRAD" 0;
+}
+
+.google-sans-code-300 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+.google-sans-code-400 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+.google-sans-code-500 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+.google-sans-code-600 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+.google-sans-code-700 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+
+.google-sans-code-800 {
+  font-family: "Google Sans Code", monospace;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-variation-settings:
+    "MONO" 1;
+}
+/*#endregion */
 
 .reddit-mono-100 {
     font-family: "Reddit Mono", monospace;

@@ -77,7 +77,7 @@
         if (TransitionDetail != null)
         {
 
-            _stateList = await Uow.ObjectStateConfigs.GetAsync(TransitionDetail!.ObjectClassName!, TransitionDetail!.ObjectFieldName!);
+            _stateList = await Uow.ObjStateConfigs.GetAsync(TransitionDetail!.ObjectClassName!, TransitionDetail!.ObjectFieldName!);
 
             if (TransitionDetail!.EffectiveDate is null)
                 TransitionDetail!.EffectiveDate = DateTime.Today;

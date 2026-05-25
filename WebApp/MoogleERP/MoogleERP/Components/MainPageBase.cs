@@ -57,6 +57,8 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable where T : class
 	public UserSessionInfo? LoggedInUser { get; set; }
 
 	public int SelectedRowNo { get; set; }
+	protected bool IsInitDone { get; set; }
+	protected int InitCount { get; set; }
 
 	public string AuditTrailUser => LoggedInUser != null ? LoggedInUser.UserNameAndUserID : "Public";
 
@@ -128,7 +130,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable where T : class
 		else if (SelectedObject != null && SelectedObject.Equals(element))
 		{
 			SelectedRowNo = rowNumber;
-			return "moog-mud-datagrid-row selected";
+			return "moog-mud-datagrid-row moog-muddatagrid-row-selected";
 		}
 		else
 		{

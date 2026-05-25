@@ -380,7 +380,7 @@
     Dictionary<string, string> _actionBtnStyles = [];
     Dictionary<string, string> _nextValidActionList = [];
     Dictionary<string, string> _actionIconList = [];
-    ObjectStateTransitionDetail? _objStateTranDetail = null;
+    ObjStateTransDetail? _objStateTranDetail = null;
 
     bool _isEditingContent = false;
     BoardgameContentItem? _tempContentItemToAdd;
@@ -632,7 +632,7 @@
             TargetStateText = ObjectStates.GetDisplayText(targetState)
         };
 
-        DialogParameters<ObjectStateTransitionDiag> param = new();
+        DialogParameters<ObjStateTransDiag> param = new();
         param.Add(x => x.TransitionDetail, _objStateTranDetail);
 
         var diagOptions = new DialogOptions { 
@@ -643,13 +643,13 @@
             Position = DialogPosition.Center
         };
 
-        var dialog = await MudDialogSvc.ShowAsync<ObjectStateTransitionDiag>($"{ObjectDisplayName} (View)", param, diagOptions);
+        var dialog = await MudDialogSvc.ShowAsync<ObjStateTransDiag>($"{ObjectDisplayName} (View)", param, diagOptions);
         var result = await dialog.Result;
 
-        if (result != null && !result.Canceled && result.Data != null && result.DataType == typeof(ObjectStateTransitionDetail))
+        if (result != null && !result.Canceled && result.Data != null && result.DataType == typeof(ObjStateTransDetail))
         {
-            _objStateTranDetail.TransitionRemark = ((ObjectStateTransitionDetail)result.Data).TransitionRemark;
-            _objStateTranDetail.TargetUserId = ((ObjectStateTransitionDetail)result.Data).TargetUserId;
+            _objStateTranDetail.TransitionRemark = ((ObjStateTransDetail)result.Data).TransitionRemark;
+            _objStateTranDetail.TargetUserId = ((ObjStateTransDetail)result.Data).TargetUserId;
 
             try
             {

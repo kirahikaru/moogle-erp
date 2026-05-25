@@ -60,7 +60,7 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="KhVillage" Class="moog-mud-datagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
+			<MudDataGridPager T="KhVillage" Class="moog-muddatagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
 		</PagerContent>
     </MudDataGrid>
 </MudPaper>
@@ -117,7 +117,7 @@
 			}
 			else
 			{
-				var result = await Uow.CambodiaVillages.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
+				var result = await Uow.KhVillages.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}

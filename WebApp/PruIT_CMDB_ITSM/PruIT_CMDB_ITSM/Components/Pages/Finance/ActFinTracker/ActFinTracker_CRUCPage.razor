@@ -33,11 +33,11 @@
                 <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd">
                     @if (!IsViewMode)
                     {
-                        <MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/save_as" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="pru-btn-base"
+                        <MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/save_as" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="pru-ui-mudbutton"
                                    OnClick="@(() => Save())">Save</MudButton>
-                        <MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/save" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="pru-btn-base"
+                        <MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/save" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="pru-ui-mudbutton"
                                    OnClick="@(() => Save(true))">Save & Close</MudButton>
-                        <MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/cancel" Size="Size.Small" Color="Color.Secondary" DropShadow="false" Class="pru-btn-base"
+                        <MudButton Variant="Variant.Filled" StartIcon="material-symbols-rounded/cancel" Size="Size.Small" Color="Color.Secondary" DropShadow="false" Class="pru-ui-mudbutton"
                                    OnClick="Cancel">Cancel</MudButton>
                     }
                     else
@@ -53,37 +53,37 @@
                     <MudForm Model="@CurrentObject" @ref=@CrucForm @bind-IsValid=@IsValidationPassed @bind-Errors=@MudValidationErrors >
                         <MudGrid Spacing="2" Justify="Justify.SpaceEvenly">
                             <MudItem xs="3">
-                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" MaxLength="80"
+                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-ui-mudform-input bordered" MaxLength="80"
                                               Label="ID"
                                               @bind-Value=CurrentObject!.ObjectCode For="@(() => CurrentObject.ObjectCode)" OnlyValidateIfDirty="true"
                                               Required="true" RequiredError="'ID' is required." />
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Required="true"
+                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-ui-mudform-input bordered" Required="true"
                                               Label="Name"
                                               @bind-Value=CurrentObject!.ObjectName For="@(() => CurrentObject.ObjectName)" 
                                               MaxLength="255" @ref=_uiControlObjectName />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Required="false"
+                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-ui-mudform-input bordered" Required="false"
                                               Label="Department"
                                               @bind-Value=CurrentObject!.DepartmentName For="@(() => CurrentObject.DepartmentName)"
                                               MaxLength="255" />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Required="false"
+                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-ui-mudform-input bordered" Required="false"
                                               Label="Function"
                                               @bind-Value=CurrentObject!.FunctionName For="@(() => CurrentObject.FunctionName)"
                                               MaxLength="255" />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Required="false"
+                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-ui-mudform-input bordered" Required="false"
                                               Label="Owner Emp ID"
                                               @bind-Value=CurrentObject!.OwnerEmpID For="@(() => CurrentObject.OwnerEmpID)"
                                               MaxLength="255" />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-mud-form-field bordered" Required="false"
+                                <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-ui-mudform-input bordered" Required="false"
                                               Label="Owner Name"
                                               @bind-Value=CurrentObject!.OwnerName For="@(() => CurrentObject.OwnerName)"
                                               MaxLength="255" />
@@ -91,7 +91,7 @@
                             <MudItem xs="3">
                             </MudItem>
                             <MudItem xs="12">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" MaxLines="25" Lines=4
+                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input bordered" MaxLines="25" Lines=4
                                               Label="Remark"
                                               @bind-Value=CurrentObject!.Remark For="@(() => CurrentObject!.Remark)" OnlyValidateIfDirty="true"
                                               MaxLength="1000" />

@@ -5,7 +5,7 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudLayout>
-    <MudAppBar Elevation="0" Style="background-color:white; border-bottom:solid 1px var(--tw-gray-200);">
+    <MudAppBar Elevation="0" Style="border-bottom:solid 1px var(--tw-gray-200);">
         <MudText Typo="Typo.h5" Class="ml-3" Style="color:var(--pru-red-default); font-weight:800;">PRU</MudText>
         <MudText Typo="Typo.h5" Style="color:var(--tw-gray-500); font-weight:300;">ITAdminERP</MudText>
         <MudSpacer />
@@ -21,8 +21,7 @@
             </MudStack>
         </MudStack>
     </MudAppBar>
-    <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0" Width="300px"
-               Style="border-right:solid 1px var(--tw-gray-200); padding:10px; scrollbar-color: var(--tw-gray-300) var(--tw-gray-50); scrollbar-width:auto">
+    <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="0" Width="300px" Class="pru-ui-muddrawer-mainlayout">
         <NavMenu />
         <MudSpacer />
         <MudText Typo="Typo.body1" Class="ml-2" Style="font-size:7pt; color:var(--pru-red-default);">
@@ -32,7 +31,7 @@
             &copy; 2025 Copy Right Company
         </MudText>
     </MudDrawer>
-    <MudMainContent Style="height:100vh; background-color:var(--tw-gray-50); padding: 85px 22px 18px 18px;">
+    <MudMainContent Class="pru-ui-mudmaincontent-mainlayout" >
         @Body
     </MudMainContent>
 </MudLayout>
@@ -90,49 +89,70 @@
     }
 
     private readonly Typography _pruTypography = new()
+    {
+        Body1 = new Body1Typography()
         {
-            Body1 = new Body1Typography()
-            {
-                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-
-                FontSize = "12px"
-            },
-            Body2 = new Body2Typography()
-            {
-                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                FontSize = "12px"
-            },
-            H4 = new H4Typography()
-            {
-                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                FontWeight = "800",
-                FontSize = "36px",
-            },
-            H5 = new H5Typography()
-            {
-                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                FontWeight = "700",
-                FontSize = "28px"
-            },
-            H6 = new H6Typography()
-            {
-                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                FontWeight = "600",
-                FontSize = "32px"
-            },
-            Default = new DefaultTypography()
-            {
-                FontFamily = new[] { "Inter", "Arial", "sans-serif" },
-                FontSize = "10pt"
-            }
-        };
+            FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+            FontSize = "0.75rem" //12px
+        },
+        Body2 = new Body2Typography()
+        {
+            FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+            FontSize = "0.75rem" //12px
+        },
+        H1 = new H1Typography()
+        {
+            FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+            FontWeight = "800",
+            FontSize = "2rem", //32px
+        },
+        H2 = new H2Typography()
+        {
+            FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+            FontWeight = "800",
+            FontSize = "1.5rem", //24px
+        },
+        H3 = new H3Typography()
+        {
+            FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+            FontWeight = "800",
+            FontSize = "36px", 
+        },
+        H4 = new H4Typography()
+        {
+            FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+            FontWeight = "800",
+            FontSize = "36px",
+        },
+        H5 = new H5Typography()
+        {
+            FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+            FontWeight = "700",
+            FontSize = "28px"
+        },
+        H6 = new H6Typography()
+        {
+            FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+            FontWeight = "600",
+            FontSize = "32px"
+        },
+        Default = new DefaultTypography()
+        {
+            FontFamily = new[] { "Inter", "Arial", "sans-serif" },
+            FontSize = "10pt"
+        },
+        Subtitle2 = new Subtitle2Typography()
+        {
+            FontSize = "11px"
+        }
+    };
 
     private readonly PaletteLight _pruLightPalette = new()
     {
         AppbarText = "#364153", // Tailwnid Gray 700
         Primary = "#364153", // Tailwind Gray 700
         // Primary = "#ED1B2E", //pru-red-default
-        Secondary = "#687379", //pru-gray-default
+        Secondary = "#ED1B2E", //pru-red-default
         TextPrimary = "#343A3C",
         Black = "#110e2d",
         
@@ -141,6 +161,9 @@
         DrawerBackground = "#FFFFFF",
         GrayLight = "#e8e8e8",
         GrayLighter = "#f9f9f9",
+        Success = "#009966", // --tw-emerald-600
+        Info = "#0084D1", // --tw-sky-600
+        Error = "#E7000B", //--tw-red-600
     };
 
     private readonly PaletteLight _lightPalette = new()

@@ -32,16 +32,16 @@
                 <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd">
                     @if (!IsViewMode)
                     {
-                        <MudButton Variant="Variant.Filled" DropShadow="false" Class="pru-btn-base" Size="Size.Small" Color="Color.Primary" StartIcon="material-symbols-rounded/save_as"
+                        <MudButton Variant="Variant.Filled" DropShadow="false" Class="pru-ui-mudbutton" Size="Size.Small" Color="Color.Primary" StartIcon="material-symbols-rounded/save_as"
                                    OnClick="@(() => Save())">Save</MudButton>
-                        <MudButton Variant="Variant.Filled" DropShadow="false" Class="pru-btn-base" Size="Size.Small" Color="Color.Primary" StartIcon="material-symbols-rounded/save"
+                        <MudButton Variant="Variant.Filled" DropShadow="false" Class="pru-ui-mudbutton" Size="Size.Small" Color="Color.Primary" StartIcon="material-symbols-rounded/save"
                                    OnClick="@(() => Save(true))">Save & Close</MudButton>
-                        <MudButton Variant="Variant.Filled" DropShadow="false" Class="pru-btn-base" Size="Size.Small" Color="Color.Secondary" StartIcon="material-symbols-rounded/cancel"
+                        <MudButton Variant="Variant.Filled" DropShadow="false" Class="pru-ui-mudbutton" Size="Size.Small" Color="Color.Secondary" StartIcon="material-symbols-rounded/cancel"
                                    OnClick="Cancel">Cancel</MudButton>
                     }
                     else
                     {
-                        <MudButton Variant="Variant.Filled" DropShadow="false" Class="pru-btn-base" Size="Size.Small" Color="Color.Default" StartIcon="material-symbols-rounded/close"
+                        <MudButton Variant="Variant.Filled" DropShadow="false" Class="pru-ui-mudbutton" Size="Size.Small" Color="Color.Default" StartIcon="material-symbols-rounded/close"
                                    OnClick="Cancel">Close</MudButton>
                     }
                 </MudStack>
@@ -99,13 +99,13 @@
                                           MaxLength="50" />
                         </MudItem>
                         <MudItem xs="3">
-                            <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Class="pru-mud-form-field bordered pru-ui-datepicker" 
+                            <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Class="pru-mud-form-field bordered pru-ui-muddatepicker" 
                                            AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
                                            Label="Start Date" DateFormat="dd-MMM-yyyy"
                                            @bind-Date=@CurrentObject.StartDate For="@(() => CurrentObject.StartDate)" />
                         </MudItem>
                         <MudItem xs="3">
-                            <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Class="pru-mud-form-field bordered pru-ui-datepicker"
+                            <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Class="pru-mud-form-field bordered pru-ui-muddatepicker"
                                            AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
                                            Label="End Date" DateFormat="dd-MMM-yyyy"
                                            @bind-Date=@CurrentObject.EndDate For="@(() => CurrentObject.EndDate)" />

@@ -60,7 +60,13 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable
 	public bool IsAdvSearch { get; set; }
 	public bool IsAdvSearchPanelOpen { get; set; }
 	public MudDataGrid<T> MainDataGrid { get; set; }
-	public readonly string DataGridHdrStyle = "font-weight:700; background-color:var(--pru-gray-default); color:#FFFFFF; border-right:1px solid #FFFFFF; padding-inline-start: 10px; padding-inline-end:5px; line-height:100%; padding-top:4px; padding-bottom:4px";
+
+	public RenderFragment HtmlDataGridZeroRecord = builder =>
+	{
+		builder.OpenElement(0, "span");
+		builder.AddContent(1, "0 record found.");
+		builder.CloseElement();
+	};
 
 	public string? SearchParamName { get; set; }
 	public string? UrlPrefix { get; set; }
@@ -136,7 +142,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable
 		else if (MainDataGrid.SelectedItem != null && MainDataGrid.SelectedItem.Equals(element))
 		{
 			SelectedRowNo = rowNumber;
-			return "pru-mud-datagrid-row selected";
+			return "pru-ui-muddatagrid-row selected";
 		}
 		else
 		{

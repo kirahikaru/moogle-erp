@@ -28,15 +28,15 @@
 			}
 		</MudSelect>
 	</MudStack>
-	<MudDataGrid Class="mt-2 pru-mud-datagrid cruc-pg-items" @ref="_dataGrid" Items="_budgetItemList" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@_isSearching RowsPerPage=50
+	<MudDataGrid Class="mt-2 pru-ui-muddatagrid cruc-pg-items" @ref="_dataGrid" Items="_budgetItemList" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@_isSearching RowsPerPage=50
 				 ColumnResizeMode="ResizeMode.Container" HorizontalScrollbar="true" Elevation="0" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true"
 				 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" T="BudgetItem" QuickFilter="_quickFilter"
 				 EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
 				 StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
 		<Columns>
-			@* <PropertyColumn Property="x => x.LBU" Title="LBU" HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" /> *@
+			@* <PropertyColumn Property="x => x.LBU" Title="LBU" HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" /> *@
 			<TemplateColumn Title="LBU" StickyLeft="true" 
-				HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top" Context="rowData">
+				HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top" Context="rowData">
 				<CellTemplate>
 					<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
 						<MudImage Src=@(_lbuFlagList[rowData.Item.LBU!]) Height="12" />
@@ -45,7 +45,7 @@
 				</CellTemplate>
             </TemplateColumn>
             <TemplateColumn Title="Current" StickyLeft="true"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
                             CellStyle="text-align:center" Context="rowData">
                 <CellTemplate>
                     @if (rowData.Item.IsCurrent)
@@ -59,7 +59,7 @@
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Title="Order" Property="x => x.DispOrder" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Context="item">
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="item">
                 <EditTemplate>
                     <MudTextField Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
                                   MaxLength="10"
@@ -67,37 +67,37 @@
                 </EditTemplate>
             </PropertyColumn>
             <PropertyColumn Title="Year" Property="x => x.BudgetYear" Sortable="false"
-							HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top" />
+							HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top" />
             <PropertyColumn Title="Grouping L1" Property="x => x.GroupingL1"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top"
                             HeaderStyle="min-width:200px" Sortable="false" />
             <PropertyColumn Property="x => x.GroupingL2" Title="Grouping L2"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top"
                             HeaderStyle="min-width:180px" Sortable="false" />
             <PropertyColumn Property="x => x.GroupingL3" Title="Grouping L3."
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top" HeaderStyle="min-width:200px" />
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top" HeaderStyle="min-width:200px" />
             <PropertyColumn Property="x => x.ObjectName" Title="Budget Item"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top"
                             HeaderStyle="min-width:280px" />
 			<PropertyColumn Title="Category" Property="x => x.Category"
-							HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top" />
+							HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top" />
             <PropertyColumn Title="Act Tracker ID" Property="x => x.ActivityTrackID" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-400"
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top pru-ui-font-mono"
                             HeaderStyle="min-width:120px" />
             <PropertyColumn Title="Class 2" Property="x => x.Class2"
-							HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top"
+							HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top"
                             HeaderStyle="min-width:180px" />
             <PropertyColumn Title="Currency" Property="x => x.CurrencyCode" Filterable="false" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top" />
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top" />
             <PropertyColumn Title="Budget Amount" Property="x => x.BudgetedAmount" Format="#,##0" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-500"
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top reddit-mono-500"
                             HeaderStyle="min-width:140px" CellStyle="text-align:right" />
             <PropertyColumn Title="Expense Amount" Property="x => x.TotalExpenseAmount" Format="#,##0" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-500"
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top reddit-mono-500"
                             HeaderStyle="min-width:140px" CellStyle="text-align:right" />
-            @* <PropertyColumn Property="x => x.RemainingAmount" Title="Remaining Amount" HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell" Format="#,##0" CellStyle="text-align:right" /> *@
+            @* <PropertyColumn Property="x => x.RemainingAmount" Title="Remaining Amount" HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Format="#,##0" CellStyle="text-align:right" /> *@
             <TemplateColumn Title="Remaining Amount" Filterable="false" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top"
                             HeaderStyle="min-width:150px" CellStyle="text-align:right" Context="item">
                 <CellTemplate>
                     <MudText Typo="Typo.body1" Class="reddit-mono-500" Color="@(item.Item.RemainingAmount > 0 ? Color.Success : (item.Item.RemainingAmount < 0 ? Color.Error : Color.Default))">
@@ -106,21 +106,21 @@
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Property="x => x.TaxRateText" Title="Tax Rate" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top"
                             HeaderStyle="min-width:110px" />
             <PropertyColumn Title="Budget ID" Property="x => x.ObjectCode"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-400" HeaderStyle="min-width:150px" />
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top pru-ui-font-mono" HeaderStyle="min-width:150px" />
             <PropertyColumn Title="Version" Property="x => x.VersionName"
-                            HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top"
 							HeaderStyle="min-width:200px" />
 			<PropertyColumn Title="Account Code" Property="x => x.AccountCode" Sortable="false"
-							HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top reddit-mono-400"
+							HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top pru-ui-font-mono"
 							HeaderStyle="min-width:150px" />
 			<PropertyColumn Title="Account Name" Property="x => x.AccountName" Sortable="false"
-							HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell data-align-top"
+							HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell data-align-top"
 							HeaderStyle="min-width:250px" />
             <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
-							HeaderClass="pru-mud-datagrid-hdr cruc-pg-items" CellClass="pru-mud-datagrid-cell"
+							HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
 							HeaderStyle="justify-items:center"
 							CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
                 <CellTemplate>
@@ -131,7 +131,7 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="BudgetItem" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] {10, 30, 50, 80, 100}" />
+			<MudDataGridPager T="BudgetItem" Class="pru-ui-muddatagrid-pager" PageSizeOptions="new[] {10, 30, 50, 80, 100}" />
 		</PagerContent>
 	</MudDataGrid>
 </MudPaper>
@@ -210,7 +210,7 @@
 		else if (_dataGrid!.SelectedItem != null && _dataGrid!.SelectedItem.Equals(element))
 		{
 			_selectedRowNo = rowNumber;
-			return "pru-mud-datagrid-row selected";
+			return "pru-ui-muddatagrid-row selected";
 		}
 		else
 		{

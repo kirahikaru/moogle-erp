@@ -4,30 +4,35 @@
 
 @inherits MainPageBase<ITAsset>
 
-<MudPaper Class="px-4 py-3 rounded" Width="100%" Elevation="0" Square="true" Style="background-color:#FFFDE7; border: solid 1px var(--pru-gray-tw-100)">
-	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-		<div style="color:var(--pru-red-default); font-size:28px;">
-			<span style="font-weight:800">@HeaderTitle</span>
-			<span style="font-weight:400"> | Hardware</span>
-		</div>
-		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="pru-btn-base"
-				   StartIcon="material-symbols-rounded/add_circle" OnClick="@(args => CreateOrEditRecord(0))">Add New</MudButton>
+<MudPaper Class="pru-ui-mudcard-hdr-banner px-5 py-4" Width="100%" Elevation="0" Outlined="true">
+    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+        <div style="color:var(--pru-red-default); font-size:28px;">
+            <span style="font-weight:800">@HeaderTitle</span>
+            <span style="font-weight:400"> | Hardware</span>
+        </div>
+		<MudButton Color="Color.Primary" DropShadow="false" Size="Size.Small" Variant="Variant.Filled"
+				   Class="pru-ui-mudbutton" StartIcon="material-symbols-rounded/add_circle"
+				   OnClick="@(args => CreateOrEditRecord(0))">Add New</MudButton>
 	</MudStack>
 </MudPaper>
-<MudPaper Class="pa-3 mt-3 rounded overflow-y-auto" Width="100%" Elevation="0" Square="true" Height="calc(100vh - 170px)">
-	<MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
-		<MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="pru-mud-form-field bordered"
+<MudPaper Class="pru-std-card-white mt-4" Outlined="true" Elevation="0" Height="100%" Width="100%" Style="overflow-y:hidden">
+	<MudStack Class="pa-6" Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
+		<MudTextField Clearable="true" Immediate="true" Required="false" ShrinkLabel="true" Variant="Variant.Text" Class="pru-ui-mudform-input"
 					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
-					  Placeholder="Search text here..." HelperText="<Search input instruction here>" Style="padding: 2px 0px 2px 0px"
-					  @bind-Value="SearchText" Disabled=IsSearching OnKeyDown="OnSearchBoxKeyDown" @ref=UITextBoxSearch />
+					  Placeholder="Search text here..."
+					  @bind-Value="SearchText" OnKeyDown="OnSearchBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
 		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false"
-				   StartIcon="material-symbols-rounded/search" OnClick="OnSearchClicked" Class="pru-btn-base">Search</MudButton>
+				   Class="pru-ui-mudbutton" StartIcon="material-symbols-rounded/search"
+				   OnClick="OnSearchClicked">Search</MudButton>
 	</MudStack>
-	<MudDataGrid Class="mt-2 pru-mud-datagrid main-pg" @ref="MainDataGrid" ServerData="ServerDataFunc" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@IsSearching RowsPerPage=50
-					 ColumnResizeMode="ResizeMode.Container" Elevation="0" SortMode="SortMode.Multiple" SelectOnRowClick="true"
-				 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" @bind-SelectedItem=SelectedObject T="ITAsset">
+	<MudDataGrid Dense="true" Hover="true" Bordered="false" Square="true" FixedHeader="true" Striped="true"
+				 ColumnResizeMode="ResizeMode.Column" SortMode="SortMode.Multiple" Loading=@IsSearching RowsPerPage="50" Elevation="0"
+				 Class="pru-ui-muddatagrid main-pg"
+				 SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row"
+				 ServerData="ServerDataFunc" @ref="MainDataGrid" @bind-SelectedItem=SelectedObject Height="100%"
+				 T="ITAsset">
 		<Columns>
-			<TemplateColumn Title="LBU" StickyLeft="true" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Context="rowData">
+			<TemplateColumn Title="LBU" StickyLeft="true" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData">
 				<CellTemplate>
 					<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
 						<MudImage Src=@(_lbuFlagList[rowData.Item.LBU!]) Height="12" />
@@ -35,8 +40,8 @@
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>
-			@* <PropertyColumn Property="x => x.ObjectName" Title="Asset Name" StickyLeft="true" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" /> *@
-			<TemplateColumn Title="Asset Name" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" Context="rowData" HeaderStyle="min-width:250px" StickyLeft="true">
+			@* <PropertyColumn Property="x => x.ObjectName" Title="Asset Name" StickyLeft="true" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
+			<TemplateColumn Title="Asset Name" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData" HeaderStyle="min-width:250px" StickyLeft="true">
 				<CellTemplate>
 					@if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.TERMINATED, AssetLifeCycleStatuses.WRITTEN_OFF))
 					{
@@ -55,9 +60,9 @@
 					}
 				</CellTemplate>
 			</TemplateColumn>
-			@* <PropertyColumn Property="x => x.ObjectCode" Title="Asset ID" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" /> *@
+			@* <PropertyColumn Property="x => x.ObjectCode" Title="Asset ID" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
 			<TemplateColumn Title="Asset ID" Sortable="false"
-				HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400" 
+				HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono" 
 				HeaderStyle="min-width:180px"
 				Context="rowData">
 				<CellTemplate>
@@ -79,44 +84,45 @@
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Title="Product Name" Property="x => x.ProductName"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" HeaderStyle="min-width:250px" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" HeaderStyle="min-width:250px" />
             <PropertyColumn Title="System Asset Name" Property="x => x.AssetName"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:250px" />
             <PropertyColumn Title="Manufacturer" Property="x => x.Manufacturer"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
             <PropertyColumn Title="Serial No." Property="x => x.SerialNo" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
                             HeaderStyle="min-width:100px" />
-            <PropertyColumn Title="Category" Property="x => x.CategoryName" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" />
+            <PropertyColumn Title="Category" Property="x => x.CategoryName"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
             <PropertyColumn Title="Sub-Category" Property="x => x.SubCategory"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:180px" />
             <PropertyColumn Title="Current User" Property="x => x.CurrentUserName"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:200px" />
             <PropertyColumn Title="Staff ID" Property="x => x.CurrentUserID" Sortable="false"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell reddit-mono-400"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
                             HeaderStyle="min-width:120px" />
             <PropertyColumn Title="Function" Property="x => x.CurrentUserFunc"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:250px" />
             <PropertyColumn Title="Department" Property="x => x.CurrentUserDept"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:280px" />
             <PropertyColumn Title="Purchased Date" Property="x => x.PurchaseDate" Format="dd-MMM-yyyy"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-celll reddit-mono-400"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
                             HeaderStyle="min-width: 170px" CellStyle="text-align:center" />
             <PropertyColumn Title="Purchase Cost" Property="x => x.PurchaseCost" Format="$ #,##0"
-                            HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width: 170px" CellStyle="text-align:right" />
-            <TemplateColumn Title="Asset State" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell" 
-							CellStyle="text-align:center; padding-top: 2px !important; padding-bottom: 2px !important">
+            <TemplateColumn Title="Asset State" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+                            CellStyle="text-align:center; padding-top: 2px !important; padding-bottom: 2px !important">
                 <CellTemplate>
                     <MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(context.Item.AssetState) ? _stateCssClassList[context.Item.AssetState!] : "status-chip-default-dark")">@context.Item.AssetStateText</MudChip>
                 </CellTemplate>
 			</TemplateColumn>
-			<TemplateColumn Title="Status" HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+			<TemplateColumn Title="Status" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
 							CellStyle="text-align:center; padding-top: 2px !important; padding-bottom: 2px !important">
 				<CellTemplate>
 					<MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(context.Item.LifeCycleStatus) ? _statusCssClassList[context.Item.LifeCycleStatus!] : "status-chip-default-light")" Style="padding:2px 8px; font-size:9pt">
@@ -125,21 +131,29 @@
 				</CellTemplate>
 			</TemplateColumn>
 			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
-							HeaderClass="pru-mud-datagrid-hdr main-pg" CellClass="pru-mud-datagrid-cell"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
 							HeaderStyle="justify-items:center; max-width:120px; width:500px"
 							CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
 				<CellTemplate>
-					<MudStack Row="true" Spacing="1">
-						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(args => CreateOrEditRecord(context.Item.Id))" />
-						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.FileCopy" Size="Size.Small" Color="Color.Success" OnClick="@(args => CloneAndEditRecord(context.Item.Id))" />
-						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Visibility" Size="Size.Small" Color="Color.Info" OnClick="@(args => ViewFullRecord(context.Item.Id))" />
-						<MudIconButton Class="pru-ico-btn-datagrid-action" Icon="@Icons.Material.Rounded.Delete" Size="Size.Small" Color="Color.Default" OnClick="@(args => DeleteRecord(context.Item))" />
+					<MudStack Row="true" Spacing="0">
+						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/edit"
+									   OnClick="@(args => CreateOrEditRecord(context.Item.Id))" aria-label="edit" />
+						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/file_copy"
+									   OnClick="@(args => CloneAndEditRecord(context.Item.Id))" aria-label="clone" />
+						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Success"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/visibility"
+									   OnClick="@(args => ViewFullRecord(context.Item.Id))" aria-label="view" />
+						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Error"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/delete"
+									   OnClick="@(args => DeleteRecord(context.Item))" aria-label="delete" />
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="ITAsset" Class="pru-mud-datagrid-pager" PageSizeOptions="new[] {10, 30, 50, 80, 100}" />
+			<MudDataGridPager T="ITAsset" Class="pru-ui-muddatagrid-pager" PageSizeOptions="new[] {10, 30, 50, 80, 100}" />
 		</PagerContent>
 	</MudDataGrid>
 </MudPaper>

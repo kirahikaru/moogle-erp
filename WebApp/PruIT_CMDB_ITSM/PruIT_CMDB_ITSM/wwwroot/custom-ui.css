@@ -2,7 +2,13 @@
 
  */
 
+:root {
+    --pru-cruc-pg-status-bar-height: 32px;   
+}
+
 /*#region MUD OVERWRITE STYLE */
+
+
 
 .mud-dialog-container {
     > .mud-dialog {
@@ -44,153 +50,224 @@
     }
 }
 
+
+.mud-chip-outlined {
+    &.mud-chip-color-info {
+        background-color: var(--tw-sky-50);
+        color: var(--tw-sky-600) !important;
+    }
+
+    &.mud-chip-color-success {
+        background-color: var(--tw-emerald-50);
+        
+    }
+}
+
+.mud-button-filled {
+    &.mud-button-filled-default {
+        background-color: var(--tw-slate-500);
+        color:#FFFFFF;
+
+        &:hover {
+            background-color: var(--tw-slate-600);
+        }
+    }
+}
+
 /*#endregion */
+
+.pru-ui-mudmaincontent-mainlayout {
+    display:flex; 
+    flex-direction:column; 
+    height:calc(100vh - var(--mud-appbar-height)) !important;
+    margin-top: var(--mud-appbar-height) !important; 
+    background-color:var(--tw-gray-50);
+    padding: 18px !important;
+}
+
+.pru-ui-muddrawer-mainlayout {
+    border-right:solid 1px var(--tw-gray-200); 
+    padding:10px; 
+    scrollbar-color: var(--tw-gray-300) var(--tw-gray-50); 
+    scrollbar-width:auto;
+}
+
+.pru-ui-mudchip-banner-status {
+    border-radius: 6px !important;
+    font-size: 11px !important;
+    font-weight: 600;
+    height:20px !important;
+    padding: 0px 6px !important;
+}
 
 .pru-ui-font-mono {
     font-family: "Google Sans Code", monospace !important;
 }
 
-.pru-card-header-banner {
+.pru-ui-mudcard-hdr-banner {
     border-radius: var(--pru-base-card-radius) !important;
     background-color:var(--pru-red-tw-50) !important;
     box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 }
 
+.pru-ui-mudpaper-cruc-tab-content {
+    border-right: 1px solid var(--tw-gray-300); 
+    border-left: 1px solid var(--tw-gray-300);  
+    border-left: 1px solid var(--tw-gray-300); 
+    scrollbar-color: var(--tw-gray-300) var(--tw-gray-50); 
+    scrollbar-width:auto
+}
+
 .pru-std-card-white {
     border-radius: var(--pru-base-card-radius) !important;
     background-color: #FFFFFF !important;
+    display: flex;
+    flex-direction: column;
 }
 
-.pru-mud-form-field {
-    &.bordered {
-        /* For MudDatePicker is slightly different from  */
-        > .mud-input-control-input-container {
-            > .mud-input {
-                border: 1px solid var(--tw-gray-300) !important;
-                border-radius: 8px;
-                > input.mud-input-root {
-                    font-size: 12px;
-                    line-height: 100%;
-                    padding: 10px 12px;
-                }
+.pru-ui-mudform-input {
+    /* For MudDatePicker is slightly different from  */
+    > .mud-input-control-input-container {
+        > .mud-input {
+            border: 1px solid var(--tw-gray-300) !important;
+            border-radius: 8px;
+            > input.mud-input-root {
+                font-size: 12px;
+                line-height: 100%;
+                padding: 10px 12px;
+            }
 
-                > textarea.mud-input-root {
-                    font-size: 12px;
-                    /* height: 100%; */
-                    padding: 8px 12px;
-                    margin: 0px;
-                }
+            > textarea.mud-input-root {
+                font-size: 12px;
+                /* height: 100%; */
+                padding: 8px 12px;
+                margin: 0px;
+            }
 
-                > div.mud-input-root {
-                    font-size: 12px;
-                    line-height: 100%;
-                    padding: 10px 12px;
-                }
+            > div.mud-input-root {
+                font-size: 12px;
+                line-height: 100%;
+                padding: 10px 12px;
+            }
 
-                > .mud-input-adornment {
-                    > .material-symbols-rounded {
-                        color: var(--tw-gray-500);
-                        font-size: 20px;
-                        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 100, 'opsz' 24;
-                    }
+            > .mud-input-adornment {
+                > .material-symbols-rounded {
+                    color: var(--tw-gray-500);
+                    font-size: 20px;
+                    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 100, 'opsz' 24;
                 }
+            }
 
-                > .mud-input-adornment-start {
-                    margin-inline-end: -8px;
-                    margin-inline-start: 6px;
+            > .mud-input-adornment-start {
+                margin-inline-end: -8px;
+                margin-inline-start: 6px;
+            }
+
+            &.mud-input-text {
+                &.mud-input-text-with-label {
+                    margin-top: 18px;
                 }
+            }
 
-                &.mud-input-text {
-                    &.mud-input-text-with-label {
-                        margin-top: 18px;
-                    }
-                }
-
-                &.mud-input-underline {
+            &.mud-input-underline {
+                &:hover:not(.mud-input-disabled) {
                     &::before {
                         border-bottom: none;
                     }
-                    &::after {
+                }
+                &::before {
+                    border-bottom: none;
+                    
+                }
+                &::after {
+                    border-bottom: none;
+                }
+            }
+
+            > .mud-icon-button-edge-margin-end {
+                margin-left: -14px;
+                margin-inline-end: 6px;
+            }
+
+            > .mud-icon-button {
+                
+                > .mud-icon-button-label {
+                    .mud-icon-root {
+                        color: var(--tw-gray-400);
+                    }
+
+                    > .material-symbols-rounded {
+                        font-size: 20px;
+                    }
+                }
+            }
+
+            > .mud-icon-button-size-small {
+                padding: 0px;
+
+                &.mud-icon-button-edge-end {
+                    margin-inline-start: -10px;
+                    margin-inline-end: 10px;
+                }
+            }
+
+            &:hover {
+                &.mud-input-underline:hover:not(.mud-input-disabled) {
+                    &::before {
                         border-bottom: none;
                     }
                 }
-
-                > .mud-icon-button-edge-margin-end {
-                    margin-left: -14px;
-                    margin-inline-end: 2px;
-                }
-
-                > .mud-icon-button {
-                    
-                    > .mud-icon-button-label {
-                        .mud-icon-root {
-                            color: var(--tw-gray-400);
-                        }
-
-                        > .material-symbols-rounded {
-                            font-size: 20px;
-                        }
-                    }
-                }
-
-                > .mud-icon-button-size-small {
-                    padding: 0px;
-
-                    &.mud-icon-button-edge-end {
-                        margin-inline-start: -10px;
-                    }
-                }
             }
+        }
 
-            > .mud-shrink {
-                ~label.mud-input-label {
-                    &.mud-input-label-inputcontrol {
-                        font-size: 14px;
-                        margin-left: 4px;
-                        color:var(--tw-gray-700);
-                        font-weight: 500;
-                    }
-                }
-            }
-
-            &:focus-within {
-                > .mud-input {
-                    outline: 1.5px solid var(--tw-gray-500);
+        > .mud-shrink {
+            ~label.mud-input-label {
+                &.mud-input-label-inputcontrol {
+                    font-size: 14px;
+                    margin-left: 4px;
+                    color:var(--tw-gray-700);
+                    font-weight: 500;
                 }
             }
         }
 
-        > .mud-input-control-helper-container {
-            > .mud-input-helper-text {
-                font-size: 10px;
-                line-height: 100%;
-                &.mud-input-error {
-                    font-style: italic;
+        &:focus-within {
+            > .mud-input {
+                outline: 1.5px solid var(--tw-gray-500);
+            }
+        }
+    }
+
+    > .mud-input-control-helper-container {
+        > .mud-input-helper-text {
+            font-size: 10px;
+            line-height: 100%;
+            &.mud-input-error {
+                font-style: italic;
+            }
+        }
+    }
+
+    &.mud-input-control {
+        &.mud-input-required {
+            > .mud-input-control-input-container {
+
+                &:focus-within {
+                    > .mud-input {
+                        outline: 1.5px solid var(--pru-red-default);
+                    }
+                }
+
+                > .mud-input-label {
+                    &::after {
+                        color: var(--pru-red-default);
+                        font-weight: 800;
+                        content: "*";
+                    }
                 }
             }
         }
-
-        &.mud-input-control {
-            &.mud-input-required {
-                > .mud-input-control-input-container {
-
-                    &:focus-within {
-                        > .mud-input {
-                            outline: 1.5px solid var(--pru-red-default);
-                        }
-                    }
-
-                    > .mud-input-label {
-                        &::after {
-                            color: var(--pru-red-default);
-                            font-weight: 800;
-                            content: "*";
-                        }
-                    }
-                }
-            }
-            
-        }
+        
     }
 
     &.no-flex {
@@ -238,7 +315,7 @@
     }
 }
 
-.pru-ui-datepicker {
+.pru-ui-muddatepicker {
     > .mud-input-control {
         > .mud-input-control-input-container {
             > .mud-input {
@@ -248,7 +325,7 @@
                 border: 1px solid var(--tw-gray-300);
 
                 > .mud-input-root {
-                    padding: 10px 12px;
+                    padding: 10px 0px 10px 12px;
                     line-height: 100%;
                 }
 
@@ -280,12 +357,32 @@
                 }
 
                 > .mud-icon-button-size-small {
-                    padding: 2px;
+                    padding: 0px;
 
                     &.mud-icon-button-edge-end {
-                        margin-inline-end: 0px;
-                        margin-inline-start: -10px;
+                        margin-inline-end: -2px;
+                        margin-inline-start: 0px;
                     }
+                }
+
+                > .mud-input-clear-button {
+                    > .mud-icon-button-label {
+                        > .mud-icon-root {
+                            height: 20px;
+                            width: 20px;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        > .material-symbols-rounded {
+                            color: var(--tw-gray-400);
+                            font-size: 20px;
+                            display: flex;
+                            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 100, 'opsz' 36;
+                        }
+                    }
+                    
+                    
                 }
 
                 & .mud-input-adornment-end {
@@ -299,8 +396,8 @@
                             font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
                         }
                     }
-                    margin-left: -6px;
-                    margin-inline-start: -6px;
+                    margin-left: 0px;
+                    margin-inline-start: 0px;
                 }
             }
 
@@ -423,9 +520,9 @@
         scrollbar-width: auto;
         scrollbar-color: var(--tw-gray-300) var(--tw-gray-50);
 
-        > .mud-combobox-item-hilight {
+        /* > .mud-combobox-item-hilight {
             background-color: transparent !important;
-        }
+        } */
     }
 
     & .mud-combobox-item {
@@ -517,83 +614,20 @@
     opacity: 1;
 }
 
-.pru-mud-icon-btn {
-    border: 1px solid var(--tw-gray-200) !important;
-    background-color: var(--tw-gray-100) !important;
-    padding: 2px !important;
+.pru-ui-mudiconbtn-datagrid {
+    padding: 4px !important;
 
     & .material-symbols-rounded {
-        color: var(--tw-gray-700);
-        font-size: 16px;
+        font-size: 18px;
         font-variation-settings:
             'FILL' 0,
-            'wght' 500,
-            'GRAD' 200,
-            'opsz' 48;
+            'wght' 400,
+            'GRAD' 150,
+            'opsz' 36;
         }
-
-    &:hover {
-        background-color: var(--tw-gray-700) !important;
-
-        & .material-symbols-rounded {
-            color: #FFFFFF;
-        }
-    }
-    
-    
-    &.info-light {
-        border: 1px solid var(--tw-sky-100) !important;
-        background-color: var(--tw-sky-50) !important;
-
-        & .material-symbols-rounded {
-            color: var(--tw-sky-600);
-        }
-
-        &:hover {
-            background-color: var(--tw-sky-600) !important;
-
-            & .material-symbols-rounded {
-                color: #FFFFFF;
-            }
-        }
-    }
-
-    &.error-light {
-        border: 1px solid var(--tw-red-100) !important;
-        background-color: var(--tw-red-50) !important;
-
-        & .material-symbols-rounded {
-            color: var(--tw-red-600);
-        }
-
-        &:hover {
-            background-color: var(--tw-red-600) !important;
-
-            & .material-symbols-rounded {
-                color: #FFFFFF;
-            }
-        }
-    }
-
-    &.success-light {
-        border: 1px solid var(--tw-green-100) !important;
-        background-color: var(--tw-green-50) !important;
-
-        & .material-symbols-rounded {
-            color: var(--tw-green-600);
-        }
-
-        &:hover {
-            background-color: var(--tw-green-600) !important;
-
-            & .material-symbols-rounded {
-                color: #FFFFFF;
-            }
-        }
-    }
 }
 
-.pru-btn-base {
+.pru-ui-mudbutton {
     border-radius: 8px !important;
     padding: 4px 12px !important;
 
@@ -610,27 +644,6 @@
                         'wght' 300,
                         'GRAD' 0,
                         'opsz' 24;
-                }
-            }
-        }
-    }
-
-    &.small {
-        padding: 3px 9px !important;
-        
-        & .mud-button-label {
-            font-size: 11px;
-            font-weight: 600;
-
-            & .mud-button-icon-size-small {
-                margin-inline-end: 2px;
-
-                & .material-symbols-rounded {
-                font-variation-settings:
-                    'FILL' 0,
-                    'wght' 300,
-                    'GRAD' 100,
-                    'opsz' 24;
                 }
             }
         }
@@ -751,7 +764,9 @@
     
 }
 
-.pru-ui-autocomplete-popover {
+/*#region MudAutocomplete */
+
+.pru-ui-mudautocomplete-popover {
     box-shadow: var(--mud-elevation-3) !important;
 
     & .mud-list-item-gutters {
@@ -765,7 +780,33 @@
     }
 }
 
-.pru-ui-select-popover {
+.pru-ui-mudautocomplete-input {
+    > .mud-icon-button-size-small {
+        padding: 1px;
+        &.mud-icon-button-edge-end {
+            margin-right: 4px;
+            margin-inline-end: 4px;
+            margin-inline-start: -14px;
+        }
+        > .mud-icon-button-label {
+            > .mud-icon-size-small {
+                
+            }
+        }
+        
+    }
+}
+
+.pru-ui-mudautocomplete-list {
+}
+
+.pru-ui-mudautocomplete-listitem {
+}
+
+/*#endregion */
+
+/*#region MudSelect */
+.pru-ui-mudselect-popover {
     box-shadow: var(--mud-elevation-1) !important;
     border-radius: 8px !important;
 
@@ -785,14 +826,71 @@
     }
 }
 
+.pru-ui-mudselect-input {
+    
+    background-color: none;
+    margin-inline-end: 4px;
+    > .mud-icon-button-size-small {
+        padding: 1px;
+        &.mud-icon-button-edge-end {
+            margin-right: 4px;
+            margin-inline-end: 4px;
+            margin-inline-start: -14px;
+        }
+        
+    }
+
+    > button.mud-icon-button-size-small {
+        padding: 1px;
+        &.mud-icon-button-edge-end {
+            margin-right: 0px !important;
+            margin-inline-end: 0px !important;
+            margin-inline-start: 0px !important;
+        }
+    }
+
+    > .mud-input-adornment-end {
+        margin-right: 4px;
+        margin-inline-end: 4px;
+    }
+
+    > div.pru-ui-mudselect-input {
+        > .material-symbols-rounded {
+            color: var(--tw-gray-500);
+            font-size: 24px !important;
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 150, 'opsz' 24 !important;
+        }
+    }
+}
+
+.pru-ui-mudselect-list {
+    background-color: red;
+}
+
+.pru-ui-mudselect-outer {
+    background-color: transparent;
+}
+
+
+/*#endregion */
+
 /*#region MudDataGrid */
-.pru-mud-datagrid {
+.pru-ui-muddatagrid {
     border-radius: 0px !important;
     border-bottom: 1.5px solid var(--tw-gray-200);
     border-right: 1px solid white;
-
-    & .mud-table-container {
-        width: auto !important;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    > .mud-table-container {
+        height: calc(100% - 36px) !important;
+        width: 100% !important;
+        > .mud-drop-container {
+            height: 100%;
+            overflow-y: auto;
+            scrollbar-color: var(--tw-gray-300) var(--tw-gray-50);
+            scrollbar-width: auto;
+        }
     }
 
     & .mud-table-root .mud-table-head * .mud-table-cell {
@@ -806,14 +904,7 @@
     }
 
     &.main-pg {
-        overflow: hidden;
 
-        & .mud-drop-container {
-            height: 100%;
-            overflow-y: auto;
-            scrollbar-color: var(--tw-gray-300) var(--tw-gray-50);
-            scrollbar-width: auto;
-        }
     }
 
     &.cruc-pg-pager {
@@ -830,7 +921,7 @@
     }
 }
 
-.pru-mud-datagrid-hdr {
+.pru-ui-muddatagrid-hdr {
     font-weight: 600 !important;
     padding-inline-start: 12px !important;
     padding-inline-end: 12px !important;
@@ -921,19 +1012,20 @@
     }
 }
 
-.pru-mud-datagrid-row {
+.pru-ui-muddatagrid-row {
     &.selected {
         border-left: var(--pru-red-default) 3px solid;
-        background-color: var(--material-yellow-50) !important;
+        
 
         &>.mud-table-cell {
             color: var(--pru-red-default) !important;
+            background-color: var(--tw-yellow-50) !important;
             font-weight: 500;
         }
     }
 }
 
-.pru-mud-datagrid-cell {
+.pru-ui-muddatagrid-cell {
     padding: 8px 12px !important;
     font-size: 12px !important;
     line-height: 120% !important;
@@ -953,7 +1045,7 @@
     }
 }
 
-.pru-mud-datagrid-pager {
+.pru-ui-muddatagrid-pager {
     height: 28px;
 
     & .mud-icon-button {
@@ -1195,6 +1287,7 @@
 /*#region MudTab */
 .pru-mudtab {
     background-color: transparent;
+    height:100%;
 
     > .mud-tabs-tabbar {
         > .mud-tabs-tabbar-inner {
@@ -1237,6 +1330,7 @@
 
 .pru-mudtab-tabpanel {
     background-color: transparent;
+    height:100%;
 }
 
 .pru-mudtabpanel {
@@ -1264,6 +1358,7 @@
 }
 
 .pru-mudtabpanel-panel {
+    height: 100%;
     border: none;
     background-color: transparent;
 }

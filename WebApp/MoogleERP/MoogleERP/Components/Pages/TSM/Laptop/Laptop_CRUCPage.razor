@@ -243,14 +243,14 @@
                                                  StartedEditingItem="@StartedEditingSpecVar" CanceledEditingItem="@CanceledEditingSpecVar" CommittedItemChanges="@CommittedSpecVarChanges">
                                         <Columns>
                                             <PropertyColumn Title="No." Property="x => x.SeqNo" Sortable="false" Editable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
                                                             CellStyle="text-align:right" Context="item" >
                                                             <EditTemplate>
 
                                                             </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Type" Property="x => x.ObjectName" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
@@ -259,7 +259,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Model" Property="x => x.ObjectName" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Class="mt-3">
@@ -271,7 +271,7 @@
                                             </PropertyColumn>
                                             
                                             <PropertyColumn Title="CPU" Property="x => x.CpuName" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Class="mt-3">
@@ -292,7 +292,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="RAM" Property="x => x.RamDispTxt" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Class="mt-3">
@@ -317,7 +317,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="GPU" Property="x => x.GpuName" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Class="mt-3">
@@ -336,7 +336,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Storage" Property="x => x.StorageDispTxt" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Class="mt-3">
@@ -357,7 +357,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Barcode" Property="x => x.Barcode" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingSpecVar) ? " spacious" : " data-align-top inline-editing"))
                                                             HeaderStyle="width:100px; max-width:80px" Context="item">
                                                 <EditTemplate>
                                                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Class="mt-3">
@@ -368,7 +368,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-muddatagrid-cell inline-editing"
                                                             CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
                                                             Context="item">
                                                 <CellTemplate>
@@ -420,10 +420,10 @@
                                                  StartedEditingItem="@StartedEditingItemSpec" CanceledEditingItem="@CanceledEditingItemSpec" CommittedItemChanges="@CommittedItemSpecChanges">
                                         <Columns>
                                             <PropertyColumn Title="No." Property="x => x.OrderNo" Sortable="false" Editable="false" Hidden="true"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingTechSpecItem) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingTechSpecItem) ? " spacious" : " data-align-top inline-editing"))
                                                             CellStyle="text-align:right" />
                                             <PropertyColumn Title="Type" Property="x => x.ObjectName" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingTechSpecItem) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingTechSpecItem) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
@@ -432,7 +432,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Spec Desc" Property="x => x.SpecDesc" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingTechSpecItem) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingTechSpecItem) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
@@ -441,7 +441,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Value" Property="x => x.SpecValue" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingTechSpecItem) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingTechSpecItem) ? " spacious" : " data-align-top inline-editing"))
                                                             HeaderStyle="width:100px; max-width:80px" Context="item">
                                                 <EditTemplate>
                                                     <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
@@ -451,7 +451,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Unit" Property="x => x.UnitCode" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingTechSpecItem) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingTechSpecItem) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
@@ -460,7 +460,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-muddatagrid-cell inline-editing"
                                                             CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
                                                             Context="item">
                                                 <CellTemplate>
@@ -504,10 +504,10 @@
                                                  StartedEditingItem="@StartedEditingIOPort" CanceledEditingItem="@CanceledEditingIOPort" CommittedItemChanges="@CommittedIOPortChanges">
                                         <Columns>
                                             <PropertyColumn Title="No." Property="x => x.SeqNo" Sortable="false" Editable="false" Hidden="true"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingIOPort) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingIOPort) ? " spacious" : " data-align-top inline-editing"))
                                                             CellStyle="text-align:right" />
                                             <PropertyColumn Title="Type" Property="x => x.ObjectName" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingIOPort) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingIOPort) ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
@@ -516,7 +516,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="# Port" Property="x => x.PortCount" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingIOPort) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingIOPort) ? " spacious" : " data-align-top inline-editing"))
                                                             HeaderStyle="width:500px; max-width:80px"
                                                             CellStyle="text-align:right" Context="item">
                                                 <EditTemplate>
@@ -528,7 +528,7 @@
                                             </PropertyColumn>
                                             
                                             <PropertyColumn Title="Remark" Property="x => x.Remark" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + ((IsViewMode || !_isEditingIOPort) ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_isEditingIOPort) ? " spacious" : " data-align-top inline-editing"))
                                                             HeaderStyle="width:800px" Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
@@ -537,7 +537,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-muddatagrid-cell inline-editing"
                                                             CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
                                                             Context="item">
                                                 <CellTemplate>

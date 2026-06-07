@@ -24,30 +24,30 @@
                  T="Book">
         <Columns>
             <PropertyColumn Title="Title" Property="x => x.Title"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" CellStyle="font-weight:500" />
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="font-weight:500" />
             <PropertyColumn Title="Author(s)" Property="x => x.AuthorText"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
-            <TemplateColumn Title="Category" HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" Context="dataRow">
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+            <TemplateColumn Title="Category" HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" Context="dataRow">
                 <CellTemplate>
                     <MudText Typo="Typo.body1">@(dataRow.Item.Category != null ? dataRow.Item.Category.ObjectName : "-")</MudText>
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Title="Series Name" Property="x => x.SeriesText"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
             <PropertyColumn Title="Book#" Property="x => x.BookNoText"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" Sortable="false" />
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" Sortable="false" />
             <PropertyColumn Title="Year" Property="x => x.ReleasedYear"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
             <PropertyColumn Title="Publisher" Property="x => x.PublisherName"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
             <PropertyColumn Title="ISBN-13" Property="x => x.ISBN13" Sortable="false"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400"
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono"
 							HeaderStyle="width:800px; max-width:80px" />
             <PropertyColumn Title="ISBN-10" Property="x => x.ISBN10" Sortable="false"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400"
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono"
 							HeaderStyle="width:800px; max-width:100px" />
             <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell"
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
 							HeaderStyle="width:120px"
                             CellStyle="padding-inline-end:4px; padding-inline-start:4px">
                 <CellTemplate>

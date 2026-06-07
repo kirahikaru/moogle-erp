@@ -47,6 +47,12 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable where T : class
 
 	public int PageSize { get; set; }
 	public MudDataGrid<T> MainDataGrid { get; set; }
+	public RenderFragment DataGridZeroRecordContent = builder =>
+	{
+		builder.OpenElement(0,"p");
+		builder.AddContent(1, "0 record found.");
+		builder.CloseElement();
+	};
 	public T? SelectedObject { get; set; }
 	public IList<T> SelectedObjects { get; set; }
 	public IEnumerable<T> MainDataList { get; set; }

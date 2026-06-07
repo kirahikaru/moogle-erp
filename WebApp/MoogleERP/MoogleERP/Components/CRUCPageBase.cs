@@ -63,6 +63,13 @@ public class CRUCPageBase<T> : ComponentBase
 	protected int InitCount { get; set; }
 	public Dictionary<string, string> InvalidMsgList { get; set; }
 
+	public RenderFragment DataGridZeroRecordContent = builder =>
+	{
+		builder.OpenElement(0, "p");
+		builder.AddContent(1, "0 record found.");
+		builder.CloseElement();
+	};
+
 	public string AuditTrailUser => LoggedInUser != null ? LoggedInUser.UserNameAndUserID : "Public";
 
 	public CRUCPageBase()

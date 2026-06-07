@@ -26,9 +26,9 @@
 				 T="OrgStruct">
 		<Columns>
 			<PropertyColumn Title="Name" Property="x => x.ObjectName" 
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
             <TemplateColumn Title="Type" Sortable="false" Filterable="false"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" Context="rowData">
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" Context="rowData">
                 <CellTemplate>
                     @if (@rowData.Item.Type is not null)
                     {
@@ -37,7 +37,7 @@
                 </CellTemplate>
             </TemplateColumn>
             <TemplateColumn Title="Level" Sortable="false" Filterable="false"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" Context="rowData"
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" Context="rowData"
                             HeaderStyle="width:800px; max-width:60px" CellStyle="text-align:right">
                 <CellTemplate>
                     @if (@rowData.Item.Type is not null)
@@ -47,9 +47,9 @@
 				</CellTemplate>
 			</TemplateColumn>
             <PropertyColumn Title="Parent" Property="x => x.ParentName"
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" />
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
 			<TemplateColumn Title="Enabled?" Sortable="false" Filterable="false"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" Context="rowData"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" Context="rowData"
 							HeaderStyle="width:800px; max-width:85px">
 				<CellTemplate>
 					<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
@@ -65,11 +65,11 @@
 				</CellTemplate>
 			</TemplateColumn>
 			<PropertyColumn Title="ID" Property="x => x.ObjectCode"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
 			<PropertyColumn Title="Hierarchy Path" Property="x => x.HierarchyPath"
-							HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell reddit-mono-400" />
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
 			<TemplateColumn Title="Action" Sortable="false" Filterable="false" 
-                            HeaderClass="moog-mud-datagrid-hdr main-pg" CellClass="moog-mud-datagrid-cell" 
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" 
 							HeaderStyle="max-width: 120px; width:500px; justify-items:center" CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
 				<CellTemplate>
 					<MudStack Row="true" Spacing="1">

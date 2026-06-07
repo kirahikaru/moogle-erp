@@ -5,100 +5,134 @@
 
 @if (CurrentObject != null && CurrentEditContext != null)
 {
-    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" >
+    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column;">
         <DataAnnotationsValidator />
-        <MudPaper Class="moog-pg-banner mt-3" Elevation="1">
+        <MudPaper Class="moog-pg-banner" Elevation="0">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="0">
-                    <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
+                    <MudIcon Icon="fad fa-box-heart" Color="Color.Primary" Size="Size.Large"></MudIcon>
+                    <MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
                     @if (CRUCMode == CRUDCModes.READ)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Success" Class=@($"status-chip-tiny") T="string" Style="margin-top:-5px">View</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-12px">VIEW</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.UPDATE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">Update</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-12px">UPDATE</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.CREATE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-12px">NEW</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.CLONE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New (Clone)</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-12px">NEW (Clone)</MudChip>
                     }
                 </MudStack>
                 <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="2">
                     @if (IsViewMode)
                     {
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base moog-btn-gray" Color="Color.Dark"
-                                   Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/close">
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Default" Disabled=@IsSaving
+                                   Class="moog-mudbutton"
+                                   StartIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                   OnClick="Cancel">
                             Close
+                        </MudButton>
+                    }
+                    else if (CRUCMode == CRUDCModes.UPDATE)
+                    {
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Primary" Disabled=@IsSaving
+                                   Class="moog-mudbutton"
+                                   StartIcon="material-symbols-rounded/save_as" IconSize="Size.Small"
+                                   OnClick="@(() => Save(false))">
+                            Save
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Primary" Disabled=@IsSaving
+                                   Class="moog-mudbutton"
+                                   StartIcon="material-symbols-rounded/save"
+                                   OnClick="@(() => Save(true))">
+                            Save & Close
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Default" Disabled=@IsSaving
+                                   Class="moog-mudbutton"
+                                   StartIcon="material-symbols-rounded/cancel" IconSize="Size.Small"
+                                   OnClick="Cancel">
+                            Cancel
                         </MudButton>
                     }
                     else
                     {
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
-                                   Disabled=@IsSaving OnClick="@(() => Save(false))" StartIcon="material-symbols-rounded/save_as">
-                            Save
-                        </MudButton>
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary"
-                                   Disabled=@IsSaving OnClick="@(() => Save(true))" StartIcon="material-symbols-rounded/save">
-                            Save & Close
-                        </MudButton>
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base moog-btn-gray" Color="Color.Default"
-                                   Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/cancel">
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Default" Disabled=@IsSaving
+                                   Class="moog-mudbutton"
+                                   StartIcon="material-symbols-rounded/cancel" IconSize="Size.Small"
+                                   OnClick="Cancel">
                             Cancel
                         </MudButton>
                     }
                 </MudStack>
             </MudStack>
         </MudPaper>
-        <MudTabs Color="Color.Primary" Class="mt-3 moog-cruc-pg-mudtab" ActiveTabClass="moog-cruc-pg-mudtab-active" PanelClass="moog-cruc-pg-mudtab-panel" TabHeaderClass="moog-cruc-pg-mudtab-header" TabPanelClass="moog-cruc-pg-mudtab-tab-panel"
-                 Style="height:calc(100vh - 185px);">
-            <MudTabPanel Icon="material-symbols-rounded/home" Text="Main">
-                <MudPaper Class="rounded-0" Elevation="1" Height="calc(100vh - 220px)" Style="overflow-y: auto;">
+        <MudTabs Color="Color.Primary" Class="moog-mudtab mt-4" ActiveTabClass="moog-mudtab-tab-active" TabButtonsClass="moog-mudtab-tab-btn" TabHeaderClass="moog-mudtab-tab-hdr" TabPanelsClass="moog-mudtab-tab-panel">
+            <MudTabPanel Icon="fad fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
+                <MudPaper Class="moog-mudpaper-cruc-pg-tab-content" Elevation="0" Square="true" Height="calc(100% - var(--moog-cruc-pg-status-bar-height))" Style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px">
                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" StretchItems="StretchItems.All" Spacing="1">
-                        <MudGrid Spacing="3" Class="pa-3">
+                        <MudGrid Spacing="4" Class="pa-6 py-4">
                             <MudItem xs="2">
-                                <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Class="moog-mud-form-field bordered moog-ui-datepicker" Required="true"
+                                <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                               Class="moog-muddatepicker" ActionsClass="moog-muddatepicker-action" ToolbarClass="moog-muddatepicker-toolbar"
+                                               ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
                                                Label="Registration Date" Placeholder="DD-MMM-YYYY" DateFormat="dd-MMM-yyyy"
                                                @bind-Date="CurrentObject!.RegDateTime" For="@(() => CurrentObject!.RegDateTime)" />
                             </MudItem>
                             <MudItem xs="4">
                                 <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Start" >
-                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                    <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                                  Class="moog-mudform-input"
+                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                   Label="Given Name" @ref=_mtfObjName
                                                   @bind-Value="CurrentObject!.GivenName" For="@(() => CurrentObject!.GivenName)" />
-                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                    <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                                  Class="moog-mudform-input"
+                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                   Label="Surnname" 
                                                   @bind-Value="CurrentObject!.Surname" For="@(() => CurrentObject!.Surname)" />
                                 </MudStack>
                             </MudItem>
                             <MudItem xs="4">
                                 <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Start" >
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered lang-kh"
-                                              Label="Surname" Placeholder="នាមត្រកូល"
-                                              @bind-Value="CurrentObject!.SurnameKh" For="@(() => CurrentObject!.SurnameKh)" />
-                                    <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered lang-kh"
+                                    <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                  Class="moog-mudform-input moog-lang-kh"
+                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                  Label="Surname" Placeholder="នាមត្រកូល"
+                                                  @bind-Value="CurrentObject!.SurnameKh" For="@(() => CurrentObject!.SurnameKh)" />
+                                    <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                  Class="moog-mudform-input moog-lang-kh"
+                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                   Label="Given Name" Placeholder="នាមខ្លួន"
                                                   @bind-Value="CurrentObject!.SurnameKh" For="@(() => CurrentObject!.SurnameKh)" />
                                 </MudStack>
                             </MudItem>
                             <MudItem xs="2">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false" 
+                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               Label="ID" 
                                               @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" Style="text-transform:uppercase" />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Class="moog-mud-form-field bordered moog-ui-datepicker" Required="true"
+                                <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                               Class="moog-muddatepicker" ActionsClass="moog-muddatepicker-action" ToolbarClass="moog-muddatepicker-toolbar"
+                                               ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
                                                Label="Date of Birth" Placeholder="Purchased Date" DateFormat="dd-MMM-yyyy"
                                                @bind-Date="CurrentObject!.BirthDate" For="@(() => CurrentObject!.BirthDate)" />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-select" PopoverClass="moog-ui-select-popover" Required="true"
+                                <MudSelect Clearable="true" FitContent="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                           Class="moog-mudform-input" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
+                                           ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                           AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
                                            Label="Gender" T="string"
                                            Value="@CurrentObject!.Gender" ValueChanged="OnGenderChanged">
                                     @foreach (var gender in _genderList)
@@ -108,7 +142,10 @@
                                 </MudSelect>
                             </MudItem>
                             <MudItem xs="3">
-                                <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-select" PopoverClass="moog-ui-select-popover"
+                                <MudSelect Clearable="true" FitContent="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                           Class="moog-mudform-input" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
+                                           ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                           AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
                                            Label="Marital Status" T="string"
                                            @bind-Value="@CurrentObject!.MaritalStatus" For="@(() => CurrentObject!.MaritalStatus)">
                                     @foreach (var item in _maritalStatusList)
@@ -118,8 +155,8 @@
                                 </MudSelect>
                             </MudItem>
                             <MudItem xs="3">
-                                <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                                             PopoverClass="moog-ui-combo-box-popover"
+                                <MudComboBox Clearable="true" Editable="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text"
+                                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight" autocomplete="new-password"
                                              Label="Nationality" T="string"
                                              @bind-Value="@CurrentObject.NatlCtyCode" 
                                              ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _countryList.SingleOrDefault<DropDownListItem>(x => x.ObjectCode == e)?.ObjectName)">
@@ -132,55 +169,84 @@
                                 </MudComboBox>
                             </MudItem>
                             <MudItem xs="3">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               AdornmentIcon="material-symbols-rounded/id_card" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                               Label="National ID No."
                                               @bind-Value="CurrentObject!.NationalIdNum" For="@(() => CurrentObject!.NationalIdNum)" />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Class="moog-mud-form-field bordered moog-ui-datepicker" Required="false"
+                                <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                               Class="moog-muddatepicker" ActionsClass="moog-muddatepicker-action" ToolbarClass="moog-muddatepicker-toolbar"
+                                               ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
                                                Label="Expiry Date" Placeholder="DD-MMM-YYYY" DateFormat="dd-MMM-yyyy"
                                                @bind-Date="CurrentObject!.NatlIDExpiryDate" For="@(() => CurrentObject!.NatlIDExpiryDate)" />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               AdornmentIcon="material-symbols-rounded/passport" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                               Label="Passport No."
                                               @bind-Value="CurrentObject!.PassportNo" For="@(() => CurrentObject!.PassportNo)" />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" Class="moog-mud-form-field bordered moog-ui-datepicker" Required="false"
+                                <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                               Class="moog-muddatepicker" ActionsClass="moog-muddatepicker-action" ToolbarClass="moog-muddatepicker-toolbar"
+                                               ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
                                                Label="Expiry Date" Placeholder="DD-MMM-YYYY" DateFormat="dd-MMM-yyyy"
                                                @bind-Date="CurrentObject!.PassportExpiryDate" For="@(() => CurrentObject!.PassportExpiryDate)" />
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               AdornmentIcon="material-symbols-rounded/mobile" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                               Label="Phone No. (1)"
                                               @bind-Value="CurrentObject!.PhoneLine1" For="@(() => CurrentObject!.PhoneLine1)" />
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               AdornmentIcon="material-symbols-rounded/mobile" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                               Label="Phone No. (2)"
                                               @bind-Value="CurrentObject!.PhoneLine2" For="@(() => CurrentObject!.PhoneLine2)" />
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               AdornmentIcon="material-symbols-rounded/mail" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                               Label="Email (Personal)"
                                               @bind-Value="CurrentObject!.PersonalEmail" For="@(() => CurrentObject!.PersonalEmail)" />
                             </MudItem>
                             <MudItem xs="6">
-                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                              Class="moog-mudform-input"
+                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               AdornmentIcon="material-symbols-rounded/mail" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                               Label="Email (Work)"
                                               @bind-Value="CurrentObject!.WorkEmail" For="@(() => CurrentObject!.WorkEmail)" />
                             </MudItem>
+                            @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
+                            {
+                                <MudItem xs="12" Class="pt-4">
+                                    @foreach (string msg in CurrentEditContext.GetValidationMessages())
+                                    {
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
+                                    }
+                                    @foreach (string key in InvalidMsgList.Keys)
+                                    {
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                    }
+                                </MudItem>
+                            }
                         </MudGrid>
-                        <MudPaper MinWidth="500px" MaxWidth="500px" MaxHeight="1000px" MinHeight="500px" Class="pa-2" Elevation="0" >
+                        <MudPaper MinWidth="500px" MaxWidth="500px" MaxHeight="1000px" MinHeight="500px" Class="pa-4" Elevation="0" Style="background-color: var(--tw-gray-50)">
                             <MudCarousel Class="mud-full-width" ShowArrows="false" ShowBullets="true" BulletsPosition="Position.End" EnableSwipeGesture="true" AutoCycle="false" TData="object" Style="min-height:540px">
                                 <BulletTemplate Context="selected">
                                     <div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon" style="padding:8px">
@@ -215,30 +281,25 @@
                         </MudPaper>
                     </MudStack>
                 </MudPaper>
-                <MudPaper Height="26px" Elevation="1"
-                          Style="padding:0px; background-color:var(--material-blue-gray-50); border-top-left-radius:0px; border-top-right-radius:0px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px">
-                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1" Style="height:100%; padding: 0px 10px">
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)">Created by </MudText>
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@CurrentObject!.CreatedUser</MudText>
-                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">@CurrentObject!.CreatedUser</MudChip> *@
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)"> on </MudText>
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@(CurrentObject!.CreatedDateTimeText)</MudText>
-                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">
-                                @(CurrentObject!.CreatedDateTime is null ? " - " : CurrentObject!.CreatedDateTime!.Value.ToString("dd-MMM-yyyy HH:mm:ss"))
-                            </MudChip> *@
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)">| Last modified by </MudText>
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@CurrentObject!.ModifiedUser</MudText>
-                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">@CurrentObject!.ModifiedUser</MudChip> *@
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)"> on </MudText>
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@(CurrentObject!.ModifiedDateTimeText)</MudText>
-                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">
-                                @(CurrentObject!.ModifiedDateTime is null ? " - " : CurrentObject!.ModifiedDateTime!.Value.ToString("dd-MMM-yyyy HH:mm:ss"))
-                            </MudChip> *@
+                <MudPaper Class="moog-mudpaper-cruc-pg-status" Height="var(--moog-cruc-pg-status-bar-height)" Elevation="0">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1" Style="height:100%; padding: 0px 16px">
+                        @if (CurrentObject.Id > 0)
+                        {
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default">Created by </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@CurrentObject!.CreatedUser</MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default"> on </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@(CurrentObject!.CreatedDateTimeText)</MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default">| Last modified by </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@CurrentObject!.ModifiedUser</MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default"> on </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@(CurrentObject!.ModifiedDateTimeText)</MudText>
+                        }
                     </MudStack>
                 </MudPaper>
             </MudTabPanel>
-            <MudTabPanel Icon="@Icons.Material.Rounded.Info" Text="Other Info" Style="height:100%">
-                
+            <MudTabPanel Icon="fad fa-circle-info" Text="Other Info" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
+                <MudPaper Class="moog-mudpaper-cruc-pg-tab-content" Elevation="0" Square="true" Height="100%" >
+                </MudPaper>
             </MudTabPanel>
         </MudTabs>
     </EditForm>

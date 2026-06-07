@@ -9,44 +9,52 @@
         <DataAnnotationsValidator />
         <MudPaper Class="moog-pg-banner mt-3 px-4 py-3" Elevation="1">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="0">
-                    <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
+                    <MudIcon Icon="fad fa-store" Color="Color.Primary" Size="Size.Large"></MudIcon>
+                    <MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
                     @if (CRUCMode == CRUDCModes.READ)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Success" Class=@($"status-chip-tiny") T="string" Style="margin-top:-5px">View</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-12px">VIEW</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.UPDATE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">Update</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-12px">UPDATE</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.CREATE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-12px">NEW</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.CLONE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New (Clone)</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-12px">NEW (Clone)</MudChip>
                     }
                 </MudStack>
                 <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="2">
                     @if (IsViewMode)
                     {
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base moog-btn-gray" Color="Color.Default"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Default"
                                    Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/close">
                             Close
                         </MudButton>
                     }
-                    else
+                    else if (CRUCMode == CRUDCModes.UPDATE)
                     {
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary" StartIcon="material-symbols-rounded/save_as"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary" StartIcon="material-symbols-rounded/save_as"
                                    Disabled=@IsSaving OnClick="@(() => Save(false))">
                             Save
                         </MudButton>
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base" Color="Color.Primary" StartIcon="material-symbols-rounded/save"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary" StartIcon="material-symbols-rounded/save"
                                    Disabled=@IsSaving OnClick="@(() => Save(true))">
                             Save & Close
                         </MudButton>
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-btn-base moog-btn-gray" Color="Color.Default" StartIcon="material-symbols-rounded/cancel"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Default" StartIcon="material-symbols-rounded/cancel"
+                                   Disabled=@IsSaving OnClick="Cancel">
+                            Cancel
+                        </MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Default" StartIcon="material-symbols-rounded/cancel"
                                    Disabled=@IsSaving OnClick="Cancel">
                             Cancel
                         </MudButton>
@@ -54,10 +62,9 @@
                 </MudStack>
             </MudStack>
         </MudPaper>
-        <MudTabs Color="Color.Primary" Class="mt-3 moog-cruc-pg-mudtab" ActiveTabClass="moog-cruc-pg-mudtab-active" PanelClass="moog-cruc-pg-mudtab-panel" TabHeaderClass="moog-cruc-pg-mudtab-header" TabPanelClass="moog-cruc-pg-mudtab-tab-panel"
-                 Style="height:calc(100vh - 185px);">
-            <MudTabPanel Icon="material-symbols-rounded/home" Text="Main">
-                <MudPaper Class="rounded-0" Elevation="1" Height="calc(100vh - 220px)" Style="overflow-y: auto;">
+        <MudTabs Color="Color.Primary" Class="moog-mudtab mt-4" ActiveTabClass="moog-mudtab-tab-active" TabButtonsClass="moog-mudtab-tab-btn" TabHeaderClass="moog-mudtab-tab-hdr" TabPanelsClass="moog-mudtab-tab-panel">
+            <MudTabPanel Icon="fad fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
+                <MudPaper Class="moog-mudpaper-cruc-pg-tab-content" Elevation="0" Square="true" Height="calc(100% - var(--moog-cruc-pg-status-bar-height))" Style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px">
                     <MudGrid Spacing="3" Class="pa-3">
                         <MudItem xs="5">
                             <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
@@ -103,31 +110,38 @@
                                           Label="Info Link"
                                           @bind-Value="CurrentObject!.Link" For="@(() => CurrentObject!.Link)" />
                         </MudItem>
+                        @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
+                        {
+                            <MudItem xs="12" Class="pt-4">
+                                @foreach (string msg in CurrentEditContext.GetValidationMessages())
+                                {
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
+                                }
+                                @foreach (string key in InvalidMsgList.Keys)
+                                {
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                }
+                            </MudItem>
+                        }
                     </MudGrid>
                 </MudPaper>
-                <MudPaper Height="26px" Elevation="1"
-                          Style="padding:0px; background-color:var(--material-blue-gray-50); border-top-left-radius:0px; border-top-right-radius:0px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px">
-                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1" Style="height:100%; padding: 0px 10px">
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)">Created by </MudText>
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@CurrentObject!.CreatedUser</MudText>
-                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">@CurrentObject!.CreatedUser</MudChip> *@
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)"> on </MudText>
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@(CurrentObject!.CreatedDateTimeText)</MudText>
-                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">
-                                @(CurrentObject!.CreatedDateTime is null ? " - " : CurrentObject!.CreatedDateTime!.Value.ToString("dd-MMM-yyyy HH:mm:ss"))
-                            </MudChip> *@
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)">| Last modified by </MudText>
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@CurrentObject!.ModifiedUser</MudText>
-                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">@CurrentObject!.ModifiedUser</MudChip> *@
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; color:var(--material-blue-gray-500)"> on </MudText>
-                        <MudText Typo="Typo.subtitle1" Style="font-size:8pt; font-weight:600; color:var(--material-blue-gray-500)">@(CurrentObject!.ModifiedDateTimeText)</MudText>
-                        @* <MudChip T="string" Class="status-chip-tiny" Style="font-size:8pt; padding-left:6px;padding-right:6px">
-                                @(CurrentObject!.ModifiedDateTime is null ? " - " : CurrentObject!.ModifiedDateTime!.Value.ToString("dd-MMM-yyyy HH:mm:ss"))
-                            </MudChip> *@
+                <MudPaper Class="moog-mudpaper-cruc-pg-status" Height="var(--moog-cruc-pg-status-bar-height)" Elevation="0">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1" Style="height:100%; padding: 0px 16px">
+                        @if (CurrentObject.Id > 0)
+                        {
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default">Created by </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@CurrentObject!.CreatedUser</MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default"> on </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@(CurrentObject!.CreatedDateTimeText)</MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default">| Last modified by </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@CurrentObject!.ModifiedUser</MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default"> on </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@(CurrentObject!.ModifiedDateTimeText)</MudText>
+                        }
                     </MudStack>
                 </MudPaper>
             </MudTabPanel>
-            <MudTabPanel Icon="@Icons.Material.Rounded.Info" Text="Other Info">
+            <MudTabPanel Icon="fad fa-circle-info" Text="Other Info" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
                     
             </MudTabPanel>
         </MudTabs>

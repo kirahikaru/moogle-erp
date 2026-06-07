@@ -1,12 +1,12 @@
-﻿@page "/pms/med-comp/main"
-@inherits MainPageBase<MedicalComposition>
+﻿@page "/hms/med-appt/main"
+
+@inherits MainPageBase<MedAppt>
 <MudPaper Class="moog-pg-banner" Elevation="0">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
-			<MudIcon Icon="fad fa-mortar-pestle" Color="Color.Primary" Size="Size.Large"></MudIcon>
+			<MudIcon Icon="fad fa-calendar-alt" Color="Color.Primary" Size="Size.Large"></MudIcon>
 			<MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
 		</MudStack>
-
 		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary"
 				   StartIcon="far fa-plus-circle" OnClick="@(args => PerformCRUC(CRUDCModes.CREATE))">
 			Add New
@@ -26,35 +26,15 @@
 	</MudStack>
 	<MudDataGrid Bordered="false" Dense="true" FixedHeader="true" Hover="true" Loading=@IsSearching MultiSelection="false" Square="true" Striped="true"
 				 ColumnResizeMode="ResizeMode.Container" Elevation="0" RowsPerPage="50" SortMode="SortMode.Multiple"
-				 Class="moog-muddatagrid moog-main-pg" Height="calc(100% - 38px)" NoRecordsContent="DataGridZeroRecordContent"
+				 Class="moog-muddatagrid moog-main-pg" Height="calc(100% - 38px)"
 				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-muddatagrid-row"
 				 @ref="MainDataGrid" ServerData="ServerDataFunc"
-				 T="MedicalComposition" >
+				 T="MedAppt">
 		<Columns>
-			@* <PropertyColumn Property="x => x.ObjectName" Title="Name" HeaderClass="mud-datagrid-hdr" HeaderStyle=@DataGridHdrStyle CellClass="mud-datagrid-cell" /> *@
-			<TemplateColumn Title="Name" 
-				HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" Context="rowData" >
-				<CellTemplate>
-					<MudStack Spacing="1" Row=true AlignItems="AlignItems.Center">
-						<MudText Typo="Typo.body1" Style="font-weight:500; color:var(--ssv-pharma-blue)">@rowData.Item.ObjectName</MudText>
-						@if (!string.IsNullOrEmpty(rowData.Item.RefUrl))
-						{
-							<MudLink Href="@rowData.Item.RefUrl" Target="_blank" >
-								<MudIcon Icon="material-symbols-rounded/info" Size="Size.Small" Color="Color.Primary" />
-							</MudLink>
-						}
-					</MudStack>
-				</CellTemplate>
-			</TemplateColumn>
-			<PropertyColumn Title="Khmer Name" Property="x => x.ObjectNameKh" 
-				HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-				HeaderStyle="min-width:200px"/>
-			<PropertyColumn Title="French Name" Property="x => x.FrenchName" 
-				HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-			<PropertyColumn Title="Treatment" Property="x => x.TreatmentDescription" 
-				HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
 			<PropertyColumn Title="ID" Property="x => x.ObjectCode" 
-				HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
+			<PropertyColumn Title="Full Name" Property="x => x.ObjectName"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
 			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
 							HeaderStyle="width:300px; max-width:120px" CellStyle="padding: 0px 10px !important;">
@@ -63,10 +43,10 @@
 						<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
 									   Icon="far fa-edit"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
-						<MudIconButton Size="Size.Small" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+						<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
 									   Icon="far fa-copy"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
-						<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
+						<MudIconButton Size="Size.Small" Color="Color.Info" Class="moog-muddatagrid-icon-btn"
 									   Icon="far fa-eye"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
 						<MudIconButton Size="Size.Small" Color="Color.Error" Class="moog-muddatagrid-icon-btn"
@@ -77,7 +57,7 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="MedicalComposition" Class="moog-muddatagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
+			<MudDataGridPager T="MedAppt" Class="moog-muddatagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
 		</PagerContent>
     </MudDataGrid>
 </MudPaper>
@@ -85,32 +65,13 @@
 @code {
 	#region UI VARIABLES
 
-	Dictionary<string, string> _statesCssClasses = new() {
-		{ ObjectStates.NEW, "status-chip-pink-light" },
-		{ ObjectStates.BNIB, "status-chip-pink-light" },
-		{ ObjectStates.IN_USE, "status-chip-green-light" },
-		{ ObjectStates.LOANED, "status-chip-amber-light"},
-		{ ObjectStates.UNKNOWN, "status-chip-brown-light"},
-		{ ObjectStates.OTHER, "status-chip-brown-light"},
-		{ ObjectStates.DRAFT, "status-chip-teal-light"},
-		{ ObjectStates.GIFTED_OTHER, "status-chip-blue-gray-light"},
-		{ ObjectStates.SOLD, "status-chip-blue-gray-light"},
-		{ ObjectStates.WRITTEN_OFF, "status-chip-blue-gray-light"},
-		{ ObjectStates.IN_STASH, "status-chip-purple-light" },
-		{ ObjectStates.BROKEN, "status-chip-blue-gray-light" },
-		{ ObjectStates.RARELY_USED, "status-chip-amber-light" },
-	};
-
-	Dictionary<string, string> _stateLightStyles = [];
-
 	#endregion
 
 	#region PAGE LIFECYCLE FUNCTIONS
 	public override Task SetParametersAsync(ParameterView parameters)
 	{
-		UrlPrefix = "/pms/med-comp";
-		SearchParamName = "medCompSearchParam";
-		_stateLightStyles = ObjectStates.GetLightStyles();
+		UrlPrefix = "/hms/med-appt";
+		SearchParamName = "medApptSearchParam";
 		return base.SetParametersAsync(parameters);
 	}
 
@@ -121,17 +82,12 @@
 	#endregion
 
 	#region UI FUNCTIONS
-	async Task OnSearchClearClicked(MouseEventArgs args)
-	{
-		await UITextBoxSearch!.FocusAsync();
-		await MainDataGrid.ReloadServerData();
-	}
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<MedicalComposition>> ServerDataFunc(GridState<MedicalComposition> gridState, CancellationToken token)
+	protected override async Task<GridData<MedAppt>> ServerDataFunc(GridState<MedAppt> gridState, CancellationToken token)
 	{
-		if (IsSearching) return new GridData<MedicalComposition>
+		if (IsSearching) return new GridData<MedAppt>
 		{
 			Items = [],
 			TotalItems = 0
@@ -141,16 +97,13 @@
 		{
 			IsSearching = true;
 			int totalItemCount = 0;
-            IEnumerable<SqlSortCond> sortConds = [];
-			IEnumerable<SqlFilterCond> filterConds = [];
-
-			if (gridState.SortDefinitions.Count > 0)
-			{
-				foreach(var sortDef in gridState.SortDefinitions)
-				{
-					sortConds.Append<SqlSortCond>(new SqlSortCond(sortDef.SortBy, sortDef.Descending ));
-				}
-			}
+			//if (gridState.SortDefinitions.Count > 0)
+			//{
+			//	var firstSort = gridState.SortDefinitions.First();
+			//	result = firstSort.Descending
+			//		? result.OrderByDescending(firstSort.SortFunc).ToList()
+			//		: result.OrderBy(firstSort.SortFunc).ToList();
+			//}
 
 			if (gridState.FilterDefinitions.Any())
 			{
@@ -159,12 +112,21 @@
 				//	.Where(x => filterFunctions.All(f => f(x)))
 				//	.ToList();
 			}
+			else
+			{
+				var result = await Uow.MedAppts.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
+				MainDataList = result.Value;
+				totalItemCount = result.Key;
+			}
 
-			var result = await Uow.MedicalComps.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, sortConds, filterConds);
-			MainDataList = result.Value;
-			totalItemCount = result.Key;
+			//var totalNumberOfFilteredItems = result.Count;
 
-			return new GridData<MedicalComposition>
+			//result = result
+			//	.Skip(gridState.StartIndex)
+			//	.Take(gridState.Count)
+			//	.ToList();
+
+			return new GridData<MedAppt>
 			{
 				Items = MainDataList,
 				TotalItems = totalItemCount
@@ -174,7 +136,7 @@
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
 
-			return new GridData<MedicalComposition>
+			return new GridData<MedAppt>
 			{
 				Items = [],
 				TotalItems = 0

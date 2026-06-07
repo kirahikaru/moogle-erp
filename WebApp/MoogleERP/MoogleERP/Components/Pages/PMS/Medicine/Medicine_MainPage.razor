@@ -2,7 +2,10 @@
 @inherits MainPageBase<Medicine>
 <MudPaper Class="moog-pg-banner" Elevation="0">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-		<MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
+		<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
+			<MudIcon Icon="fad fa-pills" Color="Color.Primary" Size="Size.Large"></MudIcon>
+			<MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
+		</MudStack>
 		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary"
 				   StartIcon="far fa-plus-circle" OnClick="@(args => PerformCRUC(CRUDCModes.CREATE))">
 			Add New

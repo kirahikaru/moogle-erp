@@ -54,10 +54,20 @@ public interface IUowMoogleKhErp : IUnitOfWork
 	IDoctorRepos Doctors { get; }
 	IHealthcareFacilityRepos HealthcareFacilities { get; }
 	IIllnessRepos Illnesses { get; }
+    /// <summary>
+    /// Medical Appointment
+    /// </summary>
 	IMedApptRepos MedAppts { get; }
 	IMedExamRepos MedExams { get; }
-	IMedRxItemRepos MedRxItems { get; }
+    /// <summary>
+    /// Medical Prescription
+    /// </summary>
 	IMedRxRepos MedRxs { get; }
+	/// <summary>
+	/// Medical Prescription Item
+	/// </summary>
+	IMedRxItemRepos MedRxItems { get; }
+	
 	IMedTestRepos MedTests { get; }
 	IMedTestTypeRepos MedTestTypes { get; }
 	IPatientRepos Patients { get; }

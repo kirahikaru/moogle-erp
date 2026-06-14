@@ -30,40 +30,49 @@ public class ExchangeRate : AuditObject
     
     [Required(ErrorMessage = "'From Currency Ratio' is required.")]
     [Range(0, 999999999, ErrorMessage = "'From Currency Ratio' must be positive wholenumber.")]
-	public int? FromCurrencyRatioValue { get; set; }
+	public int? FromCurrencyRatio { get; set; }
 
 	[Required(AllowEmptyStrings = false, ErrorMessage = "'To Currency' is required.")]
 	public string? ToCurrencyCode { get; set; }
 
 	[Required(ErrorMessage = "'To Currency Ratio' is required.")]
 	[Range(0, 999999999, ErrorMessage = "'To Currency Ratio' must be positive wholenumber.")]
-	public int? ToCurrencyRatioValue { get; set; }
+	public int? ToCurrencyRatio { get; set; }
     [Required(ErrorMessage = "'Start Date' is required.")]
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
-    public bool IsCurrent { get; set; }
-    #endregion
+	/// <summary>
+	/// Exchange Type : Default, Buy, Sell, Mid
+	/// Valid Values: GlobalConstants.FIN.ExchangeTypes
+	/// </summary>
+	[Required(ErrorMessage = "'Exchange Type' is required.")]
+	public string? ExchgType { get; set; }
+	public bool IsCurrent { get; set; }
+	public string? Source { get; set; }
+	public string? Note { get; set; }
+	#endregion
 
-    #region *** LINKED OBJECTS ***
-    #endregion
+	#region *** LINKED OBJECTS ***
+	#endregion
 
-    #region *** DYNAMIC PROPERTIES ***
-    [Computed, Write(false)]
-    public string ExchangeRateText => $"{FromCurrencyCode.NonNullValue("-")} {FromCurrencyRatioValue:#,##0} = {ToCurrencyCode.NonNullValue("-")} {ToCurrencyRatioValue:#,##0}";
+	#region *** DYNAMIC PROPERTIES ***
+	[Computed, Write(false)]
+    public string ExchangeRateText => $"{FromCurrencyCode.NonNullValue("-")} {FromCurrencyRatio:#,##0} = {ToCurrencyCode.NonNullValue("-")} {ToCurrencyRatio:#,##0}";
     #endregion
 
     public decimal ComputeTo(decimal fromCurrValue)
     {
-        return (fromCurrValue * ToCurrencyRatioValue!.Value)/FromCurrencyRatioValue!.Value;
+        return (fromCurrValue * ToCurrencyRatio!.Value)/FromCurrencyRatio!.Value;
     }
 
     public decimal ComputeFrom(decimal toCurrValue)
     {
-        return (toCurrValue * FromCurrencyRatioValue!.Value) / ToCurrencyRatioValue!.Value;
+        return (toCurrValue * FromCurrencyRatio!.Value) / ToCurrencyRatio!.Value;
     }
 
     public ExchangeRate()
     {
         IsCurrent = true;
+        ExchgType = ExchangeTypes.DEFAULT;
     }
 }

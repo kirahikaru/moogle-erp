@@ -39,12 +39,14 @@ public class Currency : AuditObject
     public new string? ObjectName { get; set; }
 
     [StringUnicode(true)]
-    public string? CurrencySymbol { get; set; }
+    public string? Symbol { get; set; }
     public string? CountryCode { get; set; }
-    #endregion
 
-    #region *** LINKED OBJECT ***
-    [Computed, Write(false)]
+	public decimal? LowestDenominator { get; set; }
+	#endregion
+
+	#region *** LINKED OBJECT ***
+	[Computed, Write(false)]
 	public Country? Country { get; set; }
     #endregion
 }

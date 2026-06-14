@@ -1,0 +1,168 @@
+﻿@inherits CRUCDiagBase<Bank>
+
+<MudDialog Class="moog-crud-muddiag" >
+    <TitleContent>
+        <MudText Typo="Typo.h6" Class="lang-en">
+            @HeaderTitle
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (CurrentObject is not null && CurrentEditContext is not null)
+        {
+            <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy">
+                <DataAnnotationsValidator />
+                <MudGrid Spacing="3">
+                    <MudItem xs="8">
+                        <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                      Class="moog-mudform-input"
+                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                      Label="Name" 
+                                      @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" />
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                      Class="moog-mudform-input"
+                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                      Label="ID"
+                                      @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" Style="text-transform:uppercase" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                      Class="moog-mudform-input"
+                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                      Label="Registered Name"
+                                      @bind-Value="CurrentObject!.RegisteredName" For="@(() => CurrentObject!.RegisteredName)" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                      Class="moog-mudform-input"
+                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                      Label="Display Name"
+                                      @bind-Value="CurrentObject!.DisplayName" For="@(() => CurrentObject!.DisplayName)" />
+                    </MudItem>
+                </MudGrid>
+            </EditForm>
+        }
+        <MudCardActions>
+            <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Style="width:100%;">
+                <MudButton Variant="Variant.Filled" Size="Size.Medium" DropShadow="false" Class="moog-mudbutton" Color="Color.Success"
+                           StartIcon="material-symbols-rounded/save_as"
+                           OnClick="@(() => Save(false))">
+                    Save
+                </MudButton>
+                <MudButton Variant="Variant.Filled" Size="Size.Medium" DropShadow="false" Class="moog-mudbutton" Color="Color.Success"
+                           StartIcon="material-symbols-rounded/save"
+                           OnClick="@(() => Save(true))">
+                    Save
+                </MudButton>
+                <MudButton Variant="Variant.Filled" Size="Size.Medium" DropShadow="false" Class="moog-mudbutton" Color="Color.Default"
+                           StartIcon="material-symbols-rounded/cancel" OnClick="Cancel">
+                    Cancel
+                </MudButton>
+            </MudStack>
+        </MudCardActions>
+    </DialogContent>
+</MudDialog>
+
+@code {
+
+
+    #region PAGE LIFECYCLE EVENTS
+    protected override async Task OnInitializedAsync()
+    {
+        if (IsInitDone)
+            return;
+
+        switch (CRUCMode)
+        {
+            case CRUDCModes.READ:
+                {
+                    CurrentObject = await Uow.Banks.GetAsync(Id);
+                    IsViewMode = true;
+                }
+                break;
+            case CRUDCModes.CREATE:
+                {
+                    CurrentObject = new();
+                }
+                break;
+            case CRUDCModes.UPDATE:
+                CurrentObject = await Uow.Banks.GetAsync(Id);
+                break;
+            case CRUDCModes.CLONE:
+                {
+                    var tempObj = await Uow.Banks.GetAsync(Id);
+                    CurrentObject = tempObj!.DeepClone();
+                    CurrentObject!.Id = 0;
+                    CurrentObject!.ObjectCode = null;
+                }
+                break;
+        }
+
+        CurrentEditContext = new EditContext(CurrentObject!);
+
+        await PopulatedUIControls();
+
+        IsInitDone = true;
+        InitCount++;
+    }
+    #endregion
+
+    #region DB UPDATE FUNCTIONS
+    protected override async Task ValidatePreSave()
+    {
+        InvalidMsgList.Clear();
+
+        bool isDuplicated = await Uow.LocationTypes.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+
+        if (isDuplicated)
+        {
+            InvalidMsgList.Add("ObjectCode_Duplicate", $"Record with ObjectCode='{CurrentObject.ObjectCode}' is already existed.");
+        }
+    }
+
+    protected override Task PreSaveProcessing()
+    {
+        CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
+
+        return base.PreSaveProcessing();
+    }
+
+    protected override async Task<bool> SaveAndCommitProcessing()
+    {
+        DateTime timestamp = DateTime.Now;
+
+        if (CurrentObject!.Id == 0)
+        {
+            CurrentObject!.CreatedUser = AuditTrailUser;
+            CurrentObject!.CreatedDateTime = timestamp;
+        }
+
+        CurrentObject!.ModifiedUser = AuditTrailUser;
+        CurrentObject!.ModifiedDateTime = timestamp;
+
+        if (CurrentObject.Id > 0)
+        {
+            // Update existing record
+            bool isUpd = await Uow.Banks.UpdateAsync(CurrentObject);
+            return isUpd;
+        }
+        else
+        {
+            int objId = await Uow.Banks.InsertAsync(CurrentObject);
+            if (objId > 0)
+                CurrentObject.Id = objId;
+
+            return objId > 0;
+        }
+        ;
+    }
+    #endregion
+
+    #region INTERNAL FUNCTIONS
+    async Task PopulatedUIControls()
+    {
+
+    }
+    #endregion
+}

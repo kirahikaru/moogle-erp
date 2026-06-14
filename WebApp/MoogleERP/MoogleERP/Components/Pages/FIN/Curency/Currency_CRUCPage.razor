@@ -119,6 +119,9 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (IsInitDone)
+            return;
+
         switch (CRUCMode)
         {
             case CRUDCModes.READ:
@@ -148,6 +151,9 @@
         CurrentEditContext = new EditContext(CurrentObject!);
 
         await PopulatedUIControls();
+
+        IsInitDone = true;
+        InitCount++;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

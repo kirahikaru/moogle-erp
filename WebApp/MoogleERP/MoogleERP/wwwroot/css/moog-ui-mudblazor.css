@@ -4,6 +4,10 @@
 
 /*#region MUD OVERWRITE STYLE */
 
+:root {
+    --moog-muddatagrid-pager-height: 36px;
+}
+
 .mud-button-filled {
     &.mud-button-filled-primary {
         background-color: var(--ssv-pharma-blue);
@@ -31,6 +35,32 @@
 .mud-button-filled-size-small {
     padding: 4px 16px;
     font: 12px;
+}
+
+.mud-button-filled-size-medium {
+    font-size: 16px !important;
+
+    > .mud-button-label {
+        > .mud-button-icon-start {
+            margin-right: 4px;
+            margin-inline-end: 4px;
+        }
+
+        > .mud-button-icon-size-medium {
+            > .mud-icon-size-medium {
+                font-size: 18px;
+            }
+
+            > .material-symbols-rounded {
+                font-size: 24px;
+                font-variation-settings:
+                    'FILL' 0,
+                    'wght' 200,
+                    'GRAD' 50,
+                    'opsz' 24;
+            }
+        }
+    }
 }
 
 .mud-chip-container {
@@ -1417,6 +1447,10 @@
     font-size: var(--base-font-size) !important;
     line-height: 120% !important;
 
+    &.moog-lang-kh {
+        font-family: "Koh Santepheap", serif !important;
+    }
+
     &.data-align-top {
         vertical-align: top !important;
         & .mud-table-cell {
@@ -1627,16 +1661,39 @@
 /*#endregion */
 
 
-
-
 /*#region CRUD Dialog */
 .moog-crud-muddiag {
     background-color: var(--pru-light-grey);
-    & .mud-dialog-title {
+    > .mud-dialog-title {
         background-color: var(--ssv-pharma-blue);
-        padding-top: 0.2rem;
-        padding-bottom: 0.2rem;
-        padding-left: 0.8rem;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 20px;
+
+        > .mud-button-close {
+            color: white;
+            padding: 4px;
+            top: 12px !important;
+            right: 16px !important;
+            border: 1px solid var(--ssv-pharma-blue-500);
+
+            &:hover {
+                background-color: var(--ssv-pharma-blue-500);
+                color: var(--ssv-pharma-blue-200);
+            }
+        }
+    }
+
+    > .mud-focus-trap {
+        > .mud-focus-trap-child-container {
+            > .mud-dialog-content {
+                padding: 18px 24px 18px 24px;
+
+                > .mud-card-actions-padding {
+                    padding: 24px 16px 8px 16px;
+                }
+            }
+        }
     }
 
     & .mud-dialog-title .mud-typography-h6 {
@@ -1648,14 +1705,6 @@
 
     & .outline-none {
         background-color: var(--pru-light-grey);
-    }
-
-    & .mud-button-close {
-        color: white;
-        padding: 4px;
-        top: 6px !important;
-        right: 8px !important;
-        border: 1px solid rgba(255, 255, 255, 0.3);
     }
 }
 

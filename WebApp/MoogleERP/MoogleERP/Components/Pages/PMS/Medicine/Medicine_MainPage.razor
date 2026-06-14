@@ -51,7 +51,9 @@
 			<PropertyColumn Title="Composition" Property="x => x.CompositionSummary" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
 			<TemplateColumn Title="Country" Editable="false" Filterable="false" Sortable="false" Resizable="true"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" Context="rowData">
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" 
+							HeaderStyle="min-width:180px"
+							Context="rowData">
                 <CellTemplate>
                     @if (rowData.Item.ManufacturingCountry != null && !string.IsNullOrEmpty(rowData.Item.ManufacturingCountry.FlagIconPath))
                     {
@@ -63,7 +65,8 @@
                 </CellTemplate>
             </TemplateColumn>
 			<PropertyColumn Title="Package" Property="x => x.PackageContent" Editable="false" Filterable="false" Sortable="false" Resizable="true"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
+							HeaderStyle="min-width:200px" />
 			<PropertyColumn Title="Imported By" Property="x => x.ImportCompany" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
 							HeaderStyle="min-width:200px" />

@@ -1,5 +1,6 @@
 ﻿using CurrieTechnologies.Razor.SweetAlert2;
 using DataLayer.AuxComponents.Extensions;
+using DataLayer.Models;
 using DataLayer.Models.SysCore.NonPersistent;
 using DataLayer.Repos;
 using Microsoft.AspNetCore.Components;
@@ -10,7 +11,7 @@ using MudBlazor;
 
 namespace MoogleERP.Components;
 
-public class CRUCPageBase<T> : ComponentBase
+public class CRUCDiagBase<T> : ComponentBase
 {
 	[Inject]
 	public required IJSRuntime JsRuntime { get; set; }
@@ -29,6 +30,9 @@ public class CRUCPageBase<T> : ComponentBase
 
 	[Inject]
 	public required ISnackbar Snackbar { get; set; }
+
+	[CascadingParameter]
+	protected IMudDialogInstance? MudDialog { get; set; }
 
 	[CascadingParameter(Name = "AuthUser")]
 	public UserSessionInfo? LoggedInUser { get; set; }
@@ -72,7 +76,7 @@ public class CRUCPageBase<T> : ComponentBase
 
 	public string AuditTrailUser => LoggedInUser != null ? LoggedInUser.UserNameAndUserID : "Public";
 
-	public CRUCPageBase()
+	public CRUCDiagBase()
 	{
 		SystemModulePermissions = [];
 		InvalidMsgList = [];
@@ -116,7 +120,7 @@ public class CRUCPageBase<T> : ComponentBase
 		{
 			await PreSaveProcessing();
 			bool isSaveSuccess = await SaveAndCommitProcessing();
-
+			
 			if (isSaveSuccess)
 			{
 				await PostSaveProcessing();
@@ -126,7 +130,9 @@ public class CRUCPageBase<T> : ComponentBase
 
 				if (closeAfterSave)
 				{
-					NavMngr.NavigateTo($"{UrlPrefix}/main");
+					KeyValuePair<int, bool> upd = new(Id, true);
+
+					MudDialog!.Close(DialogResult.Ok(upd, upd.GetType()));
 				}
 				else
 				{
@@ -213,6 +219,6 @@ public class CRUCPageBase<T> : ComponentBase
 
 	public virtual void Cancel()
 	{
-		NavMngr.NavigateTo($"{UrlPrefix}/main");
+		MudDialog!.Close(DialogResult.Cancel());
 	}
 }

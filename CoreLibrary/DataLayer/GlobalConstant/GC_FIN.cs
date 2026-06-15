@@ -266,4 +266,120 @@ public static class CustomerTypes
         return list;
     }
 }
+
+public static class ExchangeTypes
+{
+	public const string DEFAULT = "DEFAULT";
+	public const string MID = "MID";
+	public const string BUY = "BUY";
+	public const string SELL = "SELL";
+
+	public static bool IsValid(string customerType)
+	{
+		return customerType switch
+		{
+			DEFAULT => true,
+			MID => true,
+			BUY => true,
+			SELL => true,
+			_ => false
+		};
+	}
+
+	public static string GetDisplayText(string? customerType)
+	{
+		return customerType switch
+		{
+			DEFAULT => "Default",
+			MID => "Mid",
+			BUY => "Buy",
+			SELL => "Sell",
+			_ => ""
+		};
+	}
+
+	public static Dictionary<string, string> GetAll()
+	{
+		Dictionary<string, string> list = new()
+		{
+			{ DEFAULT, GetDisplayText(DEFAULT) },
+			{ MID, GetDisplayText(MID) },
+			{ BUY, GetDisplayText(BUY) },
+			{ SELL, GetDisplayText(SELL) }
+		};
+
+		return list;
+	}
+
+	public static List<DropdownSelectItem> GetForDropdown()
+	{
+		List<DropdownSelectItem> list =
+		[
+			new DropdownSelectItem { Key = DEFAULT, Value = GetDisplayText(DEFAULT) },
+			new DropdownSelectItem { Key = MID, Value = GetDisplayText(MID) },
+			new DropdownSelectItem { Key = BUY, Value = GetDisplayText(BUY) },
+			new DropdownSelectItem { Key = SELL, Value = GetDisplayText(SELL) }
+		];
+
+		return list;
+	}
+}
+
+public static class RoundingTypes
+{
+	public const string ROUND_UP = "RND-UP";
+	public const string ROUND_DOWN = "RND-DOWN";
+	public const string ROUND_MID = "RND-MID";
+	public const string ROUND_NONE = "NO-RND";
+
+	public static bool IsValid(string customerType)
+	{
+		return customerType switch
+		{
+			ROUND_UP => true,
+			ROUND_DOWN => true,
+			ROUND_MID => true,
+			ROUND_NONE => true,
+			_ => false
+		};
+	}
+
+	public static string GetDisplayText(string? customerType)
+	{
+		return customerType switch
+		{
+			ROUND_UP => "Round-Up",
+			ROUND_DOWN => "Round-Down",
+			ROUND_MID => "Round Away from Mid-Point",
+			ROUND_NONE => "No Roudning",
+			_ => ""
+		};
+	}
+
+	public static Dictionary<string, string> GetAll()
+	{
+		Dictionary<string, string> list = new()
+		{
+			{ ROUND_UP, GetDisplayText(ROUND_UP) },
+			{ ROUND_DOWN, GetDisplayText(ROUND_DOWN) },
+			{ ROUND_MID, GetDisplayText(ROUND_MID) },
+			{ ROUND_NONE, GetDisplayText(ROUND_NONE) }
+		};
+
+		return list;
+	}
+
+	public static List<DropdownSelectItem> GetForDropdown()
+	{
+		List<DropdownSelectItem> list =
+		[
+			new DropdownSelectItem { Key = ROUND_UP, Value = GetDisplayText(ROUND_UP) },
+			new DropdownSelectItem { Key = ROUND_DOWN, Value = GetDisplayText(ROUND_DOWN) },
+			new DropdownSelectItem { Key = ROUND_MID, Value = GetDisplayText(ROUND_MID) },
+			new DropdownSelectItem { Key = ROUND_NONE, Value = GetDisplayText(ROUND_NONE) }
+		];
+
+		return list;
+	}
+}
 #endregion

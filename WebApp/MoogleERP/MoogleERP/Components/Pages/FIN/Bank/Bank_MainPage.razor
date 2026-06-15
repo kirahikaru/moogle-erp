@@ -1,17 +1,23 @@
-﻿@page "/core/kh-village/main"
+﻿@page "/fin/bank/main"
 
-@inherits MainPageBase<KhVillage>
+@inherits MainPageBase<Bank>
+<PageTitle>@HeaderTitle</PageTitle>
 <MudPaper Class="moog-pg-banner" Elevation="0">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
-			<MudIcon Icon="fad fa-map-marked-alt" Color="Color.Primary" Size="Size.Large"></MudIcon>
+			<MudIcon Icon="fad fa-landmark" Color="Color.Primary" Size="Size.Large"></MudIcon>
 			<MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
 		</MudStack>
-
-		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary"
-				   StartIcon="far fa-plus-circle" OnClick="@(args => PerformCRUC(CRUDCModes.CREATE))">
-			Add New
-		</MudButton>
+		<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="2">
+			<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary"
+					   StartIcon="far fa-comment-plus" OnClick="@(args => QuickCRUC(CRUDCModes.CREATE))">
+				Quick Add
+			</MudButton>
+			<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary"
+					   StartIcon="far fa-plus-circle" OnClick="@(args => PerformCRUC(CRUDCModes.CREATE))">
+				Add New
+			</MudButton>
+		</MudStack>
 	</MudStack>
 </MudPaper>
 <MudPaper Class="moog-mudpaper-main-pg-content mt-5 overflow-y-auto" Elevation="0" Height="100%" Style="display: flex; flex-direction:column">
@@ -30,43 +36,49 @@
 				 Class="moog-muddatagrid moog-main-pg" Height="calc(100% - 38px)" NoRecordsContent="DataGridZeroRecordContent"
 				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-muddatagrid-row"
 				 @ref="MainDataGrid" ServerData="ServerDataFunc"
-				 T="KhVillage">
+				 T="Bank">
 		<Columns>
-			<PropertyColumn Title="Name" Property="x => x.ObjectName" StickyLeft="true"
+			
+			<PropertyColumn Title="Name" Property="x => x.ObjectName"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-							CellStyle="font-weight:600; color:var(--ssv-pharma-blue)"/>
-			<PropertyColumn Title="Name (kh)" Property="x => x.NameKh"
+							CellStyle="font-weight:500; color:var(--ssv-pharma-blue)" />
+			<PropertyColumn Title="Registered Name" Property="x => x.RegisteredName"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-			<PropertyColumn Title="Commune Name" Property="x => x.CommuneNameEnText"
+			<PropertyColumn Title="Display Name" Property="x => x.DisplayName"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-			<PropertyColumn Title="Commune Name (kh)" Property="x => x.CommuneNameKhText"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-			<PropertyColumn Title="District Name" Property="x => x.DistrictNameEnText"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-			<PropertyColumn Title="District Name (kh)" Property="x => x.DistrictNameKhText"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-			<PropertyColumn Title="Province Name" Property="x => x.ProvinceNameEnText"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-			<PropertyColumn Title="Province Name (kh)" Property="x => x.ProvinceNameKhText"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-			<PropertyColumn Title="Postal Code" Property="x => x.PostalCode"
+			<PropertyColumn Title="Type" Property="x => x.BankTypeText"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
 			<PropertyColumn Title="ID" Property="x => x.ObjectCode"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
 			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
 							HeaderStyle="width:300px; max-width:120px" CellStyle="padding: 0px 10px !important;">
 				<CellTemplate>
 					<MudStack Row="true" Spacing="0">
-						<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-edit"
-									   OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
-						<MudIconButton Size="Size.Small" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-copy"
-									   OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
-						<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-eye"
-									   OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
+						@if (EnbleQuickCRUC)
+						{
+							<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-comment-pen"
+										   OnClick="@(args => QuickCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
+							<MudIconButton Size="Size.Small" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-clone"
+										   OnClick="@(args => QuickCRUC(CRUDCModes.CLONE, context.Item.Id))" />
+							<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-eyes"
+										   OnClick="@(args => QuickCRUC(CRUDCModes.READ, context.Item.Id))" />
+						}
+						else 
+						{
+							<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-edit"
+										   OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
+							<MudIconButton Size="Size.Small" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-copy"
+										   OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
+							<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-eye"
+										   OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
+						}
 						<MudIconButton Size="Size.Small" Color="Color.Error" Class="moog-muddatagrid-icon-btn"
 									   Icon="far fa-trash-alt"
 									   OnClick="@(args => DeleteRecord(context.Item))" />
@@ -75,21 +87,21 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="KhVillage" Class="moog-muddatagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
+			<MudDataGridPager T="Bank" Class="moog-muddatagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
 		</PagerContent>
     </MudDataGrid>
 </MudPaper>
 
 @code {
 	#region UI VARIABLES
-
+	private bool EnbleQuickCRUC = true;
 	#endregion
 
 	#region PAGE LIFECYCLE FUNCTIONS
 	public override Task SetParametersAsync(ParameterView parameters)
 	{
-		UrlPrefix = "/core/kh-village";
-		SearchParamName = "khVillageSearchParam";
+		UrlPrefix = "/fin/bank";
+		SearchParamName = "bankSearchParam";
 		return base.SetParametersAsync(parameters);
 	}
 
@@ -100,12 +112,38 @@
 	#endregion
 
 	#region UI FUNCTIONS
+	async Task QuickCRUC(string CRUCMode, int id = 0)
+	{
+		if (!CRUDCModes.IsValid(CRUCMode))
+			return;
+		else if (CRUCMode == CRUDCModes.CREATE && id != 0)
+			return;
+		else if (CRUCMode != CRUDCModes.CREATE && id == 0)
+			return;
+
+		DialogParameters<Bank_CRUCDiag> param = new();
+
+		param.Add(x => x.Id, id);
+		param.Add(x => x.CRUCMode, CRUCMode);
+
+		var diagOptions = new DialogOptions
+		{
+			BackdropClick = false,
+			CloseButton = true,
+			CloseOnEscapeKey = false,
+			MaxWidth = MaxWidth.ExtraLarge,
+			Position = DialogPosition.Center
+		};
+
+		var dialog = await MudDialogSvc.ShowAsync<Bank_CRUCDiag>(HeaderTitle, param, diagOptions);
+		var result = await dialog.Result;
+	}
 	#endregion
 
 	#region UI BASE FUNCTIONS
-	protected override async Task<GridData<KhVillage>> ServerDataFunc(GridState<KhVillage> gridState, CancellationToken token)
+	protected override async Task<GridData<Bank>> ServerDataFunc(GridState<Bank> gridState, CancellationToken token)
 	{
-		if (IsSearching) return new GridData<KhVillage>
+		if (IsSearching) return new GridData<Bank>
 		{
 			Items = [],
 			TotalItems = 0
@@ -132,7 +170,7 @@
 			}
 			else
 			{
-				var result = await Uow.KhVillages.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
+				var result = await Uow.Banks.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}
@@ -144,7 +182,7 @@
 			//	.Take(gridState.Count)
 			//	.ToList();
 
-			return new GridData<KhVillage>
+			return new GridData<Bank>
 			{
 				Items = MainDataList,
 				TotalItems = totalItemCount
@@ -154,7 +192,7 @@
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
 
-			return new GridData<KhVillage>
+			return new GridData<Bank>
 			{
 				Items = [],
 				TotalItems = 0

@@ -4,6 +4,10 @@
 
 /*#region MUD OVERWRITE STYLE */
 
+:root {
+    --moog-muddatagrid-pager-height: 36px;
+}
+
 .mud-button-filled {
     &.mud-button-filled-primary {
         background-color: var(--ssv-pharma-blue);
@@ -31,6 +35,32 @@
 .mud-button-filled-size-small {
     padding: 4px 16px;
     font: 12px;
+}
+
+.mud-button-filled-size-medium {
+    font-size: 16px !important;
+
+    > .mud-button-label {
+        > .mud-button-icon-start {
+            margin-right: 4px;
+            margin-inline-end: 4px;
+        }
+
+        > .mud-button-icon-size-medium {
+            > .mud-icon-size-medium {
+                font-size: 18px;
+            }
+
+            > .material-symbols-rounded {
+                font-size: 24px;
+                font-variation-settings:
+                    'FILL' 0,
+                    'wght' 200,
+                    'GRAD' 50,
+                    'opsz' 24;
+            }
+        }
+    }
 }
 
 .mud-chip-container {
@@ -423,7 +453,6 @@
 /*#endregion */
 
 .moog-mudform-input {
-
     > .mud-input-control-input-container {
         /* > .mud-input:focus-within~label.mud-input-label.mud-input-label-inputcontrol
         {
@@ -449,6 +478,7 @@
                 font-size: var(--base-font-size);
                 padding: 16px 20px;
                 margin-top: 0px;
+                line-height: 120%;
 
                 &::placeholder {
                     color: var(--tw-gray-400);
@@ -640,210 +670,15 @@
             }
         }
     }
-}
 
-.moog-mud-form-field {
-    & .mud-input {
-        & input.mud-input-root, div.mud-input-slot.mud-input-root {
-            color: var(--pru-gray-tw-600);
-            line-height: 100%;
-            font-size: 10pt;
-            line-height: 16px;
-            padding: 8px 0px 8px 0px;
-        }
-
-        &:focus-within {
+    &.moog-lang-kh {
+        > .mud-input-control-input-container {
             > .mud-input {
-                outline: 1.5px solid var(--tw-gray-500);
-            }
-        }
-
-        &>textarea.mud-input-root {
-            line-height: 16px;
-            font-size: 10pt;
-            padding: 6px 6px;
-            margin: 0px;
-        }
-
-        & .mud-input-adornment-start {
-            margin-left: 0px;
-        }
-
-        & input.mud-input-root-adorned-start {
-            padding: 8px 0 8px;
-        }
-
-        & .mud-input-adornment-icon {
-            font-size:18px;
-        }
-
-        &.mud-input-underline {
-            &:hover:not(.mud-disabled):before
-            {
-                border-bottom: 1px solid var(--ssv-pharma-blue);
-            }
-            &:after {
-                border-bottom: 1px solid var(--ssv-pharma-blue);
-            }
-        }
-
-        :focus-within ~ label.mud-input-label.mud-input-label-inputcontrol {
-            color: var(--pru-navy-default);
-        }
-
-        > .mud-icon-button-edge-margin-end {
-            margin-inline-end: 2px;
-        }
-
-        & .material-symbols-rounded {
-            font-size: 20px;
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-        }
-
-        &.mud-disabled {
-            background-color: var(--pru-gray-tw-50);
-            
-            & > input {
-                cursor:not-allowed;
-                padding-left: 6px;
-            }
-        }
-    }
-
-    &.mud-input-control {
-        &.mud-input-required>.mud-input-control-input-container>.mud-input-label::after {
-            color: var(--google-red);
-            font-weight: 800;
-            content: "*";
-        }
-    }
-
-    & .mud-input-control {
-        &.mud-input-required > .mud-input-control-input-container > .mud-input-label::after {
-            color: var(--google-red);
-            font-weight: 800;
-            content: "*";
-        }
-    }
-
-    & .mud-input-helper-text {
-        font-size: 8pt;
-        line-height: 100%;
-    }
-
-    &.bordered {
-        /* For MudDatePicker is slightly different from  */
-        &>.mud-input-control
-        {
-            &>.mud-input-control-input-container {
-                &>div.mud-input.mud-input-text {
-                    &.mud-input-text-with-label {
-                        margin-top: 18px;
-                        border: 1px solid var(--material-blue-gray-200);
-                    }
+                > input.mud-input-root, > textarea.mud-input-root, > div.mud-input-root {
+                    font-family: "Koh Santepheap", serif;
+                    font-size: 1rem;
+                    
                 }
-            }
-            
-        }
-
-        &>.mud-input-control-input-container {
-            &>div.mud-input.mud-input-text {
-                border: 1px solid var(--material-blue-gray-200);
-
-                &:focus-within {
-                    border: 1px solid var(--ssv-pharma-blue);
-                }
-
-                &:focus-within {
-                    background-color: var(--ssv-pharma-blue-50);
-                }
-
-                &.mud-input-text-with-label {
-                    margin-top: 18px;
-                }
-            }
-        }
-
-        & .mud-input {
-            & input.mud-input-root, div.mud-input-slot.mud-input-root {
-                font-size:10pt;
-                line-height: 18px;
-                padding: 6px 0px 6px 8px;
-                height: unset;
-                /* border-right: solid 1px var(--mud-palette-lines-inputs);
-                border-top: solid 1px var(--mud-palette-lines-inputs); */
-            }
-
-            & .mud-input-adornment-start {
-                margin-right: -3px;
-                margin-inline-end: -3px;
-                margin-inline-start: 7px;
-            }
-
-            &.mud-input-underline {
-                border: none;
-                &:hover:not(.mud-disabled):before {
-                    border:none;
-                }
-                &::before {
-                    border: none;
-                }
-                &::after {
-                    border: none;
-                }
-
-            }
-        }
-    }
-
-    &.moog-ui-autocomplete {
-        .mud-icon-button {
-            padding: 2px;
-        }
-        
-        & .mud-icon-button-edge-end {
-            margin-right: 0px;
-            margin-inline-end: 0px;
-        }
-    }
-
-    &.moog-ui-combo-box {
-        & .mud-icon-button-edge-margin-end {
-            margin-right: -4px;
-            margin-inline-end: -4px;
-        }
-    }
-
-    &.moog-ui-select {
-        & .mud-input {
-            & input.mud-input-root, div.mud-input-slot.mud-input-root {
-                font-size:10pt;
-                padding: 6px 0px 6px 8px;
-                height: unset;
-                /* border-right: solid 1px var(--mud-palette-lines-inputs);
-                border-top: solid 1px var(--mud-palette-lines-inputs); */
-            }
-        }
-    }
-    & .mud-input-adornment-start
-    {
-        margin-left: 4px;
-        margin-right: 4px;
-    }
-
-    & .mud-input-adornment-text {
-        margin-right: 6px;
-    }
-
-    &.lang-kh {
-        & .mud-input {
-            & input.mud-input-root, div.mud-input-slot.mud-input-root {
-                font-family: "Hanuman", serif;
-                font-optical-sizing: auto;
-                font-weight: 400;
-                font-style: normal;
-                font-size:14px;
-                line-height: 14px;
             }
         }
     }
@@ -1612,6 +1447,10 @@
     font-size: var(--base-font-size) !important;
     line-height: 120% !important;
 
+    &.moog-lang-kh {
+        font-family: "Koh Santepheap", serif !important;
+    }
+
     &.data-align-top {
         vertical-align: top !important;
         & .mud-table-cell {
@@ -1822,16 +1661,39 @@
 /*#endregion */
 
 
-
-
 /*#region CRUD Dialog */
 .moog-crud-muddiag {
     background-color: var(--pru-light-grey);
-    & .mud-dialog-title {
+    > .mud-dialog-title {
         background-color: var(--ssv-pharma-blue);
-        padding-top: 0.2rem;
-        padding-bottom: 0.2rem;
-        padding-left: 0.8rem;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 20px;
+
+        > .mud-button-close {
+            color: white;
+            padding: 4px;
+            top: 12px !important;
+            right: 16px !important;
+            border: 1px solid var(--ssv-pharma-blue-500);
+
+            &:hover {
+                background-color: var(--ssv-pharma-blue-500);
+                color: var(--ssv-pharma-blue-200);
+            }
+        }
+    }
+
+    > .mud-focus-trap {
+        > .mud-focus-trap-child-container {
+            > .mud-dialog-content {
+                padding: 18px 24px 18px 24px;
+
+                > .mud-card-actions-padding {
+                    padding: 24px 16px 8px 16px;
+                }
+            }
+        }
     }
 
     & .mud-dialog-title .mud-typography-h6 {
@@ -1843,14 +1705,6 @@
 
     & .outline-none {
         background-color: var(--pru-light-grey);
-    }
-
-    & .mud-button-close {
-        color: white;
-        padding: 4px;
-        top: 6px !important;
-        right: 8px !important;
-        border: 1px solid rgba(255, 255, 255, 0.3);
     }
 }
 

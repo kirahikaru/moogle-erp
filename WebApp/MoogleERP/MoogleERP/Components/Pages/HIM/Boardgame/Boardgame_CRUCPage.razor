@@ -7,12 +7,13 @@
 
 @if (CurrentObject != null && CurrentEditContext != null)
 {
-    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" >
+    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column;">
         <DataAnnotationsValidator />
         <MudPaper Class="moog-pg-banner mt-3" Elevation="1">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="0">
-                    <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
+                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2">
+                    <MudIcon Icon="fad fa-game-board" Color="Color.Primary" Size="Size.Large"></MudIcon>
+                    <MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
                     @if (CRUCMode == CRUDCModes.READ)
                     {
                         <MudChip Size="Size.Small" Color="Color.Success" Class=@($"status-chip-tiny") T="string" Style="margin-top:-5px">View</MudChip>
@@ -237,15 +238,15 @@
                                     }
                                     @* EditDialogOptions=@(new() { BackdropClick = false, MaxWidth = MaxWidth.Medium, FullWidth = true }) *@
                                     <MudDataGrid Class="moog-mud-datagrid" Dense="true" Hover="true" FixedHeader="true" Striped="false" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None"
-                                                 Items="@CurrentObject!.ContentItems" T="BoardgameContentItem" @ref="_contentItemsGrid" NoRecordsContent="_gridNoRecord" Style="width:100%" QuickFilter="_quickContentFilter"
+                                                 Items="@CurrentObject!.ContentItems" T="BoardgameContentItem" @ref="_contentItemsGrid" NoRecordsContent="DataGridZeroRecordContent" Style="width:100%" QuickFilter="_quickContentFilter"
                                                  ReadOnly=@(IsViewMode || !_isEditingContent) EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
                                                  StartedEditingItem="@StartedEditingContentItem" CanceledEditingItem="@CanceledEditingContentItem" CommittedItemChanges="@CommittedContentItemChanges">
                                         <Columns>
                                             <PropertyColumn Title="No." Property="x => x.SeqNo" Sortable="false" Editable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
                                                             HeaderStyle="width:200px; max-width:48px" CellStyle="text-align:right" />
                                             <PropertyColumn Title="Item" Property="x => x.ObjectName" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField Readonly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
@@ -253,7 +254,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Count" Property="x => x.ItemCount" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
                                                             HeaderStyle="width:100px; max-width:80px" CellStyle=@(IsViewMode || !_isEditingContent ? "text-align:right" : "")
                                                             Context="item">
                                                 <EditTemplate>
@@ -264,7 +265,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Remark" Property="x => x.Remark" Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-mud-datagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingContent ? " spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
                                                     <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Lines="2" 
@@ -273,7 +274,7 @@
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
-                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-mud-datagrid-cell inline-editing"
+                                                            HeaderClass="moog-mud-datagrid-hdr cruc-pg-items" CellClass="moog-muddatagrid-cell inline-editing"
                                                             HeaderStyle="width:500px; max-width:88px" CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
                                                             Context="item">
                                                 <CellTemplate>
@@ -291,6 +292,19 @@
                                     </MudDataGrid>
                                 </MudStack>
                             </MudItem>
+                            @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
+                            {
+                                <MudItem xs="12" Class="pt-4">
+                                    @foreach (string msg in CurrentEditContext.GetValidationMessages())
+                                    {
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
+                                    }
+                                    @foreach (string key in InvalidMsgList.Keys)
+                                    {
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                    }
+                                </MudItem>
+                            }
                         </MudGrid>
                         <MudPaper MinWidth="500px" MaxWidth="500px" MaxHeight="1000px" MinHeight="500px" Class="pa-2" Elevation="0">
                             <MudCarousel Class="mud-full-width" ShowArrows="false" ShowBullets="true" BulletsPosition="Position.End" EnableSwipeGesture="true" AutoCycle="false" TData="object" Style="min-height:540px">
@@ -384,7 +398,6 @@
 
     bool _isEditingContent = false;
     BoardgameContentItem? _tempContentItemToAdd;
-    RenderFragment _gridNoRecord = @<p>No record</p>;
     MudDataGrid<BoardgameContentItem> _contentItemsGrid = new();
     #endregion
 

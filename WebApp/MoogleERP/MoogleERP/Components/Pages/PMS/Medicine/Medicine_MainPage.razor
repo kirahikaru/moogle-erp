@@ -2,7 +2,10 @@
 @inherits MainPageBase<Medicine>
 <MudPaper Class="moog-pg-banner" Elevation="0">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-		<MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
+		<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
+			<MudIcon Icon="fad fa-pills" Color="Color.Primary" Size="Size.Large"></MudIcon>
+			<MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
+		</MudStack>
 		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary"
 				   StartIcon="far fa-plus-circle" OnClick="@(args => PerformCRUC(CRUDCModes.CREATE))">
 			Add New
@@ -48,7 +51,9 @@
 			<PropertyColumn Title="Composition" Property="x => x.CompositionSummary" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
 			<TemplateColumn Title="Country" Editable="false" Filterable="false" Sortable="false" Resizable="true"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" Context="rowData">
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" 
+							HeaderStyle="min-width:180px"
+							Context="rowData">
                 <CellTemplate>
                     @if (rowData.Item.ManufacturingCountry != null && !string.IsNullOrEmpty(rowData.Item.ManufacturingCountry.FlagIconPath))
                     {
@@ -60,7 +65,8 @@
                 </CellTemplate>
             </TemplateColumn>
 			<PropertyColumn Title="Package" Property="x => x.PackageContent" Editable="false" Filterable="false" Sortable="false" Resizable="true"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
+							HeaderStyle="min-width:200px" />
 			<PropertyColumn Title="Imported By" Property="x => x.ImportCompany" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
 							HeaderStyle="min-width:200px" />

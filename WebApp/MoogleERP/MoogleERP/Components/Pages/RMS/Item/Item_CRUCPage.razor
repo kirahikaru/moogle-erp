@@ -10,7 +10,8 @@
         <MudPaper Class="moog-pg-banner" Elevation="0">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                 <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="0">
-                    <MudText Typo="Typo.h1" Color="@Color.Primary" Style="font-weight:800; font-size:20pt;">@HeaderTitle</MudText>
+                    <MudIcon Icon="fad fa-list-tree" Color="Color.Primary" Size="Size.Large"></MudIcon>
+                    <MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
                     @if (CRUCMode == CRUDCModes.READ)
                     {
                         <MudChip Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-8px">VIEW</MudChip>

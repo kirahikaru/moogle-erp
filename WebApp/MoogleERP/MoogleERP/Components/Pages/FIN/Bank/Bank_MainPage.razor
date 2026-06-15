@@ -29,7 +29,7 @@
 					  Placeholder="Search text here..."
 					  @bind-Value="SearchText" OnKeyDown="OnSearchTextBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
 		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-mudbutton"
-				   StartIcon="material-symbols-rounded/search" OnClick="OnSearchClicked">Search</MudButton>
+				   StartIcon="far fa-magnifying-glass" OnClick="OnSearchClicked">Search</MudButton>
 	</MudStack>
 	<MudDataGrid Bordered="false" Dense="true" FixedHeader="true" Hover="true" Loading=@IsSearching MultiSelection="false" Square="true" Striped="true"
 				 ColumnResizeMode="ResizeMode.Container" Elevation="0" RowsPerPage="50" SortMode="SortMode.Multiple"

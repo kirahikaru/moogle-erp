@@ -499,7 +499,7 @@ public class EventRepos(IDbContext dbContext) : BaseRepos<Event>(dbContext, Even
         SqlBuilder sbSql = new();
 
         sbSql.Select("t.FeeCurrencyCode")
-            .Select("'FeeCurrencySymbol'=curr.CurrencySymbol")
+            .Select("'FeeCurrencySymbol'=curr.Symbol")
             .Select("'TotalFeeAmount'=SUM(t.FeeAmountPaid)");
 
         sbSql.LeftJoin($"{Currency.MsSqlTable} curr ON curr.IsDeleted=0 AND curr.ObjectCode=t.FeeCurrencyCode");
@@ -512,7 +512,7 @@ public class EventRepos(IDbContext dbContext) : BaseRepos<Event>(dbContext, Even
 
 
         sbSql.GroupBy("t.FeeCurrencyCode")
-            .GroupBy("curr.CurrencySymbol");
+            .GroupBy("curr.Symbol");
 
         sbSql.OrderBy("t.FeeCurrencyCode ASC");
 

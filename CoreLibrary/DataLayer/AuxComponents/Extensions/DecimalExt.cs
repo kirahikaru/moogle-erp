@@ -9,7 +9,7 @@ public static class DecimalExt
 
     public static string ToCurrencyText(this decimal? value, 
         bool displayDecimal = true, 
-        string? currencySymbolCode = null,
+        string? currSymbolCode = null,
         CurrencyDisplayOption displayOption = CurrencyDisplayOption.PrefixNoSpace)
     {
         StringBuilder sb = new();
@@ -22,21 +22,21 @@ public static class DecimalExt
         else
 			sb.Append(value.Value.ToString("#,##0", CultureInfo.CurrentCulture));
 
-        if (!string.IsNullOrEmpty(currencySymbolCode))
+        if (!string.IsNullOrEmpty(currSymbolCode))
         {
             switch (displayOption)
             {
                 case CurrencyDisplayOption.PrefixNoSpace:
-                    sb.Insert(0, currencySymbolCode);
+                    sb.Insert(0, currSymbolCode);
                     break;
                 case CurrencyDisplayOption.PrefixWithSpace:
-					sb.Insert(0, currencySymbolCode + " ");
+					sb.Insert(0, currSymbolCode + " ");
                     break;
                 case CurrencyDisplayOption.SuffixNoSpace:
-					sb.Append(currencySymbolCode);
+					sb.Append(currSymbolCode);
                     break;
                 case CurrencyDisplayOption.SuffixWithSpace:
-					sb.Append(" " + currencySymbolCode);
+					sb.Append(" " + currSymbolCode);
                     break;
                 default: break;
             }
@@ -48,7 +48,7 @@ public static class DecimalExt
     public static string ToCurrencyText(
         this decimal value, 
         bool displayDecimal = true, 
-        string? currencySymbolCode = null,
+        string? currSymbolCode = null,
         CurrencyDisplayOption displayOption = CurrencyDisplayOption.PrefixNoSpace)
     {
 		StringBuilder sb = new();
@@ -58,21 +58,21 @@ public static class DecimalExt
         else
 			sb.Append(value.ToString("#,##0", CultureInfo.CurrentCulture));
 
-        if (!string.IsNullOrEmpty(currencySymbolCode))
+        if (!string.IsNullOrEmpty(currSymbolCode))
         {
             switch (displayOption)
             {
                 case CurrencyDisplayOption.PrefixNoSpace:
-                    sb.Insert(0, currencySymbolCode);
+                    sb.Insert(0, currSymbolCode);
                     break;
                 case CurrencyDisplayOption.PrefixWithSpace:
-					sb.Insert(0, currencySymbolCode + " ");
+					sb.Insert(0, currSymbolCode + " ");
                     break;
                 case CurrencyDisplayOption.SuffixNoSpace:
-					sb.Append(currencySymbolCode);
+					sb.Append(currSymbolCode);
                     break;
                 case CurrencyDisplayOption.SuffixWithSpace:
-					sb.Append(" " + currencySymbolCode);
+					sb.Append(" " + currSymbolCode);
                     break;
                 default: break;
             }

@@ -302,11 +302,11 @@
                                         <MudDatePicker Label="Request Date" @bind-Date=@i.Item.RequestDate DateFormat="dd-MMM-yyyy" Clearable="true" Editable="true" For="@(() => i.Item.RequestDate)" />
                                     </EditTemplate>
                                 </PropertyColumn>
-                                <PropertyColumn Property="x => x.EffectiveDate" Title="Effective Date" Format="dd-MMM-yyyy" HeaderClass="pru-ui-muddatagrid-hdr main-pg" HeaderStyle=@_dataGridHdrStyle CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                <PropertyColumn Property="x => x.StartDate" Title="Effective Date" Format="dd-MMM-yyyy" HeaderClass="pru-ui-muddatagrid-hdr main-pg" HeaderStyle=@_dataGridHdrStyle CellClass="pru-ui-muddatagrid-cell" Context="i">
                                     <EditTemplate>
                                         <MudStack Row="true" Spacing="2">
-                                            <MudDatePicker Label="Effective Date" @bind-Date=@i.Item.EffectiveDate DateFormat="dd-MMM-yyyy" Clearable="true" Editable="true" For="@(() => i.Item.EffectiveDate)" />
-                                            <MudDatePicker Label="Till Date" @bind-Date=@i.Item.EffTillDate DateFormat="dd-MMM-yyyy" Clearable="true" Editable="true" For="@(() => i.Item.EffTillDate)" />
+                                            <MudDatePicker Label="Effective Date" @bind-Date=@i.Item.StartDate DateFormat="dd-MMM-yyyy" Clearable="true" Editable="true" For="@(() => i.Item.StartDate)" />
+                                            <MudDatePicker Label="Till Date" @bind-Date=@i.Item.StartDate DateFormat="dd-MMM-yyyy" Clearable="true" Editable="true" For="@(() => i.Item.StartDate)" />
                                         </MudStack>
                                     </EditTemplate>
                                 </PropertyColumn>

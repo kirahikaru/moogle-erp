@@ -59,6 +59,9 @@ public class PurchaseOrder : AuditObject
 	public int? QuotationId { get; set; }
 	public string? QuotationCode { get; set; }
 	public string? Remark { get; set; }
+
+	public decimal? PaidAmount { get; set; }
+	public string? InvoiceRefs { get; set; }
 	#endregion
 
 	#region *** LINKED OBJECTS ***
@@ -119,5 +122,7 @@ public class PurchaseOrder : AuditObject
 		Items = [];
 		CurrencyCode = Pru_GC.Currencies.USD;
 		LBU = Pru_GC.PruLBUs.PCLA;
+		PaidAmount = 0;
+		InvoiceRefs = string.Empty;
 	}
 }

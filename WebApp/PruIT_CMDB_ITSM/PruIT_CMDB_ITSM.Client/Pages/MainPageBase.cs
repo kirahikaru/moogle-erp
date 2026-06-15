@@ -139,7 +139,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable
 			SelectedRowNo = -1;
 			return string.Empty;
 		}
-		else if (MainDataGrid.SelectedItem != null && MainDataGrid.SelectedItem.Equals(element))
+		else if (SelectedObject != null && SelectedObject.Equals(element))
 		{
 			SelectedRowNo = rowNumber;
 			return "pru-ui-muddatagrid-row selected";

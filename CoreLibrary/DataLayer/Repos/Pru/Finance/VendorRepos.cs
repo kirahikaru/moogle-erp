@@ -14,7 +14,7 @@ public interface IVendorRepos : IBaseRepos<Vendor>
 		IEnumerable<SqlFilterCond>? filterConds = null,
 		List<int>? excludeIdList = null);
 
-	Task<IEnumerable<DropdownSelectItem>> GetForDropdownListAsync(string lbu, string? includingID = null);
+	Task<IEnumerable<DropdownSelectItem>> GetForDropdownListAsync(string lbu, string? vendorStatus = null, string? includingID = null);
 
 	Task<bool> IsDuplicateCodeAsync(string objCode, string lbu, int id);
 }
@@ -113,7 +113,7 @@ public class VendorRepos(IDbContext dbContext) : BaseRepos<Vendor>(dbContext, Ve
 		return new KeyValuePair<int, IEnumerable<Vendor>>(count, dataList);
 	}
 
-	public async Task<IEnumerable<DropdownSelectItem>> GetForDropdownListAsync(string lbu, string? includingID = null)
+	public async Task<IEnumerable<DropdownSelectItem>> GetForDropdownListAsync(string lbu, string? vendorStatus=null, string? includingID = null)
 	{
 		SqlBuilder sbSql = new();
 
@@ -129,16 +129,29 @@ public class VendorRepos(IDbContext dbContext) : BaseRepos<Vendor>(dbContext, Ve
 		{
 			sbSql.Where("t.IsDeleted=0");
 			sbSql.Where("t.LBU=@LBU");
-			sbSql.Where("t.[Status]=@VendorStatus");
+
+			if (!string.IsNullOrEmpty(vendorStatus))
+			{
+				sbSql.Where("t.[Status]=@VendorStatus");
+				param.Add("@VendorStatus", VendorStatuses.ACTIVE, DbType.AnsiString);
+			}
 		}
 		else
 		{
-			sbSql.Where("(t.IsDeleted=0 AND t.LBU=@LBU AND t.[Status]=@VendorStatus) OR t.ObjectCode=@ObjectCode");
+			if (!string.IsNullOrEmpty(vendorStatus))
+			{
+				sbSql.Where("t.[Status]=@VendorStatus");
+				sbSql.Where("(t.IsDeleted=0 AND t.LBU=@LBU AND t.[Status]=@VendorStatus) OR t.ObjectCode=@ObjectCode");
+			}
+			else
+			{
+				sbSql.Where("(t.IsDeleted=0 AND t.LBU=@LBU) OR t.ObjectCode=@ObjectCode");
+			}
 			param.Add("@ObjectCode", includingID, DbType.AnsiString);
 		}
 
 		param.Add("@LBU", lbu, DbType.AnsiString);
-		param.Add("@VendorStatus", VendorStatuses.ACTIVE, DbType.AnsiString);
+		
 
 		sbSql.OrderBy("t.ObjectName ASC");
 

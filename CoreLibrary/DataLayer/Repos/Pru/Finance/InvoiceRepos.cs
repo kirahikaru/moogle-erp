@@ -58,7 +58,7 @@ public class InvoiceRepos(IDbContext dbContext) : BaseRepos<PruFin.Invoice>(dbCo
 			}
 			else
 			{
-				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(v.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.AccSysSubmID) LIKE '%'+UPPER(@SearchText)+'%')");
+				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(v.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.AccSysSubmID) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.PurchaseOrderCode) LIKE '%'+UPPER(@SearchText)+'%')");
 				param.Add("@SearchText", searchText, DbType.AnsiString);
 			}
 		}

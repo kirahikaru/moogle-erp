@@ -188,6 +188,7 @@ public static class AssetLifeCycleStatuses
 	public const string DRAFT = "DRAFT";
 	public const string IN_USE = "IN-USE";
 	public const string IN_STOCK = "IN-STOCK";
+	public const string ON_LOAN = "ON-LOAN";
 	public const string PENDING_REVIEW = "PENDING-REVIEW";
 	public const string PENDING_WRITE_OFF = "PENDING-WRITE-OFF";
 	public const string TERMINATED = "TERMINATED";
@@ -202,6 +203,7 @@ public static class AssetLifeCycleStatuses
 			DRAFT => "Draft",
 			IN_USE => "In-Use",
 			IN_STOCK => "In-Stock",
+			ON_LOAN => "On-Loan",
 			PENDING_REVIEW => "Pending Review",
 			PENDING_WRITE_OFF => "Pending Write-Off",
 			PENDING_TERMINATION => "Pending Termination",
@@ -275,6 +277,7 @@ public static class PurchaseOrderWFStatuses
 	public const string PR_APPROVED = "PR_APPROVED";
 	public const string PREPARING_PO = "PREPARING_PO";
 	public const string COMPLETE = "COMPLETE";
+	public const string CLOSED = "CLOSED";
 
 	public static string GetDisplayText(string? wfs)
 	{
@@ -286,6 +289,7 @@ public static class PurchaseOrderWFStatuses
 			PR_APPROVED => "PR Approved",
 			PREPARING_PO => "Preparing PO",
 			COMPLETE => "Complete",
+			CLOSED => "Closed",
 			_ => ""
 		};
 	}
@@ -299,6 +303,7 @@ public static class PurchaseOrderWFStatuses
 			new DropdownSelectItem { Key = PR_APPROVED, Value = GetDisplayText(PR_APPROVED) },
 			new DropdownSelectItem { Key = PREPARING_PO, Value = GetDisplayText(PREPARING_PO) },
 			new DropdownSelectItem { Key = COMPLETE, Value = GetDisplayText(COMPLETE) },
+			new DropdownSelectItem { Key = CLOSED, Value = GetDisplayText(CLOSED) },
 			];
 	}
 }

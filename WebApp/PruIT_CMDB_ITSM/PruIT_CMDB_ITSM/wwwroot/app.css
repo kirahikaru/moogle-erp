@@ -720,6 +720,19 @@ h1:focus {
     font-size: 10px !important;
 }
 
+.status-chip-error-light {
+    color: var(--tw-red-600) !important;
+    background-color: var(--tw-red-100) !important;
+    border: solid 1px var(--tw-red-500) !important;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0px !important;
+    height: 20px !important;
+    border-radius:10px !important;
+    font-size: 10px !important;
+}
+
+
 
 .status-chip-default-dark {
     color: #FFFFFF !important;
@@ -751,6 +764,7 @@ h1:focus {
     border-radius: 10px !important;
     height: 20px !important;
     border-radius:10px !important;
+    font-size: 10px !important;
 }
 
 .status-chip-pending-dark {

@@ -50,6 +50,8 @@ public class Invoice : AuditObject
 	[Required(ErrorMessage = "'Total Amount' is required.")]
 	public decimal? TotalAmount { get; set; }
 	public decimal? TotalTaxAmount { get; set; }
+	public int? PurchaseOrderId { get; set; }
+	public string? PurchaseOrderCode { get; set; }
 
 	/// <summary>
 	/// Accounting System Submission Record Ref. ID
@@ -66,6 +68,9 @@ public class Invoice : AuditObject
 
 	[Computed]
 	public Vendor? Vendor { get; set; }
+
+	[Computed]
+	public PurchaseOrder? PO { get; set; }
 	#endregion
 
 	#region *** DYNAMIC PROPERTIES ***

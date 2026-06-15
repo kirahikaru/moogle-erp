@@ -1,4 +1,5 @@
 ﻿using Dapper.Contrib.Extensions;
+using DataLayer.Models.Pru.IT;
 
 namespace DataLayer.Models.Pru.Finance;
 
@@ -28,7 +29,7 @@ public class PurchaseOrderItem : AuditObject
 	[Required(AllowEmptyStrings = false, ErrorMessage = "'No.' is required.")]
 	public int? OrderNo { get; set; }
     [Required(AllowEmptyStrings = false, ErrorMessage = "'Unit Price' is required.")]
-	[Range(0.00, 999999999999.99, ErrorMessage = "'Unit Price' must be positive number.")]
+	//[Range(0.00, 999999999999.99, ErrorMessage = "'Unit Price' must be positive number.")]
 	public decimal? UnitPrice { get; set; }
 	[Required(AllowEmptyStrings = false, ErrorMessage = "'Quantity' is required.")]
     [Range(0.00, 999999999999.99, ErrorMessage = "'Quantity' must be positive number.")]
@@ -39,17 +40,24 @@ public class PurchaseOrderItem : AuditObject
 	public string? Remark { get; set; }
     public int? PurchaseOrderId { get; set; }
     public string? PurchaseOrderCode { get; set; }
-    #endregion
 
-    #region *** LINKED OBJECTS ***
+	public int? ITAssetId { get; set; }
+	public string? ITAssetCode { get; set; }
+	public string? UserID { get; set; }
+	public string? UserName { get; set; }
+	public string? PurchaseType { get; set; }
+	#endregion
 
-    #endregion
+	#region *** LINKED OBJECTS ***
 
-    #region *** DYNAMIC PROPERTIES ***
+	#endregion
 
-    #endregion
+	#region *** DYNAMIC PROPERTIES ***
+	[Computed, Write(false), ReadOnly(true)]
+	public string UserNameAndID => !string.IsNullOrEmpty(UserName) ? $"{UserName} ({UserID.NonNullValue("-")})" : "";
+	#endregion
 
-    public PurchaseOrderItem() : base()
+	public PurchaseOrderItem() : base()
     {
 		
     }

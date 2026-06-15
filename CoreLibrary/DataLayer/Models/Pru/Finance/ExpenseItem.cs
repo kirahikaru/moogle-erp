@@ -34,7 +34,7 @@ public class ExpenseItem : AuditObject
 	public string? LBU { get; set; }
 	public DateTime? EffectiveDate { get; set; }
 
-	[RegularExpression(@"^\d{10}$", ErrorMessage = "Invalid format. Valid format is 10 digit")]
+	//[RegularExpression(@"^\d{10}$", ErrorMessage = "Invalid format. Valid format is 10 digit")]
 	public string? AccountCode { get; set; }
 	public string? AccountName { get; set; }
 

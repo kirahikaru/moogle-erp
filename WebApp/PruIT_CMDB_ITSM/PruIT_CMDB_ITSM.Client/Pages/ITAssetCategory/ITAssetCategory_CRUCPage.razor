@@ -71,7 +71,10 @@
                                               Required="true" RequiredError="'ID' is required." />
                             </MudItem>
                             <MudItem xs="3">
-                                <MudSelect ReadOnly="@IsViewMode" Clearable="true" Class="pru-ui-mudform-input pru-ui-select" PopoverClass="pru-ui-select-popover" Required="true" FullWidth="true"
+                                <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
+                                           Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
+                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                           AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary"
                                            Label="Asset Type" Placeholder="Select asset type"
                                            Value=CurrentObject!.AssetType For="@(() => CurrentObject.AssetType)" ValueChanged="OnAssetTypeChanged" InputId="AssetType" T="string" OnlyValidateIfDirty="true">
                                     @foreach (DropdownSelectItem assetType in _assetTypeList)
@@ -83,7 +86,9 @@
                             @if (CurrentObject.Id > 0)
                             {
                                 <MudItem xs="12">
-                                    <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input pru-ui-combo-box" PopoverClass="pru-ui-combo-box-popover" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
+                                    <MudComboBox Clearable="true" Editable="true" FullWidth="true" ReadOnly=@IsViewMode Required="true" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" ShrinkLabel="true" autocomplete="new-password"
+                                                 Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
+                                                 AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
                                                  Label="Parent" T="int?"
                                                  Value="@CurrentObject.ParentId" ValueChanged="OnParentChanged"
                                                  ToStringFunc="@(val => val is not null && val > 0 ? _validParentList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == val)?.ObjectName : "-")">
@@ -116,19 +121,6 @@
                             }
                         </MudGrid>
                     </MudForm>
-                    @if (Id > 0)
-                    {
-                        <MudStack Row="true" Class="px-2 py-1" AlignItems="AlignItems.Center" Spacing="1" Style="position:absolute; bottom:0; left:0; right:0; background-color:var(--pru-red-tw-50)">
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)">Created By</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@CurrentObject.CreatedUser</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)">on</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@(CurrentObject.CreatedDateTime.HasValue? CurrentObject.CreatedDateTime!.Value.ToString("dd-MMM-yyyy hh:mm:ss tt") : " - ")</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)"> | Last Modified By</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@CurrentObject.ModifiedUser</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)">on</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@(CurrentObject.ModifiedDateTime.HasValue? CurrentObject.ModifiedDateTime!.Value.ToString("dd-MMM-yyyy hh:mm:ss tt") : " - ")</MudText>
-                        </MudStack>
-                    }
                 </MudPaper>
                 <MudPaper Class="pru-mudpaper-status-bar" Elevation="0" Height="var(--pru-cruc-pg-status-bar-height)">
                     @if (CurrentObject.Id > 0)
@@ -261,7 +253,7 @@
         if (!string.IsNullOrEmpty(_parentHierarchyPath))
             CurrentObject!.HierarchyPath = $"{_parentHierarchyPath}>{CurrentObject!.ObjectCode}";
         else
-            CurrentObject!.HierarchyPath = CurrentObject!.ObjectCode;
+            CurrentObject!.HierarchyPath = $"{CurrentObject!.AssetType}>{CurrentObject!.ObjectCode}";
 
         await Task.CompletedTask;
     }

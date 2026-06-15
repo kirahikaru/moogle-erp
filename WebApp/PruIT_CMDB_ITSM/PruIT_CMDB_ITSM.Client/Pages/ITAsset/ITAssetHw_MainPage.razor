@@ -17,7 +17,7 @@
 </MudPaper>
 <MudPaper Class="pru-std-card-white mt-4" Outlined="true" Elevation="0" Height="100%" Width="100%" Style="overflow-y:hidden">
 	<MudStack Class="pa-6" Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
-		<MudTextField Clearable="true" Immediate="true" Required="false" ShrinkLabel="true" Variant="Variant.Text" Class="pru-ui-mudform-input"
+		<MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="pru-ui-mudform-input"
 					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
 					  Placeholder="Search text here..."
 					  @bind-Value="SearchText" OnKeyDown="OnSearchBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
@@ -32,7 +32,8 @@
 				 ServerData="ServerDataFunc" @ref="MainDataGrid" @bind-SelectedItem=SelectedObject Height="100%"
 				 T="ITAsset">
 		<Columns>
-			<TemplateColumn Title="LBU" StickyLeft="true" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData">
+			<TemplateColumn Title="LBU" StickyLeft="true" 
+				HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData">
 				<CellTemplate>
 					<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
 						<MudImage Src=@(_lbuFlagList[rowData.Item.LBU!]) Height="12" />
@@ -41,27 +42,33 @@
 				</CellTemplate>
 			</TemplateColumn>
 			@* <PropertyColumn Property="x => x.ObjectName" Title="Asset Name" StickyLeft="true" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
-			<TemplateColumn Title="Asset Name" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData" HeaderStyle="min-width:250px" StickyLeft="true">
+			<TemplateColumn Title="Asset Name" StickyLeft="true" 
+				HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData" HeaderStyle="min-width:250px" >
 				<CellTemplate>
-					@if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.TERMINATED, AssetLifeCycleStatuses.WRITTEN_OFF))
-					{
-						<span style="text-decoration:line-through; font-style:italic">@rowData.Item.ObjectName</span>
-					}
-					else if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.PENDING_TERMINATION, AssetLifeCycleStatuses.PENDING_WRITE_OFF))
-					{
-						<MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
-							<MudIcon Icon="@Icons.Material.Rounded.WarningAmber" Style="color:var(--vic-orange-500);" />
+					<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
+						@if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.TERMINATED, AssetLifeCycleStatuses.WRITTEN_OFF))
+						{
+							<span style="text-decoration:line-through; font-style:italic">@rowData.Item.ObjectName</span>
+						}
+						else if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.PENDING_TERMINATION, AssetLifeCycleStatuses.PENDING_WRITE_OFF))
+						{
+							<MudIcon Icon="@Icons.Material.Rounded.WarningAmber" Style="color:var(--vic-orange-500);" />	
 							<span style="font-style:italic; color:var(--vic-orange-500);">@rowData.Item.ObjectName</span>
-						</MudStack>
-					}
-					else
-					{
-						<span>@rowData.Item.ObjectName</span>
-					}
+						}
+						else
+						{
+							<span>@rowData.Item.ObjectName</span>
+						}
+
+						@if (rowData.Item.AssetState == AssetStates.BROKEN_UNREPAIRABLE)
+						{
+							<img src="svg/broken-phone-in-two-parts.svg" height="14" />
+						}
+					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>
 			@* <PropertyColumn Property="x => x.ObjectCode" Title="Asset ID" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
-			<TemplateColumn Title="Asset ID" Sortable="false"
+			<TemplateColumn Title="Asset ID" Sortable="false" 
 				HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono" 
 				HeaderStyle="min-width:180px"
 				Context="rowData">
@@ -110,44 +117,65 @@
             <PropertyColumn Title="Department" Property="x => x.CurrentUserDept"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Purchased Date" Property="x => x.PurchaseDate" Format="dd-MMM-yyyy"
+			<PropertyColumn Title="Vendor" Property="x => x.VendorName"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							HeaderStyle="min-width:200px" />
+			<PropertyColumn Title="PO#" Property="x => x.PORefNo"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							HeaderStyle="min-width:120px"/>
+			<PropertyColumn Title="Invoice#" Property="x => x.InvoiceRefNo"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+			<PropertyColumn Title="Purchased Date" Property="x => x.PurchaseDate" Format="dd-MMM-yyyy"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
                             HeaderStyle="min-width: 170px" CellStyle="text-align:center" />
             <PropertyColumn Title="Purchase Cost" Property="x => x.PurchaseCost" Format="$ #,##0"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width: 170px" CellStyle="text-align:right" />
-            <TemplateColumn Title="Asset State" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+			<PropertyColumn Title="Fin Asset Code" Property="x => x.FinAssetCode" Filterable="false" Sortable="false"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+							HeaderStyle="min-width:115px"/>
+			<TemplateColumn Title="Asset State" Hidden="true" StickyRight="true"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             CellStyle="text-align:center; padding-top: 2px !important; padding-bottom: 2px !important">
                 <CellTemplate>
                     <MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(context.Item.AssetState) ? _stateCssClassList[context.Item.AssetState!] : "status-chip-default-dark")">@context.Item.AssetStateText</MudChip>
                 </CellTemplate>
-			</TemplateColumn>
-			<TemplateColumn Title="Status" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-							CellStyle="text-align:center; padding-top: 2px !important; padding-bottom: 2px !important">
-				<CellTemplate>
-					<MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(context.Item.LifeCycleStatus) ? _statusCssClassList[context.Item.LifeCycleStatus!] : "status-chip-default-light")" Style="padding:2px 8px; font-size:9pt">
-						@context.Item.LifeCycleStatusText
-					</MudChip>
-				</CellTemplate>
-			</TemplateColumn>
-			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+            </TemplateColumn>
+            <TemplateColumn Title="Status" Hidden="true" StickyRight="true"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+                            CellStyle="text-align:center; padding-top: 2px !important; padding-bottom: 2px !important">
+                <CellTemplate>
+                    <MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(context.Item.LifeCycleStatus) ? _statusCssClassList[context.Item.LifeCycleStatus!] : "status-chip-default-light")" Style="padding:2px 8px; font-size:9pt">
+                        @context.Item.LifeCycleStatusText
+                    </MudChip>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
 							HeaderStyle="justify-items:center; max-width:120px; width:500px"
 							CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
 				<CellTemplate>
-					<MudStack Row="true" Spacing="0">
-						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/edit"
-									   OnClick="@(args => CreateOrEditRecord(context.Item.Id))" aria-label="edit" />
-						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/file_copy"
-									   OnClick="@(args => CloneAndEditRecord(context.Item.Id))" aria-label="clone" />
-						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Success"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/visibility"
-									   OnClick="@(args => ViewFullRecord(context.Item.Id))" aria-label="view" />
-						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Error"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/delete"
-									   OnClick="@(args => DeleteRecord(context.Item))" aria-label="delete" />
+					<MudStack Row="true" Spacing="2">
+                        <MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(context.Item.AssetState) ? _stateCssClassList[context.Item.AssetState!] : "status-chip-default-dark")">
+                            @context.Item.AssetStateText
+                        </MudChip>
+                        <MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(context.Item.LifeCycleStatus) ? _statusCssClassList[context.Item.LifeCycleStatus!] : "status-chip-default-light")">
+                            @context.Item.LifeCycleStatusText
+                        </MudChip>
+                        <MudStack Row="true" Spacing="0">
+                            <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
+                                           Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/edit"
+                                           OnClick="@(args => CreateOrEditRecord(context.Item.Id))" aria-label="edit" />
+                            <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
+                                           Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/file_copy"
+                                           OnClick="@(args => CloneAndEditRecord(context.Item.Id))" aria-label="clone" />
+                            <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Success"
+                                           Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/visibility"
+                                           OnClick="@(args => ViewFullRecord(context.Item.Id))" aria-label="view" />
+                            <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Error"
+                                           Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/delete"
+                                           OnClick="@(args => DeleteRecord(context.Item))" aria-label="delete" />
+                        </MudStack>
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>
@@ -170,6 +198,7 @@
 			{ AssetLifeCycleStatuses.WRITTEN_OFF, "status-chip-obsolete-light" },
 			{ AssetLifeCycleStatuses.PENDING_WRITE_OFF, "status-chip-pending-light" },
 			{ AssetLifeCycleStatuses.PENDING_TERMINATION, "status-chip-pending-light" },
+			{ AssetLifeCycleStatuses.ON_LOAN, "status-chip-pending-light" },
 			{ AssetLifeCycleStatuses.DISPOSED, "status-chip-obsolete-light" },
 		};
 
@@ -181,6 +210,7 @@
 		{ AssetStates.USED_POOR, "status-chip-obsolete-light" },
 		{ AssetStates.USED_ESR, "status-chip-pending-light" },
 		{ AssetStates.EOL, "status-chip-obsolete-light" },
+		{ AssetStates.EOS, "status-chip-obsolete-light" },
 		{ AssetStates.BROKEN_UNREPAIRABLE, "status-chip-pending-light" },
 		{ AssetStates.NA, "status-chip-pending-light" }
 	};

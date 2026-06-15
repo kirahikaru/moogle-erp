@@ -165,7 +165,7 @@
 
             &.mud-input-text {
                 &.mud-input-text-with-label {
-                    margin-top: 18px;
+                    margin-top: 18px !important;
                 }
             }
 
@@ -225,8 +225,9 @@
                 &.mud-input-label-inputcontrol {
                     font-size: 14px;
                     margin-left: 4px;
-                    color:var(--tw-gray-700);
-                    font-weight: 500;
+                    color:var(--tw-gray-400);
+                    font-weight: 600;
+                    text-transform: uppercase;
                 }
             }
         }
@@ -406,8 +407,9 @@
                     &.mud-input-label-inputcontrol {
                         font-size: 14px;
                         margin-left: 4px;
-                        color:var(--tw-gray-700);
-                        font-weight: 500;
+                        color:var(--tw-gray-400);
+                        font-weight: 600;
+                        text-transform: uppercase;
                     }
                 }
             }
@@ -461,8 +463,9 @@
                 &.mud-input-label-inputcontrol {
                     font-size: 14px;
                     margin-left: 4px;
-                    color:var(--tw-gray-700);
-                    font-weight: 500;
+                    color:var(--tw-gray-400);
+                    font-weight: 600;
+                    text-transform: uppercase;
                 }
             }
         }
@@ -830,6 +833,13 @@
     
     background-color: none;
     margin-inline-end: 4px;
+    > div.mud-input-root {
+        padding: 10px 0px 10px 12px !important;
+    }
+    > input.mud-input-root {
+        padding: 10px 0px 10px 12px !important;
+    }
+    
     > .mud-icon-button-size-small {
         padding: 1px;
         &.mud-icon-button-edge-end {
@@ -864,7 +874,10 @@
 }
 
 .pru-ui-mudselect-list {
-    background-color: red;
+    background-color: var(--tw-gray-50);
+    scrollbar-color: var(--tw-gray-300) var(--tw-gray-50);
+    scrollbar-width: auto;
+    
 }
 
 .pru-ui-mudselect-outer {

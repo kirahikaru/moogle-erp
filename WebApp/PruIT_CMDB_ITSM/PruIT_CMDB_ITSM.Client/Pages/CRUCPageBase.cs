@@ -107,7 +107,7 @@ public class CRUCPageBase<T> : ComponentBase, IAsyncDisposable
 		if (CrucForm != null)
 		{
 			//await CrucForm!.ResetAsync();
-			await CrucForm!.Validate();
+			await CrucForm!.ValidateAsync();
 
 			if (!IsValidationPassed)
 				return;

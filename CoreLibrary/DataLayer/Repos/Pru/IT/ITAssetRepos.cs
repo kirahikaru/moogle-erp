@@ -1,8 +1,9 @@
-﻿using DataLayer.Models.Pru.IT;
-using PruHR=DataLayer.Models.Pru.HR;
-using static Dapper.SqlMapper;
+﻿using Dapper.Contrib.Extensions;
+using Dapper.FastCrud;
 using DataLayer.GlobalConstant.Pru;
-using Dapper.Contrib.Extensions;
+using DataLayer.Models.Pru.IT;
+using static Dapper.SqlMapper;
+using PruHR=DataLayer.Models.Pru.HR;
 
 namespace DataLayer.Repos.Pru.IT;
 
@@ -37,6 +38,8 @@ public interface IITAssetRepos : IBaseRepos<ITAsset>
 		IEnumerable<SqlSortCond>? sortConds = null,
 		IEnumerable<SqlFilterCond>? filterConds = null,
 		List<int>? excludeIdList = null);
+
+	Task<List<DropdownSelectItem>> GetForDropdownAsync(string? assetType = null, bool includSerialNo = false, bool includeModelNo = false, bool includeState = false, bool includeStatus = false, bool includeCurrentUser = false);
 }
 
 public class ITAssetRepos(IDbContext dbContext) : BaseRepos<ITAsset>(dbContext, ITAsset.DatabaseObject), IITAssetRepos
@@ -70,7 +73,7 @@ public class ITAssetRepos(IDbContext dbContext) : BaseRepos<ITAsset>(dbContext, 
 			sbSqlItem.Where("t.IsDeleted=0");
 			sbSqlItem.Where("t.AssetId=@AssetId");
 			paramItem.Add("@AssetId", id);
-			sbSqlItem.OrderBy("t.RequestDate").OrderBy("t.EffectiveDate");
+			sbSqlItem.OrderBy("t.RequestDate").OrderBy("t.StartDate");
 			string sqlItem = sbSqlItem.AddTemplate($"SELECT * FROM {ITAssetAuditTrail.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
 			dataList[0].AuditTrails = (await cn.QueryAsync<ITAssetAuditTrail>(sqlItem, paramItem)).AsList();
 
@@ -141,9 +144,22 @@ public class ITAssetRepos(IDbContext dbContext) : BaseRepos<ITAsset>(dbContext, 
 				sbSql.Where("UPPER(t.SerialNo) LIKE '%'+UPPER(@SearchText)+'%'");
 				param.Add("@SearchText", searchText.Replace("sr:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
 			}
+			else if (searchText.StartsWith("v:"))
+			{
+				sbSql.Where("UPPER(t.VendorName) LIKE '%'+UPPER(@SearchText)+'%'");
+				param.Add("@SearchText", searchText.Replace("v:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
+			}
 			else
 			{
-				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.SerialNo) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.CurrentUserName) LIKE '%'+UPPER(@SearchText)+'%' OR  t.CurrentUserID=@SearchText)");
+				StringBuilder sbORConds = new();
+				sbORConds.Append("UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%'");
+				sbORConds.Append(" OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
+				sbORConds.Append(" OR UPPER(t.SerialNo) LIKE '%'+UPPER(@SearchText)+'%'");
+				sbORConds.Append(" OR UPPER(t.CurrentUserName) LIKE '%'+UPPER(@SearchText)+'%'");
+				sbORConds.Append(" OR t.CurrentUserID=@SearchText");
+				sbORConds.Append(" OR t.FinAssetCode=@SearchText");
+
+				sbSql.Where("("+sbORConds.ToString()+")");
 				param.Add("@SearchText", searchText, DbType.AnsiString);
 			}
 		}
@@ -455,5 +471,39 @@ public class ITAssetRepos(IDbContext dbContext) : BaseRepos<ITAsset>(dbContext, 
 			tran.Rollback();
 			throw;
 		}
+	}
+
+	public async Task<List<DropdownSelectItem>> GetForDropdownAsync(string? assetType = null, 
+		bool includSerialNo = false, 
+		bool includeModelNo = false, 
+		bool includeState = false, 
+		bool includeStatus = false, 
+		bool includeCurrentUser = false)
+	{
+		SqlBuilder sbSql = new();
+		DynamicParameters param = new();
+
+		sbSql.Select("t.Id")
+			.Select("'Key'=t.ObjectCode")
+			.Select("'Value'=CONCAT(t.ObjectName, ' (', t.LifeCycleStatus,', ', t.SerialNo, ', ', t.CurrentUserID,'-', t.CurrentUserName,')')");
+
+		
+		sbSql.Where("t.IsDeleted=0");
+		sbSql.Where("t.ObjectName IS NOT NULL");
+		sbSql.OrderBy("t.ObjectName ASC");
+
+		if (!string.IsNullOrEmpty(assetType))
+		{
+			sbSql.Where("t.AssetType=@AssetType");
+			param.Add("@AssetType", assetType, DbType.AnsiString);
+		}
+
+		using IDbConnection cn = DbContext.DbCxn;
+
+		string sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
+
+		var dataList = (await cn.QueryAsync<DropdownSelectItem>(sql, param)).AsList();
+
+		return dataList;
 	}
 }

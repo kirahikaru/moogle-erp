@@ -36,8 +36,8 @@ public class ITAssetAuditTrail : AuditObject
 	[Required(ErrorMessage = "'Request Date' is required.")]
 	public DateTime? RequestDate { get; set; }
 
-	public DateTime? EffectiveDate { get; set; }
-	public DateTime? EffTillDate { get; set; }
+	public DateTime? StartDate { get; set; }
+	public DateTime? EndDate { get; set; }
 	[Required(ErrorMessage = "'Action' is required.")]
 	public string? ActionDesc { get; set; }
 	public string? ActionUser { get; set; }
@@ -45,6 +45,8 @@ public class ITAssetAuditTrail : AuditObject
 	public string? CurrentUserName { get; set; }
 	public string? CurrentUserFunc { get; set; }
 	public string? CurrentUserDept { get; set; }
+	public string? TargetUserID { get; set; }
+	public string? TargetUserName { get; set; }
 	public string? Justification { get; set; }
 	public string? Approver { get; set; }
 	public string? Remark { get; set; }
@@ -60,6 +62,9 @@ public class ITAssetAuditTrail : AuditObject
 
 	[Computed, Write(false), ReadOnly(true)]
 	public string? CurrentUserNameAndID => CurrentUserName.NonNullValue("") + (!string.IsNullOrEmpty(CurrentUserID) ? $" ({CurrentUserID!})" : "");
+
+	[Computed, Write(false), ReadOnly(true)]
+	public string? TargetUserNameAndID => TargetUserName.NonNullValue("") + (!string.IsNullOrEmpty(TargetUserID) ? $" ({TargetUserID!})" : "");
 	#endregion
 
 	public ITAssetAuditTrail() : base()

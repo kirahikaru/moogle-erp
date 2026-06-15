@@ -17,6 +17,7 @@ public interface IPurchaseOrderRepos : IBaseRepos<PruFin.PurchaseOrder>
 		List<int>? excludeIdList = null);
 
 	Task<PruFin.PurchaseOrder?> GetFullAsync(int id);
+	Task<PruFin.PurchaseOrder?> GetFullAsync(string objectCode);
 
 	Task<int> InsertOrUpdateFullAsync(PruFin.PurchaseOrder obj);
 }
@@ -59,7 +60,7 @@ public class PurchaseOrderRepos(IDbContext dbContext) : BaseRepos<PruFin.Purchas
 			}
 			else
 			{
-				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.PRID) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(v.ObjectName) LIKE '%'+UPPER(@SearchText)+'%')");
+				sbSql.Where("(UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.PRID) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(v.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR t.InvoiceRefs LIKE '%'+@SearchText+'%')");
 				param.Add("@SearchText", searchText, DbType.AnsiString);
 			}
 		}
@@ -115,6 +116,45 @@ public class PurchaseOrderRepos(IDbContext dbContext) : BaseRepos<PruFin.Purchas
 		sbSql.Where("t.IsDeleted=0");
 		sbSql.Where("t.Id=@Id");
 		param.Add("@Id", id);
+
+		sbSql.LeftJoin($"{Vendor.MsSqlTable} v ON v.IsDeleted=0 AND v.LBU=t.LBU AND v.ObjectCode=t.VendorID");
+		sbSql.LeftJoin($"{Quotation.MsSqlTable} q ON q.IsDeleted=0 AND q.LBU=t.LBU AND q.ObjectCode=t.QuotationCode");
+
+		//sbSql.LeftJoin($"{Vendor.MsSqlTable} v ON v.IsDeleted=0 AND v.ObjectCode=t.VendorID");
+
+		using var cn = DbContext.DbCxn;
+		string sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
+		var obj = (await cn.QueryAsync<PruFin.PurchaseOrder, Vendor, Quotation, PruFin.PurchaseOrder>(sql, (po, vendor, qnt) =>
+		{
+			po.Vendor = vendor;
+			po.Quotation = qnt;
+
+			return po;
+		}, param, splitOn: "Id")).SingleOrDefault();
+
+		if (obj != null)
+		{
+			SqlBuilder sbSqlItem = new();
+			DynamicParameters paramItem = new();
+			sbSqlItem.Where("qi.IsDeleted=0");
+			sbSqlItem.Where("qi.PurchaseOrderId=@PurchaseOrderId");
+			paramItem.Add("@PurchaseOrderId", obj.Id);
+
+			string sqlItem = sbSqlItem.AddTemplate($"SELECT * FROM {PruFin.PurchaseOrderItem.MsSqlTable} qi /**where**/").RawSql;
+			obj.Items = (await cn.QueryAsync<PruFin.PurchaseOrderItem>(sqlItem, paramItem)).AsList();
+		}
+
+		return obj;
+	}
+
+	public async Task<PruFin.PurchaseOrder?> GetFullAsync(string objectCode)
+	{
+		SqlBuilder sbSql = new();
+		DynamicParameters param = new();
+
+		sbSql.Where("t.IsDeleted=0");
+		sbSql.Where("t.ObjectCode=@ObjectCode");
+		param.Add("@ObjectCode", objectCode, DbType.AnsiString);
 
 		sbSql.LeftJoin($"{Vendor.MsSqlTable} v ON v.IsDeleted=0 AND v.LBU=t.LBU AND v.ObjectCode=t.VendorID");
 		sbSql.LeftJoin($"{Quotation.MsSqlTable} q ON q.IsDeleted=0 AND q.LBU=t.LBU AND q.ObjectCode=t.QuotationCode");

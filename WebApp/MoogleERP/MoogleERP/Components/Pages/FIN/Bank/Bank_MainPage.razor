@@ -94,7 +94,6 @@
 
 @code {
 	#region UI VARIABLES
-	private bool EnbleQuickCRUC = true;
 	#endregion
 
 	#region PAGE LIFECYCLE FUNCTIONS
@@ -107,12 +106,17 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		await Task.CompletedTask;
-	}
-	#endregion
+		if (IsInitDone)
+			return;
 
-	#region UI FUNCTIONS
-	async Task QuickCRUC(string CRUCMode, int id = 0)
+		EnbleQuickCRUC = true;
+
+        await Task.CompletedTask;
+    }
+    #endregion
+
+    #region UI FUNCTIONS
+    public override async Task QuickCRUC(string CRUCMode, int id = 0)
 	{
 		if (!CRUDCModes.IsValid(CRUCMode))
 			return;

@@ -65,6 +65,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable where T : class
 	public int SelectedRowNo { get; set; }
 	protected bool IsInitDone { get; set; }
 	protected int InitCount { get; set; }
+	protected bool EnbleQuickCRUC { get; set; }
 
 	public string AuditTrailUser => LoggedInUser != null ? LoggedInUser.UserNameAndUserID : "Public";
 
@@ -79,6 +80,7 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable where T : class
 		MainDataGrid = new MudDataGrid<T>();
 		MainDataList = [];
 		SelectedObjects = [];
+		EnbleQuickCRUC = false;
 	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -189,6 +191,18 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable where T : class
 		{
 			PerformCRUC(CRUDCModes.UPDATE, (SelectedObject as AuditObject)!.Id);
 		}
+	}
+
+	public virtual async Task QuickCRUC(string CRUCMode, int id = 0)
+	{
+		if (!CRUDCModes.IsValid(CRUCMode))
+			return;
+		else if (CRUCMode == CRUDCModes.CREATE && id != 0)
+			return;
+		else if (CRUCMode != CRUDCModes.CREATE && id == 0)
+			return;
+
+		return;
 	}
 
 	public void PerformCRUC(string crucMode, int objId = 0)

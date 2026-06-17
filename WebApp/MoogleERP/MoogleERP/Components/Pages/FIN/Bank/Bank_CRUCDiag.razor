@@ -2,9 +2,27 @@
 
 <MudDialog Class="moog-crud-muddiag" >
     <TitleContent>
-        <MudText Typo="Typo.h6" Class="lang-en">
-            @HeaderTitle
-        </MudText>
+        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
+            <MudText Typo="Typo.h6" Class="lang-en">
+                @HeaderTitle
+            </MudText>
+            @if (CRUCMode == CRUDCModes.READ)
+            {
+                <MudChip Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="background-color: var(--tw-emerald-100)">VIEW</MudChip>
+            }
+            else if (CRUCMode == CRUDCModes.UPDATE)
+            {
+                <MudChip Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="background-color: var(--tw-sky-100)">UPDATE</MudChip>
+            }
+            else if (CRUCMode == CRUDCModes.CREATE)
+            {
+                <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="background-color: var(--tw-sky-100)">NEW</MudChip>
+            }
+            else if (CRUCMode == CRUDCModes.CLONE)
+            {
+                <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="background-color: var(--tw-sky-100)">NEW (Clone)</MudChip>
+            }
+        </MudStack>
     </TitleContent>
     <DialogContent>
         @if (CurrentObject is not null && CurrentEditContext is not null)
@@ -44,22 +62,46 @@
             </EditForm>
         }
         <MudCardActions>
-            <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Style="width:100%;">
-                <MudButton Variant="Variant.Filled" Size="Size.Medium" DropShadow="false" Class="moog-mudbutton" Color="Color.Success"
-                           StartIcon="material-symbols-rounded/save_as"
-                           OnClick="@(() => Save(false))">
-                    Save
-                </MudButton>
-                <MudButton Variant="Variant.Filled" Size="Size.Medium" DropShadow="false" Class="moog-mudbutton" Color="Color.Success"
-                           StartIcon="material-symbols-rounded/save"
-                           OnClick="@(() => Save(true))">
-                    Save
-                </MudButton>
-                <MudButton Variant="Variant.Filled" Size="Size.Medium" DropShadow="false" Class="moog-mudbutton" Color="Color.Default"
-                           StartIcon="material-symbols-rounded/cancel" OnClick="Cancel">
-                    Cancel
-                </MudButton>
-            </MudStack>
+            @if (CurrentObject is not null && CurrentEditContext is not null)
+            {
+                if (IsViewMode)
+                {
+                    <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Style="width:100%;">
+                        <MudButton Variant="Variant.Filled" Size="Size.Medium" DropShadow="false" Class="moog-mudbutton" Color="Color.Default"
+                                   StartIcon="material-symbols-rounded/close" OnClick="Cancel">
+                            Close
+                        </MudButton>
+                    </MudStack>
+                }
+                else
+                {
+                    <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Style="width:100%;">
+                        <MudButton Variant="Variant.Filled" Size="Size.Medium" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary"
+                                   StartIcon="material-symbols-rounded/save_as"
+                                   OnClick="@(() => Save(false))">
+                            Save
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Medium" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary"
+                                   StartIcon="material-symbols-rounded/save"
+                                   OnClick="@(() => Save(true))">
+                            Save
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Medium" DropShadow="false" Class="moog-mudbutton" Color="Color.Default"
+                                   StartIcon="material-symbols-rounded/cancel" OnClick="Cancel">
+                            Cancel
+                        </MudButton>
+                    </MudStack>
+                }
+            }
+            else
+            {
+                <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Style="width:100%;">
+                    <MudButton Variant="Variant.Filled" Size="Size.Medium" DropShadow="false" Class="moog-mudbutton" Color="Color.Default"
+                               StartIcon="material-symbols-rounded/close" OnClick="Cancel">
+                        Close
+                    </MudButton>
+                </MudStack>
+            }
         </MudCardActions>
     </DialogContent>
 </MudDialog>

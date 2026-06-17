@@ -1,0 +1,399 @@
+﻿@page "/core/kh-province/{CRUCMode}"
+@page "/core/kh-province/{CRUCMode}/{id:int}"
+
+@inherits CRUCPageBase<KhProvince>
+
+@if (CurrentObject != null && CurrentEditContext != null)
+{
+    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column;">
+        <DataAnnotationsValidator />
+        <MudPaper Class="moog-pg-banner" Elevation="0">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="0">
+                    <MudIcon Icon="fad fa-list-tree" Color="Color.Primary" Size="Size.Large"></MudIcon>
+                    <MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
+                    @if (CRUCMode == CRUDCModes.READ)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-8px">VIEW</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.UPDATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-8px">UPDATE</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CREATE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-8px">NEW</MudChip>
+                    }
+                    else if (CRUCMode == CRUDCModes.CLONE)
+                    {
+                        <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="margin-top:-8px">NEW (Clone)</MudChip>
+                    }
+                </MudStack>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="2">
+                    @if (IsViewMode)
+                    {
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Default" DropShadow="false" Class="moog-mudbutton"
+                                   Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/close">
+                            Close
+                        </MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" DropShadow="false" Class="moog-mudbutton"
+                                   Disabled=@IsSaving OnClick="@(() => Save(false))" StartIcon="fa-regular fa-floppy-disk-circle-arrow-right">
+                            Save
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" DropShadow="false" Class="moog-mudbutton"
+                                   Disabled=@IsSaving OnClick="@(() => Save(true))" StartIcon="fa-regular fa-floppy-disk">
+                            Save & Close
+                        </MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Default" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" 
+                                   Disabled=@IsSaving OnClick="Cancel" StartIcon="fa-regular fa-circle-xmark">
+                            Cancel
+                        </MudButton>
+                    }
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+        <MudTabs Color="Color.Primary" Class="moog-mudtab mt-4" ActiveTabClass="moog-mudtab-tab-active" TabButtonsClass="moog-mudtab-tab-btn" TabHeaderClass="moog-mudtab-tab-hdr" TabPanelsClass="moog-mudtab-tab-panel">
+            <MudTabPanel Icon="fad fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
+                <MudPaper Elevation="0" Square="true" Height="calc(100% - var(--moog-cruc-pg-status-bar-height))" Style="overflow-y: auto; background-color: var(--tw-gray-50); scrollbar-width:auto; scrollbar-color:var(--tw-gray-300) var(--tw-gray-50)">
+                    <MudGrid Spacing="4" Class="py-4 px-4" Style="margin-left:-8px">
+                        <MudItem xs="6">
+                            <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                          Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="Name" @ref=_mtfObjName
+                                          @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" />
+                        </MudItem>
+                        <MudItem xs="4">
+                            <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                          Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="Name (Kh)" Placeholder="ឈ្មោះខ្មែរ"
+                                          @bind-Value="CurrentObject!.NameKh" For="@(() => CurrentObject!.NameKh)" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                          Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="ID"
+                                          @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" Style="text-transform:uppercase" />
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                          Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="Code 2"
+                                          @bind-Value="CurrentObject!.Code2" For="@(() => CurrentObject!.Code2)" Style="text-transform:uppercase" />
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                          Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="Code 3"
+                                          @bind-Value="CurrentObject!.Code3" For="@(() => CurrentObject!.Code3)" Style="text-transform:uppercase" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                          Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="Postal Code"
+                                          @bind-Value="CurrentObject!.PostalCode" For="@(() => CurrentObject!.PostalCode)" Style="text-transform:uppercase" />
+                        </MudItem>
+                        <MudItem xs="8">
+                        </MudItem>
+                        @if (CurrentObject!.Id > 0)
+                        {
+                            <MudItem xs="2">
+                                <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly="true" Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                 Class="moog-mudform-input"
+                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 Label="# Krong" T="int"
+                                                 @bind-Value="CurrentObject!.KrongCount" For="(() => CurrentObject.KrongCount)"
+                                                 Step="1" Format="#,##0" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly="true" Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                 Class="moog-mudform-input"
+                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 Label="# Khan" T="int"
+                                                 @bind-Value="CurrentObject!.KhanCount" For="(() => CurrentObject.KhanCount)"
+                                                 Step="1" Format="#,##0" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly="true" Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                 Class="moog-mudform-input"
+                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 Label="# Commune" T="int"
+                                                 @bind-Value="CurrentObject!.CommuneCount" For="(() => CurrentObject.CommuneCount)"
+                                                 Step="1" Format="#,##0" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly="true" Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                 Class="moog-mudform-input"
+                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 Label="# Sangkat" T="int"
+                                                 @bind-Value="CurrentObject!.SangkatCount" For="(() => CurrentObject.SangkatCount)"
+                                                 Step="1" Format="#,##0" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly="true" Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                 Class="moog-mudform-input"
+                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 Label="# Sangkat" T="int"
+                                                 @bind-Value="CurrentObject!.VillageCount" For="(() => CurrentObject.VillageCount)"
+                                                 Step="1" Format="#,##0" />
+                            </MudItem>
+                            <MudItem xs="2">
+                                <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly="true" Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                 Class="moog-mudform-input"
+                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 Label="# Srok" T="int"
+                                                 @bind-Value="CurrentObject!.SrokCount" For="(() => CurrentObject.SrokCount)"
+                                                 Step="1" Format="#,##0" />
+                            </MudItem>
+                        }
+                        
+                        <MudItem xs="12">
+                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
+                                          Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="Reference" Placeholder="Reference..."
+                                          @bind-Value="CurrentObject!.ReferenceText" For="@(() => CurrentObject!.ReferenceText)" />
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
+                                          Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="Reference" Placeholder="Reference..."
+                                          @bind-Value="CurrentObject!.Note" For="@(() => CurrentObject!.Note)" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
+                                          Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="Reference" Placeholder="Reference..."
+                                          @bind-Value="CurrentObject!.Note" For="@(() => CurrentObject!.Note)" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
+                                          Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="Item Content" Placeholder="Content..."
+                                          @bind-Value="CurrentObject!.Remark" For="@(() => CurrentObject!.Remark)" />
+                        </MudItem>
+                        @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
+                        {
+                            <MudItem xs="12" Class="pt-4">
+                                @foreach (string msg in CurrentEditContext.GetValidationMessages())
+                                {
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
+                                }
+                                @foreach (string key in InvalidMsgList.Keys)
+                                {
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                }
+                            </MudItem>
+                        }
+                    </MudGrid>
+                </MudPaper>
+                <MudPaper Class="moog-mudpaper-cruc-pg-status" Height="var(--moog-cruc-pg-status-bar-height)" Elevation="0">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1" Style="height:100%; padding: 0px 16px">
+                        @if (CurrentObject.Id > 0)
+                        {
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default">Created by </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@CurrentObject!.CreatedUser</MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default"> on </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@(CurrentObject!.CreatedDateTimeText)</MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default">| Last modified by </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@CurrentObject!.ModifiedUser</MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Default"> on </MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Primary" Style="font-weight:600">@(CurrentObject!.ModifiedDateTimeText)</MudText>
+                        }
+                    </MudStack>
+                </MudPaper>
+            </MudTabPanel>
+            <MudTabPanel Icon="fad fa-circle-info" Text="Other Info" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
+                <MudPaper Elevation="0" Square="true" Height="100%" Class="moog-mudpaper-cruc-pg-tab-content">
+                    <MudGrid Spacing="3" Class="pa-3">
+                        
+                    </MudGrid>
+                </MudPaper>
+            </MudTabPanel>
+        </MudTabs>
+    </EditForm>
+}
+
+@code {
+
+    #region UI PARAM
+    RenderFragment _gridNoRecord = @<p>No record</p>;
+    List<DropdownSelectItem> _itemCategoryList = [];
+    List<DropDownListItem> _countryList = [];
+    List<Supplier> _supplierList = [];
+    List<DropdownSelectItem> _busnEntList = [];
+    IEnumerable<DropdownSelectItem> _medCompList = [];
+    IEnumerable<string> _brandList = [];
+    MudTextField<string>? _mtfObjName;
+    List<AttachedImage> _images = [];
+    string? _selectedCountryName;
+    string? _dimensionUnitSymbol;
+    string? _weightUnitSymbol;
+    string? _itemUnitSymbol;
+
+    List<UnitOfMeasure> _dimensionUnitList = [];
+    List<UnitOfMeasure> _weightUnitList = [];
+    List<UnitOfMeasure> _itemUnitList = [];
+    List<DropdownSelectItem> _currencyList = [];
+
+    Dictionary<string, string> _knownEcommSites = [];
+
+    MudDataGrid<ItemSpec> _itemSpecsGrid = new();
+    ItemSpec? _tempItemSpecToAdd;
+
+    MudDataGrid<ItemVariation> _itemVarsGrid = new();
+    ItemVariation? _tempItemVarToAdd;
+
+    MudDataGrid<ItemSupplier> _supplierGrid = new();
+    ItemSupplier? _tempSupplierToAdd;
+
+    bool _canEditSpecs = false;
+    bool _canEditVars = false;
+    bool _canEditSuppliers = false;
+    bool _isEditingSpec = false;
+    bool _isEditingItemVar = false;
+    bool _isEditingSupplier = false;
+    #endregion
+
+    #region PAGE LIFECYCLE FUNCTIONS
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        UrlPrefix = "/rms/item";
+        return base.SetParametersAsync(parameters);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        InitCount++;
+
+        if (IsInitDone)
+            return;
+
+        switch (CRUCMode)
+        {
+            case CRUDCModes.READ:
+                {
+                    CurrentObject = await Uow.KhProvinces.GetAsync(Id);
+                    IsViewMode = true;
+                }
+                break;
+            case CRUDCModes.CREATE:
+                {
+                    CurrentObject = new();
+                }
+                break;
+            case CRUDCModes.UPDATE:
+                CurrentObject = await Uow.KhProvinces.GetAsync(Id);
+                break;
+            case CRUDCModes.CLONE:
+                {
+                    var tempObj = await Uow.KhProvinces.GetAsync(Id);
+                    CurrentObject = tempObj!.DeepClone();
+
+                    CurrentObject!.Id = 0;
+                    CurrentObject!.ObjectCode = String.Empty;
+                }
+                break;
+        }
+
+        CurrentEditContext = new EditContext(CurrentObject!);
+
+        if (CurrentObject != null && CurrentObject.Id > 0)
+        {
+            _images = await Uow.AttachedImages.GetByLinkedObjectAsync(CurrentObject.Id, CurrentObject.GetType().Name);
+            // CurrentObject.Specs = await Uow.ItemSpecs.GetByItemAsync(CurrentObject.Id);
+            // CurrentObject.Suppliers = await Uow.ItemSuppliers.GetByItemAsync(CurrentObject.Id);
+        }
+
+        if (CurrentObject!.Id == 0)
+        {
+            _canEditSpecs = true;
+            _canEditSuppliers  = true;
+            _canEditVars = true;
+        }
+
+        await PopulatedUIControls();
+        IsInitDone = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (_mtfObjName != null && !IsViewMode)
+                await _mtfObjName!.FocusAsync();
+        }
+
+        await JsRuntime!.InvokeVoidAsync("console.info", $"Initialization Count: {InitCount}.");
+    }
+    #endregion
+
+    #region UI FUNCTIONS
+    #endregion
+
+    #region DB UPDATE FUNCTIONS
+    protected override async Task ValidatePreSave()
+    {
+        InvalidMsgList.Clear();
+
+        bool isDuplicated = await Uow.KhProvinces.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+
+        if (isDuplicated)
+        {
+            InvalidMsgList.Add("ObjectCode_Duplicate", $"Record with ObjectCode='{CurrentObject.ObjectCode}' is already existed.");
+        }
+    }
+
+    protected override Task PreSaveProcessing()
+    {
+        CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
+        return base.PreSaveProcessing();
+    }
+
+    protected override async Task<bool> SaveAndCommitProcessing()
+    {
+        DateTime timestamp = DateTime.Now;
+
+        if (CurrentObject!.Id == 0)   //CREATE
+        {
+            CurrentObject!.CreatedUser = AuditTrailUser;
+            CurrentObject!.ModifiedUser = AuditTrailUser;
+            CurrentObject!.CreatedDateTime = timestamp;
+            CurrentObject!.ModifiedDateTime = timestamp;
+
+            int objId = await Uow.KhProvinces.InsertAsync(CurrentObject!);
+
+            if (objId > 0)
+            {
+                CurrentObject!.Id = objId;
+                return true;
+            }
+            else return false;
+        }
+        else    // UPDATE
+        {
+            CurrentObject!.ModifiedUser = AuditTrailUser;
+            CurrentObject!.ModifiedDateTime = timestamp;
+
+            return await Uow.KhProvinces.UpdateAsync(CurrentObject!);
+        }
+    }
+    #endregion
+
+    #region INTERNAL FUNCTIONS
+    async Task PopulatedUIControls()
+    {
+    }
+    #endregion
+}

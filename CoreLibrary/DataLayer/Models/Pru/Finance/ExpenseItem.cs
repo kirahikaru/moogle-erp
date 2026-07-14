@@ -22,8 +22,8 @@ public class ExpenseItem : AuditObject
 
 	#region *** DATABASE FIELDS ***
 
-	[Required(AllowEmptyStrings = false, ErrorMessage = "'ID' is required.")]
-    [RegularExpression(@"^[a-zA-Z\d._-]{0,}$", ErrorMessage = "'ID' invalid format. Valid format input: Capital letter OR number OR . _ - sign")]
+	//[Required(AllowEmptyStrings = false, ErrorMessage = "'ID' is required.")]
+    //[RegularExpression(@"^[a-zA-Z\d._-]{0,}$", ErrorMessage = "'ID' invalid format. Valid format input: Capital letter OR number OR . _ - sign")]
     [MaxLength(80)]
     public new string? ObjectCode { get; set; }
 
@@ -33,6 +33,7 @@ public class ExpenseItem : AuditObject
 	public int? OrderNo { get; set; }
 	public string? LBU { get; set; }
 	public DateTime? EffectiveDate { get; set; }
+	public DateTime? PostingDate { get; set; }
 
 	//[RegularExpression(@"^\d{10}$", ErrorMessage = "Invalid format. Valid format is 10 digit")]
 	public string? AccountCode { get; set; }
@@ -42,11 +43,13 @@ public class ExpenseItem : AuditObject
 	public string? FinActTrackerID { get; set; }
 	public string? FinActTrackerName { get; set; }
 	public string? FinProjectCode { get; set; }
+	public string? CurrCode { get; set; }
 	public decimal? Amount { get; set; }
 	public decimal? TaxRate { get; set; }
 	public decimal? TaxAmount { get; set; }
-	public int? ExpenseYr { get; set; }
-	public int? ExpenseMth { get; set; }
+	
+	public DateTime? FromDate { get; set; }
+	public DateTime? ToDate { get; set; }
 	public DateTime? SubmDate { get; set; }
 	public DateTime? ApprovedDate { get; set; }
 	public string? PurchaseOrderNo { get; set; }
@@ -56,6 +59,8 @@ public class ExpenseItem : AuditObject
 	public DateTime? InvoiceDate { get; set; }
 
 	public string? EmpID { get; set; }
+	public int? ITAssetId { get; set; }
+	public string? ITAssetCode { get; set; }
 	/// <summary>
 	/// Accounting System Reference Number
 	/// </summary>
@@ -66,6 +71,14 @@ public class ExpenseItem : AuditObject
 	/// </summary>
 	public string? VendorID { get; set; }
 	public string? Remark { get; set; }
+
+	public string? ProductName { get; set; }
+	public string? ProductType { get; set; }
+	public string? ServiceName { get; set; }
+	public string? ServiceType { get; set; }
+	public int? BudgetItemId { get; set; }
+	public string? BudgetItemCode { get; set; }
+	public string? BudgetItemName { get; set; }
 	#endregion
 
 	#region *** LINKED OBJECTS ***
@@ -81,12 +94,6 @@ public class ExpenseItem : AuditObject
 	public string VendorName => Vendor != null ? Vendor.ObjectName.NonNullValue("-") : "-";
 
 	[Computed, Write(false), ReadOnly(true)]
-	public string BudgetItemName => BudgetItem != null ? BudgetItem.ObjectName.NonNullValue("-") : "-";
-
-	[Computed, Write(false), ReadOnly(true)]
-	public string BudgetItemID => BudgetItem != null ? BudgetItem.ObjectCode.NonNullValue("-") : "-";
-
-	[Computed, Write(false), ReadOnly(true)]
 	public string AmountWithTaxText => $"$ {(Amount ?? 0)+(TaxAmount ?? 0):#,##0.00}";
 
 	[Computed, Write(false), ReadOnly(true)]
@@ -94,9 +101,6 @@ public class ExpenseItem : AuditObject
 
 	[Computed, Write(false), ReadOnly(true)]
 	public string TaxRateText => TaxRate.HasValue ? $"{TaxRate.Value:#,##0} %" : "-";
-
-	[Computed, Write(false), ReadOnly(true)]
-	public string ExpenseYrMthTxt => (ExpenseYr.HasValue ? ExpenseYr.ToString() : "YYYY") + "-" + (ExpenseMth.HasValue ? ExpenseMth!.Value.ToString("00") : "-");
 	#endregion
 
 	public ExpenseItem() : base()

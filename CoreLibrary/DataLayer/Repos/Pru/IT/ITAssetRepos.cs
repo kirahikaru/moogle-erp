@@ -73,7 +73,7 @@ public class ITAssetRepos(IDbContext dbContext) : BaseRepos<ITAsset>(dbContext, 
 			sbSqlItem.Where("t.IsDeleted=0");
 			sbSqlItem.Where("t.AssetId=@AssetId");
 			paramItem.Add("@AssetId", id);
-			sbSqlItem.OrderBy("t.RequestDate").OrderBy("t.StartDate");
+			sbSqlItem.OrderBy("t.SeqNo DESC");
 			string sqlItem = sbSqlItem.AddTemplate($"SELECT * FROM {ITAssetAuditTrail.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
 			dataList[0].AuditTrails = (await cn.QueryAsync<ITAssetAuditTrail>(sqlItem, paramItem)).AsList();
 

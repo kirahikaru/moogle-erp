@@ -3,7 +3,7 @@
 @* @rendermode InteractiveAuto *@
 
 @inherits MainPageBase<ITAsset>
-
+<PageTitle>IT Asset | Hardware</PageTitle>
 <MudPaper Class="pru-ui-mudcard-hdr-banner px-5 py-4" Width="100%" Elevation="0" Outlined="true">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
         <div style="color:var(--pru-red-default); font-size:28px;">
@@ -196,6 +196,7 @@
 			{ AssetLifeCycleStatuses.IN_USE, "status-chip-success-light" },
 			{ AssetLifeCycleStatuses.TERMINATED, "status-chip-obsolete-light" },
 			{ AssetLifeCycleStatuses.WRITTEN_OFF, "status-chip-obsolete-light" },
+			{ AssetLifeCycleStatuses.PENDING_REVIEW, "status-chip-pending-light" },
 			{ AssetLifeCycleStatuses.PENDING_WRITE_OFF, "status-chip-pending-light" },
 			{ AssetLifeCycleStatuses.PENDING_TERMINATION, "status-chip-pending-light" },
 			{ AssetLifeCycleStatuses.ON_LOAN, "status-chip-pending-light" },

@@ -30,14 +30,30 @@ public class ITAssetAuditTrail : AuditObject
 	public string? AssetCode { get; set; }
 	public string? SerialNo { get; set; }
 	public string? Category { get; set; }
+	public int? SeqNo { get; set; }
 	public string? RequestTicketRefNo { get; set; }
 	public string? RequestTicketSys { get; set; }
 	public string? SubCategory { get; set; }
-	[Required(ErrorMessage = "'Request Date' is required.")]
 	public DateTime? RequestDate { get; set; }
 
 	public DateTime? StartDate { get; set; }
 	public DateTime? EndDate { get; set; }
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <remarks>
+	/// 01-Acquire
+	/// 01-Purchase
+	/// 01-Provision
+	/// 02-Unbox Allocation
+	/// 03-Allocate
+	/// 04-Transfer
+	/// 05-Return
+	/// 88-Terminate
+	/// 88-Write-Off
+	/// 99-Dispose
+	/// </remarks>
 	[Required(ErrorMessage = "'Action' is required.")]
 	public string? ActionDesc { get; set; }
 	public string? ActionUser { get; set; }

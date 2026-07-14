@@ -5,6 +5,7 @@
              xmlns:models="clr-namespace:MoogleMAUI.Models"
              xmlns:controls="clr-namespace:MoogleMAUI.Pages.Controls"
              xmlns:pullToRefresh="clr-namespace:Syncfusion.Maui.Toolkit.PullToRefresh;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:telerik="http://schemas.telerik.com/2022/xaml/maui"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MoogleMAUI.Pages.MainPage"
              x:DataType="pageModels:MainPageModel"

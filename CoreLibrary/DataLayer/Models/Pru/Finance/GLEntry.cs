@@ -34,14 +34,19 @@ public class GLEntry : AuditObject
 	public DateTime? EffDate { get; set; }
 	public DateTime? PostingDate { get; set; }
 	public string? GlAccNo { get; set; }
-	public string? FinActTrackerNo { get; set; }
-	public string? LinkedObjType { get; set; }
-	public int? LinkedObjId { get; set; }
+	public string? FinActTrackerID { get; set; }
+	public string? SourceObjType { get; set; }
+	public int? SourceObjId { get; set; }
 	public DateTime? DocDate { get; set; }
 	public string? DocType { get; set; }
 	public string? DocRefNo { get; set; }
+	public string? OrigCurrCode { get; set; }
+	public decimal? OrigAmount { get; set; }
+	public decimal? ExChgRate { get; set; }
+	public string? AccCurrCode { get; set; }
 	public decimal? CR { get; set; }
 	public decimal? DR { get; set; }
+	public string? Remark { get; set; }
 
 	#endregion
 

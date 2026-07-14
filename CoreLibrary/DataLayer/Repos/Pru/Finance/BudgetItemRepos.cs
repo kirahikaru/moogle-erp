@@ -1,4 +1,6 @@
-﻿using DataLayer.Models.Pru.Finance;
+﻿using Dapper.FastCrud;
+using DataLayer.Models.Pru.Finance;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using static Dapper.SqlMapper;
 
@@ -11,6 +13,8 @@ public interface IBudgetItemRepos : IBaseRepos<BudgetItem>
 	Task<BudgetItem?> GetFullAsync(int id);
 
 	Task<IEnumerable<BudgetItem>> GetByYearAsync(int year);
+
+	Task<IEnumerable<DropdownSelectItem>> GetByYearForDropdownAsync(int year);
 }
 
 public class BudgetItemRepos(IDbContext dbContext) : BaseRepos<BudgetItem>(dbContext, BudgetItem.DatabaseObject), IBudgetItemRepos
@@ -104,7 +108,6 @@ public class BudgetItemRepos(IDbContext dbContext) : BaseRepos<BudgetItem>(dbCon
 		DynamicParameters param = new();
 
 		sbSql.Where("t.IsDeleted=0");
-		sbSql.Where("t.IsCurrent=1");
 
 		#region Form Search Conditions
 		if (!string.IsNullOrEmpty(searchText))
@@ -121,7 +124,7 @@ public class BudgetItemRepos(IDbContext dbContext) : BaseRepos<BudgetItem>(dbCon
 			}
 			else if (searchText.StartsWith("tracker:"))
 			{
-				sbSql.Where("UPPER(t.ActivityTrackID) LIKE '%'+UPPER(@SearchText)+'%'");
+				sbSql.Where("UPPER(t.FinActTrackerID) LIKE '%'+UPPER(@SearchText)+'%'");
 				param.Add("@SearchText", searchText.Replace("tracker:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
 			}
 			else if (Regex.IsMatch(searchText, @"^[0-9]{4}[A-Z]{0,1}$"))
@@ -184,8 +187,29 @@ public class BudgetItemRepos(IDbContext dbContext) : BaseRepos<BudgetItem>(dbCon
 		return new KeyValuePair<int, IEnumerable<BudgetItem>>(count, dataList);
 	}
 
+	public async Task<IEnumerable<DropdownSelectItem>> GetByYearForDropdownAsync(int year)
+	{
+		SqlBuilder sbSql = new();
+		DynamicParameters param = new();
+
+		sbSql.Select("t.Id")
+			.Select("t.ObjectCode as 'Key'")
+			.Select("t.ObjectName + '(' + ISNULL(t.FinActTrackerID,'') + ')' as 'Value'");
+		sbSql.Where("t.IsDeleted=0");
+		sbSql.Where("t.BudgetYear=@BudgetYear");
+		sbSql.OrderBy("t.DispOrder ASC");
+		param.Add("@BudgetYear", year);
+
+		using var cn = DbContext.DbCxn;
+
+		string sql = sbSql.AddTemplate($"SELECT /**select**/ FROM {DbObject.MsSqlTable} t /**where**/ /**orderby**/").RawSql;
+		var dataList = (await cn.QueryAsync<DropdownSelectItem>(sql, param)).AsList();
+
+		return dataList;
+	}
+
 	public override List<string> GetSearchOrderbBy()
 	{
-		return ["t.IsCurrent DESC", "t.BudgetYear DESC", "t.LBU", "t.VersionName DESC", "t.GroupingL1 ASC", "t.GroupingL2 ASC", "t.GroupingL3 ASC", "t.ObjectName ASC"];
+		return ["t.IsCurrent DESC", "t.BudgetYear DESC", "t.LBU", "t.VersionName DESC", "t.DispOrder ASC", "t.GroupingL1 ASC", "t.GroupingL2 ASC", "t.GroupingL3 ASC", "t.ObjectName ASC"];
 	}
 }

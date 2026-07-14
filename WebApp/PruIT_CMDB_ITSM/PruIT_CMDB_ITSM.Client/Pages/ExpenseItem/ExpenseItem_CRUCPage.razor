@@ -4,136 +4,155 @@
 
 @* @rendermode InteractiveAuto*@
 @inherits CRUCPageBase<ExpenseItem>
+<PageTitle>@HeaderTitle</PageTitle>
 
 @if (CurrentObject != null && CurrentEditContext != null)
 {
-    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" >
+    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column">
         <DataAnnotationsValidator />
-        <MudPaper Class="px-4 py-3 rounded" Width="100%" Elevation="0" Square="true" Style="background-color:var(--pru-cyan-tw-50); border: solid 1px var(--pru-cyan-tw-400)">
+        <MudPaper Class="pru-ui-mudcard-hdr-banner px-5 py-4" Width="100%" Elevation="0" Outlined="true">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-                <div style="color:var(--pru-cyan-default); font-size:28px;">
-                    <span style="font-weight:800">@HeaderTitle</span>
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="0">
+                    <MudText Typo="Typo.h3" Color="Color.Secondary">@HeaderTitle</MudText>
                     @if (CRUCMode == CRUDCModes.READ)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Success" Class=@($"status-chip-tiny") T="string" Style="margin-top:-5px">View</MudChip>
+                        <MudChip Color="Color.Success" Size="Size.Small" Variant="Variant.Outlined" Class="pru-ui-mudchip-banner-status" T="string" Style="margin-top:-10px">VIEW</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.UPDATE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">Update</MudChip>
+                        <MudChip Color="Color.Info" Size="Size.Small" Variant="Variant.Outlined" Class="pru-ui-mudchip-banner-status" T="string" Style="margin-top:-10px">UPDATE</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.CREATE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New</MudChip>
+                        <MudChip Color="Color.Info" Size="Size.Small" Variant="Variant.Outlined" Class="pru-ui-mudchip-banner-status" T="string" Style="margin-top:-10px">NEW</MudChip>
                     }
                     else if (CRUCMode == CRUDCModes.CLONE)
                     {
-                        <MudChip Size="Size.Small" Color="Color.Info" Class=@($"status-chip-tiny") T="string">New (Clone)</MudChip>
+                        <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="pru-ui-mudchip-banner-status" T="string" Style="margin-top:-10px">NEW (Clone)</MudChip>
                     }
-                </div>
+                </MudStack>
                 <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd">
                     @if (!IsViewMode)
                     {
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton" Color="Color.Primary" StartIcon="material-symbols-rounded/save_as"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Secondary" Class="pru-ui-mudbutton"
+                                   StartIcon="material-symbols-rounded/save_as"
                                    OnClick="@(() => Save())">Save</MudButton>
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton" Color="Color.Primary" StartIcon="material-symbols-rounded/save"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Secondary" Class="pru-ui-mudbutton"
+                                   StartIcon="material-symbols-rounded/save"
                                    OnClick="@(() => Save(true))">Save & Close</MudButton>
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton" Color="Color.Secondary" StartIcon="material-symbols-rounded/cancel"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Default" Class="pru-ui-mudbutton"
+                                   StartIcon="material-symbols-rounded/cancel"
                                    OnClick="Cancel">Cancel</MudButton>
                     }
                     else
                     {
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton" Color="Color.Default" StartIcon="material-symbols-rounded/close"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Secondary"
+                                   StartIcon="material-symbols-rounded/close"
                                    OnClick="Cancel">Close</MudButton>
                     }
                 </MudStack>
             </MudStack>
         </MudPaper>
-        <MudTabs Class="pru-mud-tab cruc-pg mt-3" Elevation="0">
-            <MudTabPanel Text="Main" Icon="material-symbols-rounded/home" Class="pru-mud-tab-panel" Style="min-width:120px">
-                <MudPaper Class="px-4 pt-2 pb-5 overflow-y-auto" Height="calc(100vh - 210px)" Width="100%" Elevation="0" Style="position:relative">
-                    <MudGrid Spacing="2" Justify="Justify.SpaceEvenly">
+        <MudTabs Class="pru-mudtab mt-5" Elevation="0" ActiveTabClass="pru-mudtab-active" TabHeaderClass="pru-mudtab-hdr" TabButtonsClass="pru-mudtab-btn" TabPanelsClass="pru-mudtab-tabpanel">
+            <MudTabPanel Text="Main" Icon="material-symbols-rounded/home"
+                         Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" Style="min-width:120px">
+                <MudPaper Class="pru-ui-mudpaper-cruc-tab-content px-5 pt-3 pb-4 overflow-y-auto" Square="true" Height="calc(100% - var(--pru-cruc-pg-status-bar-height))" Width="100%" Elevation="0">
+                    <MudGrid Spacing="4" Justify="Justify.SpaceEvenly">
                         <MudItem xs="1">
-                            <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
+                            <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
+                                       Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
+                                       ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary"
                                        Label="LBU" T="string"
-                                       Value=CurrentObject!.LBU For="@(() => CurrentObject.LBU)" ValueChanged="OnLBUChanged" OnlyValidateIfDirty="true">
+                                       Value=CurrentObject!.LBU For="@(() => CurrentObject.LBU)" ValueChanged="OnLBUChanged" OnlyValidateIfDirty="false">
                                 @foreach (string lbuID in _lbuIDList)
                                 {
                                     <MudSelectItem Value=@lbuID>@lbuID</MudSelectItem>
                                 }
                             </MudSelect>
                         </MudItem>
-                        <MudItem xs="7">
-                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
-                                          Label="Budget Desc" MaxLength="255" 
+                        <MudItem xs="5">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="true"
+                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                          AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                          Label="One-liner Summary" MaxLength="255"
                                           @bind-Value=CurrentObject!.ObjectName For="@(() => CurrentObject.ObjectName)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="2">
-                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Required="true"
-                                          Label="Ref No." Placeholder="LBU-YYYY-####"
-                                          @bind-Value=CurrentObject!.ObjectCode For="@(() => CurrentObject.ObjectCode)" OnlyValidateIfDirty="true"
-                                           />
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="true"
+                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                          Label="Ref #" MaxLength="80"
+                                          @bind-Value=CurrentObject!.ObjectCode For="@(() => CurrentObject.ObjectCode)" OnlyValidateIfDirty="false" />
                         </MudItem>
-                        
-                        <MudItem xs="1">
-                            <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" Required="true"
-                                             AdornmentIcon="material-symbols-rounded/calendar_month" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
-                                             Label="Expense Year" Placeholder="YYYY"
-                                             @bind-Value="CurrentObject!.ExpenseYr" For="@(() => CurrentObject!.ExpenseYr)" OnlyValidateIfDirty="true" />
+                        <MudItem xs="2">
+                            <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
+                                           Class="pru-ui-muddatepicker"
+                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                           Label="Effective Date" DateFormat="dd-MMM-yyyy"
+                                           @bind-Date=@CurrentObject.EffectiveDate For="@(() => CurrentObject.EffectiveDate)" />
                         </MudItem>
-                        <MudItem xs="1">
-                            <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" Required="true"
-                                             AdornmentIcon="material-symbols-rounded/calendar_month" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
-                                             Label="Expense Month" Placeholder="MM"
-                                             @bind-Value="CurrentObject!.ExpenseMth" For="@(() => CurrentObject!.ExpenseMth)" OnlyValidateIfDirty="true" />
+                        <MudItem xs="2">
+                            <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
+                                           Class="pru-ui-muddatepicker"
+                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                           Label="Posting Date" DateFormat="dd-MMM-yyyy"
+                                           @bind-Date=@CurrentObject.PostingDate For="@(() => CurrentObject.PostingDate)" />
                         </MudItem>
                         @* ======================================================================================================== *@
                         <MudItem xs="2">
-                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" 
-                                          Label="Account Code" MaxLength="10"
-                                          @bind-Value=CurrentObject!.AccountCode For="@(() => CurrentObject.AccountCode)" OnlyValidateIfDirty="true" Mask="@(new PatternMask("0000000000"))" />
-                        </MudItem>
-                        <MudItem xs="4">
-                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" 
-                                          Label="Account Name"
-                                          @bind-Value=CurrentObject!.AccountName For="@(() => CurrentObject.AccountName)" OnlyValidateIfDirty="true"
-                                          MaxLength="255" />
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="false"
+                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                          AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                          Label="Product Name" MaxLength="255"
+                                          @bind-Value=CurrentObject!.ProductName For="@(() => CurrentObject.ProductName)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="2">
-                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered"
-                                          Label="Act. Tracker" Placeholder="####(A-Z)" HelperText="4 Digit (+ A-Z)"
-                                          @bind-Value=CurrentObject!.FinActTrackerID For="@(() => CurrentObject.FinActTrackerID)" OnlyValidateIfDirty="true"
-                                          MaxLength="5" />
-                        </MudItem>
-                        <MudItem xs="4">
-                        </MudItem>
-                        <MudItem xs="2">
-                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered"
-                                          Label="PO#" Placeholder="PO Ref #" 
-                                          @bind-Value=CurrentObject!.PurchaseOrderNo For="@(() => CurrentObject.PurchaseOrderNo)" OnlyValidateIfDirty="true"
-                                          MaxLength="5" />
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="false"
+                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                          AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                          Label="Product Type" MaxLength="255"
+                                          @bind-Value=CurrentObject!.ProductType For="@(() => CurrentObject.ProductType)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="2">
-                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered"
-                                          Label="Invoice #" Placeholder="Invoice Ref #"
-                                          @bind-Value=CurrentObject!.InvoiceCode For="@(() => CurrentObject.InvoiceCode)" OnlyValidateIfDirty="true"
-                                          />
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="false"
+                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                          AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                          Label="Service Name" MaxLength="255"
+                                          @bind-Value=CurrentObject!.ServiceName For="@(() => CurrentObject.ServiceName)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="2">
-                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered"
-                                          Label="Acct. Sys ID" Placeholder="Acc. Sys ID"
-                                          @bind-Value=CurrentObject!.AccSysID For="@(() => CurrentObject.AccSysID)" OnlyValidateIfDirty="true"                               />
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="false"
+                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                          AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                          Label="Service Type" MaxLength="255"
+                                          @bind-Value=CurrentObject!.ServiceType For="@(() => CurrentObject.ServiceType)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="2">
-                            <MudDatePicker ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-muddatepicker" Editable="true"
+                            <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
+                                           Class="pru-ui-muddatepicker"
+                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                            AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
-                                           Label="Invoice Date"
-                                           @bind-Date=@CurrentObject.InvoiceDate DateFormat="dd-MMM-yyyy" For="@(() => CurrentObject.InvoiceDate)" />
+                                           Label="From Date" DateFormat="dd-MMM-yyyy"
+                                           @bind-Date=@CurrentObject.FromDate For="@(() => CurrentObject.FromDate)" />
                         </MudItem>
-                        <MudItem xs="4">
-                            <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-combo-box" PopoverClass="pru-ui-combo-box-popover" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                                         Label="Vendor/Supplier" T="string"
+                        <MudItem xs="2">
+                            <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
+                                           Class="pru-ui-muddatepicker"
+                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                           Label="To Date" DateFormat="dd-MMM-yyyy"
+                                           @bind-Date=@CurrentObject.ToDate For="@(() => CurrentObject.ToDate)" />
+                        </MudItem>
+                        @* ======================================================================================================== *@
+                        <MudItem xs="3">
+                            <MudComboBox Clearable="true" Editable="true" FullWidth="true" ReadOnly=@IsViewMode Required="true" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" ShrinkLabel="true" autocomplete="new-password"
+                                         Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
+                                         AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
+                                         Label="Vendor/Supplier" Placeholder="Select a vendor/supplier..." T="string"
                                          @bind-Value="@CurrentObject.VendorID" For="@(() => CurrentObject.VendorID)"
-                                         ToStringFunc="@(e => string.IsNullOrEmpty(e) || !_vendorList.Any() ? "" : _vendorList.Single<DropdownSelectItem>(x => x.Key == e)?.Value)">
+                                         ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _vendorList.Single<DropdownSelectItem>(x => x.Key == e)?.Value)">
                                 <ChildContent>
                                     @foreach (var vendor in _vendorList)
                                     {
@@ -142,51 +161,139 @@
                                 </ChildContent>
                             </MudComboBox>
                         </MudItem>
-                        <MudItem xs="2">
-                            <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" 
-                                             Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.AttachMoney" AdornmentColor=@Color.Primary
-                                             Label="Expense Amount" Format="#,##0.00"
-                                             @bind-Value="CurrentObject!.Amount" For="@(() => CurrentObject.Amount)" />
-                        </MudItem>
-                        <MudItem xs="2">
-                            <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")"
-                                             Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.AttachMoney" AdornmentColor=@Color.Primary
-                                             Label="Tax Amount" Format="#,##0.00"
-                                             @bind-Value="CurrentObject!.TaxAmount" For="@(() => CurrentObject.TaxAmount)" />
-                        </MudItem>
                         <MudItem xs="1">
-                            <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")"
-                                             AdornmentIcon="material-symbols-rounded/percent" Adornment="Adornment.End" AdornmentColor=@Color.Primary
-                                             Label="Tax Rate (%)" Format="#,##0.0"
-                                             @bind-Value="CurrentObject!.TaxRate" For="@(() => CurrentObject.TaxRate)" OnlyValidateIfDirty="true" />
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="false"
+                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                          Label="PO #" 
+                                          @bind-Value=CurrentObject!.PurchaseOrderNo For="@(() => CurrentObject.PurchaseOrderNo)" OnlyValidateIfDirty="false" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="false"
+                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                          Label="Invoice #"
+                                          @bind-Value=CurrentObject!.InvoiceCode For="@(() => CurrentObject.InvoiceCode)" OnlyValidateIfDirty="false" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
+                                           Class="pru-ui-muddatepicker"
+                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                           Label="Invoice Date" DateFormat="dd-MMM-yyyy"
+                                           @bind-Date=@CurrentObject.InvoiceDate For="@(() => CurrentObject.InvoiceDate)" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
+                                           Class="pru-ui-muddatepicker"
+                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                           Label="Submitted On" DateFormat="dd-MMM-yyyy"
+                                           @bind-Date=@CurrentObject.SubmDate For="@(() => CurrentObject.SubmDate)" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
+                                           Class="pru-ui-muddatepicker"
+                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                           Label="Approved On" DateFormat="dd-MMM-yyyy"
+                                           @bind-Date=@CurrentObject.ApprovedDate For="@(() => CurrentObject.ApprovedDate)" />
                         </MudItem>
                         @* ======================================================================================================== *@
-                        <MudItem xs="2">
-                            <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-muddatepicker" Editable="true" DateFormat="dd-MMM-yyyy"
-                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
-                                           Label="Submitted Date"
-                                           @bind-Date="CurrentObject!.SubmDate" For="@(() => CurrentObject!.SubmDate)" />
-                        </MudItem>
-                        <MudItem xs="2">
-                            <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered pru-ui-muddatepicker" Editable="true" DateFormat="dd-MMM-yyyy"
-                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
-                                           Label="Approved Date"
-                                           @bind-Date="CurrentObject!.ApprovedDate" For="@(() => CurrentObject!.SubmDate)" />
+                        <MudItem xs="3">
+                            <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="false" SearchFunc="SearchGlAccount"
+                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             Label="GL Acount" T="GLAccount" ToStringFunc="@(e => e == null ? null : $"{e.ObjectCode} - {e.ObjectName}")"
+                                             Value="_selGlAccount" ValueChanged="OnGlAcctValueChanged" />
                         </MudItem>
                         <MudItem xs="3">
+                            <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchFinActTracker"
+                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             Label="Activity Tracker" T="FinActivityTracker" ToStringFunc="@(e => e == null ? null : $"{e.ObjectCode} - {e.ObjectName}")"
+                                             Value="_selFinActTracker" ValueChanged="OnFinActTrackerValueChanged" />
                         </MudItem>
+                        <MudItem xs="2">
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="false"
+                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                          Label="Acc. Sys. ID"
+                                          @bind-Value=CurrentObject!.AccSysID For="@(() => CurrentObject.AccSysID)" OnlyValidateIfDirty="false" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchEmployee"
+                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             Label="Purchased For Employee" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
+                                             Value="_selEmployee" ValueChanged="OnEmployeeValueChanged" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudTextField Clearable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Class="pru-ui-mudform-input"
+                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                          Label="IT Asset Code"
+                                          @bind-Value=CurrentObject!.ITAssetCode For="@(() => CurrentObject.ITAssetCode)" OnlyValidateIfDirty="false" />
+                        </MudItem>
+                        @* ======================================================================================================== *@
+                        <MudItem xs="1">
+                            <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
+                                       Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
+                                       ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary"
+                                       Label="Currency"
+                                       @bind-Value=CurrentObject!.CurrCode For="@(() => CurrentObject!.CurrCode)" OnlyValidateIfDirty="true">
+                                @foreach (DropdownSelectItem curr in _currList)
+                                {
+                                    <MudSelectItem Value=@curr.Key>@curr.Key</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" Required="true"
+                                             Adornment="Adornment.Start" AdornmentIcon="material-symbols-rounded/attach_money" AdornmentColor=@Color.Primary
+                                             Label="Amount" Format="#,##0.##"
+                                             @bind-Value=CurrentObject.Amount For="@(() => CurrentObject.Amount)" OnlyValidateIfDirty="true"
+                                             Step=".1M" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" Required="false"
+                                             Adornment="Adornment.Start" AdornmentIcon="material-symbols-rounded/attach_money" AdornmentColor=@Color.Primary
+                                             Label="Tax Amount" Format="#,##0.##"
+                                             @bind-Value=CurrentObject.TaxAmount For="@(() => CurrentObject.TaxAmount)" OnlyValidateIfDirty="true"
+                                             Step=".1M" />
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" Required="false"
+                                             Adornment="Adornment.End" AdornmentIcon="material-symbols-rounded/percent" AdornmentColor=@Color.Primary
+                                             Label="Tax Rate" Format="#,##0.##"
+                                             @bind-Value=CurrentObject.TaxRate For="@(() => CurrentObject.TaxRate)" OnlyValidateIfDirty="true"
+                                             Step=".1M" />
+                        </MudItem>
+                        <MudItem xs="6">
+                            <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="false" SearchFunc="SearchBudgetItem"
+                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             Label="Budget Line" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
+                                             Value="_selBudgetItem" ValueChanged="OnBudgetItemValueChanged" />
+                        </MudItem>
+                        @* ======================================================================================================== *@
                         <MudItem xs="12">
-                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" Lines="5" MaxLines="30"
+                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Lines=4
                                           Label="Remark"
-                                          @bind-Value=CurrentObject!.Remark For="@(() => CurrentObject.Remark)" OnlyValidateIfDirty="true"  />
+                                          @bind-Value=CurrentObject.Remark For="@(() => CurrentObject.Remark)" OnlyValidateIfDirty="true"
+                                          MaxLines="25" />
                         </MudItem>
+                        @* ======================================================================================================== *@
+                        @* ======================================================================================================== *@
+                        @* ======================================================================================================== *@
                         @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
                         {
                             <MudItem xs="12" Class="pt-10">
-                                @* @foreach (string msg in CurrentEditContext.GetValidationMessages())
+                                @foreach (string msg in CurrentEditContext.GetValidationMessages())
                                 {
                                     <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@msg</MudAlert>
-                                } *@
+                                }
                                 @foreach (string key in InvalidMsgList.Keys)
                                 {
                                     <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
@@ -194,24 +301,27 @@
                             </MudItem>
                         }
                     </MudGrid>
-                    @if (Id > 0)
+                </MudPaper>
+                <MudPaper Class="pru-mudpaper-status-bar" Elevation="0" Height="var(--pru-cruc-pg-status-bar-height)">
+                    @if (CurrentObject.Id > 0)
                     {
-                        <MudStack Row="true" Class="px-2 py-1" AlignItems="AlignItems.Center" Spacing="1" Style="position:absolute; bottom:0; left:0; right:0; background-color:var(--pru-red-tw-50)">
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)">Created By</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@CurrentObject.CreatedUser</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)">on</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@(CurrentObject.CreatedDateTime.HasValue? CurrentObject.CreatedDateTime!.Value.ToString("dd-MMM-yyyy hh:mm:ss tt") : " - ")</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)"> | Last Modified By</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@CurrentObject.ModifiedUser</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-gray-default)">on</MudText>
-                            <MudText Typo="Typo.body1" Style="font-size:8pt; color:var(--pru-red-default)">@(CurrentObject.ModifiedDateTime.HasValue? CurrentObject.ModifiedDateTime!.Value.ToString("dd-MMM-yyyy hh:mm:ss tt") : " - ")</MudText>
+                        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1" Justify="Justify.FlexStart" Style="height:100%; padding: 0px 10px">
+                            <MudText Typo="Typo.subtitle2" Color="Color.Primary">Created By</MudText>
+                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">@CurrentObject.CreatedUser</MudText>
+                            <MudText Typo="Typo.subtitle2" Color="Color.Primary">on</MudText>
+                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">@(CurrentObject.CreatedDateTime.HasValue ? CurrentObject.CreatedDateTime!.Value.ToString("dd-MMM-yyyy hh:mm:ss tt") : " - ")</MudText>
+                            <MudText Typo="Typo.subtitle2" Color="Color.Primary"> | Last Modified By</MudText>
+                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">@CurrentObject.ModifiedUser</MudText>
+                            <MudText Typo="Typo.subtitle2" Color="Color.Primary">on</MudText>
+                            <MudText Typo="Typo.subtitle2" Color="Color.Secondary">@(CurrentObject.ModifiedDateTime.HasValue ? CurrentObject.ModifiedDateTime!.Value.ToString("dd-MMM-yyyy hh:mm:ss tt") : " - ")</MudText>
                         </MudStack>
                     }
                 </MudPaper>
             </MudTabPanel>
-            <MudTabPanel Text="History" Icon="material-symbols-rounded/history" Class="pru-mud-tab-panel" Style="min-width:120px">
-                <MudPaper Class="px-4 pt-2 pb-5 overflow-y-auto" Height="calc(100vh - 210px)" Width="100%" Elevation="0" Style="position:relative">
-
+            <MudTabPanel Text="History" Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel"
+                         Icon="material-symbols-rounded/history" Style="min-width:120px">
+                <MudPaper Class="pru-ui-mudpaper-cruc-tab-content px-4 pt-2 pb-5 overflow-y-auto" Height="100%" Width="100%" Elevation="0"
+                          Style="border-bottom: 1px solid var(--tw-gray-300); border-bottom-left-radius:var(--pru-base-card-radius); border-bottom-right-radius:var(--pru-base-card-radius)">
                 </MudPaper>
             </MudTabPanel>
         </MudTabs>
@@ -229,8 +339,18 @@
     IEnumerable<string> _lbuIDList = ["PCLA", "PMLI", "PLAL"];
     IEnumerable<DropdownSelectItem> _currList = PruGC.Currencies.GetForDropdownList();
     IEnumerable<DropdownSelectItem> _vendorList = Enumerable.Empty<DropdownSelectItem>();
+    IEnumerable<GLAccount> _glAccountList = Enumerable.Empty<GLAccount>();
+    GLAccount? _selGlAccount;
+    IEnumerable<FinActivityTracker> _finActTrackerList = Enumerable.Empty<FinActivityTracker>();
+    FinActivityTracker? _selFinActTracker;
     MudDataGrid<ExpenseItem> _expItemDataGrid = new();
     ExpenseItem? _tempExpItemToAdd;
+    List<DropdownSelectItem> _employeeList = [];
+
+    DropdownSelectItem? _selEmployee;
+
+    IEnumerable<DropdownSelectItem> _budgetItemList = Enumerable.Empty<DropdownSelectItem>();
+    DropdownSelectItem? _selBudgetItem;
 
     AggregateDefinition<ExpenseItem> _expAggr = new AggregateDefinition<ExpenseItem>
     {
@@ -243,7 +363,7 @@
     #region PAGE LIFECYCLE FUNCTIONS
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        UrlPrefix = "/fin/budget-item";
+        UrlPrefix = "/fin/expense-item";
 
         return base.SetParametersAsync(parameters);
     }
@@ -297,20 +417,142 @@
             _vendorList = [];
         }
     }
+
+    private async Task<IEnumerable<DropdownSelectItem>> SearchEmployee(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _employeeList.Take(50);
+        }
+
+        return _employeeList.Where(x => x.Value.Contains(value, StringComparison.InvariantCultureIgnoreCase) || x.Key == value).Take(50);
+    }
+
+    private async Task<IEnumerable<GLAccount>> SearchGlAccount(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _glAccountList.Take(50);
+        }
+
+        return _glAccountList.Where(x => (x.ObjectName is not null && x.ObjectName.Contains(value, StringComparison.InvariantCultureIgnoreCase)) 
+        || (x.ObjectCode is not null && x.ObjectCode!.Contains(value))).Take(50);
+    }
+
+    private async Task<IEnumerable<FinActivityTracker>> SearchFinActTracker(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _finActTrackerList.Take(50);
+        }
+
+        return _finActTrackerList.Where(x => (x.ObjectName is not null && x.ObjectName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+        || (x.ObjectCode is not null && x.ObjectCode!.Contains(value))).Take(50);
+    }
+
+    void OnGlAcctValueChanged(GLAccount? glAcct)
+    {
+        if (glAcct is null)
+        {
+            _selGlAccount = null;
+            CurrentObject!.AccountCode = null;
+            CurrentObject!.AccountName = null;
+        }
+        else
+        {
+            _selGlAccount = glAcct;
+            CurrentObject!.AccountCode = glAcct.ObjectCode;
+            CurrentObject!.AccountName = glAcct.ObjectName;
+        }
+    }
+
+    void OnFinActTrackerValueChanged(FinActivityTracker? finActTracker)
+    {
+        if (finActTracker is null)
+        {
+            _selFinActTracker = null;
+            CurrentObject!.AccountCode = null;
+            CurrentObject!.AccountName = null;
+        }
+        else
+        {
+            _selFinActTracker = finActTracker;
+            CurrentObject!.AccountCode = finActTracker.ObjectCode;
+            CurrentObject!.AccountName = finActTracker.ObjectName;
+        }
+    }
+
+    void OnEmployeeValueChanged(DropdownSelectItem? emp)
+    {
+        if (emp is null)
+        {
+            _selEmployee = null;
+            CurrentObject!.EmpID = null;
+        }
+        else
+        {
+            _selEmployee = emp;
+            CurrentObject!.EmpID = emp.Key;
+        }
+    }
+
+    void OnBudgetItemValueChanged(DropdownSelectItem? budgetItem)
+    {
+        if (budgetItem is null)
+        {
+            _selBudgetItem = null;
+            CurrentObject!.BudgetItemId = null;
+            CurrentObject!.BudgetItemCode = null;
+            CurrentObject!.BudgetItemName = null;
+        }
+        else
+        {
+            _selBudgetItem = budgetItem;
+            CurrentObject!.BudgetItemId = budgetItem.Id;
+            CurrentObject!.BudgetItemCode = budgetItem.Key;
+            CurrentObject!.BudgetItemName = budgetItem.Value;
+        }
+    }
+
+    private async Task<IEnumerable<DropdownSelectItem>> SearchBudgetItem(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _budgetItemList.Take(50);
+        }
+
+        return _budgetItemList.Where(x => x.Value.Contains(value, StringComparison.InvariantCultureIgnoreCase) || (x.Key!.Contains(value))).Take(50);
+    }
     #endregion
 
     #region UPDATE FUNCTIONS
     protected override async Task PreSaveProcessing()
     {
-        CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
+        if (!string.IsNullOrEmpty(CurrentObject!.ObjectCode))
+            CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
+
         await Task.CompletedTask;
     }
 
     protected override async Task ValidatePreSave()
     {
         InvalidMsgList.Clear();
-
-        
     }
 
     protected override async Task<bool> SaveAndCommitProcessing()
@@ -350,6 +592,31 @@
     {
         if (!string.IsNullOrEmpty(CurrentObject!.LBU))
             _vendorList = await Uow.Vendors.GetForDropdownListAsync(CurrentObject!.LBU, null, CurrentObject!.VendorID);
+
+        _glAccountList = await Uow.GLAccounts.GetAllAsync();
+        _finActTrackerList = await Uow.FinActivityTrackers.GetAllAsync();
+
+        if (CurrentObject.EffectiveDate.HasValue)
+            _budgetItemList = await Uow.BudgetItems.GetByYearForDropdownAsync(CurrentObject.EffectiveDate.Value.Year);
+        else
+            _budgetItemList = await Uow.BudgetItems.GetByYearForDropdownAsync(DateTime.Today.Year);
+
+        if (!string.IsNullOrEmpty(CurrentObject!.AccountCode))
+        {
+            _selGlAccount = _glAccountList.SingleOrDefault(x => x.ObjectCode == CurrentObject!.AccountCode);
+        }
+
+        if (!string.IsNullOrEmpty(CurrentObject!.FinActTrackerID))
+        {
+            _selFinActTracker = _finActTrackerList.SingleOrDefault(x => x.ObjectCode == CurrentObject!.FinActTrackerID);
+        }
+
+        _employeeList = (await Uow.Employees.GetForDropdownAsync()).ToList();
+
+        if (!string.IsNullOrEmpty(CurrentObject!.EmpID))
+        {
+            _selEmployee = _employeeList.SingleOrDefault(x => x.Key == CurrentObject!.EmpID);
+        }
     }
     #endregion
 }

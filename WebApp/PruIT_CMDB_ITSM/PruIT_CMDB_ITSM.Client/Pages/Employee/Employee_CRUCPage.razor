@@ -406,11 +406,11 @@
     {
         InvalidMsgList.Clear();
 
-        bool isDuplicated = await Uow.ITAssets.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+        bool isDuplicated = await Uow.Employees.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
 
         if (isDuplicated)
         {
-            InvalidMsgList.Add("ObjectCode_Duplicate", $"Asset with ID='{CurrentObject.ObjectCode}' is already existed.");
+            InvalidMsgList.Add("ObjectCode_Duplicate", $"Employee ID='{CurrentObject.ObjectCode}' is already existed.");
         }
     }
 

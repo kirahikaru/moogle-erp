@@ -35,6 +35,7 @@ public class ITAsset : AuditObject
     [Required(AllowEmptyStrings = false, ErrorMessage = "Asset name is required.")]
     [MaxLength(255)]
     public new string? ObjectName { get; set; }
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'LBU' is required.")]
 	public string? LBU { get; set; }
 
 	/// <summary>

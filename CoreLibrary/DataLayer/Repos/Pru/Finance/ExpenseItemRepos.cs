@@ -39,9 +39,7 @@ public class ExpenseItemRepos(IDbContext dbContext) : BaseRepos<ExpenseItem>(dbC
 	{
 		SqlBuilder sbSql = new();
 		DynamicParameters param = new();
-		param.Add("@ExpenseYr", year);
 		sbSql.Where("t.IsDeleted=0");
-		sbSql.Where("t.ExpenseYr=@ExpenseYr");
 		sbSql.OrderBy("t.ObjectName");
 
 		using var cn = DbContext.DbCxn;
@@ -97,7 +95,7 @@ public class ExpenseItemRepos(IDbContext dbContext) : BaseRepos<ExpenseItem>(dbC
 		}
 		#endregion
 
-		sbSql.LeftJoin($"{BudgetItem.MsSqlTable} bi ON bi.IsDeleted=0 AND bi.IsCurrent=1 AND bi.AccountCode=t.AccountCode AND bi.ActivityTrackID=t.ActivityTrackID");
+		sbSql.LeftJoin($"{BudgetItem.MsSqlTable} bi ON bi.IsDeleted=0 AND bi.Id=1 AND bi.Id=t.BudgetItemId");
 		sbSql.LeftJoin($"{Vendor.MsSqlTable} v ON v.IsDeleted=0 AND v.LBU=t.LBU AND v.ObjectCode=t.VendorID");
 
 		foreach (string orderByClause in GetSearchOrderbBy())
@@ -136,6 +134,6 @@ public class ExpenseItemRepos(IDbContext dbContext) : BaseRepos<ExpenseItem>(dbC
 
 	public override List<string> GetSearchOrderbBy()
 	{
-		return ["t.ExpenseYr DESC", "t.ExpenseMth DESC", "t.InvoiceDate DESC"];
+		return ["t.EffectiveDate DESC"];
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
+using Telerik.Maui.Controls.Compatibility;
 
 namespace MoogleMAUI
 {
@@ -12,6 +13,7 @@ namespace MoogleMAUI
 			builder
 				.UseMauiApp<App>()
 				.UseMauiCommunityToolkit()
+				.UseTelerik()
 				.ConfigureSyncfusionToolkit()
 				.ConfigureMauiHandlers(handlers =>
 				{

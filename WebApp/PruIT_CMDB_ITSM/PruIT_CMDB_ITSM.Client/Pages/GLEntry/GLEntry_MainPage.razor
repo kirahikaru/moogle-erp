@@ -1,12 +1,11 @@
-﻿@page "/fin/expense-item/main"
-@using DataLayer.AuxComponents.Extensions
+﻿@page "/fin/gl-entry/main"
 @using PruIT_CMDB_ITSM.Client.Pages
 
 @* @rendermode InteractiveAuto *@
 
 @inject SweetAlertService Swal
-@inherits MainPageBase<ExpenseItem>
-<PageTitle>@HeaderTitle</PageTitle>
+@inherits MainPageBase<GLEntry>
+
 <MudPaper Class="pru-ui-mudcard-hdr-banner px-5 py-4" Width="100%" Elevation="0" Outlined="true">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<MudText Typo="Typo.h3" Color="Color.Secondary">@HeaderTitle</MudText>
@@ -29,85 +28,49 @@
 	<MudDataGrid Dense="true" Hover="true" Bordered="false" Square="true" FixedHeader="true" Striped="true"
 				 ColumnResizeMode="ResizeMode.Column" SortMode="SortMode.Multiple" Loading=@IsSearching RowsPerPage="50" Elevation="0"
 				 Class="pru-ui-muddatagrid main-pg"
-				 SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" NoRecordsContent="HtmlDataGridZeroRecord"
-				 ServerData="ServerDataFunc" @ref="MainDataGrid" @bind-SelectedItem=SelectedObject Height="100%"
-				 T="ExpenseItem">
+				 SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" NoRecordsContent=HtmlDataGridZeroRecord
+				 ServerData="ServerDataFunc" @ref="MainDataGrid" @bind-SelectedItem=SelectedObject Height="100%" 
+				 T="GLEntry">
 		<Columns>
-			<TemplateColumn Title="LBU" StickyLeft="true" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData">
-				<CellTemplate>
-					<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
-						<MudImage Src=@(_lbuFlagList[rowData.Item.LBU!]) Height="12" />
-						<MudText Typo="Typo.body1">@rowData.Item.LBU</MudText>
-					</MudStack>
-				</CellTemplate>
-			</TemplateColumn>
-			@* <PropertyColumn Property="x => x.LBU" Title="LBU" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
-			<PropertyColumn Title="Eff. Date" Property="x => x.EffectiveDate" Format="dd-MMM-yyyy"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
-                            HeaderStyle="min-width:130px" CellStyle="text-align:center" />
-			<PropertyColumn Title="Posting Date" Property="x => x.PostingDate" Format="dd-MMM-yyyy"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
-							HeaderStyle="min-width:150px" CellStyle="text-align:center" />
-            <PropertyColumn Title="Item Name" Property="x => x.ObjectName"
+			<PropertyColumn Title="Effective Date" Property="x => x.EffDate" Format="dd-MM-yyyy"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width:350px" />
-			<PropertyColumn Title="Product Name" Property="x => x.ProductName"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-							HeaderStyle="min-width:180px" />
-			<PropertyColumn Title="Product Type" Property="x => x.ProductType"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-							HeaderStyle="min-width:180px" />
-			<PropertyColumn Title="Service Name" Property="x => x.ServiceName"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-							HeaderStyle="min-width:180px" />
-			<PropertyColumn Title="Service Type" Property="x => x.ServiceType"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-							HeaderStyle="min-width:180px" />
-            <PropertyColumn Title="Invoice Date" Property="x => x.InvoiceDate" Format="dd-MMM-yyyy"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
-                            HeaderStyle="min-width:150px" CellStyle="text-align:center" />
-            <PropertyColumn Title="Account #" Property="x => x.AccountCode" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono" />
-            <PropertyColumn Title="Account Name" Property="x => x.AccountName" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width:200px" />
-            <PropertyColumn Title="Act Tracker ID" Property="x => x.FinActTrackerID" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
-                            HeaderStyle="min-width:110px" />
-            <PropertyColumn Title="Budget Line" Property="x => x.BudgetItemName"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width:250px" />
-			<PropertyColumn Title="From Date" Property="x => x.FromDate" Format="dd-MMM-yyyy" Sortable="false"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-							HeaderStyle="min-width:120px" />
-			<PropertyColumn Title="To Date" Property="x => x.ToDate" Format="dd-MMM-yyyy" Sortable="false"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" 
-							HeaderStyle="min-width:120px" />
-			<PropertyColumn Title="Currency" Property="x => x.CurrCode" Sortable="false"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
-            <PropertyColumn Title="Amount" Property="x => x.Amount" Format="#,##0" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" CellStyle="text-align:right" />
-            <PropertyColumn Title="Tax" Property="x => x.TaxAmount" Format="#,##0" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" CellStyle="text-align:right" />
-            <PropertyColumn Title="PO#" Property="x => x.PurchaseOrderNo" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
-							HeaderStyle="min-width:150px" />
-            <PropertyColumn Title="Invoice #" Property="x => x.InvoiceCode" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
-							HeaderStyle="min-width:150px" />
-            <PropertyColumn Title="Provider" Property="x => x.VendorName" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width:220px" />
-            <PropertyColumn Title="Asset ID" Property="x => x.ObjectCode" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width:220px" />
-            <PropertyColumn Title="User ID" Property="x => x.EmpID" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-							HeaderStyle="min-width:120px" />
+                            HeaderStyle="min-width:180px" Sortable="false" />
+			<PropertyColumn Title="Posting Date" Property="x => x.PostingDate" Sortable="false" Format="dd-MM-yyyy"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+							HeaderStyle="min-width:140px" CellStyle="text-align:right" />
+			<PropertyColumn Title="GL Account #" Property="x => x.GlAccNo"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top" 
+							HeaderStyle="min-width:200px" />
+            <PropertyColumn Property="x => x.ObjectName" Title="Budget Item"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+                            HeaderStyle="min-width:280px" />
+			<PropertyColumn Title="GL Account #" Property="x => x.GlAccNo" Sortable="false"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+							HeaderStyle="min-width:250px" />
+			<PropertyColumn Title="Tracker ID" Property="x => x.FinActTrackerID" Sortable="false"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+							HeaderStyle="min-width:250px" />
+			<PropertyColumn Title="Original Amount" Property="x => x.OrigAmount" Sortable="false"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+							HeaderStyle="min-width:250px" />
+			<PropertyColumn Title="CR Amount" Property="x => x.CR" Sortable="false" Format="#,##0.00"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+							HeaderStyle="min-width:250px" CellStyle="text-align:right" />
+			<PropertyColumn Title="DR Amount" Property="x => x.DR" Sortable="false" Format="#,##0.00"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+							HeaderStyle="min-width:250px" CellStyle="text-align:right" />
+			<PropertyColumn Title="Document Date" Property="x => x.DocDate" Sortable="false" Format="dd-MMM-yyyy"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+							HeaderStyle="min-width:250px" />
+			<PropertyColumn Title="Document Ref No." Property="x => x.DocRefNo" Sortable="false" 
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+							HeaderStyle="min-width:250px" />
+			<PropertyColumn Title="Document Type" Property="x => x.DocType" Sortable="false"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+							HeaderStyle="min-width:250px" />
             <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="justify-items:center; max-width:120px; width:500px"
-                            CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important">
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							HeaderStyle="justify-items:center; width:300px; max-width:120px" CellStyle="padding-inline-end:4px; padding-inline-start:4px" >
                 <CellTemplate>
 					<MudStack Row="true" Spacing="0">
 						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
@@ -127,33 +90,21 @@
 			</TemplateColumn>
 		</Columns>
 		<PagerContent>
-			<MudDataGridPager T="ExpenseItem" Class="pru-ui-muddatagrid-pager" PageSizeOptions="new[] {10, 30, 50, 80, 100}" />
+			<MudDataGridPager T="GLEntry" Class="pru-ui-muddatagrid-pager" PageSizeOptions="new[] { 10, 30, 50, 80, 100 }" />
 		</PagerContent>
 	</MudDataGrid>
 </MudPaper>
 
 @code {
-
-	#region UI Param
-	Dictionary<string, string> _lbuFlagList = PruLBUs.GetFlagIconPaths();
-	Dictionary<string, string> _statusCssClassList = new()
-		{
-			{ "", "" },
-			{ AssetLifeCycleStatuses.IN_STOCK, "status-chip-success-light" },
-			{ AssetLifeCycleStatuses.IN_USE, "status-chip-success-light" },
-			{ AssetLifeCycleStatuses.TERMINATED, "status-chip-obsolete-light" },
-			{ AssetLifeCycleStatuses.WRITTEN_OFF, "status-chip-obsolete-light" },
-			{ AssetLifeCycleStatuses.PENDING_REVIEW, "status-chip-pending-light" },
-			{ AssetLifeCycleStatuses.PENDING_WRITE_OFF, "status-chip-pending-light" },
-			{ AssetLifeCycleStatuses.PENDING_TERMINATION, "status-chip-pending-light" },
-		};
+	#region UI PARAM
+	
 	#endregion
 
 	#region PAGE LIFECYCLE EVENTS
 	public override Task SetParametersAsync(ParameterView parameters)
 	{
-		UrlPrefix = "/fin/expense-item";
-		SearchParamName = "expenseItemParam";
+		UrlPrefix = "/fin/gl-entry";
+		SearchParamName = "glEntrySearchParam";
 
 		return base.SetParametersAsync(parameters);
 	}
@@ -167,7 +118,7 @@
 			CurrentAppModPerm.CanRead = true;
 			CurrentAppModPerm.CanUpdate = true;
 			CurrentAppModPerm.CanDelete = true;
-			CurrentAppModPerm.ModuleName = typeof(ExpenseItem).Name;
+			CurrentAppModPerm.ModuleName = typeof(GLEntry).Name;
 		}
 		else
 		{
@@ -201,9 +152,9 @@
 	}
 	#endregion
 
-	protected override async Task<GridData<ExpenseItem>> ServerDataFunc(GridState<ExpenseItem> gridState, CancellationToken token)
+	protected override async Task<GridData<GLEntry>> ServerDataFunc(GridState<GLEntry> gridState, CancellationToken token)
 	{
-		if (IsSearching) return new GridData<ExpenseItem>
+		if (IsSearching) return new GridData<GLEntry>
 			{
 				Items = [],
 				TotalItems = 0
@@ -221,6 +172,8 @@
 			//		: result.OrderBy(firstSort.SortFunc).ToList();
 			//}
 
+			List<SqlFilterCond> filterConds = [];
+
 			if (gridState.FilterDefinitions.Any())
 			{
 				//var filterFunctions = gridState.FilterDefinitions.Select(x => x.GenerateFilterFunction());
@@ -230,7 +183,7 @@
 			}
 			else
 			{
-				KeyValuePair<int, IEnumerable<ExpenseItem>> result = await Uow.ExpenseItems.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, null, null);
+				KeyValuePair<int, IEnumerable<GLEntry>> result = await Uow.GLEntries.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, null, filterConds, null);
 				MainDataList = result.Value;
 				totalItemCount = result.Key;
 			}
@@ -242,7 +195,7 @@
 			//	.Take(gridState.Count)
 			//	.ToList();
 
-			return new GridData<ExpenseItem>
+			return new GridData<GLEntry>
 				{
 					Items = MainDataList,
 					TotalItems = totalItemCount
@@ -252,7 +205,7 @@
 		{
 			await JsRuntime.InvokeVoidAsync("console.error", ex.GetFullMessage());
 
-			return new GridData<ExpenseItem>
+			return new GridData<GLEntry>
 				{
 					Items = [],
 					TotalItems = 0
@@ -272,7 +225,7 @@
 	#endregion
 
 	#region CRUD FUNCTIONS
-	private async Task DeleteRecord(ExpenseItem objToDelete)
+	private async Task DeleteRecord(GLEntry objToDelete)
 	{
 		if (objToDelete == null)
 		{
@@ -302,7 +255,7 @@
 			{
 				try
 				{
-					int delCount = await Uow.ExpenseItems.DeleteAsync(objToDelete.Id, AuditTrailUser);
+					int delCount = await Uow.GLEntries.DeleteAsync(objToDelete.Id, AuditTrailUser);
 
 					if (delCount > 0)
 					{

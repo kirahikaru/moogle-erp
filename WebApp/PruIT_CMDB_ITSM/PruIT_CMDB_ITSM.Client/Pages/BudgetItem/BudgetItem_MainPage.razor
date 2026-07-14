@@ -29,6 +29,16 @@
 		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false"
 				   Class="pru-ui-mudbutton" StartIcon="material-symbols-rounded/search"
 				   OnClick="OnSearchClicked">Search</MudButton>
+		<MudSelect Clearable="true" FullWidth="false" Immediate="false" Required="false" ShrinkLabel="true"
+				   Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
+				   AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+				   Placeholder="Budget Year"
+				   T="int" Value=_budgetYr ValueChanged="OnBudgeYearChanged" InputId="BudgetYear" Style="max-width:100px" >
+			@foreach (int bpYr in _budgetYrList)
+			{
+				<MudSelectItem Value=@bpYr>@bpYr.ToString()</MudSelectItem>
+			}
+		</MudSelect>
 	</MudStack>
 	<MudDataGrid Dense="true" Hover="true" Bordered="false" Square="true" FixedHeader="true" Striped="true"
 				 ColumnResizeMode="ResizeMode.Column" SortMode="SortMode.Multiple" Loading=@IsSearching RowsPerPage="50" Elevation="0"
@@ -63,20 +73,26 @@
             </TemplateColumn>
             <PropertyColumn Title="Year" Property="x => x.BudgetYear" Sortable="false"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top" />
+			<PropertyColumn Title="Disp Order" Property="x => x.DispOrder" Sortable="false"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top pru-ui-font-mono"
+							HeaderStyle="min-width:200px" CellStyle="text-align:right" />
             <PropertyColumn Title="Grouping L1" Property="x => x.GroupingL1"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
                             HeaderStyle="min-width:200px" Sortable="false" />
-            <PropertyColumn Property="x => x.GroupingL2" Title="Grouping L2"
+			<PropertyColumn Title="Grouping L2" Property="x => x.GroupingL2"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
                             HeaderStyle="min-width:180px" Sortable="false" />
-            <PropertyColumn Property="x => x.GroupingL3" Title="Grouping L3."
+			<PropertyColumn Title="Grouping L3." Property="x => x.GroupingL3"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top" HeaderStyle="min-width:200px" />
-            <PropertyColumn Property="x => x.ObjectName" Title="Budget Item"
+			<PropertyColumn Title="Budget Item" Property="x => x.ObjectName"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
                             HeaderStyle="min-width:280px" />
 			<PropertyColumn Title="Category" Property="x => x.Category"
 							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top" />
-            <PropertyColumn Title="Act Tracker ID" Property="x => x.ActivityTrackID" Sortable="false"
+			<PropertyColumn Title="GL Account" Property="x => x.GLAccountText"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+							CellStyle="white-space: nowrap" />
+            <PropertyColumn Title="Act Tracker ID" Property="x => x.FinActTrackerID" Sortable="false" 
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top pru-ui-font-mono"
                             HeaderStyle="min-width:120px" />
             <PropertyColumn Title="Class 2" Property="x => x.Class2"
@@ -85,10 +101,10 @@
             <PropertyColumn Title="Currency" Property="x => x.CurrencyCode" Filterable="false" Sortable="false"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top" />
             <PropertyColumn Title="Budget Amount" Property="x => x.BudgetedAmount" Format="#,##0" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top reddit-mono-500"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top pru-ui-font-mono"
                             HeaderStyle="min-width:140px" CellStyle="text-align:right" />
             <PropertyColumn Title="Expense Amount" Property="x => x.TotalExpenseAmount" Format="#,##0" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top reddit-mono-500"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top pru-ui-font-mono"
                             HeaderStyle="min-width:140px" CellStyle="text-align:right" />
             @* <PropertyColumn Property="x => x.RemainingAmount" Title="Remaining Amount" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Format="#,##0" CellStyle="text-align:right" /> *@
             <TemplateColumn Title="Remaining Amount" Filterable="false" Sortable="false"
@@ -237,19 +253,22 @@
 
 			List<SqlFilterCond> filterConds = [];
 
-            filterConds.Add(new SqlFilterCond()
+			filterConds.Add(new SqlFilterCond()
             {
                 FieldName = nameof(BudgetItem.IsCurrent),
                 FilterOperator = "=",
                 FilterValue = _isLatestBudget
             });
 
-            filterConds.Add(new SqlFilterCond()
-            {
-                FieldName = nameof(BudgetItem.BudgetYear),
-                FilterOperator = "=",
-                FilterValue = _budgetYr
-            });
+			if (_budgetYr > 1900)
+			{
+				filterConds.Add(new SqlFilterCond()
+				{
+					FieldName = nameof(BudgetItem.BudgetYear),
+					FilterOperator = "=",
+					FilterValue = _budgetYr
+				});
+			}
 
 			if (gridState.FilterDefinitions.Any())
 			{
@@ -298,6 +317,12 @@
 	protected async ValueTask QuickViewHotKeyPressed()
 	{
 		await Task.CompletedTask;
+	}
+
+	private async Task OnBudgeYearChanged(int budgetYear)
+	{
+		_budgetYr = budgetYear;
+		await MainDataGrid.ReloadServerData();
 	}
 	#endregion
 

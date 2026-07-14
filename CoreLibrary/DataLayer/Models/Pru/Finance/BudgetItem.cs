@@ -43,7 +43,7 @@ public class BudgetItem : AuditObject
 	public string? AccountName { get; set; }
 
 	[RegularExpression(@"^\d{4}[A-Z]{0,1}$", ErrorMessage = "Invalid format. Valid format is 4 digit with operation (A to E) at the end")]
-	public string? ActivityTrackID { get; set; }
+	public string? FinActTrackerID { get; set; }
 
 	public string? CurrencyCode { get; set; }
 	public decimal? TotalExpenseAmount { get; set; }
@@ -91,7 +91,10 @@ public class BudgetItem : AuditObject
 	public string TaxRateText => TaxRate.HasValue ? $"{TaxRate.Value:#,##0} %" : "-";
 
 	[Computed, Write(false), ReadOnly(true)]
-	public decimal RemainingAmount => BudgetedAmount!.Value - (TotalExpenseAmount ?? 0);
+	public decimal RemainingAmount => (BudgetedAmount ?? 0) - (TotalExpenseAmount ?? 0);
+
+	[Computed, Write(false), ReadOnly(true)]
+	public string GLAccountText => $"{AccountCode.NonNullValue("-")} - {AccountName.NonNullValue("-")}";
 	#endregion
 
 	public BudgetItem() : base()

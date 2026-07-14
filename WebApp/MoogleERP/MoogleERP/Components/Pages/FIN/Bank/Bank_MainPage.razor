@@ -29,7 +29,7 @@
 					  Placeholder="Search text here..."
 					  @bind-Value="SearchText" OnKeyDown="OnSearchTextBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
 		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-mudbutton"
-				   StartIcon="material-symbols-rounded/search" OnClick="OnSearchClicked">Search</MudButton>
+				   StartIcon="far fa-magnifying-glass" OnClick="OnSearchClicked">Search</MudButton>
 	</MudStack>
 	<MudDataGrid Bordered="false" Dense="true" FixedHeader="true" Hover="true" Loading=@IsSearching MultiSelection="false" Square="true" Striped="true"
 				 ColumnResizeMode="ResizeMode.Container" Elevation="0" RowsPerPage="50" SortMode="SortMode.Multiple"
@@ -94,7 +94,6 @@
 
 @code {
 	#region UI VARIABLES
-	private bool EnbleQuickCRUC = true;
 	#endregion
 
 	#region PAGE LIFECYCLE FUNCTIONS
@@ -107,12 +106,17 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		await Task.CompletedTask;
-	}
-	#endregion
+		if (IsInitDone)
+			return;
 
-	#region UI FUNCTIONS
-	async Task QuickCRUC(string CRUCMode, int id = 0)
+		EnbleQuickCRUC = true;
+
+        await Task.CompletedTask;
+    }
+    #endregion
+
+    #region UI FUNCTIONS
+    public override async Task QuickCRUC(string CRUCMode, int id = 0)
 	{
 		if (!CRUDCModes.IsValid(CRUCMode))
 			return;

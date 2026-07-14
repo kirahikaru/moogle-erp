@@ -61,18 +61,30 @@
 							HeaderStyle="width:300px; max-width:120px" CellStyle="padding: 0px 10px !important;">
 				<CellTemplate>
 					<MudStack Row="true" Spacing="0">
-						<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-comment-pen"
-									   OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
-						<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-edit"
-									   OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
-						<MudIconButton Size="Size.Small" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-copy"
-									   OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
-						<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-eye"
-									   OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
+						@if (EnbleQuickCRUC)
+						{
+							<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-comment-pen"
+										   OnClick="@(args => QuickCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
+							<MudIconButton Size="Size.Small" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-clone"
+										   OnClick="@(args => QuickCRUC(CRUDCModes.CLONE, context.Item.Id))" />
+							<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-eyes"
+										   OnClick="@(args => QuickCRUC(CRUDCModes.READ, context.Item.Id))" />
+						}
+						else
+						{
+							<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-edit"
+										   OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
+							<MudIconButton Size="Size.Small" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-copy"
+										   OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
+							<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
+										   Icon="far fa-eye"
+										   OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
+						}
 						<MudIconButton Size="Size.Small" Color="Color.Error" Class="moog-muddatagrid-icon-btn"
 									   Icon="far fa-trash-alt"
 									   OnClick="@(args => DeleteRecord(context.Item))" />
@@ -88,7 +100,7 @@
 
 @code {
 	#region UI VARIABLES
-
+	private bool EnbleQuickCRUC = true;
 	#endregion
 
 	#region PAGE LIFECYCLE FUNCTIONS

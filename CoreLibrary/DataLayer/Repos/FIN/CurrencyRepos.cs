@@ -423,7 +423,7 @@ public class CurrencyRepos(IDbContext dbContext) : BaseRepos<Currency>(dbContext
 
         sbSql.Select("t.Id")
             .Select("'Key'=t.ObjectCode")
-            .Select("'Value'=t.ObjectCode+' ('+t.CurrencySymbol+')'");
+            .Select("'Value'=t.ObjectCode+' ('+t.Symbol+')'");
 
         if (includingId.HasValue)
         {
@@ -513,7 +513,7 @@ public class CurrencyRepos(IDbContext dbContext) : BaseRepos<Currency>(dbContext
 
         sbSql.Select("t.Id")
             .Select("'Key'=t.ObjectCode")
-            .Select("'Value'=t.ObjectCode+' ('+t.CurrencySymbol+')'");
+            .Select("'Value'=t.ObjectCode+' ('+t.Symbol+')'");
 
         sbSql.Where("t.IsDeleted=0");
 

@@ -16,16 +16,16 @@ public static class CurrencyExtension
         };
     }
 
-    public static string ToDisplayText(decimal value, string currencyCode, 
-        CurrencyAppendType appendCurrencySymbol = CurrencyAppendType.Prefix, 
+    public static string ToDisplayText(decimal value, string currCode, 
+        CurrencyAppendType appendCurrSymbol = CurrencyAppendType.Prefix, 
         CurrencyDisplayUnit displayUnit = CurrencyDisplayUnit.Symbol)
     {
         StringBuilder sb = new();
 
-        if (appendCurrencySymbol == CurrencyAppendType.Prefix)
-            sb.Append(displayUnit == CurrencyDisplayUnit.Symbol ? Currencies.GetSymbol(currencyCode) : currencyCode);
+        if (appendCurrSymbol == CurrencyAppendType.Prefix)
+            sb.Append(displayUnit == CurrencyDisplayUnit.Symbol ? Currencies.GetSymbol(currCode) : currCode);
 
-        switch (currencyCode)
+        switch (currCode)
         {
             case Currencies.CAMBODIA_KHR:
             case Currencies.THAI_THB:
@@ -37,8 +37,8 @@ public static class CurrencyExtension
                 break;
         }
 
-        if (appendCurrencySymbol == CurrencyAppendType.Suffix)
-            sb.Append(displayUnit == CurrencyDisplayUnit.Symbol ? Currencies.GetSymbol(currencyCode) : currencyCode);
+        if (appendCurrSymbol == CurrencyAppendType.Suffix)
+            sb.Append(displayUnit == CurrencyDisplayUnit.Symbol ? Currencies.GetSymbol(currCode) : currCode);
 
         return sb.ToString();
     }

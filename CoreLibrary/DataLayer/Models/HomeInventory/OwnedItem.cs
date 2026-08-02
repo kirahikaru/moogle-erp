@@ -3,7 +3,7 @@ using DataLayer.GlobalConstant;
 using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.HomeInventory;
 
-[Table("[him].[OwnedItem]"), DisplayName("My Item")]
+[Table("[him].[OwnedItem]"), DisplayName("My Stuff")]
 public class OwnedItem : AuditObject
 {
 	[Computed, Write(false), ReadOnly(true)]
@@ -35,6 +35,7 @@ public class OwnedItem : AuditObject
     public string? NameEn { get; set; }
 	public string? NameKh { get; set; }
 	public int? OwnedItemCategoryId { get; set; }
+	public string? OwnedItemCategoryCode { get; set; }
 
 	[RegularExpression(@"^[A-Z0-9]{0,}$", ErrorMessage = "'Barcode' specified is of invalid format.")]
 	[MaxLength(25)]
@@ -85,16 +86,17 @@ public class OwnedItem : AuditObject
 	public double? OtherCost { get; set; }
 	public int? Quantity { get; set; }
 
-	public string? MerchantObjectCode { get; set; }
+	public int? MerchantId { get; set; }
+	public string? MerchantCode { get; set; }
 
 	[MaxLength(3)]
-	public string? ManufacturerCountryCode { get; set; }
+	public string? MfgCountryCode { get; set; }
 
 	[MaxLength(255)]
 	public string? ImagePath { get; set; }
 
 	[MaxLength(255)]
-	public string? ReferenceLink { get; set; }
+	public string? RefLink { get; set; }
     [MaxLength(255)]
     public string? PurchaseLink { get; set; }
 	#endregion
@@ -107,7 +109,7 @@ public class OwnedItem : AuditObject
 	public Merchant? Merchant { get; set; }
 
 	[Computed, Write(false)]
-	public Country? ManufacturedCountry { get; set; }
+	public Country? MfgCountry { get; set; }
 
 	[Computed, Write(false)]
 	public List<ObjStateHistory> AuditTrails { get; set; }

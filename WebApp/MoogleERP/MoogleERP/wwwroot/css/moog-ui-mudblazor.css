@@ -14,6 +14,14 @@
         color: #FFFFFF;
         box-shadow: none;
 
+        > .mud-button-label {
+            > .mud-button-icon-start {
+                > .mud-primary-text {
+                    color: #FFFFFF !important;
+                }
+            }
+        }
+
         &:hover {
             background-color: var(--ssv-pharma-blue-700);
             box-shadow: none;
@@ -28,6 +36,16 @@
         &:hover {
             background-color: var(--tw-gray-600);
             box-shadow: none;
+        }
+    }
+
+    &:disabled {
+        > .mud-button-label {
+            > .mud-button-icon-start {
+                > .mud-primary-text {
+                    color: var(--mud-palette-action-disabled) !important;
+                }
+            }
         }
     }
 }

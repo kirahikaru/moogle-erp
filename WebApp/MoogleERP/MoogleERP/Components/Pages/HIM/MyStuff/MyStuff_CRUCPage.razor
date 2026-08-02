@@ -2,7 +2,7 @@
 @page "/him/my-stuff/{CRUCMode}/{id:int}"
 
 @inherits CRUCPageBase<OwnedItem>
-
+<PageTitle>My Stuff</PageTitle>
 @if (CurrentObject != null && CurrentEditContext != null)
 {
     <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column;" >
@@ -99,25 +99,23 @@
                                               @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" />
                             </MudItem>
                             <MudItem xs="5">
-                                <MudComboBox Clearable="true" Editable="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text" 
-                                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight" autocomplete="new-password"
-                                             Label="Category" Placeholder="Select a category..." T="int?"
-                                             @bind-Value="@CurrentObject.OwnedItemCategoryId" @bind-Text=@_selectedCategoryName
-                                             ToStringFunc="@(e => e is null || _ownedItemCategoryList.Count == 0 ? "" : _ownedItemCategoryList.Single<DropdownSelectItem>(x => x.Id == e).Value)">
-                                    <ChildContent>
-                                        @foreach (var ctg in _ownedItemCategoryList)
-                                        {
-                                            <MudComboBoxItem T="int?" Value="@ctg.Id" Text="@ctg.Value">@ctg.Value</MudComboBoxItem>
-                                        }
-                                    </ChildContent>
-                                </MudComboBox>
-                                @* <MudSelect T="int?" Label="Category" ShrinkLabel="true" Clearable="true" ReadOnly=@IsViewMode Dense="true" Margin="Margin.Dense" Class="moog-mud-select"
-                                           @bind-Value="CurrentObject!.OwnedItemCategoryId">
-                                    @foreach (var ctg in _ownedItemCategoryList)
-                                    {
-                                        <MudSelectItem T="int?" Value="@ctg.Id">@ctg.Value</MudSelectItem>
-                                    }
-                                </MudSelect> *@
+                                <MudStack Row="true" Spacing="1">
+                                    <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                     Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
+                                                     ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                     AdornmentIcon="fa-solid fa-angle-down"
+                                                     DebounceInterval="300"
+                                                     Label="Category" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value}")"
+                                                     Value="_selOwnedItemCtg" ValueChanged="OnOwnedItemCategoryChanged"
+                                                     SearchFunc="@SearchOwnedItemCategory" />
+                                    <MudStack Row="true" Spacing="1">
+                                        <MudTooltip Text="Add new category"
+                                                    Placement="Placement.Top" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="false" ShowOnHover="true" ShowOnFocus="false">
+                                            <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+                                                           Icon="fad fa-circle-plus" aria-label="Add New My Stuff Category" />
+                                        </MudTooltip>
+                                    </MudStack>
+                                </MudStack>
                             </MudItem>
                             <MudItem xs="5">
                                 @* <MudSelect T="string" Label="Made In" Dense="true" Margin="Margin.Dense" ShrinkLabel="true" Clearable="true" @bind-Value="CurrentObject!.ManufacturerCountryCode" For="@(() => CurrentObject!.ManufacturerCountryCode)"
@@ -130,7 +128,7 @@
                                 <MudComboBox Clearable="true" Editable="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password"
                                              Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight"
                                              Label="Made In" Placeholder="Select a country..."
-                                             @bind-Value="@CurrentObject.ManufacturerCountryCode" @bind-Text=@_selectedCountryName
+                                             @bind-Value="@CurrentObject.MfgCountryCode" @bind-Text=@_selectedCountryName
                                              T="string" ToStringFunc="@(e => string.IsNullOrEmpty(e) || _countryList.Count == 0 ? "" : _countryList.Single<DropDownListItem>(x => x.ObjectCode == e)?.ObjectName)">
                                     <ChildContent>
                                         @foreach (var cty in _countryList)
@@ -186,7 +184,7 @@
                                               ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                               AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                               Label="Info Link"
-                                              @bind-Value="CurrentObject!.ReferenceLink" For="@(() => CurrentObject!.ReferenceLink)" />
+                                              @bind-Value="CurrentObject!.RefLink" For="@(() => CurrentObject!.RefLink)" />
                             </MudItem>
                             <MudItem xs="6">
                                 <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
@@ -209,17 +207,21 @@
                                 </MudDatePicker> *@
                             </MudItem>
                             <MudItem xs="4">
-                                <MudSelect Clearable="true" FitContent="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
-                                           Class="moog-mudform-input" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
-                                           ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                           AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
-                                           Label="Purchase From" Placeholder="Purchase from..." T="string"
-                                           @bind-Value="CurrentObject!.MerchantObjectCode" For="@(() => CurrentObject!.MerchantObjectCode)">
-                                    @foreach (var merchant in _merchantList)
-                                    {
-                                        <MudSelectItem T="string" Value="@merchant.Key">@merchant.Value</MudSelectItem>
-                                    }
-                                </MudSelect>
+                                <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                 Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
+                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 AdornmentIcon="fa-solid fa-angle-down"
+                                                 DebounceInterval="300"
+                                                 Label="Purchased From" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value}")"
+                                                 Value="_selMerchant" ValueChanged="OnMerchantChanged"
+                                                 SearchFunc="@SearchMerchant" />
+                                <MudStack Row="true" Spacing="1">
+                                    <MudTooltip Text="Add new category"
+                                                Placement="Placement.Top" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="false" ShowOnHover="true" ShowOnFocus="false">
+                                        <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+                                                       Icon="fad fa-circle-plus" aria-label="Add New Merchant" />
+                                    </MudTooltip>
+                                </MudStack>
                             </MudItem>
                             <MudItem xs="2">
                                 <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
@@ -387,10 +389,12 @@
 
     #region UI PARAM
     MudTextField<string>? _mtfObjName;
-    List<DropdownSelectItem> _ownedItemCategoryList = [];
+    IEnumerable<DropdownSelectItem> _ownedItemCategoryList = Enumerable.Empty<DropdownSelectItem>();
+    DropdownSelectItem? _selOwnedItemCtg;
     List<DropDownListItem> _countryList = [];
-    List<DropdownSelectItem> _merchantList = [];
-    IEnumerable<string> _brandList = [];
+    IEnumerable<DropdownSelectItem> _merchantList = Enumerable.Empty<DropdownSelectItem>();
+    DropdownSelectItem? _selMerchant;
+    IEnumerable<string> _brandList = Enumerable.Empty<string>();
 
     string? _selectedCategoryName;
     string? _selectedCountryName;
@@ -513,6 +517,68 @@
 
         var dialog = await MudDialogSvc.ShowAsync<AttachedImagesDiag>($"IMAGE(S)", param, diagOptions);
         var result = await dialog.Result;
+    }
+
+    void OnMerchantChanged(DropdownSelectItem? value)
+    {
+        if (value is null)
+        {
+            _selMerchant = null;
+            CurrentObject!.MerchantId = null;
+            CurrentObject!.MerchantCode = null;
+        }
+        else
+        {
+            _selMerchant = value;
+            CurrentObject!.MerchantId = value.Id;
+            CurrentObject!.MerchantCode = value.Key;
+        }
+    }
+
+    private async Task<IEnumerable<DropdownSelectItem>> SearchMerchant(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _merchantList.Take(50);
+        }
+
+        return _merchantList.Where(x => (x.Value is not null && x.Value.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+        || (x.Key is not null && x.Key.Contains(value, StringComparison.InvariantCultureIgnoreCase))).Take(50);
+    }
+
+    void OnOwnedItemCategoryChanged(DropdownSelectItem? value)
+    {
+        if (value is null)
+        {
+            _selOwnedItemCtg = null;
+            CurrentObject!.MerchantId = null;
+            CurrentObject!.MerchantCode = null;
+        }
+        else
+        {
+            _selOwnedItemCtg = value;
+            CurrentObject!.MerchantId = value.Id;
+            CurrentObject!.MerchantCode = value.Key;
+        }
+    }
+
+    private async Task<IEnumerable<DropdownSelectItem>> SearchOwnedItemCategory(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _ownedItemCategoryList.Take(50);
+        }
+
+        return _ownedItemCategoryList.Where(x => (x.Value is not null && x.Value.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+        || (x.Key is not null && x.Key.Contains(value, StringComparison.InvariantCultureIgnoreCase))).Take(50);
     }
     #endregion
 
@@ -658,13 +724,13 @@
                             ObjectCode = CurrentObject.Barcode,
                             ObjectName = CurrentObject.ObjectName,
                             ObjectNameKh = CurrentObject.NameKh,
-                            InfoLink = CurrentObject.ReferenceLink,
+                            InfoLink = CurrentObject.RefLink,
                             PurchaseLink = CurrentObject.PurchaseLink,
                             Description = CurrentObject.ItemDescription,
                             RetailUnitPrice = (decimal?)CurrentObject.PurchasedPrice,
                             CurrencyCode = CurrentObject.PurchasedPrice != null ? Currencies.US_USD : null,
                             Barcode = CurrentObject.Barcode,
-                            MfgCountryCode = CurrentObject.ManufacturerCountryCode,
+                            MfgCountryCode = CurrentObject.MfgCountryCode,
                             Brand = CurrentObject.Brand,
                             Model = CurrentObject.ModelNo,
                             CreatedUser = CurrentObject.CreatedUser,
@@ -764,6 +830,16 @@
         if (CurrentObject!.Category != null)
         {
             _selectedCategoryName = CurrentObject.Category.ObjectName;
+        }
+
+        if (CurrentObject.MerchantId.HasValue && _merchantList.Count(x => x.Id == CurrentObject.MerchantId.Value) > 0)
+        {
+            _selMerchant = _merchantList.SingleOrDefault<DropdownSelectItem>(x => x.Id == CurrentObject.MerchantId.Value);
+        }
+
+        if (CurrentObject.OwnedItemCategoryId.HasValue && _ownedItemCategoryList.Count(x => x.Id == CurrentObject.OwnedItemCategoryId.Value) > 0)
+        {
+            _selOwnedItemCtg = _ownedItemCategoryList.SingleOrDefault<DropdownSelectItem>(x => x.Id == CurrentObject.OwnedItemCategoryId.Value);
         }
     }
 

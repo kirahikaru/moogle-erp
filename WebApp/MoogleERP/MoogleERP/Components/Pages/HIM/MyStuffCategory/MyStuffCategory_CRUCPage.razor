@@ -1,8 +1,8 @@
-﻿@page "/him/merchant/{CRUCMode}"
-@page "/him/merchant/{CRUCMode}/{id:int}"
+﻿@page "/him/my-stuff-ctg/{CRUCMode}"
+@page "/him/my-stuff-ctg/{CRUCMode}/{id:int}"
 
-@inherits CRUCPageBase<Merchant>
-
+@inherits CRUCPageBase<OwnedItemCategory>
+<PageTitle>My Stuff Category</PageTitle>
 @if (CurrentObject != null && CurrentEditContext != null)
 {
     <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column;">
@@ -57,58 +57,38 @@
         </MudPaper>
         <MudTabs Color="Color.Primary" Class="moog-mudtab mt-4" ActiveTabClass="moog-mudtab-tab-active" TabButtonsClass="moog-mudtab-tab-btn" TabHeaderClass="moog-mudtab-tab-hdr" TabPanelsClass="moog-mudtab-tab-panel">
             <MudTabPanel Icon="fad fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
-                <MudPaper Elevation="0" Square="true" Height="calc(100% - var(--moog-cruc-pg-status-bar-height))" Style="overflow-y: auto; background-color: var(--tw-gray-50); scrollbar-width:auto; scrollbar-color:var(--tw-gray-300) var(--tw-gray-50); padding: 4px 12px">
+                <MudPaper Elevation="0" Square="true" Height="calc(100% - var(--moog-cruc-pg-status-bar-height))" Style="overflow-y: auto; background-color: var(--tw-gray-50); scrollbar-width:auto; scrollbar-color:var(--tw-gray-300) var(--tw-gray-50)">
                     <MudGrid Spacing="3" Class="pa-3">
-                        <MudItem xs="5">
+                        <MudItem xs="7">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
                                           ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                           Label="Name"
                                           @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" @ref=_mtfObjName />
                         </MudItem>
                         <MudItem xs="5">
-                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
-                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                          Label="Name (kh)" Placeholder="ឈ្មោះខ្មែរ"
-                                          @bind-Value="CurrentObject!.ObjectNameKh" For="@(() => CurrentObject!.ObjectNameKh)" />
-                        </MudItem>
-                        <MudItem xs="2">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
                                           ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                           Label="ID" Placeholder="A-Z, 0-9, -_" Mask="objIdMask"
                                           @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" />
                         </MudItem>
-                        <MudItem xs="3">
-                            <MudSelect Clearable="true" FitContent="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
-                                       Class="moog-mudform-input" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
-                                       ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                       AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
-                                       Label="Type" T="string"
-                                       Value="CurrentObject!.MerchantType" ValueChanged="OnMerchantTypeChanged" For="@(() => CurrentObject!.MerchantType)">
-                                @foreach (var item in _merchantTypeList)
-                                {
-                                    <MudSelectItem T="string" Value="@item.Key">@item.Value</MudSelectItem>
-                                }
-                            </MudSelect>
-                        </MudItem>
-                        <MudItem xs="9">
                         @if (CurrentObject!.Id > 0)
                         {
-                            <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
-                                                Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
-                                                ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                                AdornmentIcon="fa-solid fa-angle-down"
-                                                DebounceInterval="300"
-                                                Label="Parent" T="DropDownListItem" ToStringFunc="@(e => e == null ? null : $"{e.ObjectName}")"
-                                                Value="_selParent" ValueChanged="OnParentValueChanged"
-                                                SearchFunc="@SearchParent" />
+                            <MudItem xs="12">
+                                <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                 Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
+                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 AdornmentIcon="fa-solid fa-angle-down"
+                                                 DebounceInterval="300"
+                                                 Label="Parent" T="DropDownListItem" ToStringFunc="@(e => e == null ? null : $"{e.ObjectName}")"
+                                                 Value="_selParent" ValueChanged="OnParentValueChanged" 
+                                                 SearchFunc="@SearchParent" />
+                            </MudItem>
                         }
-                        </MudItem>
                         <MudItem xs="12">
-                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
+                            <MudTextField Clearable="false" FullWidth="true" Immediate="false" ReadOnly=true Required="false" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
                                           ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                          AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
-                                          Label="Info Link"
-                                          @bind-Value="CurrentObject!.Link" For="@(() => CurrentObject!.Link)" />
+                                          Label="Hierarchy path"
+                                          @bind-Value="CurrentObject!.HierarchyPath" For="@(() => CurrentObject!.HierarchyPath)" />
                         </MudItem>
                         @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
                         {
@@ -141,6 +121,12 @@
                     </MudStack>
                 </MudPaper>
             </MudTabPanel>
+            <MudTabPanel Icon="fad fa-circle-info" Text="Other Info" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
+                <MudPaper Elevation="0" Square="true" Height="100%" Class="moog-mudpaper-cruc-pg-tab-content">
+                    <MudGrid Spacing="3" Class="pa-3">
+                    </MudGrid>
+                </MudPaper>
+            </MudTabPanel>
         </MudTabs>
     </EditForm>
 }
@@ -149,7 +135,6 @@
 
     #region UI PARAM
     MudTextField<string>? _mtfObjName;
-    List<DropdownSelectItem> _merchantTypeList = [];
     IEnumerable<DropDownListItem> _validParents = [];
     IMask objIdMask = new RegexMask(@"^[A-Z0-9-_]{0,}$");
     DropDownListItem? _selParent;
@@ -159,7 +144,7 @@
     #region PAGE LIFECYCLE FUNCTIONS
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        UrlPrefix = "/him/merchant";
+        UrlPrefix = "/him/my-stuff-ctg";
         return base.SetParametersAsync(parameters);
     }
 
@@ -169,7 +154,7 @@
         {
             case CRUDCModes.READ:
                 {
-                    CurrentObject = await Uow.Merchants.GetAsync(Id);
+                    CurrentObject = await Uow.OwnedItemCategories.GetAsync(Id);
                     IsViewMode = true;
                 }
                 break;
@@ -179,11 +164,11 @@
                 }
                 break;
             case CRUDCModes.UPDATE:
-                CurrentObject = await Uow.Merchants.GetAsync(Id);
+                CurrentObject = await Uow.OwnedItemCategories.GetAsync(Id);
                 break;
             case CRUDCModes.CLONE:
                 {
-                    var tempObj = await Uow.Merchants.GetAsync(Id);
+                    var tempObj = await Uow.OwnedItemCategories.GetAsync(Id);
                     CurrentObject = tempObj!.DeepClone();
                     CurrentObject!.Id = 0;
                     CurrentObject!.ObjectCode = null;
@@ -209,11 +194,6 @@
     #endregion
 
     #region UI FUNCTIONS
-    void OnMerchantTypeChanged(string? merchantType)
-    {
-        CurrentObject!.MerchantType = merchantType;
-    }
-
     void OnParentValueChanged(DropDownListItem? value)
     {
         if (value is null)
@@ -251,7 +231,7 @@
     {
         InvalidMsgList.Clear();
 
-        bool isDuplicated = await Uow.HealthcareFacilities.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+        bool isDuplicated = await Uow.OwnedItemCategories.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
 
         if (isDuplicated)
         {
@@ -285,12 +265,12 @@
         if (CurrentObject.Id > 0)
         {
             // Update existing record
-            bool isUpd = await Uow.Merchants.UpdateAsync(CurrentObject);
+            bool isUpd = await Uow.OwnedItemCategories.UpdateAsync(CurrentObject);
             return isUpd;
         }
         else
         {
-            int objId = await Uow.Merchants.InsertAsync(CurrentObject);
+            int objId = await Uow.OwnedItemCategories.InsertAsync(CurrentObject);
             if (objId > 0)
                 CurrentObject.Id = objId;
 
@@ -302,13 +282,7 @@
     #region INTERNAL FUNCTIONS
     async Task PopulatedUIControls()
     {
-        _merchantTypeList = MerchantTypes.GetForDropdownSelect();
-        _validParents = await Uow.Merchants.GetValidParentAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!, null);
-
-        if (CurrentObject.ParentId.HasValue && _validParents.Count(x => x.Id == CurrentObject.ParentId.Value) > 0)
-        {
-            _selParent = _validParents.SingleOrDefault<DropDownListItem>(x => x.Id == CurrentObject.ParentId.Value);
-        }
+        _validParents = await Uow.OwnedItemCategories.GetValidParentsAsync(CurrentObject!.ObjectCode, CurrentObject!.HierarchyPath!);
     }
     #endregion
 }

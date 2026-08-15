@@ -1,0 +1,200 @@
+﻿@namespace MoogleERP.Components.Pages
+@inherits CRUCDiagBase<OwnedItemCategory>
+
+<MudDialog Class="moog-crud-muddiag" Style="width:50%; margin:0px; background-color:#F7F7F7;" >
+    <TitleContent>
+        <MudText Typo="Typo.h6" Class="lang-en">
+            IMAGES
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudCard Outlined="true" Style="padding: 8px; border:0px; background-color: #F7F7F7;">
+            <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column;">
+                <DataAnnotationsValidator />
+                <MudGrid Spacing="3" Class="pa-3">
+                    <MudItem xs="7">
+                        <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
+                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                      Label="Name"
+                                      @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" @ref=_mtfObjName />
+                    </MudItem>
+                    <MudItem xs="5">
+                        <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
+                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                      Label="ID" Placeholder="A-Z, 0-9, -_" 
+                                      @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" />
+                    </MudItem>
+                    @if (CurrentObject!.Id > 0)
+                    {
+                        <MudItem xs="12">
+                            <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
+                                             ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                             AdornmentIcon="fa-solid fa-angle-down"
+                                             DebounceInterval="300"
+                                             Label="Parent" T="DropDownListItem" ToStringFunc="@(e => e == null ? null : $"{e.ObjectName}")"
+                                             Value="_selParent" ValueChanged="OnParentValueChanged"
+                                             SearchFunc="@SearchParent" />
+                        </MudItem>
+                    }
+                    <MudItem xs="12">
+                        <MudTextField Clearable="false" FullWidth="true" Immediate="false" ReadOnly=true Required="false" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
+                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                      Label="Hierarchy path"
+                                      @bind-Value="CurrentObject!.HierarchyPath" For="@(() => CurrentObject!.HierarchyPath)" />
+                    </MudItem>
+                    @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
+                    {
+                        <MudItem xs="12" Class="pt-4">
+                            @foreach (string msg in CurrentEditContext.GetValidationMessages())
+                            {
+                                <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
+                            }
+                            @foreach (string key in InvalidMsgList.Keys)
+                            {
+                                <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                            }
+                        </MudItem>
+                    }
+                </MudGrid>
+            </EditForm>
+        </MudCard>
+        <MudCardActions>
+            <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Style="width:100%;">
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.CheckCircle" Size="Size.Small" Color="Color.Primary" OnClick="Confirm">
+                    Confirm
+                </MudButton>
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.Cancel" Size="Size.Small" Color="Color.Dark" OnClick="Cancel">
+                    Cancel
+                </MudButton>
+            </MudStack>
+        </MudCardActions>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [Parameter]
+    public required List<AttachedImage> Images { get; set; }
+
+    Dictionary<string, string> _errorList = new();
+
+    #region UI PARAM
+    MudTextField<string>? _mtfObjName;
+    IEnumerable<DropDownListItem> _validParents = [];
+    IMask objIdMask = new RegexMask(@"^[A-Z0-9-_]{0,}$");
+    DropDownListItem? _selParent;
+    #endregion
+
+    #region PAGE LIFECYCLE EVENTS
+    protected override void OnInitialized()
+    {
+
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+    #endregion
+
+    #region UI FUNCTIONS
+    void OnParentValueChanged(DropDownListItem? value)
+    {
+        if (value is null)
+        {
+            _selParent = null;
+            CurrentObject!.ParentId = null;
+            CurrentObject!.ParentCode = null;
+        }
+        else
+        {
+            _selParent = value;
+            CurrentObject!.ParentId = value.Id;
+            CurrentObject!.ParentCode = value.ObjectCode;
+        }
+    }
+
+    private async Task<IEnumerable<DropDownListItem>> SearchParent(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _validParents.Take(50);
+        }
+
+        return _validParents.Where(x => (x.ObjectName is not null && x.ObjectName.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+        || (x.ObjectCode is not null && x.ObjectCode!.Contains(value))).Take(50);
+    }
+    #endregion
+
+    #region DB UPDATE FUNCTIONS
+    protected override async Task ValidatePreSave()
+    {
+        InvalidMsgList.Clear();
+
+        bool isDuplicated = await Uow.OwnedItemCategories.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
+
+        if (isDuplicated)
+        {
+            InvalidMsgList.Add("ObjectCode_Duplicate", $"Record with ObjectCode='{CurrentObject.ObjectCode}' is already existed.");
+        }
+    }
+
+    protected override Task PreSaveProcessing()
+    {
+        CurrentObject!.ObjectCode = CurrentObject!.ObjectCode!.ToUpper();
+
+        if (string.IsNullOrEmpty(CurrentObject!.HierarchyPath))
+            CurrentObject!.HierarchyPath = CurrentObject!.ObjectCode;
+
+        return base.PreSaveProcessing();
+    }
+
+    protected override async Task<bool> SaveAndCommitProcessing()
+    {
+        DateTime timestamp = DateTime.Now;
+
+        if (CurrentObject!.Id == 0)
+        {
+            CurrentObject!.CreatedUser = AuditTrailUser;
+            CurrentObject!.CreatedDateTime = timestamp;
+        }
+
+        CurrentObject!.ModifiedUser = AuditTrailUser;
+        CurrentObject!.ModifiedDateTime = timestamp;
+
+        if (CurrentObject.Id > 0)
+        {
+            // Update existing record
+            bool isUpd = await Uow.OwnedItemCategories.UpdateAsync(CurrentObject);
+            return isUpd;
+        }
+        else
+        {
+            int objId = await Uow.OwnedItemCategories.InsertAsync(CurrentObject);
+            if (objId > 0)
+                CurrentObject.Id = objId;
+
+            return objId > 0;
+        }
+    }
+    #endregion
+    //========================================================================================================
+    // <END> UI FUNCTIONS
+    //========================================================================================================
+
+    private void InvalidSaveClick(EditContext editContext)
+    {
+        //string text = "";
+    }
+    #region INTERNAL FUNCTIONS
+    async Task PopulatedUIControls()
+    {
+        _validParents = await Uow.OwnedItemCategories.GetValidParentsAsync(CurrentObject!.ObjectCode, CurrentObject!.HierarchyPath!);
+    }
+    #endregion
+
+}

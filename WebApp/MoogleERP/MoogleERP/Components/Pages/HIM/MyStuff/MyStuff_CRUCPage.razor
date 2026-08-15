@@ -111,7 +111,7 @@
                                     <MudStack Row="true" Spacing="1">
                                         <MudTooltip Text="Add new category"
                                                     Placement="Placement.Top" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="false" ShowOnHover="true" ShowOnFocus="false">
-                                            <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+                                            <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-muddatagrid-icon-btn" OnClick="OnAddCategoryBtnClicked"
                                                            Icon="fad fa-circle-plus" aria-label="Add New My Stuff Category" />
                                         </MudTooltip>
                                     </MudStack>
@@ -207,18 +207,19 @@
                                 </MudDatePicker> *@
                             </MudItem>
                             <MudItem xs="4">
-                                <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
-                                                 Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
-                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                                 AdornmentIcon="fa-solid fa-angle-down"
-                                                 DebounceInterval="300"
-                                                 Label="Purchased From" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value}")"
-                                                 Value="_selMerchant" ValueChanged="OnMerchantChanged"
-                                                 SearchFunc="@SearchMerchant" />
                                 <MudStack Row="true" Spacing="1">
-                                    <MudTooltip Text="Add new category"
+                                    <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                     Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
+                                                     ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                     AdornmentIcon="fa-solid fa-angle-down"
+                                                     DebounceInterval="300"
+                                                     Label="Purchased From" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value}")"
+                                                     Value="_selMerchant" ValueChanged="OnMerchantChanged"
+                                                     SearchFunc="@SearchMerchant" />
+
+                                    <MudTooltip Text="Add new merchant"
                                                 Placement="Placement.Top" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="false" ShowOnHover="true" ShowOnFocus="false">
-                                        <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+                                        <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-muddatagrid-icon-btn" OnClick="OnAddMerchantBtnClicked"
                                                        Icon="fad fa-circle-plus" aria-label="Add New Merchant" />
                                     </MudTooltip>
                                 </MudStack>
@@ -579,6 +580,48 @@
 
         return _ownedItemCategoryList.Where(x => (x.Value is not null && x.Value.Contains(value, StringComparison.InvariantCultureIgnoreCase))
         || (x.Key is not null && x.Key.Contains(value, StringComparison.InvariantCultureIgnoreCase))).Take(50);
+    }
+
+    async Task OnAddCategoryBtnClicked() {
+        var diagParam = new DialogParameters<MyStuffCategory_CRUCDiag>();
+        // Open New Category Diag
+        var diag = await MudDiagSvc.ShowAsync<MyStuffCategory_CRUCDiag>("New My Stuff Category");
+
+        var result = await diag.Result;
+
+        if (result != null && !result.Canceled && result.Data != null && result.DataType == typeof(ObjStateTransDetail))
+        {
+            try
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                await JsRuntime!.InvokeVoidAsync("console.error", ex.GetFullMessage());
+                await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "Error Encountered",
+                    Text = "System encountered error while trying to save please try again.",
+                    Icon = SweetAlertIcon.Error,
+                    ShowConfirmButton = true//,
+                    //Timer = 1500
+                });
+            }
+            finally
+            {
+                
+            }
+        }
+        else
+        {
+            _objStateTranDetail = null;
+            IsSaving = false;
+        }
+    }
+
+    async Task OnAddMerchantBtnClicked()
+    {
+        // Open New Merchant Diag
     }
     #endregion
 

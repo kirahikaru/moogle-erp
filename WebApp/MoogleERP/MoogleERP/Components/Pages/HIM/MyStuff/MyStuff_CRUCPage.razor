@@ -582,18 +582,36 @@
         || (x.Key is not null && x.Key.Contains(value, StringComparison.InvariantCultureIgnoreCase))).Take(50);
     }
 
-    async Task OnAddCategoryBtnClicked() {
-        var diagParam = new DialogParameters<MyStuffCategory_CRUCDiag>();
+    async Task OnAddCategoryBtnClicked()
+    {
+        DialogParameters<MyStuffCategory_CRUCDiag> diagParam = new();
+
+        diagParam.Add(x => x.CRUCMode, CRUDCModes.CREATE);
+
+        var diagOptions = new DialogOptions
+        {
+            BackdropClick = false,
+            CloseButton = true,
+            CloseOnEscapeKey = false,
+            MaxWidth = MaxWidth.ExtraLarge,
+            Position = DialogPosition.Center
+        };
         // Open New Category Diag
-        var diag = await MudDiagSvc.ShowAsync<MyStuffCategory_CRUCDiag>("New My Stuff Category");
+        var diag = await MudDiagSvc.ShowAsync<MyStuffCategory_CRUCDiag>("New My Stuff Category", diagParam, diagOptions);
 
         var result = await diag.Result;
 
-        if (result != null && !result.Canceled && result.Data != null && result.DataType == typeof(ObjStateTransDetail))
+        if (result != null && !result.Canceled && result.Data != null && result.DataType == typeof(KeyValuePair<int, bool>))
         {
             try
             {
-                
+                KeyValuePair<int, bool> resultVal = (KeyValuePair<int, bool>)result.Data;
+
+                if (resultVal.Value)
+                {
+                    _ownedItemCategoryList = await Uow.OwnedItemCategories.GetForDropdownSelectAsync();
+                    StateHasChanged();
+                }
             }
             catch (Exception ex)
             {
@@ -609,7 +627,7 @@
             }
             finally
             {
-                
+
             }
         }
         else

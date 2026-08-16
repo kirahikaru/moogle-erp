@@ -3,79 +3,113 @@
 
 <MudDialog Class="moog-crud-muddiag" Style="width:50%; margin:0px; background-color:#F7F7F7;" >
     <TitleContent>
-        <MudText Typo="Typo.h6" Class="lang-en">
-            IMAGES
-        </MudText>
+        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
+            <MudText Typo="Typo.h6" Class="lang-en">
+                @HeaderTitle
+            </MudText>
+            @if (CRUCMode == CRUDCModes.READ)
+            {
+                <MudChip Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="background-color: var(--tw-emerald-100)">VIEW</MudChip>
+            }
+            else if (CRUCMode == CRUDCModes.UPDATE)
+            {
+                <MudChip Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="background-color: var(--tw-sky-100)">UPDATE</MudChip>
+            }
+            else if (CRUCMode == CRUDCModes.CREATE)
+            {
+                <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="background-color: var(--tw-sky-100)">NEW</MudChip>
+            }
+            else if (CRUCMode == CRUDCModes.CLONE)
+            {
+                <MudChip Size="Size.Small" Color="Color.Info" Variant="Variant.Outlined" Class="moog-pg-banner-chip" T="string" Style="background-color: var(--tw-sky-100)">NEW (Clone)</MudChip>
+            }
+        </MudStack>
     </TitleContent>
     <DialogContent>
-        <MudCard Outlined="true" Style="padding: 8px; border:0px; background-color: #F7F7F7;">
-            <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column;">
-                <DataAnnotationsValidator />
-                <MudGrid Spacing="3" Class="pa-3">
-                    <MudItem xs="7">
-                        <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
-                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                      Label="Name"
-                                      @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" @ref=_mtfObjName />
-                    </MudItem>
-                    <MudItem xs="5">
-                        <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
-                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                      Label="ID" Placeholder="A-Z, 0-9, -_" 
-                                      @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" />
-                    </MudItem>
-                    @if (CurrentObject!.Id > 0)
-                    {
+        <MudCard Outlined="false" Elevation="0" style="background:none">
+            @if (CurrentObject != null && CurrentEditContext != null)
+            {
+                <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column;">
+                    <DataAnnotationsValidator />
+                    <MudGrid Spacing="3">
+                        <MudItem xs="7">
+                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="Name"
+                                          @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" @ref=_mtfObjName />
+                        </MudItem>
+                        <MudItem xs="5">
+                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="ID" Placeholder="A-Z, 0-9, -_"
+                                          @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" />
+                        </MudItem>
+                        @if (CurrentObject!.Id > 0)
+                        {
+                            <MudItem xs="12">
+                                <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                 Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
+                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 AdornmentIcon="fa-solid fa-angle-down"
+                                                 DebounceInterval="300"
+                                                 Label="Parent" T="DropDownListItem" ToStringFunc="@(e => e == null ? null : $"{e.ObjectName}")"
+                                                 Value="_selParent" ValueChanged="OnParentValueChanged"
+                                                 SearchFunc="@SearchParent" />
+                            </MudItem>
+                        }
                         <MudItem xs="12">
-                            <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
-                                             Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
-                                             ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                             AdornmentIcon="fa-solid fa-angle-down"
-                                             DebounceInterval="300"
-                                             Label="Parent" T="DropDownListItem" ToStringFunc="@(e => e == null ? null : $"{e.ObjectName}")"
-                                             Value="_selParent" ValueChanged="OnParentValueChanged"
-                                             SearchFunc="@SearchParent" />
+                            <MudTextField Clearable="false" FullWidth="true" Immediate="false" ReadOnly=true Required="false" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
+                                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                          Label="Hierarchy path"
+                                          @bind-Value="CurrentObject!.HierarchyPath" For="@(() => CurrentObject!.HierarchyPath)" />
                         </MudItem>
-                    }
-                    <MudItem xs="12">
-                        <MudTextField Clearable="false" FullWidth="true" Immediate="false" ReadOnly=true Required="false" ShrinkLabel="true" Variant="Variant.Text" Class="moog-mudform-input"
-                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                      Label="Hierarchy path"
-                                      @bind-Value="CurrentObject!.HierarchyPath" For="@(() => CurrentObject!.HierarchyPath)" />
-                    </MudItem>
-                    @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
-                    {
-                        <MudItem xs="12" Class="pt-4">
-                            @foreach (string msg in CurrentEditContext.GetValidationMessages())
-                            {
-                                <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
-                            }
-                            @foreach (string key in InvalidMsgList.Keys)
-                            {
-                                <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
-                            }
-                        </MudItem>
-                    }
-                </MudGrid>
-            </EditForm>
+                        @if (CurrentEditContext.GetValidationMessages().Any() || InvalidMsgList.Count > 0)
+                        {
+                            <MudItem xs="12" Class="pt-4">
+                                @foreach (string msg in CurrentEditContext.GetValidationMessages())
+                                {
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
+                                }
+                                @foreach (string key in InvalidMsgList.Keys)
+                                {
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                }
+                            </MudItem>
+                        }
+                    </MudGrid>
+                </EditForm>
+            }
         </MudCard>
         <MudCardActions>
-            <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Style="width:100%;">
-                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.CheckCircle" Size="Size.Small" Color="Color.Primary" OnClick="Confirm">
-                    Confirm
-                </MudButton>
-                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.Cancel" Size="Size.Small" Color="Color.Dark" OnClick="Cancel">
-                    Cancel
-                </MudButton>
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="2" Style="width:100%">
+                @if (IsViewMode)
+                {
+                    <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Default" DropShadow="false" Class="moog-mudbutton"
+                               Disabled=@IsSaving OnClick="Cancel" StartIcon="material-symbols-rounded/close">
+                        Close
+                    </MudButton>
+                }
+                else
+                {
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" DropShadow="false" Class="moog-mudbutton"
+                               Disabled=@IsSaving OnClick="@(() => Save(false))" StartIcon="fa-regular fa-floppy-disk-circle-arrow-right">
+                        Save
+                    </MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" DropShadow="false" Class="moog-mudbutton"
+                               Disabled=@IsSaving OnClick="@(() => Save(true))" StartIcon="fa-regular fa-floppy-disk">
+                        Save & Close
+                    </MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" Size="Size.Small" DropShadow="false" Class="moog-mudbutton"
+                               Disabled=@IsSaving OnClick="Cancel" StartIcon="fa-regular fa-circle-xmark">
+                        Cancel
+                    </MudButton>
+                }
             </MudStack>
         </MudCardActions>
     </DialogContent>
 </MudDialog>
 
 @code {
-    [Parameter]
-    public required List<AttachedImage> Images { get; set; }
-
     Dictionary<string, string> _errorList = new();
 
     #region UI PARAM
@@ -86,14 +120,37 @@
     #endregion
 
     #region PAGE LIFECYCLE EVENTS
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        switch (CRUCMode)
+        {
+            case CRUDCModes.READ:
+                {
+                    CurrentObject = await Uow.OwnedItemCategories.GetAsync(Id);
+                    IsViewMode = true;
+                }
+                break;
+            case CRUDCModes.CREATE:
+                {
+                    CurrentObject = new();
+                }
+                break;
+            case CRUDCModes.UPDATE:
+                CurrentObject = await Uow.OwnedItemCategories.GetAsync(Id);
+                break;
+            case CRUDCModes.CLONE:
+                {
+                    var tempObj = await Uow.OwnedItemCategories.GetAsync(Id);
+                    CurrentObject = tempObj!.DeepClone();
+                    CurrentObject!.Id = 0;
+                    CurrentObject!.ObjectCode = null;
+                }
+                break;
+        }
 
-    }
+        CurrentEditContext = new EditContext(CurrentObject!);
 
-    protected override Task OnInitializedAsync()
-    {
-        return base.OnInitializedAsync();
+        await PopulatedUIControls();
     }
     #endregion
 

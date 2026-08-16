@@ -1,11 +1,14 @@
 ﻿@page "/lib/book/main"
 @inherits MainPageBase<Book>
+
+<PageTitle>Book</PageTitle>
 <MudPaper Class="moog-pg-banner" Elevation="0">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
-			<MudIcon Icon="fad fa-game-board" Color="Color.Primary" Size="Size.Large"></MudIcon>
+			<MudIcon Icon="fad fa-layer-group" Color="Color.Primary" Size="Size.Large"></MudIcon>
 			<MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
 		</MudStack>
+
 		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary"
 				   StartIcon="far fa-plus-circle" OnClick="@(args => PerformCRUC(CRUDCModes.CREATE))">
 			Add New
@@ -28,32 +31,12 @@
 				 Class="moog-muddatagrid moog-main-pg" Height="calc(100% - 38px)"
 				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-muddatagrid-row"
 				 @ref="MainDataGrid" ServerData="ServerDataFunc"
-                 T="Book">
-        <Columns>
-            <PropertyColumn Title="Title" Property="x => x.Title"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="font-weight:500" />
-            <PropertyColumn Title="Author(s)" Property="x => x.AuthorText"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-            <TemplateColumn Title="Category" HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" Context="dataRow">
-                <CellTemplate>
-                    <MudText Typo="Typo.body1">@(dataRow.Item.Category != null ? dataRow.Item.Category.ObjectName : "-")</MudText>
-                </CellTemplate>
-            </TemplateColumn>
-            <PropertyColumn Title="Series Name" Property="x => x.SeriesText"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-            <PropertyColumn Title="Book#" Property="x => x.BookNoText"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" Sortable="false" />
-            <PropertyColumn Title="Year" Property="x => x.ReleasedYear"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-            <PropertyColumn Title="Publisher" Property="x => x.PublisherName"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-            <PropertyColumn Title="ISBN-13" Property="x => x.ISBN13" Sortable="false"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono"
-							HeaderStyle="width:800px; max-width:80px" />
-            <PropertyColumn Title="ISBN-10" Property="x => x.ISBN10" Sortable="false"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono"
-							HeaderStyle="width:800px; max-width:100px" />
-			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
+				 T="Book">
+		<Columns>
+			<PropertyColumn Title="Name" Property="x => x.Title"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
+							CellStyle="font-weight:500; color:var(--ssv-pharma-blue)" />
+			<TemplateColumn Title="Action" Editable="false" Filterable="false" Resizable="true" Sortable="false"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
 							HeaderStyle="width:300px; max-width:120px" CellStyle="padding: 0px 10px !important;">
 				<CellTemplate>
@@ -61,10 +44,10 @@
 						<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
 									   Icon="far fa-edit"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
-						<MudIconButton Size="Size.Small" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
+						<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
 									   Icon="far fa-copy"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
-						<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
+						<MudIconButton Size="Size.Small" Color="Color.Info" Class="moog-muddatagrid-icon-btn"
 									   Icon="far fa-eye"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
 						<MudIconButton Size="Size.Small" Color="Color.Error" Class="moog-muddatagrid-icon-btn"
@@ -73,33 +56,15 @@
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>
-        </Columns>
+		</Columns>
 		<PagerContent>
 			<MudDataGridPager T="Book" Class="moog-muddatagrid-pager" PageSizeOptions="new[] { 10, 20, 30, 50, 80, 100 }" />
 		</PagerContent>
-    </MudDataGrid>
+	</MudDataGrid>
 </MudPaper>
 
 @code {
 	#region UI VARIABLES
-
-	Dictionary<string, string> _statesCssClasses = new() {
-		{ ObjectStates.NEW, "status-chip-pink-light" },
-		{ ObjectStates.BNIB, "status-chip-pink-light" },
-		{ ObjectStates.IN_USE, "status-chip-green-light" },
-		{ ObjectStates.LOANED, "status-chip-amber-light"},
-		{ ObjectStates.UNKNOWN, "status-chip-brown-light"},
-		{ ObjectStates.OTHER, "status-chip-brown-light"},
-		{ ObjectStates.DRAFT, "status-chip-teal-light"},
-		{ ObjectStates.GIFTED_OTHER, "status-chip-blue-gray-light"},
-		{ ObjectStates.SOLD, "status-chip-blue-gray-light"},
-		{ ObjectStates.WRITTEN_OFF, "status-chip-blue-gray-light"},
-		{ ObjectStates.IN_STASH, "status-chip-purple-light" },
-		{ ObjectStates.BROKEN, "status-chip-blue-gray-light" },
-		{ ObjectStates.RARELY_USED, "status-chip-amber-light" },
-	};
-
-	Dictionary<string, string> _stateLightStyles = [];
 
 	#endregion
 
@@ -108,7 +73,6 @@
 	{
 		UrlPrefix = "/lib/book";
 		SearchParamName = "bookSearchParam";
-		_stateLightStyles = ObjectStates.GetLightStyles();
 		return base.SetParametersAsync(parameters);
 	}
 
@@ -119,11 +83,6 @@
 	#endregion
 
 	#region UI FUNCTIONS
-	async Task OnSearchClearClicked(MouseEventArgs args)
-	{
-		await UITextBoxSearch!.FocusAsync();
-		await MainDataGrid.ReloadServerData();
-	}
 	#endregion
 
 	#region UI BASE FUNCTIONS
@@ -139,16 +98,13 @@
 		{
 			IsSearching = true;
 			int totalItemCount = 0;
-			IEnumerable<SqlSortCond> sortConds = [];
-			IEnumerable<SqlFilterCond> filterConds = [];
-
-			if (gridState.SortDefinitions.Count > 0)
-			{
-				foreach (var sortDef in gridState.SortDefinitions)
-				{
-					sortConds.Append<SqlSortCond>(new SqlSortCond(sortDef.SortBy, sortDef.Descending));
-				}
-			}
+			//if (gridState.SortDefinitions.Count > 0)
+			//{
+			//	var firstSort = gridState.SortDefinitions.First();
+			//	result = firstSort.Descending
+			//		? result.OrderByDescending(firstSort.SortFunc).ToList()
+			//		: result.OrderBy(firstSort.SortFunc).ToList();
+			//}
 
 			if (gridState.FilterDefinitions.Any())
 			{
@@ -157,10 +113,19 @@
 				//	.Where(x => filterFunctions.All(f => f(x)))
 				//	.ToList();
 			}
+			else
+			{
+				var result = await Uow.Books.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText);
+				MainDataList = result.Value;
+				totalItemCount = result.Key;
+			}
 
-			var result = await Uow.Books.SearchNewAsync(PageSize, MainDataGrid.CurrentPage + 1, SearchText, sortConds, filterConds);
-			MainDataList = result.Value;
-			totalItemCount = result.Key;
+			//var totalNumberOfFilteredItems = result.Count;
+
+			//result = result
+			//	.Skip(gridState.StartIndex)
+			//	.Take(gridState.Count)
+			//	.ToList();
 
 			return new GridData<Book>
 			{
@@ -183,5 +148,5 @@
 			IsSearching = false;
 		}
 	}
-    #endregion
+	#endregion
 }

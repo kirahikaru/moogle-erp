@@ -1,6 +1,6 @@
 ﻿@page "/him/my-stuff/main"
 @inherits MainPageBase<OwnedItem>
-<PageTitle>@HeaderTitle</PageTitle>
+<PageTitle>My Stuff</PageTitle>
 <MudPaper Class="moog-pg-banner" Elevation="0">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
@@ -77,11 +77,11 @@
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
                             HeaderStyle="min-width:180px" Context="rowData">
                 <CellTemplate>
-                    @if (rowData.Item.ManufacturedCountry != null && !string.IsNullOrEmpty(rowData.Item.ManufacturedCountry.FlagIconPath))
+                    @if (rowData.Item.MfgCountry != null && !string.IsNullOrEmpty(rowData.Item.MfgCountry.FlagIconPath))
                     {
                         <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
-                            <MudImage Src=@(rowData.Item.ManufacturedCountry!.FlagIconPath!) Height="12" />
-                            <MudText Typo="Typo.body1">@rowData.Item.ManufacturedCountry.ObjectName</MudText>
+                            <MudImage Src=@(rowData.Item.MfgCountry!.FlagIconPath!) Height="12" />
+                            <MudText Typo="Typo.body1">@rowData.Item.MfgCountry.ObjectName</MudText>
                         </MudStack>
                     }
                 </CellTemplate>

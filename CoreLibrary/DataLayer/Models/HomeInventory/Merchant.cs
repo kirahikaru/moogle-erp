@@ -1,7 +1,7 @@
 ﻿using DataLayer.GlobalConstant;
 using Dapper.Contrib.Extensions;
 namespace DataLayer.Models.HomeInventory;
-[Table("[home].[Merchant]")]
+[Table("[him].[Merchant]")]
 public class Merchant : AuditObject, IParentChildHierarchyObject
 {
 	[Computed, Write(false), ReadOnly(true)]

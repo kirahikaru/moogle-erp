@@ -19,6 +19,9 @@ public class CRUCPageBase<T> : ComponentBase
 	public required NavigationManager NavMngr { get; set; }
 
 	[Inject]
+	public required IDialogService MudDiagSvc { get; set; }
+
+	[Inject]
 	public required IUowMoogleKhErp Uow { get; set; }
 
 	[Inject]

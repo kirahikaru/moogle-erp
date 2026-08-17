@@ -46,8 +46,11 @@
 					<MudText Typo="Typo.body1">@(rowData.Item.Parent is not null ? rowData.Item.Parent.ObjectName.NonNullValue("-") : "-")</MudText>
 				</CellTemplate>
 			</TemplateColumn>
+			<PropertyColumn Title="ID" Property="x => x.ObjectCode"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono"
+							CellStyle="white-space:nowrap"/>
 			<PropertyColumn Title="Hierachy Path" Property="x => x.HierarchyPath"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
 			<TemplateColumn Title="Action" Editable="false" Filterable="false" Resizable="true" Sortable="false"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
 							HeaderStyle="width:300px; max-width:120px" CellStyle="padding: 0px 10px !important;">

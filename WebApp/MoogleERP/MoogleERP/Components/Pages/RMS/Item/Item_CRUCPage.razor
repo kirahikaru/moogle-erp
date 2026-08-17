@@ -3,13 +3,14 @@
 
 @inherits CRUCPageBase<Item>
 
+<PageTitle>Item</PageTitle>
 @if (CurrentObject != null && CurrentEditContext != null)
 {
     <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column;">
         <DataAnnotationsValidator />
         <MudPaper Class="moog-pg-banner" Elevation="0">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
-                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="0">
+                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2">
                     <MudIcon Icon="fad fa-list-tree" Color="Color.Primary" Size="Size.Large"></MudIcon>
                     <MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
                     @if (CRUCMode == CRUDCModes.READ)
@@ -365,7 +366,7 @@
                                         <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify=Justify.FlexStart>
                                             <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" FullWidth="false" Class="moog-mudbutton"
                                                        StartIcon="fa-solid fa-plus" IconSize="Size.Small" IconColor="Color.Primary"
-                                                       OnClick="AddItemSpec" Disabled=@(!_canEditSpecs && _isEditingSpec)>
+                                                       OnClick="AddItemSpec" Disabled=@(!_canEditSpecs || _isEditingSpec)>
                                                 Add Spec
                                             </MudButton>
                                             <MudSwitchM3 ReadOnly=@IsViewMode Class="moog-mud-switch ml-2" Color="Color.Default"
@@ -473,7 +474,7 @@
                                     {
                                         <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify=Justify.FlexStart>
                                             <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" FullWidth="false" Class="moog-mudbutton"
-                                                       StartIcon="far fa-plus" IconSize="Size.Small" IconColor="Color.Primary"
+                                                       StartIcon="fa-solid fa-plus" IconSize="Size.Small" IconColor="Color.Primary"
                                                        OnClick="AddItemVar" Disabled="(!_canEditVars || _isEditingItemVar)">
                                                 Add Variation
                                             </MudButton>

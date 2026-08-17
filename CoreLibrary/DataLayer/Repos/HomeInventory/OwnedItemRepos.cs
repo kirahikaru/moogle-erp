@@ -29,8 +29,8 @@ public interface IOwnedItemRepos : IBaseRepos<OwnedItem>
 		DateTime? purchasedDateTo = null,
 		decimal? purchasePriceFrom = null,
 		decimal? purchasePriceTo = null,
-		List<string>? merchantObjectCodeList = null,
-		List<string>? manufactureCountryList = null);
+		List<string>? merchantCodeList = null,
+		List<string>? mfgCountryList = null);
 
 	Task<DataPagination> GetSearchPaginationAsync(
 		int pgSize = 0,
@@ -52,8 +52,8 @@ public interface IOwnedItemRepos : IBaseRepos<OwnedItem>
 		DateTime? purchasedDateTo = null,
 		decimal? purchasePriceFrom = null,
 		decimal? purchasePriceTo = null,
-		List<string>? merchantObjectCodeList = null,
-		List<string>? manufactureCountryList = null);
+		List<string>? merchantCodeList = null,
+		List<string>? mfgCountryList = null);
 }
 
 public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbContext, OwnedItem.DatabaseObject), IOwnedItemRepos
@@ -66,8 +66,8 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
         sbSql.Where("t.Id=@Id");
 
         sbSql.LeftJoin($"{OwnedItemCategory.MsSqlTable} oic ON oic.Id=t.OwnedItemCategoryId");
-        sbSql.LeftJoin($"{Merchant.MsSqlTable} m ON m.IsDeleted=0 AND m.ObjectCode=t.MerchantObjectCode");
-        sbSql.LeftJoin($"{Country.MsSqlTable} c ON c.IsDeleted=0 AND c.ObjectCode=t.ManufacturerCountryCode");
+        sbSql.LeftJoin($"{Merchant.MsSqlTable} m ON m.IsDeleted=0 AND m.ObjectCode=t.MerchantCode");
+        sbSql.LeftJoin($"{Country.MsSqlTable} c ON c.IsDeleted=0 AND c.ObjectCode=t.MfgCountryCode");
 
         var sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**leftjoin**/ /**where**/").RawSql;
 
@@ -77,7 +77,7 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
                                     sql,(oi, oic, m, c) => {
                                         oi.Category = oic;
                                         oi.Merchant = m;
-                                        oi.ManufacturedCountry = c;
+                                        oi.MfgCountry = c;
                                         return oi;
                                     }, new { Id=id }, splitOn:"Id")).AsList();
 
@@ -113,8 +113,8 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
     {
         SqlBuilder sbSql = new();
         sbSql.Where("t.IsDeleted=0");
-        sbSql.Where("t.MerchantObjectCode IS NOT NULL");
-        sbSql.Where("t.MerchantObjectCode=@MerchantObjectCode");
+        sbSql.Where("t.MerchantCode IS NOT NULL");
+        sbSql.Where("t.MerchantCode=@MerchantCode");
 
         var sql = sbSql.AddTemplate($"SELECT * FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
         var param = new { MerchantObjectCode = new DbString { Value = merchantCode, IsAnsi = true } };
@@ -176,8 +176,8 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
         #endregion
 
         sbSql.LeftJoin($"{OwnedItemCategory.MsSqlTable} oic ON oic.Id=t.OwnedItemCategoryId");
-        sbSql.LeftJoin($"{Merchant.MsSqlTable} m ON m.IsDeleted=0 AND m.ObjectCode=t.MerchantObjectCode");
-        sbSql.LeftJoin($"{Country.MsSqlTable} cty ON cty.IsDeleted=0 AND cty.ObjectCode=t.ManufacturerCountryCode");
+        sbSql.LeftJoin($"{Merchant.MsSqlTable} m ON m.IsDeleted=0 AND m.ObjectCode=t.MerchantCode");
+        sbSql.LeftJoin($"{Country.MsSqlTable} cty ON cty.IsDeleted=0 AND cty.ObjectCode=t.MfgCountryCode");
 
         sbSql.OrderBy("t.ObjectName ASC");
 
@@ -204,7 +204,7 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
                                         {
                                             oi.Category = oic;
                                             oi.Merchant = m;
-                                            oi.ManufacturedCountry = cty;
+                                            oi.MfgCountry = cty;
                                             return oi;
                                         }, param, splitOn: "Id")).OrderBy(x => x.ObjectName).AsList();
 
@@ -319,8 +319,8 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
 		#endregion
 
 		sbSql.LeftJoin($"{OwnedItemCategory.MsSqlTable} oic ON oic.Id=t.OwnedItemCategoryId");
-		sbSql.LeftJoin($"{Merchant.MsSqlTable} m ON m.IsDeleted=0 AND m.ObjectCode=t.MerchantObjectCode");
-		sbSql.LeftJoin($"{Country.MsSqlTable} cty ON cty.IsDeleted=0 AND cty.ObjectCode=t.ManufacturerCountryCode");
+		sbSql.LeftJoin($"{Merchant.MsSqlTable} m ON m.IsDeleted=0 AND m.ObjectCode=t.MerchantCode");
+		sbSql.LeftJoin($"{Country.MsSqlTable} cty ON cty.IsDeleted=0 AND cty.ObjectCode=t.MfgCountryCode");
 
         if (sortConds is null || !sortConds.Any())
         {
@@ -357,7 +357,7 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
 										{
 											oi.Category = oic;
 											oi.Merchant = m;
-											oi.ManufacturedCountry = cty;
+											oi.MfgCountry = cty;
 											return oi;
 										}, param, splitOn: "Id");
 
@@ -386,8 +386,8 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
         DateTime? purchasedDateTo = null,
         decimal? purchasePriceFrom = null,
         decimal? purchasePriceTo = null,
-        List<string>? merchantObjectCodeList = null,
-        List<string>? manufactureCountryList = null)
+        List<string>? merchantCodeList = null,
+        List<string>? mfgCountryList = null)
     {
         if (pgNo < 0 && pgSize < 0)
             throw new ArgumentOutOfRangeException(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
@@ -522,40 +522,40 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
             param.Add("@PurchasedPriceTo", purchasePriceTo.Value);
         }
 
-        if (merchantObjectCodeList != null && merchantObjectCodeList.Any())
+        if (merchantCodeList != null && merchantCodeList.Any())
         {
-            if (merchantObjectCodeList.Count == 1)
+            if (merchantCodeList.Count == 1)
             {
-                sbSql.Where("t.MerchantObjectCode IS NOT NULL");
-                sbSql.Where("t.MerchantObjectCode = @MerchantObjectCode");
-                param.Add("@MerchantObjectCode", merchantObjectCodeList[0], DbType.AnsiString);
+                sbSql.Where("t.MerchantCode IS NOT NULL");
+                sbSql.Where("t.MerchantCode = @MerchantCode");
+                param.Add("@MerchantCode", merchantCodeList[0], DbType.AnsiString);
             }
             else
             {
                 sbSql.Where("t.MerchantObjectCode IN @MerchantObjectCodeList");
-                param.Add("@MerchantObjectCodeList", merchantObjectCodeList);
+                param.Add("@MerchantObjectCodeList", merchantCodeList);
             }
         }
 
-        if (manufactureCountryList != null && manufactureCountryList.Any())
+        if (mfgCountryList != null && mfgCountryList.Any())
         {
-            if (manufactureCountryList.Count == 1)
+            if (mfgCountryList.Count == 1)
             {
                 sbSql.Where("t.ManufacturerCountryCode IS NOT NULL");
                 sbSql.Where("t.ManufacturerCountryCode = @ManufacturerCountryCode");
-                param.Add("@ManufacturerCountryCode", manufactureCountryList[0], DbType.AnsiString);
+                param.Add("@ManufacturerCountryCode", mfgCountryList[0], DbType.AnsiString);
             }
             else
             {
                 sbSql.Where("t.ManufacturerCountryCode IN @ManufacturerCountryCodeList");
-                param.Add("@ManufacturerCountryCodeList", manufactureCountryList);
+                param.Add("@ManufacturerCountryCodeList", mfgCountryList);
             }
         }
         #endregion
 
         sbSql.LeftJoin($"{OwnedItemCategory.MsSqlTable} oic ON oic.Id=t.OwnedItemCategoryId");
-        sbSql.LeftJoin($"{Merchant.MsSqlTable} m ON m.IsDeleted=0 AND m.ObjectCode=t.MerchantObjectCode");
-        sbSql.LeftJoin($"{Country.MsSqlTable} cty ON cty.IsDeleted=0 AND cty.ObjectCode=t.ManufacturerCountryCode");
+        sbSql.LeftJoin($"{Merchant.MsSqlTable} m ON m.IsDeleted=0 AND m.ObjectCode=t.MerchantCode");
+        sbSql.LeftJoin($"{Country.MsSqlTable} cty ON cty.IsDeleted=0 AND cty.ObjectCode=t.MfgCountryCode");
 
         sbSql.OrderBy("t.ObjectName ASC");
 
@@ -581,7 +581,7 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
                                         {
                                             oi.Category = oic;
                                             oi.Merchant = m;
-                                            oi.ManufacturedCountry = cty;
+                                            oi.MfgCountry = cty;
                                             return oi;
                                         }, param, splitOn: "Id")).OrderBy(x => x.ObjectName).AsList();
 
@@ -608,8 +608,8 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
         DateTime? purchasedDateTo = null,
         decimal? purchasePriceFrom = null,
         decimal? purchasePriceTo = null,
-        List<string>? merchantObjectCodeList = null,
-        List<string>? manufactureCountryList = null)
+        List<string>? merchantCodeList = null,
+        List<string>? mfgCountryList = null)
     {
         if (pgSize < 0)
             throw new ArgumentOutOfRangeException(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
@@ -744,33 +744,33 @@ public class OwnedItemRepos(IDbContext dbContext) : BaseRepos<OwnedItem>(dbConte
             param.Add("@PurchasedPriceTo", purchasePriceTo.Value);
         }
 
-        if (merchantObjectCodeList != null && merchantObjectCodeList.Any())
+        if (merchantCodeList != null && merchantCodeList.Any())
         {
-            if (merchantObjectCodeList.Count == 1)
+            if (merchantCodeList.Count == 1)
             {
-                sbSql.Where("t.MerchantObjectCode IS NOT NULL");
-                sbSql.Where("t.MerchantObjectCode = @MerchantObjectCode");
-                param.Add("@MerchantObjectCode", merchantObjectCodeList[0], DbType.AnsiString);
+                sbSql.Where("t.MerchantCode IS NOT NULL");
+                sbSql.Where("t.MerchantCode = @MerchantCode");
+                param.Add("@MerchantCode", merchantCodeList[0], DbType.AnsiString);
             }
             else
             {
-                sbSql.Where("t.MerchantObjectCode IN @MerchantObjectCodeList");
-                param.Add("@MerchantObjectCodeList", merchantObjectCodeList);
+                sbSql.Where("t.MerchantCode IN @MerchantCodeList");
+                param.Add("@MerchantCodeList", merchantCodeList);
             }
         }
 
-        if (manufactureCountryList != null && manufactureCountryList.Any())
+        if (mfgCountryList != null && mfgCountryList.Any())
         {
-            if (manufactureCountryList.Count == 1)
+            if (mfgCountryList.Count == 1)
             {
                 sbSql.Where("t.ManufacturerCountryCode IS NOT NULL");
                 sbSql.Where("t.ManufacturerCountryCode = @ManufacturerCountryCode");
-                param.Add("@ManufacturerCountryCode", manufactureCountryList[0], DbType.AnsiString);
+                param.Add("@ManufacturerCountryCode", mfgCountryList[0], DbType.AnsiString);
             }
             else
             {
                 sbSql.Where("t.ManufacturerCountryCode IN @ManufacturerCountryCodeList");
-                param.Add("@ManufacturerCountryCodeList", manufactureCountryList);
+                param.Add("@ManufacturerCountryCodeList", mfgCountryList);
             }
         }
         #endregion

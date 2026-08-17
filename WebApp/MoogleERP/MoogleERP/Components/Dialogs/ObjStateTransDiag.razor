@@ -29,11 +29,11 @@
                 </MudItem>
                 <MudItem xs="3">
                     <MudDatePicker Clearable="true" Editable="true" ReadOnly="false" Required="false" ShrinkLabel="true" Variant="Variant.Text"
-                                    Class="moog-muddatepicker" ActionsClass="moog-muddatepicker-action" ToolbarClass="moog-muddatepicker-toolbar"
-                                    ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                    AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
-                                    Label="Effective Date" DateFormat="dd-MMM-yyyy"
-                                    @bind-Date="TransitionDetail.EffectiveDate" />
+                                   Class="moog-muddatepicker" ActionsClass="moog-muddatepicker-action" ToolbarClass="moog-muddatepicker-toolbar"
+                                   ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                   AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                   Label="Effective Date" DateFormat="dd-MMM-yyyy"
+                                   @bind-Date="TransitionDetail.EffectiveDate" />
                 </MudItem>
                 <MudItem xs="9">
                         
@@ -41,17 +41,19 @@
                 <MudItem xs="12">
                     @if (TransitionDetail.ActionCode.Is(ObjectStateActions.LEND_OUT, ObjectStateActions.LOSE, ObjectStateActions.GIVEN_OTHER, ObjectStateActions.SELL, ObjectStateActions.BROKE))
                     {
-                        <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="false" Required="true" ShrinkLabel="true" Variant="Variant.Text"
-                                        Class="moog-mudform-input" Lines="8"
-                                        Label="Remark" Placeholder="Remark..."
-                                        @bind-Value="TransitionDetail.TransitionRemark" For="@(() => TransitionDetail.TransitionRemark)" />
+                        <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="false" Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
+                                      Class="moog-mudform-input"
+                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                      Label="Remark" Placeholder="Remark..."
+                                      @bind-Value="TransitionDetail.TransitionRemark" For="@(() => TransitionDetail.TransitionRemark)" />
                     }
                     else
                     {
-                        <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="false" Required="false" ShrinkLabel="true" Variant="Variant.Text"
-                                        Class="moog-mudform-input" Lines="8"
-                                        Label="Remark" Placeholder="Remark..."
-                                        @bind-Value="TransitionDetail.TransitionRemark" For="@(() => TransitionDetail.TransitionRemark)" />
+                        <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="false" Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
+                                      Class="moog-mudform-input"
+                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                      Label="Remark" Placeholder="Remark..."
+                                      @bind-Value="TransitionDetail.TransitionRemark" For="@(() => TransitionDetail.TransitionRemark)" />
                     }
                 </MudItem>
             </MudGrid>

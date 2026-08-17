@@ -7,7 +7,7 @@
 @* @rendermode InteractiveAuto*@
 @inject IDialogService MudDiagSvc
 @inherits CRUCPageBase<PruHR.Employee>
-
+<PageTitle>Employee</PageTitle>
 @if (CurrentObject != null && CurrentEditContext != null)
 {
     <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column">
@@ -84,65 +84,134 @@
                                 }
                             </MudSelect>
                         </MudItem>
-                        <MudItem xs="3">
+                        @* ================================================================================================================================================== *@
+                        <MudItem xs="2">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                           Class="pru-ui-mudform-input"
                                           Label="Surname"
                                           @bind-Value=CurrentObject!.Surname For="@(() => CurrentObject.Surname)" OnlyValidateIfDirty="true" />
                         </MudItem>
-                        <MudItem xs="3">
+                        <MudItem xs="2">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                           Class="pru-ui-mudform-input"
                                           Label="Given Name"
                                           @bind-Value=CurrentObject!.GivenName For="@(() => CurrentObject.GivenName)" OnlyValidateIfDirty="true" />
                         </MudItem>
-                        <MudItem xs="3">
+                        <MudItem xs="2">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                           Class="pru-ui-mudform-input"
                                           Label="Local Name"
                                           @bind-Value=CurrentObject!.LocalName For="@(() => CurrentObject.LocalName)" OnlyValidateIfDirty="true" />
                         </MudItem>
-                        <MudItem xs="3">
+                        <MudItem xs="2">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                           Class="pru-ui-mudform-input"
                                           Label="Call Name"
                                           @bind-Value=CurrentObject!.CallName For="@(() => CurrentObject.CallName)" OnlyValidateIfDirty="true" />
                         </MudItem>
-                        <MudItem xs="3">
+                        <MudItem xs="2">
                             <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-muddatepicker" Editable="true"
                                            AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
                                            Label="Date of Birth" DateFormat="dd-MMM-yyyy"
                                            @bind-Date=@CurrentObject.BirthDate For="@(() => CurrentObject.BirthDate)" />
                         </MudItem>
-                        <MudItem xs="3">
+                        <MudItem xs="2">
                             <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-muddatepicker" Editable="true"
                                            AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
                                            Label="Joined Date" DateFormat="dd-MMM-yyyy"
                                            @bind-Date=@CurrentObject.JoinedDate For="@(() => CurrentObject.JoinedDate)" />
                         </MudItem>
-                        <MudItem xs="3">
+                        @* ================================================================================================================================================== *@
+                        <MudItem xs="2">
                             <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-muddatepicker" Editable="true"
                                            AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
                                            Label="Hired Date" DateFormat="dd-MMM-yyyy"
                                            @bind-Date=@CurrentObject.HiredDate For="@(() => CurrentObject.HiredDate)" />
                         </MudItem>
-                        <MudItem xs="3">
+                        <MudItem xs="2">
                             <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-muddatepicker" Editable="true"
                                            AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
                                            Label="Last Day" DateFormat="dd-MMM-yyyy"
                                            @bind-Date=@CurrentObject.LastDay For="@(() => CurrentObject.LastDay)" />
                         </MudItem>
+                        <MudItem xs="2">
+                            <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
+                                       Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
+                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                       Label="Status"
+                                       @bind-Value=CurrentObject!.EmpStatus For="@(() => CurrentObject.EmpStatus)" OnlyValidateIfDirty="true">
+                                @foreach (DropdownSelectItem status in _statusList)
+                                {
+                                    <MudSelectItem Value=@status.Key>@status.Value</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
+                                          Class="pru-ui-mudform-input"
+                                          Label="Sale Tag"
+                                          @bind-Value=CurrentObject!.SaleTag For="@(() => CurrentObject.SaleTag)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
+                                       Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
+                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                       Label="Worker Type"
+                                       @bind-Value=CurrentObject!.WorkerType For="@(() => CurrentObject.EmpStatus)" OnlyValidateIfDirty="true">
+                                @foreach (string type in _workerTypeList)
+                                {
+                                    <MudSelectItem Value=@type>@type</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="2">
+                        </MudItem>
+                        @* ================================================================================================================================================== *@
                         <MudItem xs="3">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                           Class="pru-ui-mudform-input"
                                           Label="Job Title" MaxLength="255"
                                           @bind-Value=CurrentObject!.JobTitle For="@(() => CurrentObject.JobTitle)" OnlyValidateIfDirty="true" />
                         </MudItem>
-                        <MudItem xs="3">
+                        <MudItem xs="2">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                           Class="pru-ui-mudform-input"
                                           Label="Job Grade" MaxLength="255"
                                           @bind-Value=CurrentObject!.JobGrade For="@(() => CurrentObject.JobGrade)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                       Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
+                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                       Label="Pru Global Grade"
+                                       @bind-Value=CurrentObject!.PruGlobalGrade For="@(() => CurrentObject.PruGlobalGrade)" OnlyValidateIfDirty="true">
+                                @foreach (string pgg in _pruGlobalGradeList)
+                                {
+                                    <MudSelectItem Value=@pgg>@pgg</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="false" SearchFunc="SearchEmployee"
+                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             Label="Reporting To" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")" 
+                                             Value="_reportToEmp" ValueChanged="OnReportToEmpValueChanged" />
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="false" SearchFunc="SearchEmployee"
+                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             Label="C-1" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
+                                             Value="_excoDrEmp" ValueChanged="OnExcoDREmpValueChanged" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                          Class="pru-ui-mudform-input"
+                                          Label="Job Focus" MaxLength="255"
+                                          @bind-Value=CurrentObject!.JobFocus For="@(() => CurrentObject.JobFocus)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="3">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
@@ -159,6 +228,12 @@
                         <MudItem xs="3">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                           Class="pru-ui-mudform-input"
+                                          Label="Unit" MaxLength="255"
+                                          @bind-Value=CurrentObject!.Unit For="@(() => CurrentObject.Unit)" OnlyValidateIfDirty="true" />
+                        </MudItem>
+                        <MudItem xs="3">
+                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                          Class="pru-ui-mudform-input"
                                           Label="Section" MaxLength="255"
                                           @bind-Value=CurrentObject!.Section For="@(() => CurrentObject.Section)" OnlyValidateIfDirty="true" />
                         </MudItem>
@@ -169,48 +244,28 @@
                                           @bind-Value=CurrentObject!.Division For="@(() => CurrentObject.Division)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="3">
-                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
+                            @* <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                           Class="pru-ui-mudform-input"
                                           Label="Function" MaxLength="255"
-                                          @bind-Value=CurrentObject!.Function For="@(() => CurrentObject.Function)" OnlyValidateIfDirty="true" />
+                                          @bind-Value=CurrentObject!.Function For="@(() => CurrentObject.Function)" OnlyValidateIfDirty="true" /> *@
+                            <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchOrgFunc"
+                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             Label="Function" T="string"
+                                             @bind-Value="CurrentObject!.Function" />
                         </MudItem>
                         <MudItem xs="3">
-                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
+                            @* <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                           Class="pru-ui-mudform-input"
                                           Label="Department" MaxLength="255"
-                                          @bind-Value=CurrentObject!.Department For="@(() => CurrentObject.Department)" OnlyValidateIfDirty="true" />
-                        </MudItem>
-                        <MudItem xs="3">
-                            <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
-                                       Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
-                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
-                                       Label="Worker Type"
-                                       @bind-Value=CurrentObject!.WorkerType For="@(() => CurrentObject.EmpStatus)" OnlyValidateIfDirty="true">
-                                @foreach (string type in _workerTypeList)
-                                {
-                                    <MudSelectItem Value=@type>@type</MudSelectItem>
-                                }
-                            </MudSelect>
-                        </MudItem>
-                        <MudItem xs="3">
-                            <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
-                                       Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
-                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
-                                       Label="Status"
-                                       @bind-Value=CurrentObject!.EmpStatus For="@(() => CurrentObject.EmpStatus)" OnlyValidateIfDirty="true">
-                                @foreach (DropdownSelectItem status in _statusList)
-                                {
-                                    <MudSelectItem Value=@status.Key>@status.Value</MudSelectItem>
-                                }
-                            </MudSelect>
-                        </MudItem>
-                        <MudItem xs="2">
-                            <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
-                                          Class="pru-ui-mudform-input"
-                                          Label="Sale Tag"
-                                          @bind-Value=CurrentObject!.SaleTag For="@(() => CurrentObject.SaleTag)" OnlyValidateIfDirty="true" />
-                        </MudItem>
-                        <MudItem xs="4">
+                                          @bind-Value=CurrentObject!.Department For="@(() => CurrentObject.Department)" OnlyValidateIfDirty="true" /> *@
+                            <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchOrgDept"
+                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             Label="Department" T="string"
+                                             @bind-Value="CurrentObject!.Department" />
                         </MudItem>
                         <MudItem xs="12">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
@@ -300,8 +355,11 @@
     IEnumerable<DropdownSelectItem> _lbuList = Enumerable.Empty<DropdownSelectItem>();
     IEnumerable<string> _lbuIDList = ["PCLA", "PMLI", "PLAL"];
     IEnumerable<DropdownSelectItem> _statusList = EmployeeStatuses.GetForDropdown();
-    IEnumerable<string> _workerTypeList = ["FTE", "FC", "Agency", "Contract Staff", "Outsourced"];
+    List<DropdownSelectItem> _employeeList = [];
+    IEnumerable<string> _workerTypeList = ["Permanent", "FC", "Agency", "Contract Staff", "Outsourced"];
     IEnumerable<ITAsset> _itAssetList = [];
+    DropdownSelectItem? _reportToEmp;
+    DropdownSelectItem? _excoDrEmp;
     Dictionary<string, string> _assetCategoryIconList = new Dictionary<string, string> {
         { "LAPTOP", "material-symbols-rounded/laptop" },
         { "VDI", "material-symbols-rounded/desktop_cloud" },
@@ -338,6 +396,69 @@
         { AssetStates.BROKEN_UNREPAIRABLE, "status-chip-pending-light" },
         { AssetStates.NA, "status-chip-pending-light" }
     };
+
+    List<string> _deptList = [
+        "CEO Office",
+        "Finance",
+        "Legal & Government Relation",
+        "Human Resources",
+        "Marketing & Communications",
+        "Operations",
+        "Technology",
+        "Product & Pricing",
+        "Risk & Compliance",
+        "Sales & Distribution"
+    ];
+
+    List<string> _funcList = [
+        "Finance Operations & Projects",
+        "Corporate Strategy & Development",
+        "Finance Business Partnering & Procurement",
+        "Property & Corporate Services",
+        "Investment & Treasury",
+        "Actuarial Reporting",
+        "Product & Pricing",
+        "Partnership Distribution",
+        "Agency",
+        "Legal & Company Secretary",
+        "Government Relation",
+        "Sustainability & Internal Comms",
+        "Digital Marketing",
+        "Brand, Communication & Customer",
+        "Product & Channel Marketing",
+        "Risk",
+        "Compliance",
+        "Risk & Compliance",
+        "HRBP and Service Excellence",
+        "Talent, Learning, Leadership & Culture",
+        "Reward & HR Operations",
+        "Operations",
+        "Customer Experience, Call Center PCLA",
+        "Customer Experience, Call Center PMLI",
+        "Data & Process Intelligence",
+        "Back-End Applications Delivery & Support",
+        "Data Engineering",
+        "Front-End Applications Delivery & Support",
+        "DevOps",
+        "Technical Business Analysis",
+        "IT Security & Governance, Data Privacy",
+        "IT Operation & Service Management, BCM"
+    ];
+
+    IEnumerable<string> _pruGlobalGradeList = [
+        "L - Leadership",
+        "P8 - Senior Director",
+        "P7 - Director",
+        "P6 - Associate Director",
+        "P5 - Senior Manager",
+        "P4 - Manager",
+        "P3 - Associate Manager",
+        "P2 - Senior Executive",
+        "P1 - Executive",
+        "S2 - Support",
+    ];
+
+    bool isProcessing = false;
     #endregion
 
     #region PAGE LIFECYCLE FUNCTIONS
@@ -406,11 +527,14 @@
     {
         InvalidMsgList.Clear();
 
-        bool isDuplicated = await Uow.Employees.IsDuplicateCodeAsync(CurrentObject!.Id, CurrentObject!.ObjectCode!);
-
-        if (isDuplicated)
+        if (!string.IsNullOrEmpty(CurrentObject!.EmpID) && !string.IsNullOrEmpty(CurrentObject!.EmpStatus))
         {
-            InvalidMsgList.Add("ObjectCode_Duplicate", $"Employee ID='{CurrentObject.ObjectCode}' is already existed.");
+            bool isEmpIdAlrdExist = await Uow.Employees.IsEmpIdExistAsync(CurrentObject.EmpID, CurrentObject!.EmpStatus, CurrentObject!.Id);
+
+            if (isEmpIdAlrdExist)
+            {
+                InvalidMsgList.Add("ObjectCode_Duplicate", $"Employee ID='{CurrentObject.EmpID}' is already existed.");
+            }
         }
     }
 
@@ -444,6 +568,65 @@
             return isupdated;
         }
     }
+
+    private async Task<IEnumerable<string>> SearchOrgDept(string value, CancellationToken token)
+    {
+        await Task.Delay(5, token);
+
+        if (string.IsNullOrEmpty(value)) return _deptList;
+
+        return _deptList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase)).ToList();
+    }
+
+    private async Task<IEnumerable<string>> SearchOrgFunc(string value, CancellationToken token)
+    {
+        await Task.Delay(5, token);
+
+        if (string.IsNullOrEmpty(value)) return _funcList;
+
+        return _funcList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase)).ToList();
+    }
+
+    private async Task<IEnumerable<DropdownSelectItem>> SearchEmployee(string value, CancellationToken token)
+    {
+        await Task.Delay(5, token);
+
+        if (string.IsNullOrEmpty(value)) return _employeeList.Take(50);
+
+        return _employeeList.Where(x => x.Value.Contains(value, StringComparison.InvariantCultureIgnoreCase) || x.Key == value).Take(50);
+    }
+
+    void OnReportToEmpValueChanged(DropdownSelectItem? item)
+    {
+        if (item is null)
+        {
+            _reportToEmp = null;
+            CurrentObject!.ReportToEmpID = null;
+            CurrentObject!.ReportToEmpName = null;
+        }
+        else
+        {
+            _reportToEmp = item;
+            CurrentObject!.ReportToEmpID = item.Key;
+            CurrentObject!.ReportToEmpName = item.Value;
+        }
+    }
+
+    void OnExcoDREmpValueChanged(DropdownSelectItem? item)
+    {
+        if (item is null)
+        {
+            _excoDrEmp = null;
+            CurrentObject!.UnderExcoDREmpID = null;
+            CurrentObject!.UnderExcoDREmpName = null;
+        }
+        else
+        {
+            _excoDrEmp = item;
+            CurrentObject!.UnderExcoDREmpID = item.Key;
+            CurrentObject!.UnderExcoDREmpName = item.Value;
+        }
+    }
     #endregion
 
     #region INTERNAL FUNCTION
@@ -453,6 +636,18 @@
 
         if (!string.IsNullOrEmpty(CurrentObject!.EmpID))
             _itAssetList = await Uow.ITAssets.GetByEmployeeAsync(CurrentObject!.EmpID!);
+
+        _employeeList = (await Uow.Employees.GetForDropdownAsync()).ToList();
+
+        if (!string.IsNullOrEmpty(CurrentObject!.ReportToEmpID))
+        {
+            _reportToEmp = _employeeList.SingleOrDefault<DropdownSelectItem>(x => x.Key == CurrentObject!.ReportToEmpID);
+        }
+
+        if (!string.IsNullOrEmpty(CurrentObject!.UnderExcoDREmpID))
+        {
+            _excoDrEmp = _employeeList.SingleOrDefault<DropdownSelectItem>(x => x.Key == CurrentObject!.UnderExcoDREmpID);
+        }
     }
     #endregion
 }

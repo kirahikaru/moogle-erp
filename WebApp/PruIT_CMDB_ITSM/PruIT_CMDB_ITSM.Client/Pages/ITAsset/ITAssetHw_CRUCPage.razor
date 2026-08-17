@@ -406,12 +406,12 @@
                             <MudItem xs="2">
                                 <MudSwitchM3 ReadOnly=@IsViewMode Class="pru-mud-switch" Color="@(CurrentObject!.ServerInfo.IsActive ? Color.Success : Color.Secondary)"
                                              ThumbIcon="@Icons.Material.Rounded.Check" ThumbOffIcon="@Icons.Material.Rounded.Close" Size="Size.Small" Label="Active?"
-                                             @bind-Value="CurrentObject!.ServerInfo.IsActive" For="@(() => CurrentObject.ServerInfo.IsActive)" OnlyValidateIfDirty="true" />
+                                             @bind-Value="CurrentObject!.ServerInfo.IsActive" For="@(() => CurrentObject.ServerInfo.IsActive)" />
                             </MudItem>
                             <MudItem xs="2">
                                 <MudSwitchM3 ReadOnly=@IsViewMode Class="pru-mud-switch" Color="@(CurrentObject!.ServerInfo.SCCMClientInd ? Color.Success : Color.Secondary)"
                                              ThumbIcon="@Icons.Material.Rounded.Check" ThumbOffIcon="@Icons.Material.Rounded.Close" Size="Size.Small" Label="SCCM Client"
-                                             @bind-Value="CurrentObject!.ServerInfo.SCCMClientInd" For="@(() => CurrentObject.ServerInfo.SCCMClientInd)" OnlyValidateIfDirty="true" />
+                                             @bind-Value="CurrentObject!.ServerInfo.SCCMClientInd" For="@(() => CurrentObject.ServerInfo.SCCMClientInd)" />
                             </MudItem>
                             <MudItem xs="6">
                                 <MudTextField ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" FullWidth="true" Class="pru-ui-mudform-input"

@@ -44,9 +44,8 @@
 				</CellTemplate>
 			</TemplateColumn>
 			<TemplateColumn Title="Name" StickyLeft="true" 
-				HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
-                            HeaderStyle="min-width:200px"
-                            Context="rowData">
+				HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							CellStyle="white-space:nowrap" Context="rowData">
 				<CellTemplate>
 					@if (rowData.Item.EmpStatus.Is(EmployeeStatuses.TERMINATED, EmployeeStatuses.RESIGNED))
 					{
@@ -65,44 +64,51 @@
                     }
                 </CellTemplate>
             </TemplateColumn>
-            <PropertyColumn Title="Emp ID" Property="x => x.EmpID" Sortable="false" 
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
-                            HeaderStyle="min-width:80px" />
+            <Component />
             <PropertyColumn Title="Surname" Property="x => x.Surname"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
 			<PropertyColumn Title="Given Name" Property="x => x.GivenName"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:200px" />
+			<PropertyColumn Title="Emp ID" Property="x => x.EmpID"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Work Type" Property="x => x.WorkerType"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:130px" />
 			<PropertyColumn Title="Sale Tag" Property="x => x.SaleTag"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
 							HeaderStyle="min-width:120px" />
+			<PropertyColumn Title="Line Manager" Property="x => x.LineManagerText"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+			<PropertyColumn Title="C-1" Property="x => x.UnderExcoDRText"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+			<PropertyColumn Title="Function" Property="x => x.Function"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							CellStyle="white-space:nowrap" />
+			<PropertyColumn Title="Department" Property="x => x.Department"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Job Grade" Property="x => x.JobGrade"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:280px" />
             <PropertyColumn Title="Job Title" Property="x => x.JobTitle"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Job Family" Property="x => x.JobFamily" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+            <PropertyColumn Title="Job Family" Property="x => x.JobFamily" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Section" Property="x => x.Section" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+            <PropertyColumn Title="Section" Property="x => x.Section" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:280px" />
             <PropertyColumn Title="Division" Property="x => x.Division"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
-                            HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Function" Property="x => x.Function"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top" 
-							HeaderStyle="min-width:280px" />
-            <PropertyColumn Title="Department" Property="x => x.Department"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width:280px" />
             <PropertyColumn Title="Joined On" Property="x => x.JoinedDate" Format="dd-MMM-yyyy"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
 							HeaderStyle="min-width:130px" />
             <PropertyColumn Title="Last Day" Property="x => x.LastDay" Format="dd-MMM-yyyy"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell data-align-top"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
 							HeaderStyle="min-width:130px" />
             <TemplateColumn Title="Status" StickyRight="true"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
@@ -152,6 +158,7 @@
 			{ EmployeeStatuses.DRAFT, "status-chip-success-light" },
 			{ EmployeeStatuses.TERMINATED, "status-chip-obsolete-light" },
 			{ EmployeeStatuses.RESIGNED, "status-chip-obsolete-light" },
+			{ EmployeeStatuses.SUSPENDED, "status-chip-pending-light" },
 			{ EmployeeStatuses.BLACKLIST, "status-chip-pending-light" },
 			{ EmployeeStatuses.INVALID, "status-chip-pending-light" },
 		};

@@ -5,6 +5,7 @@ namespace DataLayer.Repos.Pru.HR;
 
 public interface IEmployeeRepos : IBaseRepos<PruHR.Employee>
 {
+	Task<bool> IsEmpIdExistAsync(string empId, string empStatus, int objId);
 	Task<IEnumerable<DropdownSelectItem>> GetForDropdownAsync(List<string>? statusList = null, bool displayWithEmpID = false);
 	Task<KeyValuePair<int, IEnumerable<PruHR.Employee>>> SearchAsync(
 		int pgSize = 0,
@@ -17,6 +18,24 @@ public interface IEmployeeRepos : IBaseRepos<PruHR.Employee>
 
 public class EmployeeRepos(IDbContext dbContext) : BaseRepos<PruHR.Employee>(dbContext, PruHR.Employee.DatabaseObject), IEmployeeRepos
 {
+	public async Task<bool> IsEmpIdExistAsync(string empId, string empStatus, int objId)
+	{
+		SqlBuilder sbSql = new();
+		DynamicParameters param = new();
+		sbSql.Where("t.IsDeleted=0");
+		sbSql.Where("t.EmpStatus=@EmpStatus");
+		sbSql.Where("t.EmpID=@EmpID");
+		sbSql.Where("t.Id<>@ObjId");
+
+		param.Add("@EmpStatus", empStatus);
+		param.Add("@EmpID", empId);
+		param.Add("@ObjId", objId);
+
+		string sql = sbSql.AddTemplate($"SELECT COUNT(*) FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
+		using var cn = DbContext.DbCxn;
+		int count = await cn.ExecuteScalarAsync<int>(sql, param);
+		return count > 0;
+	}
 	public async Task<IEnumerable<DropdownSelectItem>> GetForDropdownAsync(List<string>? statusList = null, bool displayWithEmpID = false)
 	{
 		SqlBuilder sbSql = new();

@@ -88,20 +88,22 @@
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
                             HeaderStyle="min-width: 350px" />
             <PropertyColumn Title="Category" Property="x => x.CategoryName"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Sub-Category" Property="x => x.SubCategory"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
                             HeaderStyle="min-width: 250px" />
             <PropertyColumn Title="Current User" Property="x => x.CurrentUserName"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width:155px" />
+							HeaderStyle="min-width:155px" CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Staff ID" Property="x => x.CurrentUserID" Sortable="false"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
                             HeaderStyle="min-width: 75px" />
             <PropertyColumn Title="Function" Property="x => x.CurrentUserFunc"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
             <PropertyColumn Title="Department" Property="x => x.CurrentUserDept"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Start Date" Property="x => x.StartDate" Format="dd-MMM-yyyy"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
                             HeaderStyle="min-width:130px" CellStyle="text-align:center" />

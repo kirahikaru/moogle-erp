@@ -148,7 +148,7 @@
                             </MudSelect>
                         </MudItem>
                         <MudItem xs="1">
-                            <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
+                            <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
                                        Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
                                        ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                        AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary"
@@ -224,7 +224,7 @@
                                              ColumnResizeMode="ResizeMode.Container" HorizontalScrollbar="true" Bordered="false"
                                              EditTrigger="DataGridEditTrigger.Manual" EditMode="DataGridEditMode.Form" EditDialogOptions=@(new (){ BackdropClick=false, MaxWidth=MaxWidth.ExtraLarge, FullWidth=true, NoHeader=true })
                                              StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges" Style="width:100%"
-                                             @ref="_qItemDataGrid" T="InvoiceItem" Items="@CurrentObject!.Items">
+                                             @ref="_qItemDataGrid" T="InvoiceItem" Items="@CurrentObject!.Items" QuickFilter="_quickInvoiceItemFilter">
                                     <Columns>
                                         <PropertyColumn Title="No." Property="x => x.OrderNo" Sortable="false" Editable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
@@ -306,15 +306,15 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="PO#" Property="x => x.PurchaseOrderCode" Sortable="false"
-                                                        HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell reddit-mono-400"
-                                                        HeaderStyle="min-width:120px" Context="qi">
+                                                        HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap" Context="qi">
                                             <EditTemplate>
                                                 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="SKU" Property="x => x.SKU" Sortable="false"
-                                                        HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell reddit-mono-400"
-                                                        Context="qi">
+                                                        HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+                                                        CellStyle="white-space: nowrap" Context="qi">
                                             <EditTemplate>
 
                                             </EditTemplate>
@@ -400,7 +400,7 @@
                                                                    Class="pru-ui-mudiconbtn-datagrid"
                                                                    Icon="material-symbols-rounded/file_copy"
                                                                    OnClick="@(() => CloneInvoiceItem(qi.Item))" />
-                                                    <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Success"
+                                                    <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Error"
                                                                    Class="pru-ui-mudiconbtn-datagrid"
                                                                    Icon="material-symbols-rounded/delete" 
                                                                    OnClick="@(() => RemoveInvoiceItem(qi.Item))" />
@@ -427,7 +427,7 @@
                                              ColumnResizeMode="ResizeMode.Column" HorizontalScrollbar="true" 
                                              EditTrigger="DataGridEditTrigger.Manual" EditMode="DataGridEditMode.Form" EditDialogOptions=@(new (){ BackdropClick=false, MaxWidth=MaxWidth.ExtraLarge, FullWidth=true })
                                              StartedEditingItem="@StartedEditingExpItem" CanceledEditingItem="@CanceledEditingExpItem" CommittedItemChanges="@CommittedExpItemChanges" Style="width:100%"
-                                             @ref="_expItemDataGrid" T="ExpenseItem" Items="@CurrentObject!.ExpenseItems">
+                                             @ref="_expItemDataGrid" T="ExpenseItem" Items="@CurrentObject!.ExpenseItems" QuickFilter="_quickExpenseItemFilter">
                                     <Columns>
                                         <PropertyColumn Title="No." Property="x => x.OrderNo" Editable="false" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
@@ -458,11 +458,17 @@
                                                                       @bind-Value=expItem.Item.ProductName For="@(() => expItem.Item.ProductName)" OnlyValidateIfDirty="true" />
                                                     </MudItem>
                                                     <MudItem xs="3">
-                                                        <MudTextField Clearable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Class="pru-ui-mudform-input"
+                                                        @* <MudTextField Clearable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Class="pru-ui-mudform-input"
                                                                       ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                                       AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
                                                                       Label="Product Type" MaxLength="255"
-                                                                      @bind-Value=expItem.Item.ProductType For="@(() => expItem.Item.ProductType)" OnlyValidateIfDirty="true" />
+                                                                      @bind-Value=expItem.Item.ProductType For="@(() => expItem.Item.ProductType)" OnlyValidateIfDirty="true" /> *@
+                                                        <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                                         Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                                         CoerceText="true" CoerceValue="true" SearchFunc="SearchProductType"
+                                                                         AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                                         Label="Product Type" T="string"
+                                                                         @bind-Value=expItem.Item.ProductType For="@(() => expItem.Item.ProductType)" />
                                                     </MudItem>
                                                     <MudItem xs="3">
                                                         <MudTextField Clearable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Class="pru-ui-mudform-input"
@@ -472,11 +478,17 @@
                                                                       @bind-Value=expItem.Item.ServiceName For="@(() => expItem.Item.ServiceName)" OnlyValidateIfDirty="true" />
                                                     </MudItem>
                                                     <MudItem xs="3">
-                                                        <MudTextField Clearable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Class="pru-ui-mudform-input"
+                                                        @* <MudTextField Clearable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Class="pru-ui-mudform-input"
                                                                       ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                                       AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
                                                                       Label="Service Type" MaxLength="255"
-                                                                      @bind-Value=expItem.Item.ServiceType For="@(() => expItem.Item.ServiceType)" OnlyValidateIfDirty="true" />
+                                                                      @bind-Value=expItem.Item.ServiceType For="@(() => expItem.Item.ServiceType)" OnlyValidateIfDirty="true" /> *@
+                                                        <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                                         Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                                         CoerceText="true" CoerceValue="true" SearchFunc="SearchServiceType"
+                                                                         AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                                         Label="Service Type" T="string"
+                                                                         @bind-Value=expItem.Item.ServiceType For="@(() => expItem.Item.ServiceType)" />
                                                     </MudItem>
                                                     @* ============================================================================================================================ *@
                                                     <MudItem xs="3">
@@ -554,7 +566,7 @@
                                                     </MudItem>
                                                     @* ============================================================================================================================ *@
                                                     <MudItem xs="2">
-                                                        <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                        <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
                                                                    Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
                                                                    ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                                    AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary"
@@ -625,42 +637,42 @@
                                         </PropertyColumn>
                                         <PropertyColumn Title="PO#" Property="x => x.PurchaseOrderNo" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px">
+                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Product Type" Property="x => x.ProductType" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px">
+                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Product Name" Property="x => x.ProductName" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px">
+                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Service Type" Property="x => x.ServiceType" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px">
+                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Service Name" Property="x => x.ServiceName" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px">
+                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="IT Asset ID" Property="x => x.ITAssetCode" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px">
+                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
                                             <EditTemplate>
                                                 
                                             </EditTemplate>
@@ -852,6 +864,50 @@
     ExpenseItem? _tempExpItemToAdd;
     IEnumerable<string> _lbuIDList = ["PCLA", "PMLI", "PLAL"];
 
+    IEnumerable<string> _productTypeList = [
+        "Accessories - Phone",
+        "Application",
+        "Charger",
+        "Check Point Firewall",
+        "Cloud Infrastructure",
+        "Digital Certificate",
+        "Flight Ticket",
+        "HDD",
+        "Keyboard",
+        "Laptop",
+        "Monitor",
+        "Network Equipment",
+        "SSD",
+        "Smart Phone",
+        "Software License Subscription",
+        "iPad",
+        "Tablet"
+    ];
+
+    IEnumerable<string> _serviceTypeList = [
+        "Chip Sound",
+        "Communication",
+        "Consumption",
+        "Control-M",
+        "Data Engineering Pipeline",
+        "Database",
+        "Group Recharge",
+        "Infrastructure, IT Operation, IT Service Management",
+        "Infrastructure, IT Operation, IT Service Management, Network Admin, System Admin",
+        "Internet",
+        "Managed Container Orchestration",
+        "NS Agency - PRUForce v.2.0",
+        "Outsource",
+        "PenTest",
+        "Purchase",
+        "Recharge",
+        "Renewal",
+        "Repair",
+        "Tech Refresh",
+        "VDI",
+        "Virtual Machine"
+    ];
+
     int? _expMth;
     int? _expYr;
 
@@ -928,7 +984,10 @@
                                 expItem.ObjectName = poi.ObjectName;
                                 expItem.ObjectCode = poi.ITAssetCode;
                                 expItem.EmpID = poi.UserID;
+                                expItem.CurrCode = po.CurrencyCode;
                                 expItem.Amount = poi.TotalAmount;
+                                expItem.ITAssetCode = poi.ITAssetCode;
+                                expItem.ITAssetId = poi.ITAssetId;
 
                                 CurrentObject!.ExpenseItems.Add(expItem);
                             }
@@ -993,6 +1052,16 @@
     #endregion
 
     #region UI FUNCTIONS
+    private Func<InvoiceItem, bool> _quickInvoiceItemFilter => x =>
+    {
+        return !x.IsDeleted;
+    };
+
+    private Func<ExpenseItem, bool> _quickExpenseItemFilter => x =>
+    {
+        return !x.IsDeleted;
+    };
+
     private async Task CopyFileName()
     {
         try {
@@ -1137,7 +1206,15 @@
 
         if (i.Id > 0)
         {
-            //#TODO# NOT YET IMPLEMENTED
+            i.IsDeleted = true;
+
+
+            foreach (ExpenseItem item in CurrentObject!.ExpenseItems.Where(x => x.OrderNo > orderNoToRemove).OrderBy(x => x.OrderNo))
+            {
+                item.OrderNo--;
+            }
+
+            i.OrderNo = -1;
         }
         else
         {
@@ -1301,6 +1378,34 @@
                 item.FinActTrackerName = finActTracker.ObjectName;
             }
         }
+    }
+
+    private async Task<IEnumerable<string>> SearchProductType(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _productTypeList;
+        }
+
+        return _productTypeList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchServiceType(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _serviceTypeList;
+        }
+
+        return _serviceTypeList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
     #endregion
 

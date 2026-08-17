@@ -240,43 +240,93 @@
                                                                       @bind-Value=qi.Item.ObjectName For="@(() => qi.Item.ObjectName)" OnlyValidateIfDirty="true"
                                                                       MaxLength="255" />
                                                     </MudItem>
-                                                    <MudItem xs="8">
-                                                        <MudComboBox Clearable="true" ShrinkLabel="true" Editable="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true"
-                                                                     Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
-                                                                     AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
-                                                                     Label="IT Asset" T="int?"
-                                                                     Value="qi.Item.ITAssetId" ValueChanged="@(args => OnITAssetChanged(qi.Item, args))"
-                                                                     ToStringFunc="@(e => e is null ? "" : _itAssetList.Single<DropdownSelectItem>(x => x.Id == e)?.Value)">
-                                                            <ChildContent>
-                                                                @foreach (var itAsset in _itAssetList)
-                                                                {
-                                                                    <MudComboBoxItem T="int?" Value="@itAsset.Id" Text="@itAsset.Value">@itAsset.Value</MudComboBoxItem>
-                                                                }
-                                                            </ChildContent>
-                                                        </MudComboBox>
+                                                    <MudItem xs="6">
+                                                        <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="3" >
+                                                            @if (_isManualITAssetInput)
+                                                            {
+                                                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
+                                                                              Class="pru-ui-mudform-input"
+                                                                              ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                                                              Label="IT Asset ID"
+                                                                              @bind-Value=qi.Item.ITAssetCode For="@(() => qi.Item.ObjectName)" OnlyValidateIfDirty="true"
+                                                                              MaxLength="255" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <MudComboBox Clearable="true" ShrinkLabel="true" Editable="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true"
+                                                                             Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
+                                                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
+                                                                             Label="IT Asset" T="int?"
+                                                                             Value="qi.Item.ITAssetId" ValueChanged="@(args => OnITAssetChanged(qi.Item, args))"
+                                                                             ToStringFunc="@(e => e is null ? "" : _itAssetList.Single<DropdownSelectItem>(x => x.Id == e)?.Value)">
+                                                                    <ChildContent>
+                                                                        @foreach (var itAsset in _itAssetList)
+                                                                        {
+                                                                            <MudComboBoxItem T="int?" Value="@itAsset.Id" Text="@itAsset.Value">@itAsset.Value</MudComboBoxItem>
+                                                                        }
+                                                                    </ChildContent>
+                                                                </MudComboBox>
+                                                            }
+                                                            <MudSwitchM3 ReadOnly=@IsViewMode Class="pru-mud-switch" Color="@(_isManualITAssetInput ? Color.Info : Color.Success)"
+                                                                         ThumbIcon="@Icons.Material.Rounded.Check" ThumbOffIcon="@Icons.Material.Rounded.Close" Size="Size.Small" 
+                                                                         Label=@(_isManualITAssetInput ? "Manual Input" : "Select")
+                                                                         Value="_isManualITAssetInput" ValueChanged="@(args => OnIsManualITAssetChanged(qi.Item, args))" T="bool"
+                                                                         Style="min-width:120px; margin-top:20px" />
+                                                        </MudStack>
+                                                        
                                                     </MudItem>
-                                                    <MudItem xs="4">
-                                                        <MudComboBox Clearable="true" Editable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" ShrinkLabel="true" autocomplete="new-password"
-                                                                     Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
-                                                                     AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
-                                                                     Label="Employee" T="string"
-                                                                     Value="@qi.Item.UserID" For="@(() => qi.Item.UserID)" ValueChanged=@(args => OnPOUserChanged(qi.Item, args))
-                                                                     ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _employeeList.Single<DropdownSelectItem>(x => x.Key == e)?.ValueKeyText)">
-                                                            <ChildContent>
-                                                                @foreach (var e in _employeeList)
-                                                                {
-                                                                    <MudComboBoxItem T="string" Value="@e.Key" Text="@e.ValueKeyText">@e.ValueKeyText</MudComboBoxItem>
-                                                                }
-                                                            </ChildContent>
-                                                        </MudComboBox>
+                                                    <MudItem xs="6">
+                                                        <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="3">
+                                                            @if (_isManualEmpInput)
+                                                            {
+                                                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
+                                                                              Class="pru-ui-mudform-input"
+                                                                              ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                                                              Label="Emp ID"
+                                                                              @bind-Value=qi.Item.UserID For="@(() => qi.Item.UserID)" OnlyValidateIfDirty="true"
+                                                                              MaxLength="8" />
+
+                                                        
+                                                                <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
+                                                                              Class="pru-ui-mudform-input"
+                                                                              ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                                                              Label="User Name"
+                                                                              @bind-Value=qi.Item.UserName For="@(() => qi.Item.UserName)" OnlyValidateIfDirty="true" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <MudComboBox Clearable="true" Editable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" ShrinkLabel="true" autocomplete="new-password"
+                                                                                Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
+                                                                                AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
+                                                                                Label="Employee" T="string"
+                                                                                Value="@qi.Item.UserID" For="@(() => qi.Item.UserID)" ValueChanged=@(args => OnPOUserChanged(qi.Item, args))
+                                                                                ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _employeeList.Single<DropdownSelectItem>(x => x.Key == e)?.ValueKeyText)">
+                                                                    <ChildContent>
+                                                                        @foreach (var e in _employeeList)
+                                                                        {
+                                                                            <MudComboBoxItem T="string" Value="@e.Key" Text="@e.ValueKeyText">@e.ValueKeyText</MudComboBoxItem>
+                                                                        }
+                                                                    </ChildContent>
+                                                                </MudComboBox>
+                                                            }
+                                                            <MudSwitchM3 ReadOnly=@IsViewMode Class="pru-mud-switch" Color="@(_isManualEmpInput ? Color.Info : Color.Dark)"
+                                                                         ThumbIcon="@Icons.Material.Rounded.Check" ThumbOffIcon="@Icons.Material.Rounded.Close" Size="Size.Small" 
+                                                                         Label=@(_isManualEmpInput ? "Manual Input" : "Select")
+                                                                         @bind-Value="_isManualEmpInput" Style="min-width:120px; margin-top:20px" />
+                                                        </MudStack>
                                                     </MudItem>
                                                     <MudItem xs="12">
-                                                        <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
+                                                        @* <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
                                                                       Class="pru-ui-mudform-input"
                                                                       ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                                       Label="Purchase Type"
                                                                       @bind-Value=qi.Item.PurchaseType For="@(() => qi.Item.PurchaseType)" OnlyValidateIfDirty="true"
-                                                                      MaxLength="255" />
+                                                                      MaxLength="255" /> *@
+                                                        <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                                         Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                                         CoerceText="true" CoerceValue="true" SearchFunc="SearchPurchaseType"
+                                                                         AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                                         Label="Action" T="string" @bind-Value="qi.Item.PurchaseType" />
                                                     </MudItem>
                                                     <MudItem xs="3">
                                                         <MudNumericField Clearable="true" FullWidth="true" HideSpinButtons="true" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true"
@@ -403,7 +453,7 @@
                                         <TemplateColumn Title="Action" Hidden=@IsViewMode
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi">
                                             <CellTemplate>
-                                                <MudStack Row="true" Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.Center ">
+                                                <MudStack Row="true" Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.FlexStart ">
                                                     <MudIconButton Variant="Variant.Text" Size="@Size.Small" Color="Color.Info"
                                                                    Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/edit"
                                                                    OnClick="@qi.Actions.StartEditingItemAsync" aria-label="edit" />
@@ -473,7 +523,33 @@
     PurchaseOrderItem? _tempItemToAdd;
     bool _isEditingItem = false;
     IEnumerable<string> _lbuIDList = ["PCLA", "PMLI", "PLAL"];
+
+    IEnumerable<string> _purchaseTypeList = [
+        "Cloud Infrastructure",
+        "Cloud Infrastructure > Microsoft Azure",
+        "Device Purchase",
+        "Device Purchase > Laptop",
+        "Flight Ticket",
+        "Group Recharge",
+        "Group Recharge > GT",
+        "Group Recharge > NorthStar",
+        "IT Asset Transfer from PLAL",
+        "Laptop",
+        "Laptop > Repair",
+        "Outsource > Data Enigneer",
+        "Outsource > Developer",
+        "Outsource Hiring",
+        "Repair",
+        "Repair & Maintenance",
+        "Repair & Maintenance > Battery",
+        "Repair & Maintenance > Laptop",
+        "Utility > Internet"
+    ];
+
     MudTextField<string>? _txtBoxPrNo;
+
+    bool _isManualITAssetInput;
+    bool _isManualEmpInput;
 
     List<DropdownSelectItem> _itAssetList = [];
     List<DropdownSelectItem> _employeeList = [];
@@ -624,6 +700,12 @@
     void StartedEditingItem(PurchaseOrderItem item)
     {
         _isEditingItem = true;
+
+        if (item.Id > 0 && item.ITAssetId.HasValue)
+            _isManualITAssetInput = true;
+
+        if (!string.IsNullOrEmpty(item.UserID) && _employeeList.Count(x => x.Key == item.UserID) == 0)
+            _isManualEmpInput = true;
     }
 
     void CanceledEditingItem(PurchaseOrderItem item)
@@ -641,6 +723,8 @@
     {
         _tempItemToAdd = null;
         _isEditingItem = false;
+        _isManualEmpInput = false;
+        _isManualITAssetInput = false;
         item.TotalAmount = item.UnitPrice!.Value * item.Quantity!.Value;
         StateHasChanged();
         return Task.FromResult(DataGridEditFormAction.Close);
@@ -754,10 +838,33 @@
         }
     }
 
+    void OnIsManualITAssetChanged(PurchaseOrderItem poi, bool value)
+    {
+        _isManualITAssetInput = value;
+        if (value)
+        {
+            poi.ITAssetId = null;
+        }
+    }
+
     public void GenerateInvoice()
 	{
 		NavManager.NavigateTo($"/fin/invoice/cruc/{CRUCModes.CREATE}/{CurrentObject!.ObjectCode!}");
 	}
+
+    private async Task<IEnumerable<string>> SearchPurchaseType(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _purchaseTypeList;
+        }
+
+        return _purchaseTypeList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
     #endregion
 
     #region UPDATE FUNCTIONS

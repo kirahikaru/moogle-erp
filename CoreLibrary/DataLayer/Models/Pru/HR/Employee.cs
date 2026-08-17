@@ -30,6 +30,8 @@ public class Employee : AuditObject
     [Required(AllowEmptyStrings = false, ErrorMessage = "'Employee Name' is required.")]
     [MaxLength(255)]
     public new string? ObjectName { get; set; }
+
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'LBU' is required.")]
 	public string? LBU { get; set; }
 	public string? EmpID { get; set; }
 	public string? Surname { get; set; }
@@ -41,7 +43,9 @@ public class Employee : AuditObject
 	public DateTime? JoinedDate { get; set; }
 	public DateTime? LastDay { get; set; }
 	public string? JobGrade { get; set; }
+	public string? PruGlobalGrade { get; set; }
 	public string? JobTitle { get; set; }
+	public string? JobFocus { get; set; }
 	public string? JobFamily { get; set; }
 	public string? JobFunction { get; set; }
 	public string? Unit { get; set; }
@@ -51,7 +55,14 @@ public class Employee : AuditObject
 	public string? Department { get; set; }
 	public string? SaleTag { get; set; }
 	public string? WorkerType { get; set; }
+
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'Employee Status' is required.")]
 	public string? EmpStatus { get; set; }
+	public string? ReportToEmpID { get; set; }
+	public string? ReportToEmpName { get; set; }
+	public string? UnderExcoDREmpID { get; set; }
+	public string? UnderExcoDREmpName { get; set; }
+	public string? HierarchyPath { get; set; }
 	public string? Remark { get; set; }
 	#endregion
 
@@ -60,11 +71,17 @@ public class Employee : AuditObject
 	#endregion
 
 	#region *** DYNAMIC PROPERTIES ***
-	[Computed, Write(false)]
+	[Computed, Write(false), ReadOnly(true)]
 	public string ObjectNameAndCode => $"{ObjectName.NonNullValue("-")} ({ObjectCode.NonNullValue("-")})";
-    #endregion
 
-    public Employee() : base()
+	[Computed, Write(false), ReadOnly(true)]
+	public string LineManagerText => !string.IsNullOrWhiteSpace(ReportToEmpName) ? $"{ReportToEmpName} ({ReportToEmpID.NonNullValue("")})" : "";
+
+	[Computed, Write(false), ReadOnly(true)]
+	public string UnderExcoDRText => !string.IsNullOrWhiteSpace(UnderExcoDREmpName) ? $"{UnderExcoDREmpName} ({UnderExcoDREmpID.NonNullValue("")})" : "";
+	#endregion
+
+	public Employee() : base()
     {
         
     }

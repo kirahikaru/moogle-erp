@@ -206,7 +206,7 @@
                         <MudItem xs="3">
                             <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
                                              Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
-                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchCurrentUser"
+                                             CoerceText="true" CoerceValue="false" SearchFunc="SearchCurrentUser"
                                              AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
                                              Label="Current User" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
                                              Value="_currentUser" ValueChanged="OnCurrentUserValueChanged" />

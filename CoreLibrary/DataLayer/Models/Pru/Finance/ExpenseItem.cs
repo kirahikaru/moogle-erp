@@ -43,6 +43,8 @@ public class ExpenseItem : AuditObject
 	public string? FinActTrackerID { get; set; }
 	public string? FinActTrackerName { get; set; }
 	public string? FinProjectCode { get; set; }
+
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'Currency' is required.")]
 	public string? CurrCode { get; set; }
 	public decimal? Amount { get; set; }
 	public decimal? TaxRate { get; set; }

@@ -1287,7 +1287,9 @@
                 width: 100%;
                 height: 100%;
                 overflow-y:auto;
-
+                > table {
+                    width: 100% !important;
+                }
                 > .mud-table-root {
                     > .mud-table-body {
                         > .mud-table-row-stripe {
@@ -1401,7 +1403,20 @@
 /*#endregion */
 
 .moog-muddatagrid-pager {
-    height:36px;
+    height: 36px;
+    min-height: 36px;
+
+    > .mud-select {
+        > .mud-table-pagination-select {
+            > .mud-input-control-input-container {
+                > .mud-select-input {
+                    border: 1px solid var(--tw-gray-300) !important;
+                    border-radius: 6px;
+                    padding: 2px 4px !important;
+                }
+            }
+        }
+    }
 
     & .mud-icon-button {
         padding:4px;

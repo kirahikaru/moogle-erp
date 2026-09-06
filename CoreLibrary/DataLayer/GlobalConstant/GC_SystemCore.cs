@@ -459,6 +459,7 @@ public static class DropdownDataSystems
     public const string FINANCIAL_SYSTEM = "FIN";
     public const string PHARMACY_MANAGEMENT_SYSTEM = "PMS";
     public const string EVENT_MANAGEMENT_SYSTEM = "EMS";
+    public const string TECH_STORE_MANAGEMENT = "TSM";
 
     public static string GetNamespacePrefix(string systemCode)
     {
@@ -469,7 +470,8 @@ public static class DropdownDataSystems
             HOME_INVENTORY_MANAGEMENT => "DataLayer.Models.HomeInventory",
             PHARMACY_MANAGEMENT_SYSTEM => "DataLayer.Models.Pharmacy",
             SYSTEM_CORE => "DataLayer.Models.SysCore",
-            _ => "?"
+			TECH_STORE_MANAGEMENT => "DataLayer.Models.TSM",
+			_ => "?"
         };
     }
 
@@ -485,6 +487,7 @@ public static class DropdownDataSystems
 			RETAIL_MANAGEMENT_SYSTEM => "Retail Management System (RMS)",
             FINANCIAL_SYSTEM => "Financial System (FIN)",
 			SYSTEM_CORE => "System Core",
+            TECH_STORE_MANAGEMENT => "Tech Store Management (TSM)",
 			_ => "",
 		};
 	}
@@ -500,7 +503,8 @@ public static class DropdownDataSystems
             new DropdownSelectItem { Key = PHARMACY_MANAGEMENT_SYSTEM, Value = GetDisplayText(PHARMACY_MANAGEMENT_SYSTEM) },
             new DropdownSelectItem { Key = RETAIL_MANAGEMENT_SYSTEM, Value = GetDisplayText(RETAIL_MANAGEMENT_SYSTEM) },
 			new DropdownSelectItem { Key = FINANCIAL_SYSTEM, Value = GetDisplayText(FINANCIAL_SYSTEM) },
-			new DropdownSelectItem { Key = SYSTEM_CORE, Value = GetDisplayText(SYSTEM_CORE) }
+			new DropdownSelectItem { Key = SYSTEM_CORE, Value = GetDisplayText(SYSTEM_CORE) },
+			new DropdownSelectItem { Key = TECH_STORE_MANAGEMENT, Value = GetDisplayText(TECH_STORE_MANAGEMENT) }
 		];
 
 		return list;

@@ -32,13 +32,18 @@
 				 @ref="MainDataGrid" ServerData="ServerDataFunc"
 				 T="DropdownDataList">
 		<Columns>
-			<PropertyColumn Title="Name" Property="x => x.ObjectName" StickyLeft="true"
+			<PropertyColumn Title="System Name" Property="x => x.SystemNameText"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+			<PropertyColumn Title="Object Name" Property="x => x.ObjectName" StickyLeft="true"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+			<PropertyColumn Title="Object Field Name" Property="x => x.ObjectFieldName"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+			<PropertyColumn Title="Value" Property="x => x.NameEn"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-							CellStyle="font-weight:600; color:var(--ssv-pharma-blue)"/>
-			<PropertyColumn Title="Object Field Naem" Property="x => x.ObjectFieldName"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
-			<PropertyColumn Title="System Name" Property="x => x.SystemName"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+							CellStyle="font-weight: 500; color:var(--ssv-pharma-blue)" />
+			<PropertyColumn Title="Value (Kh)" Property="x => x.NameKh"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-kh"
+							CellStyle="font-size:1rem"/>
 			<PropertyColumn Title="ID" Property="x => x.ObjectCode"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
 			<TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"

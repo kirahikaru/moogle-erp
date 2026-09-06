@@ -48,7 +48,7 @@ public class OwnedItem : AuditObject
 	public string? ModelNo { get; set; }
 
 	[MaxLength(50)]
-	public string? SerialNumber { get; set; }
+	public string? SerialNo { get; set; }
 
 	[MaxLength(80)]
 	public string? OtherRefNum1 { get; set; }

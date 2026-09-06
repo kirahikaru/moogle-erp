@@ -1,6 +1,7 @@
 ﻿@page "/hms/healthcare-facility/main"
 
 @inherits MainPageBase<HealthcareFacility>
+<PageTitle>Healthcare Facility</PageTitle>
 <MudPaper Class="moog-pg-banner" Elevation="0">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
@@ -26,16 +27,16 @@
 	</MudStack>
 	<MudDataGrid Bordered="false" Dense="true" FixedHeader="true" Hover="true" Loading=@IsSearching MultiSelection="false" Square="true" Striped="true"
 				 ColumnResizeMode="ResizeMode.Container" Elevation="0" RowsPerPage="50" SortMode="SortMode.Multiple"
-				 Class="moog-muddatagrid moog-main-pg" Height="calc(100% - 38px)"
+				 Class="moog-muddatagrid moog-main-pg" Height="calc(100% - 38px)" NoRecordsContent="DataGridZeroRecordContent"
 				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-muddatagrid-row"
-				 @ref="MainDataGrid" ServerData="ServerDataFunc"
-				 T="HealthcareFacility">
+				 @ref="MainDataGrid" ServerData="ServerDataFunc" T="HealthcareFacility" >
 		<Columns>
 			<PropertyColumn Title="Name" Property="x => x.ObjectName" StickyLeft="true"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
 							CellStyle="font-weight:600; color:var(--ssv-pharma-blue)"/>
 			<PropertyColumn Title="Name (kh)" Property="x => x.ObjectNameKh"
-							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-kh"
+							CellStyle="font-size:1rem !important; line-height: 80% !important" />
 			<PropertyColumn Title="Type" Property="x => x.FacilityTypeText"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
 			<PropertyColumn Title="Email" Property="x => x.Email"

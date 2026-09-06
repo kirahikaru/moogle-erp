@@ -12,37 +12,51 @@
             </MudStack>
         }
         <MudStack Row="true" Spacing="@ControlSpacing">
-            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+            <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                          Class="moog-mudform-input"
+                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                           Label="Unit / Floor" 
                           @bind-Value=Value.UnitFloor For="@(() => Value.UnitFloor)" OnlyValidateIfDirty="true" MaxLength="255" />
-            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+            <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                          Class="moog-mudform-input"
+                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                           Label="Street"
                           @bind-Value=Value.StreetNo For="@(() => Value.StreetNo)" OnlyValidateIfDirty="true" MaxLength="255" />
-            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+            <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                          Class="moog-mudform-input"
+                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                           Label="Landmark"
                           @bind-Value=Value.Landmark For="@(() => Value.Landmark)" OnlyValidateIfDirty="true" MaxLength="255" />
         </MudStack>
         <MudStack Row="true" Spacing="@ControlSpacing">
             @if (Readonly)
             {
-                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" 
+                <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                              Class="moog-mudform-input"
+                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                               Label="Province"
                               @bind-Value=Value.ProvinceName MaxLength="255" />
-                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" 
+                <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                              Class="moog-mudform-input"
+                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                               Label="District"
                               @bind-Value=Value.DistrictName MaxLength="255" />
-                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" 
+                <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                              Class="moog-mudform-input"
+                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                               Label="Commune"
                               @bind-Value=Value.CommuneName MaxLength="255" />
-                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" 
+                <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                              Class="moog-mudform-input"
+                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                               Label="Village"
                               @bind-Value=Value.VillageName For="@(() => Value.VillageName)" OnlyValidateIfDirty="true" MaxLength="255" />
             }
             else
             {
-                <MudComboBox ReadOnly=@Readonly Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                             PopoverClass="moog-ui-combo-box-popover" T="int?"
-                             Label="Province" Placeholder="Province"
+                <MudComboBox Clearable="true" Editable="true" FullWidth="true" Immediate="true" ReadOnly=@Readonly Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text"
+                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-opover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight" autocomplete="new-password"
+                             Label="Province" Placeholder="Province" T="int?"
                              ToStringFunc="@(e => e is null || e <= 0 ? "" : _khProvinceList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == e)?.ObjectName)"
                              Value="Value.KhProvinceId" For="@(() => Value.KhProvinceId)" ValueChanged="OnProvinceChanged">
                     @foreach (var p in _khProvinceList)
@@ -50,8 +64,9 @@
                         <MudComboBoxItem T="int?" Value="@p.ObjectId" Text="@p.ObjectName">@p.ObjectName</MudComboBoxItem>
                     }
                 </MudComboBox>
-                <MudComboBox ReadOnly=@Readonly Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                             PopoverClass="moog-ui-combo-box-popover" T="int?" Disabled="Value.KhProvinceId is null"
+                <MudComboBox Clearable="true" Editable="true" FullWidth="true" Immediate="true" ReadOnly=@Readonly Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text"
+                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-opover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight" autocomplete="new-password" 
+                             T="int?" Disabled="Value.KhProvinceId is null"
                              Label="District" Placeholder="District"
                              ToStringFunc="@(e => e is null || e <= 0 ? "" : _khDistrictList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == e)?.ObjectName)"
                              Value="Value.KhDistrictId" For="@(() => Value.KhDistrictId)" ValueChanged="OnDistrictChanged">
@@ -60,8 +75,9 @@
                         <MudComboBoxItem T="int?" Value="@d.ObjectId" Text="@d.ObjectName">@d.ObjectName</MudComboBoxItem>
                     }
                 </MudComboBox>
-                <MudComboBox ReadOnly=@Readonly Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                             PopoverClass="moog-ui-combo-box-popover" T="int?" Disabled="Value.KhDistrictId is null"
+                <MudComboBox Clearable="true" Editable="true" FullWidth="true" Immediate="true" ReadOnly=@Readonly Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text"
+                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-opover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight" autocomplete="new-password"
+                             T="int?" Disabled="Value.KhDistrictId is null"
                              Label="Commune" Placeholder="Commune"
                              ToStringFunc="@(e => e is null || e <= 0 ? "" : _khCommuneList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == e)?.ObjectName)"
                              Value="Value.KhCommuneId" For="@(() => Value.KhCommuneId)" ValueChanged="OnCommuneChanged">
@@ -70,8 +86,9 @@
                         <MudComboBoxItem T="int?" Value="@c.ObjectId" Text="@c.ObjectName">@c.ObjectName</MudComboBoxItem>
                     }
                 </MudComboBox>
-                <MudComboBox ReadOnly=@Readonly Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                             PopoverClass="moog-ui-combo-box-popover" T="int?" Disabled="Value.KhCommuneId is null"
+                <MudComboBox Clearable="true" Editable="true" FullWidth="true" Immediate="true" ReadOnly=@Readonly Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text"
+                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-opover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight" autocomplete="new-password"
+                             T="int?" Disabled="Value.KhCommuneId is null"
                              Label="Village" Placeholder="Village"
                              ToStringFunc="@(e => e is null || e <= 0 ? "" : _khVillageList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == e)?.ObjectName)"
                              Value="Value.KhVillageId" For="@(() => Value.KhVillageId)" ValueChanged="OnVillageChanged">

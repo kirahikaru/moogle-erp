@@ -1,4 +1,5 @@
 ﻿using Dapper.Contrib.Extensions;
+using DataLayer.GlobalConstant;
 namespace DataLayer.Models.SysCore;
 /// <summary>
 /// 
@@ -50,15 +51,17 @@ public class DropdownDataList : AuditObject
 
     [DefaultValue(true)]
     public bool IsEnabled { get; set; }
-    #endregion
+	#endregion
 
-    #region *** LINKED OBJECTS ***
-    #endregion
+	#region *** LINKED OBJECTS ***
+	#endregion
 
-    #region *** DYNAMIC PROPERTIES ***
-    #endregion
+	#region *** DYNAMIC PROPERTIES ***
+	[Computed, Write(false), ReadOnly(true)]
+	public string SystemNameText => DropdownDataSystems.GetDisplayText(SystemName);
+	#endregion
 
-    public DropdownDataList()
+	public DropdownDataList()
     {
         IsEnabled = true;
     }

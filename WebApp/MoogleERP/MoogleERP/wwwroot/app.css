@@ -358,6 +358,13 @@ html, body {
     "MONO" 1 !important;
 }
 
+.moog-font-kh {
+    font-family: "Hanuman", serif !important;
+    font-optical-sizing: auto  !important;
+    font-weight: 400  !important;
+    font-style: normal !important;
+}
+
 
 /*#region FONT: Bebas Neue*/
 .bebas-neue {

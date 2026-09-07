@@ -40,9 +40,11 @@ public class MedTest : AuditObject
     [MaxLength(255)]
     public new string? ObjectName { get; set; }
     public string? ObjectNameKh { get; set; }
-    public string? TestDesc { get; set; }
+	public string? TestCode { get; set; }
+	public string? TestDesc { get; set; }
+	public string? DiagnosisArea { get; set; }
 
-    [Required(AllowEmptyStrings = false, ErrorMessage = "'Test Type' is required.")]
+	[Required(AllowEmptyStrings = false, ErrorMessage = "'Test Type' is required.")]
     public int? MedTestTypeId { get; set; }
     public string? MedTestTypeCode { get; set; }
     public decimal? MinValue { get; set; }
@@ -50,17 +52,19 @@ public class MedTest : AuditObject
     public decimal? MaxValue { get; set; }
     public string? ValueUomCode { get; set; }
     public string? ValueUomSymbol { get; set; }
-    #endregion
+	public string? DiagnosisNote { get; set; }
+	#endregion
 
-    #region *** LINKED OBJECTS ***
-    [Computed, Write(false)]
+	#region *** LINKED OBJECTS ***
+	[Computed, Write(false)]
 	public MedTestType? TestType { get; set; }
 
 	[Computed, Write(false)]
 	public UnitOfMeasure? ValueUom { get; set; }
-    #endregion
+	#endregion
 
-    #region *** DYNAMIC PROPERTIES ***
-
-    #endregion
+	#region *** DYNAMIC PROPERTIES ***
+	[Computed, Write(false), ReadOnly(true)]
+	public string TestTypeText => TestType != null ? TestType.ObjectName.NonNullValue("") : "";
+	#endregion
 }

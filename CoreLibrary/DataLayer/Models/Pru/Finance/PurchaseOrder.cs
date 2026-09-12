@@ -89,7 +89,7 @@ public class PurchaseOrder : AuditObject
 	{
 		get
 		{
-			StringBuilder sb = new("[PO]");
+			StringBuilder sb = new(LBU.NonNullValue("???") + " [PO]");
 
 			if (!string.IsNullOrEmpty(VendorID))
 				sb.Append($" {VendorID}");

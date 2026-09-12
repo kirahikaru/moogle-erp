@@ -57,16 +57,6 @@
                          Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" Style="min-width:120px">
                 <MudPaper Class="pru-ui-mudpaper-cruc-tab-content px-5 pt-3 pb-4 overflow-y-auto" Square="true" Height="calc(100% - var(--pru-cruc-pg-status-bar-height))" Width="100%" Elevation="0">
                     <MudGrid Spacing="4" Justify="Justify.SpaceEvenly">
-                        <MudItem xs="12">
-                            <MudAutocomplete Clearable="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
-                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
-                                             CoerceText="true" CoerceValue="true" SearchFunc="@SearchQuotation" 
-                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
-                                             Label="Sale Quotation" HelperText="Sale Quotation with Status='CONFIRMED'"
-                                             Value="CurrentObject!.Quotation" T="Quotation"
-                                             ToStringFunc="@(e=> e==null?null : $"{e.EffectiveDate!.Value:dd-MMM-yyyy} | {e.ObjectCode!} | {e.ObjectName!} ({e.TotalAmountText}))")"
-                                             ValueChanged="OnQuotationChanged" />
-                        </MudItem>
                         <MudItem xs="1">
                             <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Required="true" Immediate="false"
                                        Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
@@ -78,6 +68,16 @@
                                     <MudSelectItem Value=@lbuID>@lbuID</MudSelectItem>
                                 }
                             </MudSelect>
+                        </MudItem>
+                        <MudItem xs="11">
+                            <MudAutocomplete Clearable="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="@SearchQuotation" 
+                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             Label="Sale Quotation" HelperText="Sale Quotation with Status='CONFIRMED'"
+                                             Value="CurrentObject!.Quotation" T="Quotation" Disabled="@(string.IsNullOrEmpty(CurrentObject!.LBU))"
+                                             ToStringFunc="@(e=> e==null?null : $"{e.EffectiveDate!.Value:dd-MMM-yyyy} | {e.ObjectCode!} | {e.ObjectName!} ({e.TotalAmountText}))")"
+                                             ValueChanged="OnQuotationChanged" />
                         </MudItem>
                         <MudItem xs="2">
                             <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
@@ -106,7 +106,7 @@
                                            Label="Expiry Date"
                                            @bind-Date=@CurrentObject.ExpiryDate For="@(() => CurrentObject.ExpiryDate)" />
                         </MudItem>
-                        <MudItem xs="3">
+                        <MudItem xs="4">
                             <MudComboBox Clearable="true" ShrinkLabel="true" Editable="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" 
                                          Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
                                          AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
@@ -163,15 +163,19 @@
                         </MudItem>
                         <MudItem xs="2">
                             <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" Required="true"
-                                             Adornment="Adornment.Start" AdornmentIcon="material-symbols-rounded/attach_money" AdornmentColor=@Color.Primary
-                                             Label="Total Amount" Format="#,##0.00"
+                                             Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                             AdornmentIcon=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "material-symbols-rounded/attach_money" : "material-symbols-rounded/money")
+                                             Label="Total Amount" 
+                                             Format=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.##" : "#,##0")
                                              @bind-Value=CurrentObject!.TotalAmount For="@(() => CurrentObject.TotalAmount)" OnlyValidateIfDirty="true"
                                              Step=".1M" Min="0" />
                         </MudItem>
                         <MudItem xs="2">
                             <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")"
-                                             Adornment="Adornment.Start" AdornmentIcon="material-symbols-rounded/attach_money" AdornmentColor=@Color.Primary
-                                             Label="Tax Amount" Step=".1M" Format="#,##0.00" Min="0"
+                                             Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                             AdornmentIcon=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "material-symbols-rounded/attach_money" : "material-symbols-rounded/money")
+                                             Label="Tax Amount" Step=".1M" Min="0"
+                                             Format=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.##" : "#,##0")
                                              @bind-Value=CurrentObject!.TotalTaxAmount For="@(() => CurrentObject.TotalTaxAmount)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="7">
@@ -189,8 +193,10 @@
                                 <MudNumericField Clearable="true" ReadOnly=true Required="false" ShrinkLabel="true" HideSpinButtons="true"
                                                  Class="pru-ui-mudform-input" Culture="@CultureInfo.GetCultureInfo("en-US")"
                                                  ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
-                                                 Adornment="Adornment.Start" AdornmentIcon="material-symbols-rounded/attach_money" AdornmentColor=@Color.Primary
-                                                 Label="Paid Amount" Format="#,##0.00"
+                                                 Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                                 AdornmentIcon=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "material-symbols-rounded/attach_money" : "material-symbols-rounded/money")
+                                                 Label="Paid Amount" 
+                                                 Format=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.##" : "#,##0")
                                                  @bind-Value=CurrentObject!.PaidAmount For="@(() => CurrentObject.PaidAmount)" OnlyValidateIfDirty="true"
                                                  Step=".1M" Min="0" />
                             </MudItem>
@@ -326,14 +332,16 @@
                                                                          Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
                                                                          CoerceText="true" CoerceValue="true" SearchFunc="SearchPurchaseType"
                                                                          AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
-                                                                         Label="Action" T="string" @bind-Value="qi.Item.PurchaseType" />
+                                                                         Label="Purchase Type" T="string" @bind-Value="qi.Item.PurchaseType" />
                                                     </MudItem>
                                                     <MudItem xs="3">
                                                         <MudNumericField Clearable="true" FullWidth="true" HideSpinButtons="true" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true"
                                                                          Class="pru-ui-mudform-input" Culture="@CultureInfo.GetCultureInfo("en-US")"
                                                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
-                                                                         Adornment="Adornment.Start" AdornmentIcon="material-symbols-rounded/attach_money" AdornmentColor=@Color.Primary
-                                                                         Label="Unit Price" Format="#,##0.##" Step=".1M"
+                                                                         Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                                                         AdornmentIcon=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "material-symbols-rounded/attach_money" : "material-symbols-rounded/money")
+                                                                         Label="Unit Price" Step=".1M"
+                                                                         Format=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.##" : "#,##0")
                                                                          @bind-Value=qi.Item.UnitPrice For="@(() => qi.Item.UnitPrice)" OnlyValidateIfDirty="true" />
                                                     </MudItem>
                                                     <MudItem xs="2">
@@ -341,15 +349,18 @@
                                                                          Class="pru-ui-mudform-input" Culture="@CultureInfo.GetCultureInfo("en-US")"
                                                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                                          Adornment="Adornment.Start" AdornmentIcon="material-symbols-rounded/numbers"
-                                                                         Label="Quantity" Format="#,##0.##" Min="0" Step=".1M"
+                                                                         Label="Quantity" Min="0" Step=".1M"
+                                                                         Format=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.##" : "#,##0")
                                                                          @bind-Value=qi.Item.Quantity For="@(() => qi.Item.Quantity)" OnlyValidateIfDirty="true" />
                                                     </MudItem>
                                                     <MudItem xs="3">
                                                         <MudNumericField Clearable="true" FullWidth="true" HideSpinButtons="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Disabled="true"
                                                                          Class="pru-ui-mudform-input" Culture="@CultureInfo.GetCultureInfo("en-US")"
                                                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
-                                                                         Adornment="Adornment.Start" AdornmentIcon="material-symbols-rounded/attach_money" AdornmentColor=@Color.Primary
-                                                                         Label="Total Amount" Format="#,##0.##" Min="0" Step=".1M"
+                                                                         Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                                                         AdornmentIcon=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "material-symbols-rounded/attach_money" : "material-symbols-rounded/money")
+                                                                         Label="Total Amount" Min="0" Step=".1M"
+                                                                         Format=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.##" : "#,##0")
                                                                          @bind-Value=qi.Item.TotalAmount For="@(() => qi.Item.TotalAmount)" OnlyValidateIfDirty="true" />
                                                     </MudItem>
                                                     <MudItem xs="2">
@@ -583,7 +594,9 @@
             case CRUCModes.CREATE:
                 {
                     CurrentObject = new();
-                    _quotList = await Uow.Quotations.GetForPRPOAsync();
+
+                    if (string.IsNullOrEmpty(CurrentObject!.LBU))
+                        _quotList = await Uow.Quotations.GetForPRPOAsync(CurrentObject!.LBU!);
                 }
                 break;
             case CRUCModes.UPDATE:
@@ -614,7 +627,7 @@
                         poi.ModifiedUser = null;
                     }
 
-                    _quotList = await Uow.Quotations.GetForPRPOAsync();
+                    _quotList = await Uow.Quotations.GetForPRPOAsync(CurrentObject!.LBU!);
                 } break;
         }
 
@@ -735,12 +748,35 @@
         if (!string.IsNullOrEmpty(lbu))
         {
             CurrentObject!.LBU = lbu;
+
+            switch (lbu)
+            {
+                case PruLBUs.PCLA: 
+                    CurrentObject!.CurrencyCode = PruGC.Currencies.USD;
+                    break;
+                case PruLBUs.PMLI: 
+                    CurrentObject!.CurrencyCode = PruGC.Currencies.MMK;
+                    break;
+                case PruLBUs.PLAL:
+                    CurrentObject!.CurrencyCode = PruGC.Currencies.LAK;
+                    break;
+                default:
+                    CurrentObject!.CurrencyCode = PruGC.Currencies.USD;
+                    break;
+            }
+
+            CurrentObject!.VendorID = null;
+            await OnQuotationChanged(null);
             _vendorList = await Uow.Vendors.GetForDropdownListAsync(CurrentObject!.LBU, null, CurrentObject!.VendorID);
+            _quotList = await Uow.Quotations.GetForPRPOAsync(CurrentObject!.LBU!);
         }
         else
         {
+            CurrentObject!.VendorID = null;
+            await OnQuotationChanged(null);
             CurrentObject!.LBU = null;
             _vendorList = [];
+            _quotList = [];
         }
     }
 
@@ -754,11 +790,12 @@
             return _quotList;
     }
 
-    async Task OnQuotationChanged(Quotation item)
+    async Task OnQuotationChanged(Quotation? item)
     {
         if (item != null)
         {
-            CurrentObject!.LBU = item.LBU;
+            // Change flow: select LBU First then select Quotation
+            // CurrentObject!.LBU = item.LBU;
             CurrentObject!.Quotation = item;
             CurrentObject!.QuotationId = item.Id;
             CurrentObject!.QuotationCode = item.ObjectCode;
@@ -791,7 +828,8 @@
         }
         else
         {
-            CurrentObject!.LBU = null;
+            // Change flow: select LBU First then select Quotation
+            // CurrentObject!.LBU = null;
             CurrentObject!.Quotation = null;
             CurrentObject!.QuotationId = null;
             CurrentObject!.QuotationCode = null;

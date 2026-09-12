@@ -44,7 +44,8 @@
 				</CellTemplate>
 			</TemplateColumn>
 			@* <PropertyColumn Property="x => x.ObjectName" Title="Asset Name" StickyLeft="true" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
-			<TemplateColumn Title="Asset Name" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData">
+			<TemplateColumn Title="Asset Name" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" 
+				CellStyle="white-space:nowrap" Context="rowData">
 				<CellTemplate>
 					@if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.TERMINATED, AssetLifeCycleStatuses.WRITTEN_OFF))
 					{
@@ -56,17 +57,19 @@
 					}
 				</CellTemplate>
 			</TemplateColumn>
-			@* <PropertyColumn Property="x => x.ObjectCode" Title="Asset ID" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
-			<TemplateColumn Title="Asset ID" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono" Context="rowData">
-				<CellTemplate>
-					@if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.TERMINATED, AssetLifeCycleStatuses.WRITTEN_OFF))
-					{
-						<span style="text-decoration:line-through; font-style:italic; color:var(--vic-gray-300);">@rowData.Item.ObjectCode</span>
-					}
-					else if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.PENDING_TERMINATION, AssetLifeCycleStatuses.PENDING_WRITE_OFF))
-					{
-						<MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
-							<MudIcon Icon="@Icons.Material.Rounded.WarningAmber" Style="color:var(--vic-orange-500);" />
+            @* <PropertyColumn Property="x => x.ObjectCode" Title="Asset ID" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
+            <TemplateColumn Title="Asset ID"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+                            CellStyle="white-space:nowrap" Context="rowData">
+                <CellTemplate>
+                    @if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.TERMINATED, AssetLifeCycleStatuses.WRITTEN_OFF))
+                    {
+                        <span style="text-decoration:line-through; font-style:italic; color:var(--vic-gray-300);">@rowData.Item.ObjectCode</span>
+                    }
+                    else if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.PENDING_TERMINATION, AssetLifeCycleStatuses.PENDING_WRITE_OFF))
+                    {
+                        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                            <MudIcon Icon="@Icons.Material.Rounded.WarningAmber" Style="color:var(--vic-orange-500);" />
 							<span style="font-style:italic; color:var(--vic-orange-500);">@rowData.Item.ObjectCode</span>
 						</MudStack>
 					}
@@ -77,9 +80,11 @@
 				</CellTemplate>
 			</TemplateColumn>
             <PropertyColumn Title="Product/Plan Name" Property="x => x.ProductName"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Provider Company" Property="x => x.Manufacturer"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							HeaderStyle="white-space:nowrap" />
 			<PropertyColumn Title="Serial No." Property="x => x.SerialNo" Sortable="false"
 							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono" />
             <PropertyColumn Title="Category" Property="x => x.CategoryName"
@@ -88,16 +93,20 @@
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
 							HeaderStyle="min-width:180px" />
             <PropertyColumn Title="Current User" Property="x => x.CurrentUserName"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
 			<PropertyColumn Title="Staff ID" Property="x => x.CurrentUserID" Sortable="false"
 							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
 							HeaderStyle="min-width:80px" />
             <PropertyColumn Title="Function" Property="x => x.CurrentUserFunc"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Department" Property="x => x.CurrentUserDept"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
             <PropertyColumn Title="Provision Date" Property="x => x.PurchaseDate" Format="dd-MMM-yyyy"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" CellStyle="text-align:center" />
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" 
+							HeaderStyle="white-space:nowrap"
+							CellStyle="text-align:center" />
             @* <PropertyColumn Property="x => x.AssetState" Title="Asset State" HeaderClass="pru-ui-muddatagrid-hdr main-pg" /> *@
             <TemplateColumn Title="Status" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" 
 							CellStyle="text-align:center; padding-top: 2px !important; padding-bottom: 2px !important" >

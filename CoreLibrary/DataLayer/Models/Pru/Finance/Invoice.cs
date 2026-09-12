@@ -86,7 +86,7 @@ public class Invoice : AuditObject
 	{
 		get
 		{
-			StringBuilder sb = new("[INV]");
+			StringBuilder sb = new(LBU.NonNullValue("???") + " [INV]");
 
 			if (!string.IsNullOrEmpty(VendorID))
 				sb.Append($" {VendorID}");

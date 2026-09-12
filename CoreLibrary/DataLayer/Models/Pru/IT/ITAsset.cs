@@ -101,6 +101,13 @@ public class ITAsset : AuditObject
 	public decimal? PurchaseTax { get; set; }
 	public string? CurrentSite { get; set; }
 	public string? CurrentLocation { get; set; }
+	/// <summary>
+	/// Individual
+	/// Function
+	/// Department
+	/// Company
+	/// </summary>
+	public string? OwnershipTag { get; set; }
 	#endregion
 
 	#region *** LINKED OBJECTS ***

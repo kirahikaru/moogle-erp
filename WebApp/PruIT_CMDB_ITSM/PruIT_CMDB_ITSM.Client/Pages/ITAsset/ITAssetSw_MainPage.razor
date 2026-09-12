@@ -32,7 +32,7 @@
 				 ServerData="ServerDataFunc" @ref="MainDataGrid" @bind-SelectedItem=SelectedObject Height="100%"
 				 T="ITAsset">
 		<Columns>
-			@* <PropertyColumn Property="x => x.ObjectName" Title="Asset Name" StickyLeft="true" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
+			
 			<TemplateColumn Title="LBU" StickyLeft="true" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData">
 				<CellTemplate>
 					<MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
@@ -41,7 +41,10 @@
 					</MudStack>
 				</CellTemplate>
 			</TemplateColumn>
-			<TemplateColumn Title="Asset Name" 
+			<PropertyColumn Title="Asset Name" Property="x => x.ObjectName" StickyLeft="true"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							HeaderStyle="min-width:288px" />
+			<TemplateColumn Title="Name" Hidden="true"
 				HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" 
 				HeaderStyle="min-width: 288px"
 				Context="rowData">
@@ -92,15 +95,16 @@
 							CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Sub-Category" Property="x => x.SubCategory"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width: 250px" />
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Current User" Property="x => x.CurrentUserName"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-							HeaderStyle="min-width:155px" CellStyle="white-space:nowrap" />
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Staff ID" Property="x => x.CurrentUserID" Sortable="false"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
-                            HeaderStyle="min-width: 75px" />
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Function" Property="x => x.CurrentUserFunc"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Department" Property="x => x.CurrentUserDept"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
 							CellStyle="white-space:nowrap" />

@@ -429,3 +429,21 @@ public static class PruDepts
 			];
 	}
 }
+
+public static class OwnershipTags
+{
+	public const string INDIVIDUAL = "Individual";
+	public const string FUNCTION = "Function";
+	public const string DEPARTMENT = "Department";
+	public const string COMPANY = "Company";
+
+	public static List<string> GetAll()
+	{
+		return [
+			INDIVIDUAL,
+			FUNCTION,
+			DEPARTMENT,
+			COMPANY
+			];
+	}
+}

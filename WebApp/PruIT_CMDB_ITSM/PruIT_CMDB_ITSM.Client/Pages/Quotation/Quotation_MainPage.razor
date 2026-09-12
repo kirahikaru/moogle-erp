@@ -45,19 +45,27 @@
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono" />
             <PropertyColumn Title="Budget Item" Property="x => x.ObjectName" StickyLeft="true"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
-            <PropertyColumn Title="Expiry" Property="x => x.ExpiryDate" Format="dd-MMM-yyyy"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Filterable="false" />
+			<PropertyColumn Title="Expiry" Property="x => x.ExpiryDate" Format="dd-MMM-yyyy" Filterable="false"
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+							CellStyle="text-align:center" />
             <PropertyColumn Title="Vendor" Property="x => x.VendorName"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
-            <PropertyColumn Title="Currency" Property="x => x.CurrencyCode"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Filterable="false" Sortable="false" />
-            <PropertyColumn Title="Total Amount" Property="x => x.TotalAmount"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell reddit-mono-500"
-                            Format="#,##0" CellStyle="text-align:right" Filterable="false" Sortable="false" Context="i" />
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+			<PropertyColumn Title="Currency" Property="x => x.CurrencyCode" Filterable="false" Sortable="false"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+							CellStyle="text-align:center" />
+			<PropertyColumn Title="Total Amount" Property="x => x.TotalAmount" Filterable="false" Sortable="false"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+                            Format="#,##0" 
+							CellStyle="text-align:right" Context="i" />
             <PropertyColumn Title="Total Tax" Property="x => x.TotalTaxAmount" Filterable="false" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell reddit-mono-500"
-                            Format="#,##0" HeaderStyle="max-width:100px"  CellStyle="text-align:right" />
-            <TemplateColumn Title="Status"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+                            Format="#,##0" HeaderStyle="white-space:nowrap" CellStyle="text-align:right" />
+			<PropertyColumn Title="PO" Property="x => x.PurchaseOrderRefs" Filterable="false" Sortable="false"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+							/>
+			<PropertyColumn Title="Invoice" Property="x => x.InvoiceRefs" Filterable="false" Sortable="false"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono" />
+			<TemplateColumn Title="Status"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellStyle="text-align:center" CellClass="pru-ui-muddatagrid-cell">
                 <CellTemplate>
                     <MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(context.Item.WorkflowStatus) ? _statusCssClassList[context.Item.WorkflowStatus!] : "status-chip-default-light")" Style="padding:2px 8px; font-size:9pt">

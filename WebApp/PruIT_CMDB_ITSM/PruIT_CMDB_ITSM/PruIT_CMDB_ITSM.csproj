@@ -11,7 +11,7 @@
     <ProjectReference Include="..\PruIT_CMDB_ITSM.Client\PruIT_CMDB_ITSM.Client.csproj" />
     <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="9.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.11" />
-    <PackageReference Include="MudBlazor" Version="9.8.0" />
+    <PackageReference Include="MudBlazor" Version="9.9.0" />
   </ItemGroup>
 
 </Project>

@@ -18,7 +18,7 @@ public interface IQuotationRepos : IBaseRepos<Quotation>
 
 	Task<Quotation?> GetFullAsync(int id);
 	Task<int> InsertOrUpdateFullAsync(Quotation obj);
-	Task<IEnumerable<Quotation>> GetForPRPOAsync();
+	Task<IEnumerable<Quotation>> GetForPRPOAsync(string lbu);
 }
 
 public class QuotationRepos(IDbContext dbContext) : BaseRepos<Quotation>(dbContext, Quotation.DatabaseObject), IQuotationRepos
@@ -215,14 +215,16 @@ public class QuotationRepos(IDbContext dbContext) : BaseRepos<Quotation>(dbConte
 		}
 	}
 
-	public async Task<IEnumerable<Quotation>> GetForPRPOAsync()
+	public async Task<IEnumerable<Quotation>> GetForPRPOAsync(string lbu)
 	{
 		SqlBuilder sbSql = new();
 		DynamicParameters param = new();
 		sbSql.Where("t.IsDeleted=0");
+		sbSql.Where("t.LBU=@LBU");
 		sbSql.Where("t.WorkflowStatus=@WorkflowStatus");
 
 		param.Add("@WorkflowStatus", QuotationWFStatuses.CONFIRMED, DbType.AnsiString);
+		param.Add("@LBU", lbu, DbType.AnsiString);
 		sbSql.OrderBy("t.EffectiveDate ASC");
 
 		using var cn = DbContext.DbCxn;

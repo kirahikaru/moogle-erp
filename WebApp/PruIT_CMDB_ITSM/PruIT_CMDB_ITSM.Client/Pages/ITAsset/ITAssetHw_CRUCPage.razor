@@ -220,10 +220,10 @@
                                           Label="Requested By" Placeholder="Full name of requestor" MaxLength="150" 
                                           @bind-Value=CurrentObject!.RequestUserName For="@(() => CurrentObject.RequestUserName)" OnlyValidateIfDirty="true" />
                         </MudItem> *@
-                        <MudItem xs="3">
+                        <MudItem xs="2">
                             <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
                                              Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
-                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchCurrentUser"
+                                             CoerceText="true" CoerceValue="false" SearchFunc="SearchCurrentUser"
                                              AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
                                              Label="Current User" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
                                              Value="_currentUser" ValueChanged="OnCurrentUserValueChanged" />
@@ -256,7 +256,14 @@
                                              Label="Department" T="string"
                                              @bind-Value=CurrentObject.CurrentUserDept For="@(() => CurrentObject.CurrentUserDept)" />
                         </MudItem>
-                        @* ================================================================================================================================== *@
+                        <MudItem xs="1">
+                            <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchOwnershipTag"
+                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             Label="Ownership Tag" T="string"
+                                             @bind-Value=CurrentObject.OwnershipTag For="@(() => CurrentObject.OwnershipTag)" />
+                        </MudItem>
                         <MudItem xs="2">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                           Class="pru-ui-mudform-input"
@@ -714,8 +721,6 @@
     IEnumerable<string> _envList = ["DEV", "UAT", "PRD", "SIT"];
     IEnumerable<string> _actionList = ["01-Acquire", "01-Purchase", "01-Provision", "02-Unbox Allocation", "03-Allocate", "04-Transfer", "05-Return", "88-Terminate", "88-Write-Off", "99-Dispose"];
     IEnumerable<string> _zoneList = ["Azure", "On-Prem"];
-    IEnumerable<string> _deptList = PruDepts.GetLatest();
-    IEnumerable<string> _funcList = [];
     IEnumerable<string> _lbuIDList = ["PCLA", "PMLI", "PLAL"];
     IEnumerable<string> _itsmSysList = [
         "Atlassian | Jira", "Email", "Managed Engine | ServicesDesk", "BMC RemedyForces"
@@ -763,6 +768,10 @@
         "Chhinlong Horn",
         "Hongseng Kheng"
     ];
+
+    List<string> _deptList = PruDepartments.GetAll();
+    List<string> _funcList = PruFunctions.GetAll();
+    List<string> _ownershipTags = OwnershipTags.GetAll();
     #endregion
 
     #region PAGE LIFECYCLE FUNCTIONS
@@ -1219,6 +1228,20 @@
         }
 
         return _deptList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchOwnershipTag(string value, CancellationToken token)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5, token);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _ownershipTags;
+        }
+
+        return _ownershipTags.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
     #endregion
 

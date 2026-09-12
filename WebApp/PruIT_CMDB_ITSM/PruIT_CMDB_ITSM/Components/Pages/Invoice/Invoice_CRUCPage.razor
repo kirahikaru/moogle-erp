@@ -630,82 +630,83 @@
                                         </PropertyColumn>
                                         <PropertyColumn Title="Item" Property="x => x.ObjectName" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        HeaderStyle="min-width:300px" Context="qi">
+                                                        HeaderStyle="white-space:nowrap" Context="qi">
                                             <EditTemplate>
                                                 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="PO#" Property="x => x.PurchaseOrderNo" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space: nowrap">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Product Type" Property="x => x.ProductType" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space: nowrap">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Product Name" Property="x => x.ProductName" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space: nowrap">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Service Type" Property="x => x.ServiceType" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space: nowrap">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Service Name" Property="x => x.ServiceName" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space: nowrap">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="IT Asset ID" Property="x => x.ITAssetCode" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi"
-                                                        HeaderStyle="min-width:120px" CellStyle="white-space: nowrap">
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space: nowrap">
                                             <EditTemplate>
                                                 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Staff ID" Property="x => x.EmpID" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        HeaderStyle="min-width:100px" Context="qi">
+                                                        HeaderStyle="white-space:nowrap" Context="qi">
                                             <EditTemplate>
                                                 
                                             </EditTemplate>
                                         </PropertyColumn>
-                                        <PropertyColumn Title="Invoice Item" Property="x => x.InvoiceItemId"
-                                                        HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" CellStyle="text-align:right" Sortable="false" Context="expItem" Hidden="true">
+                                        <PropertyColumn Title="Invoice Item" Property="x => x.InvoiceItemId" Context="expItem" Hidden="true"
+                                                        HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" 
+                                                        CellStyle="text-align:right" Sortable="false" >
                                             <EditTemplate>
                                                 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="GL Account #" Property="x => x.AccountCode" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
-                                                        HeaderStyle="min-width:110px; max-width:110px" Context="expItem">
+                                                        HeaderStyle="white-space:nowrap" Context="expItem">
                                             <EditTemplate>
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Account Name" Property="x => x.AccountName" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        HeaderStyle="min-width:250px" Context="expItem">
+                                                        HeaderStyle="white-space:nowrap" Context="expItem">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Act Tracker" Property="x => x.FinActTrackerID" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono" Context="expItem"
-                                                        HeaderStyle="min-width:95px; max-width:95px"
+                                                        HeaderStyle="white-space:nowrap"
                                                         FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right">
                                             <EditTemplate>
                                                 
@@ -716,14 +717,14 @@
                                         </PropertyColumn>
                                         <PropertyColumn Title="Tracker Name" Property="x => x.FinActTrackerName" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        HeaderStyle="min-width:200px" Context="expItem">
+                                                        HeaderStyle="white-space:nowrap" Context="expItem">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Amount (incl. Tax)" Property="x => x.TotalAmount" Format="@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.00" : "#,##0")" Filterable="false" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
-                                                        HeaderStyle="min-width:150px" CellStyle="text-align:right"
+                                                        HeaderStyle="white-space:nowrap" CellStyle="text-align:right"
                                                         Context="qi" FooterClass="reddit-mono-400"
                                                         AggregateDefinition="_expAggr" FooterStyle="font-size:12px; padding-inline-start: 1px; padding-inline-end:8px; text-align:right">
                                             <EditTemplate>
@@ -751,7 +752,7 @@
                                         </PropertyColumn>
                                         <PropertyColumn Title="Effective Date" Property="x => x.EffectiveDate" Format="dd-MMM-yyyy" Filterable="false" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        HeaderStyle="min-width:140px"
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap"
                                                         Context="qi">
                                             <EditTemplate>
                                                 
@@ -759,7 +760,7 @@
                                         </PropertyColumn>
                                         <PropertyColumn Title="From Date" Property="x => x.FromDate" Format="dd-MMM-yyyy" Filterable="false" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        HeaderStyle="min-width:120px"
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap"
                                                         Context="qi">
                                             <EditTemplate>
                                                 
@@ -767,14 +768,14 @@
                                         </PropertyColumn>
                                         <PropertyColumn Title="To Date" Property="x => x.ToDate" Format="dd-MMM-yyyy" Filterable="false" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        HeaderStyle="min-width:120px"
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap"
                                                         Context="qi">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <TemplateColumn Hidden=@IsViewMode Title="Action" StickyRight="true" HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell d-flex justify-end"
-                                                        HeaderStyle="width:500px" CellStyle="padding:6px 10px !important" Context="qi">
+                                                        CellStyle="padding:6px 10px !important" Context="qi">
                                             <CellTemplate>
                                                 <MudStack Row="true" Spacing="0">
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
@@ -1096,6 +1097,14 @@
                 item.CoverageStartDate = new DateTime(_expYr.Value, _expMth.Value, 1);
                 item.CoverageEndDate = item.CoverageStartDate!.Value.AddMonths(1).AddDays(-1);
             }
+
+            foreach (ExpenseItem item in CurrentObject!.ExpenseItems)
+            {
+                item.EffectiveDate = CurrentObject.EffectiveDate;
+
+                item.FromDate = new DateTime(_expYr.Value, _expMth.Value, 1);
+                item.ToDate = item.FromDate!.Value.AddMonths(1).AddDays(-1);
+            }
         }
         else if (_expMth.HasValue)
         {
@@ -1105,6 +1114,22 @@
                 {
                     item.CoverageStartDate = new DateTime(item.CoverageStartDate.Value.Year, _expMth.Value, 1);
                     item.CoverageEndDate = item.CoverageStartDate!.Value.AddMonths(1).AddDays(-1);
+                }
+            }
+
+            foreach (ExpenseItem item in CurrentObject!.ExpenseItems)
+            {
+                item.EffectiveDate = CurrentObject.EffectiveDate;
+
+                if (item.FromDate.HasValue)
+                {
+                    item.FromDate = new DateTime(item.FromDate.Value.Year, _expMth.Value, 1);
+                    item.ToDate = item.FromDate!.Value.AddMonths(1).AddDays(-1);
+                }
+                else
+                {
+                    item.FromDate = new DateTime(DateTime.Today.Year, _expMth.Value, 1);
+                    item.ToDate = item.FromDate!.Value.AddMonths(1).AddDays(-1);
                 }
             }
         }
@@ -1118,11 +1143,22 @@
                     item.CoverageEndDate = item.CoverageStartDate!.Value.AddMonths(1).AddDays(-1);
                 }
             }
-        }
 
-        foreach (ExpenseItem item in CurrentObject!.ExpenseItems)
-        {
-            item.EffectiveDate = CurrentObject.EffectiveDate;
+            foreach (ExpenseItem item in CurrentObject!.ExpenseItems)
+            {
+                item.EffectiveDate = CurrentObject.EffectiveDate;
+
+                if (item.FromDate.HasValue)
+                {
+                    item.FromDate = new DateTime(_expYr.Value, item.FromDate.Value.Month, 1);
+                    item.ToDate = item.FromDate!.Value.AddMonths(1).AddDays(-1);
+                }
+                else
+                {
+                    item.FromDate = new DateTime(_expYr.Value, DateTime.Today.Month, 1);
+                    item.ToDate = item.FromDate!.Value.AddMonths(1).AddDays(-1);
+                }
+            }
         }
     }
 

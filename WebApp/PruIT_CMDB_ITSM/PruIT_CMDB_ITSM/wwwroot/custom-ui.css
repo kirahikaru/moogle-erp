@@ -153,9 +153,23 @@
             > .mud-input-adornment {
                 > .material-symbols-rounded {
                     color: var(--tw-gray-500);
-                    font-size: 20px;
+                    font-size: 22px;
                     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 100, 'opsz' 24;
                 }
+
+                > .mud-icon-button-size-small {
+                    padding: 0px;
+
+                    > .mud-icon-button-label {
+                        > .material-symbols-rounded {
+                            font-size:22px;
+                        }
+                    }
+                }
+            }
+
+            > .mud-input-adornment-end {
+                margin-inline-end: 5px;
             }
 
             > .mud-input-adornment-start {
@@ -204,11 +218,6 @@
 
             > .mud-icon-button-size-small {
                 padding: 0px;
-
-                &.mud-icon-button-edge-end {
-                    margin-inline-start: -10px;
-                    margin-inline-end: 10px;
-                }
             }
 
             &:hover {
@@ -793,11 +802,12 @@
 .pru-ui-mudautocomplete-input {
     > .mud-icon-button-size-small {
         padding: 1px;
-        &.mud-icon-button-edge-end {
+        /* &.mud-icon-button-edge-end {
             margin-right: 4px;
             margin-inline-end: 4px;
             margin-inline-start: -14px;
-        }
+        } */
+
         > .mud-icon-button-label {
             > .mud-icon-size-small {
                 
@@ -937,7 +947,8 @@
     }
 
     & .mud-table-pagination-toolbar {
-        height: 36px;
+        /* height: 36px; */
+        min-height: 36px;
     }
 }
 
@@ -1070,6 +1081,25 @@
 
     & .mud-icon-button {
         padding: 2px;
+    }
+
+    > .mud-select {
+        > .mud-input-control {
+            > .mud-input-control-input-container {
+                border: 1px solid var(--tw-gray-300);
+                border-radius: 6px;
+                > .mud-select-input {
+                    padding-left: 2px !important;
+                    padding-right: 2px !important;
+                    padding-top: 4px !important;
+                    padding-bottom: 4px !important;
+                }
+            }
+        }    
+    }
+
+    > .mud-table-pagination-caption {
+        font-size: 13px;
     }
 }
 

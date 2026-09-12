@@ -53,6 +53,8 @@ public class Quotation : AuditObject
 	[Range(0.00, 999999999999999.99, ErrorMessage = "'Total Amount' must be postive number.")]
 	public decimal? TotalAmount { get; set; }
 	public decimal? TotalTaxAmount { get; set; }
+	public string? PurchaseOrderRefs { get; set; }
+	public string? InvoiceRefs { get; set; }
 	public string? Remark { get; set; }
 	#endregion
 

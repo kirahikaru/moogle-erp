@@ -15,12 +15,16 @@
             </MudItem>
         }
         <MudItem xs="2">
-            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false" 
+            <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                          Class="moog-mudform-input"
+                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                           Label="Unit / Floor"
                           @bind-Value=Value.ObjectName For="@(() => Value.ObjectName)" OnlyValidateIfDirty="true" MaxLength="255" />
         </MudItem>
         <MudItem xs="4">
-            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false" FullWidth="false"
+            <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                          Class="moog-mudform-input"
+                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                           Label="Street"
                           @bind-Value=Value.Street For="@(() => Value.Street)" OnlyValidateIfDirty="true" MaxLength="255" />
             
@@ -28,7 +32,9 @@
         <MudItem xs="6">
             @if (ShowLandmark)
             {
-                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false" FullWidth="false"
+                <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                              Class="moog-mudform-input"
+                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                               Label="Landmark"
                               @bind-Value=Value.Landmark For="@(() => Value.Landmark)" OnlyValidateIfDirty="true" MaxLength="255" />
             }
@@ -37,7 +43,9 @@
         @if (ShowLine1)
         {
             <MudItem xs="12">
-                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                              Class="moog-mudform-input"
+                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                               Label=@Line1Label Placeholder="@Line1Placeholder" Disabled="@Disabled"
                               @bind-Value=Value.Line1 For="@(() => Value.Line1)" MaxLength="255" />
             </MudItem>
@@ -46,7 +54,9 @@
         @if (ShowLine2)
         {
             <MudItem xs="12">
-                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                              Class="moog-mudform-input"
+                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                               Label=@Line2Label Placeholder="@Line2Placeholder" Disabled="@Disabled"
                               @bind-Value=Value.Line2 For="@(() => Value.Line2)" MaxLength="255" />
             </MudItem>
@@ -55,7 +65,9 @@
         @if (ShowLine3)
         {
             <MudItem xs="12">
-                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                              Class="moog-mudform-input"
+                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                               Label=@Line3Label Placeholder="@Line3Placeholder" Disabled="@Disabled"
                               @bind-Value=Value.Line3 For="@(() => Value.Line3)" MaxLength="255" />
             </MudItem>
@@ -64,7 +76,9 @@
         @if (ShowLine4)
         {
             <MudItem xs="12">
-                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                              Class="moog-mudform-input"
+                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                               Label=@Line4Label Placeholder="@Line4Placeholder" Disabled="@Disabled"
                               @bind-Value=Value.Line4 For="@(() => Value.Line4)" MaxLength="255" />
             </MudItem>
@@ -73,36 +87,46 @@
         @if (ShowLine5)
         {
             <MudItem xs="12">
-                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered"
+                <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                              Class="moog-mudform-input"
+                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                               Label=@Line5Label Placeholder="@Line5Placeholder" Disabled="@Disabled"
                               @bind-Value=Value.Line5 For="@(() => Value.Line5)" MaxLength="255" />
             </MudItem>
         }
         <MudItem xs="4">
-            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+            <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                          Class="moog-mudform-input"
+                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                           Label="@SubDistrictLabel" Placeholder="@SubDistrictPlaceholder" 
                           @bind-Value=Value.SubDistrict For="@(() => Value.SubDistrict)" OnlyValidateIfDirty="true" MaxLength="255" />
         </MudItem>
         <MudItem xs="4">
-            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+            <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                          Class="moog-mudform-input"
+                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                           Label="@DistrictLabel" Placeholder="@DistrictPlaceholder"
                           @bind-Value=Value.District For="@(() => Value.District)" OnlyValidateIfDirty="true" MaxLength="255" />
         </MudItem>
         <MudItem xs="4">
-            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+            <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                          Class="moog-mudform-input"
+                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                           Label="@CityLabel" Placeholder="@CityPlaceholder"
                           @bind-Value=Value.City For="@(() => Value.City)" OnlyValidateIfDirty="true" MaxLength="255" />
         </MudItem>
         <MudItem xs="4">
-            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+            <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                          Class="moog-mudform-input"
+                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                           Label="@StateLabel" Placeholder="@StatePlaceholder"
                           @bind-Value=Value.State For="@(() => Value.State)" OnlyValidateIfDirty="true" MaxLength="255" />
         </MudItem>
         <MudItem xs="3">
             @if (CountrySelection)
             {
-                <MudComboBox ReadOnly=@Readonly Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                             PopoverClass="moog-ui-combo-box-popover"
+                <MudComboBox Clearable="true" Editable="true" FullWidth="true" Immediate="true" ReadOnly=@Readonly Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text"
+                             Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight" autocomplete="new-password"
                              Label="Country" T="string"
                              Value="@Value.CountryCode" ValueChanged="OnCountryChanged"
                              ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _countryList.SingleOrDefault<DropDownListItem>(x => x.ObjectCode == e)?.ObjectName)">
@@ -116,13 +140,17 @@
             }
             else
             {
-                <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                              Class="moog-mudform-input"
+                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                               Label="Country" Placeholder="Country"
                               @bind-Value=Value.CountryName For="@(() => Value.CountryName)" OnlyValidateIfDirty="true" MaxLength="255" />
             }
         </MudItem>
         <MudItem xs="2">
-            <MudTextField Readonly="@Readonly" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+            <MudTextField Clearable="true" Immediate="false" ReadOnly=@Readonly Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                          Class="moog-mudform-input"
+                          ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                           Label="@PostalCodeLabel" Placeholder="@PostalCodePlaceholder"
                           @bind-Value=Value.Zipcode For="@(() => Value.Zipcode)" OnlyValidateIfDirty="true" MaxLength="255" />
         </MudItem>

@@ -5,7 +5,7 @@
 <PageTitle>My Stuff</PageTitle>
 @if (CurrentObject != null && CurrentEditContext != null)
 {
-    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column;" >
+    <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="min-height:0; height:stretch; display:flex; flex-direction:column;" >
         <DataAnnotationsValidator />
         <MudPaper Class="moog-pg-banner" Elevation="0">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
@@ -74,7 +74,7 @@
         </MudPaper>
         <MudTabs Color="Color.Primary" Class="moog-mudtab mt-4" ActiveTabClass="moog-mudtab-tab-active" TabButtonsClass="moog-mudtab-tab-btn" TabHeaderClass="moog-mudtab-tab-hdr" TabPanelsClass="moog-mudtab-tab-panel">
             <MudTabPanel Icon="fad fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
-                <MudPaper Class="moog-mudpaper-cruc-pg-tab-content" Elevation="0" Square="true" Height="calc(100% - var(--moog-cruc-pg-status-bar-height))" Style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px">
+                <MudPaper Class="moog-mudpaper-cruc-pg-tab-content" Elevation="0" Square="true" Height="stretch" Width="100%" Style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px">
                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" StretchItems="StretchItems.All" Spacing="1">
                         <MudGrid Spacing="4" Class="pa-4" Style="margin-left:-8px">
                             <MudItem xs="6">
@@ -125,7 +125,7 @@
                                         <MudSelectItem T="string" Value="@cty.ObjectCode" >@cty.ObjectName</MudSelectItem>
                                     }
                                 </MudSelect> *@
-                                <MudComboBox Clearable="true" Editable="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password"
+                                @* <MudComboBox Clearable="true" Editable="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password"
                                              Class="moog-mudcombobox" PopoverClass="moog-mudcombobox-popover" TemplateClass="moog-mudcombobox-template" HighlightClass="moog-mudcombobox-highlight"
                                              Label="Made In" Placeholder="Select a country..."
                                              @bind-Value="@CurrentObject.MfgCountryCode" @bind-Text=@_selectedCountryName
@@ -136,7 +136,15 @@
                                             <MudComboBoxItem T="string" Value="@cty.ObjectCode" Text="@cty.ObjectName">@cty.ObjectName</MudComboBoxItem>
                                         }
                                     </ChildContent>
-                                </MudComboBox>
+                                </MudComboBox> *@
+                                <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                 Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
+                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 AdornmentIcon="fa-solid fa-angle-down" 
+                                                 DebounceInterval="300" ToStringFunc=@(e => e != null ? e.ObjectName.NonNullValue("-") : "")
+                                                 Label="Made In" T="DropDownListItem"
+                                                 Value="_selectedCountry" ValueChanged="OnCountryChanged" 
+                                                 SearchFunc="@SearchCountry" />
                             </MudItem>
                             <MudItem xs="2">
                                 <MudStack Spacing="0">
@@ -393,6 +401,7 @@
     IEnumerable<DropdownSelectItem> _ownedItemCategoryList = Enumerable.Empty<DropdownSelectItem>();
     DropdownSelectItem? _selOwnedItemCtg;
     List<DropDownListItem> _countryList = [];
+    DropDownListItem? _selectedCountry;
     IEnumerable<DropdownSelectItem> _merchantList = Enumerable.Empty<DropdownSelectItem>();
     DropdownSelectItem? _selMerchant;
     IEnumerable<string> _brandList = Enumerable.Empty<string>();
@@ -491,6 +500,32 @@
     #endregion
 
     #region UI FUNCTIONS
+    async Task<IEnumerable<DropDownListItem>> SearchCountry(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return _countryList;
+        }
+        else
+        {
+            return _countryList.Where(x => !string.IsNullOrEmpty(x.ObjectName) && x.ObjectName.ToLower().Contains(value.ToLower())).Take(50);
+        }
+    }
+
+    async Task OnCountryChanged(DropDownListItem? value)
+    {
+        _selectedCountry = value;
+
+        if (value == null)
+        {
+            CurrentObject!.MfgCountryCode = null;    
+        }
+        else
+        {
+            CurrentObject!.MfgCountryCode = value.ObjectCode;
+        }
+    }
+
     async Task<IEnumerable<string>> SearchBrandName(string value, CancellationToken token)
     {
         // In real life use an asynchronous function for fetching data from an api.
@@ -902,6 +937,9 @@
         {
             _selOwnedItemCtg = _ownedItemCategoryList.SingleOrDefault<DropdownSelectItem>(x => x.Id == CurrentObject.OwnedItemCategoryId.Value);
         }
+
+        if (!string.IsNullOrEmpty(CurrentObject!.MfgCountryCode))
+            _selectedCountry = _countryList.SingleOrDefault(x => x.ObjectCode == CurrentObject!.MfgCountryCode);
     }
 
     Task PurchasedDateTodayAsync()

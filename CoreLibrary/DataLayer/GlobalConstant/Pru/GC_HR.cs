@@ -32,11 +32,12 @@ public static class PruFunctions
 			"Data & Process Intelligence",
 			"Back-End Applications Delivery & Support",
 			"Data Engineering",
+			"Ecosystem Integration",
 			"Front-End Applications Delivery & Support",
 			"DevOps",
 			"Technical Business Analysis",
 			"IT Security & Governance, Data Privacy",
-			"IT Operation & Service Management, BCM"
+			"IT Operations & Service Management, BCM"
 		];
 	}
 }

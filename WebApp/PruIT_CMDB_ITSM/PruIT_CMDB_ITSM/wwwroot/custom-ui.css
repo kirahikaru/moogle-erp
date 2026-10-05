@@ -6,6 +6,15 @@
     --pru-cruc-pg-status-bar-height: 32px;   
 }
 
+/*#region  */
+.pru-ui-crud-section-title {
+    font-family: "Special Gothic Condensed One", sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size:24px !important; 
+    line-height: 100% !important;
+}
+
 /*#region MUD OVERWRITE STYLE */
 
 
@@ -105,15 +114,20 @@
 }
 
 .pru-ui-mudcard-hdr-banner {
+    padding: 12px 20px 12px 20px !important;
     border-radius: var(--pru-base-card-radius) !important;
     background-color:var(--pru-red-tw-50) !important;
     box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 }
 
 .pru-ui-mudpaper-cruc-tab-content {
+    padding: 16px 16px 16px 16px;
     border-right: 1px solid var(--tw-gray-300); 
     border-left: 1px solid var(--tw-gray-300);  
-    border-left: 1px solid var(--tw-gray-300); 
+    border-left: 1px solid var(--tw-gray-300);
+    min-height: 0;
+    height:stretch;
+    overflow-y: auto;
     scrollbar-color: var(--tw-gray-300) var(--tw-gray-50); 
     scrollbar-width:auto
 }
@@ -134,7 +148,7 @@
             > input.mud-input-root {
                 font-size: 12px;
                 line-height: 100%;
-                padding: 10px 12px;
+                padding: 10px 0px 10px 10px;
             }
 
             > textarea.mud-input-root {
@@ -199,19 +213,16 @@
             }
 
             > .mud-icon-button-edge-margin-end {
-                margin-left: -14px;
-                margin-inline-end: 6px;
+                margin-left: 2px;
+                margin-inline-end: 4px;
             }
 
-            > .mud-icon-button {
-                
+            > .mud-input-clear-button {
                 > .mud-icon-button-label {
-                    .mud-icon-root {
-                        color: var(--tw-gray-400);
-                    }
-
                     > .material-symbols-rounded {
-                        font-size: 20px;
+                        color: var(--tw-gray-400);
+                        font-size: 18px;
+                        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 150, 'opsz' 24;
                     }
                 }
             }
@@ -376,18 +387,11 @@
 
                 > .mud-input-clear-button {
                     > .mud-icon-button-label {
-                        > .mud-icon-root {
-                            height: 20px;
-                            width: 20px;
-                            justify-content: center;
-                            align-items: center;
-                        }
-
                         > .material-symbols-rounded {
                             color: var(--tw-gray-400);
-                            font-size: 20px;
+                            font-size: 18px;
                             display: flex;
-                            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 100, 'opsz' 36;
+                            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 150, 'opsz' 24;
                         }
                     }
                     
@@ -800,6 +804,12 @@
 }
 
 .pru-ui-mudautocomplete-input {
+    padding-right: 0px !important;
+
+    &.pru-ui-display-all-content {
+        field-sizing: content;
+    }
+
     > .mud-icon-button-size-small {
         padding: 1px;
         /* &.mud-icon-button-edge-end {
@@ -877,11 +887,12 @@
     }
 
     > .mud-input-adornment-end {
-        margin-right: 4px;
-        margin-inline-end: 4px;
+        margin-right: 0px;
+        margin-inline-start: -4px !important;
+        margin-inline-end: 2px !important;
     }
 
-    > div.pru-ui-mudselect-input {
+    > .mud-input-adornment {
         > .material-symbols-rounded {
             color: var(--tw-gray-500);
             font-size: 24px !important;
@@ -920,6 +931,10 @@
             overflow-y: auto;
             scrollbar-color: var(--tw-gray-300) var(--tw-gray-50);
             scrollbar-width: auto;
+
+            > .mud-table-root {
+                width: 100% !important;
+            }
         }
     }
 
@@ -1337,7 +1352,8 @@
 /*#region MudTab */
 .pru-mudtab {
     background-color: transparent;
-    height:100%;
+    min-height: 0;
+    height: stretch;
 
     > .mud-tabs-tabbar {
         > .mud-tabs-tabbar-inner {
@@ -1380,7 +1396,10 @@
 
 .pru-mudtab-tabpanel {
     background-color: transparent;
-    height:100%;
+    height:stretch;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .pru-mudtabpanel {

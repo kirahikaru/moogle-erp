@@ -54,17 +54,17 @@
             </TemplateColumn>
             <TemplateColumn Title="Category"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-                            HeaderStyle="min-width:200px" Context="rowData">
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" Context="rowData">
                 <CellTemplate>
                     <span>@(rowData.Item.Category != null ? rowData.Item.Category.ObjectName : "-")</span>
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Title="Brand" Property="x => x.Brand"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-							HeaderStyle="min-width:200px" />
+							CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Model" Property="x => x.ModelNo"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-                            HeaderStyle="min-width:180px" />
+							CellStyle="white-space:nowrap" />
             <PropertyColumn Title="S/N" Property="x => x.SerialNo" 
 				HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono"
 							HeaderStyle="min-width:180px" />
@@ -72,10 +72,10 @@
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="text-align:right" />
             <PropertyColumn Title="Purhcased Date" Property="x => x.PurchasedDate" Format="dd-MMM-yyyy"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" 
-							HeaderStyle="min-width:180px" CellStyle="text-align:center" />
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap; text-align:center" />
             <TemplateColumn Title="Made In" Sortable="false" Filterable="false"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-                            HeaderStyle="min-width:180px" Context="rowData">
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" Context="rowData">
                 <CellTemplate>
                     @if (rowData.Item.MfgCountry != null && !string.IsNullOrEmpty(rowData.Item.MfgCountry.FlagIconPath))
                     {
@@ -96,9 +96,11 @@
                 </CellTemplate>
             </TemplateColumn>
 			<PropertyColumn Title="Barcode" Property="x => x.Barcode" Sortable="false" Filterable="true" 
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono"
+							CellStyle="white-space:nowrap" />
             <PropertyColumn Title="ID" Property="x => x.ObjectCode" Sortable="false" Filterable="true"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono"
+							CellStyle="white-space:nowrap" />
             <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
                             HeaderStyle="width:300px; max-width:120px" CellStyle="padding: 0px 10px !important;">

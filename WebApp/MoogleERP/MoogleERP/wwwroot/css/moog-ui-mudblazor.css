@@ -470,8 +470,7 @@
     }
 }
 /*#endregion */
-
-.moog-mudform-input {
+.moog-mudform-input-square {
     > .mud-input-control-input-container {
         /* > .mud-input:focus-within~label.mud-input-label.mud-input-label-inputcontrol
         {
@@ -479,13 +478,13 @@
         } */
         > .mud-input {
             border: 1px solid var(--tw-gray-200) !important;
-            border-radius: 1.5rem;
+            border-radius: 4px;
             background-color: #FFFFFF;
 
             > input.mud-input-root {
                 font-size: var(--base-font-size);
                 color:var(--tw-gray-700);
-                padding: 12px 18px;
+                padding: 8px 0px 8px 12px;
                 height: 18px;
 
                 &::placeholder {
@@ -631,9 +630,242 @@
             }
 
             > button.mud-icon-button-edge-margin-end {
+                margin-right: 6px;
+                margin-inline-end: 6px;
+                margin-inline-start: 2px;
+            }
+        }
+
+        > .mud-input-adorned-start {
+            > .mud-input-adornment-start {
+                margin-inline-end: -10px;
+                margin-inline-start: 12px;
+            }
+        }
+
+        > .mud-input-label {
+            color: var(--tw-gray-400);
+            text-transform: uppercase;
+        }
+
+        
+        > .mud-shrink {
+            ~label.mud-input-label {
+                &.mud-input-label-inputcontrol {
+                    color:var(--tw-gray-500);
+                    font-size: 1rem;
+                    margin-left: 16px;
+                }
+            }
+        }
+    }
+
+    > .mud-input-control-helper-container {
+        margin-left: 14px;
+        margin-top: 0px;
+        .mud-input-helper-text {
+            font-style: italic;
+            font-size: 10px;
+        }
+    }
+
+    &.mud-input-control {
+        &.mud-input-required {
+            > .mud-input-control-input-container {
+                &:focus-within {
+                    > .mud-input {
+                        outline: 1.5px solid var(--tw-red-400);
+                    }
+                }
+
+                > .mud-input-label {
+                    &::after {
+                        color: var(--tw-red-600);
+                        font-weight: 800;
+                        content: "*";
+                    }
+                }
+            }
+        }
+    }
+
+    &.moog-lang-kh {
+        > .mud-input-control-input-container {
+            > .mud-input {
+                > input.mud-input-root, > textarea.mud-input-root, > div.mud-input-root {
+                    font-family: "Koh Santepheap", serif;
+                    font-size: 1rem;
+                    
+                }
+            }
+        }
+    }
+}
+
+
+.moog-mudform-input {
+    > .mud-input-control-input-container {
+        /* > .mud-input:focus-within~label.mud-input-label.mud-input-label-inputcontrol
+        {
+            color: var(--tw-gray-700);
+        } */
+        > .mud-input {
+            border: 1px solid var(--tw-gray-200) !important;
+            border-radius: 1.5rem;
+            background-color: #FFFFFF;
+
+            > input.mud-input-root {
+                font-size: var(--base-font-size);
+                color:var(--tw-gray-700);
+                padding: 12px 0px 12px 18px;
+                height: 18px;
+
+                &::placeholder {
+                    color: var(--tw-gray-400);
+                }
+            }
+
+            > textarea.mud-input-root {
+                font-size: var(--base-font-size);
+                padding: 16px 20px;
+                margin-top: 0px;
+                line-height: 120%;
+
+                &::placeholder {
+                    color: var(--tw-gray-400);
+                }
+            }
+
+            > div.mud-input-root {
+                font-size: var(--base-font-size);
+                color:var(--tw-gray-700);
+                padding: 13.8px 18px;
+
+                &::placeholder {
+                    color: var(--tw-gray-400);
+                }
+            }
+
+            > div.mud-input-slot {
+                &.mud-input-root {
+                    height: auto;
+                }
+            }
+
+            > .mud-input-adornment {
+                > .mud-icon-button {
+                    padding: 4px;
+                }
+
+                > .mud-primary-text {
+                    color: var(--tw-gray-700);
+                }
+
+                > .mud-icon-default {
+                    color: var(--tw-gray-500);
+                }
+
+                > .mud-icon-button-edge-end {
+                    margin-right: 0px;
+                    margin-inline-end: 6px;
+                }
+            }
+
+            > .mud-icon-button-size-small {
+                &.mud-icon-button-edge-end {
+                    margin-inline-end: 0px;
+                    margin-inline-start: 4px;
+                }
+            }
+
+            > .mud-input-adornment-end {
+                margin-left: -8px;
+                margin-inline-start: -8px;
+                margin-inline-end: unset;
+
+                > button.mud-icon-button-edge-end {
+                    margin-right: 0px;
+                    margin-inline-end: 8px;
+                }
+            }
+
+            /* > .mud-input-adornment-start {
+                margin-inline-end: -10px;
+                margin-inline-start: 12px;
+            } */
+
+            > .mud-text {
+                > .mud-input-adornment-text {
+                    font-size: var(--base-font-size);
+                    margin-inline-end: 16px;
+                }
+            }
+
+            > .mud-select-input {
+                > .mud-icon-size-medium {
+                    margin-inline-end: 8px;
+                }
+
+                > .material-symbols-rounded {
+                    color: var(--tw-gray-400);
+                    font-size: 24px;
+                    font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 100, 'opsz' 48;
+                }
+            }
+
+            > .mud-input-clear-button  {
+                > .mud-icon-button-label {
+                    > .mud-icon-size-small {
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            &:focus-within {
+                outline: 1.5px solid var(--ssv-pharma-blue);
+
+                > .mud-input-adornment {
+                    > .mud-primary-text {
+                        color: var(--ssv-pharma-blue) !important;
+                    }
+
+                    > .mud-icon-default {
+                        color: var(--ssv-pharma-blue) !important;
+                    }
+                }
+
+                ~ label.mud-input-label {
+                    &.mud-input-label-inputcontrol {
+                        color: var(--ssv-pharma-blue);
+                    }
+                }
+                
+                &.mud-input-underline::after {
+                    transition: none;
+                    border: none;
+                }
+            }
+
+
+            &.mud-input-text {
+                &.mud-input-text-with-label {
+                    margin-top: 18px !important;
+                }
+            }
+
+            &.mud-input-underline {
+                &::before {
+                    border-bottom: none;
+                }
+                &::after {
+                    border-bottom: none;
+                }
+            }
+
+            > button.mud-icon-button-edge-margin-end {
                 margin-right: 10px;
                 margin-inline-end: 10px;
-                margin-inline-start: -12px;
+                margin-inline-start: 2px;
             }
         }
 
@@ -714,7 +946,7 @@
                 background-color: #FFFFFF;
 
                 > input.mud-input-root {
-                    padding: 12px 18px;
+                    padding: 12px 0px 12px 18px;
                     height: 18px;
                     &::placeholder {
                        color: var(--tw-gray-400);
@@ -768,7 +1000,7 @@
 
                     &.mud-icon-button-edge-end {
                         margin-inline-end: 0px;
-                        margin-inline-start: -14px;
+                        margin-inline-start: 0px;
                     }
                 }
 
@@ -839,11 +1071,12 @@
 
 .moog-mudselect-input {
     background-color: transparent;
+    padding-right: 0px !important;
     
     & div.mud-input-adornment-end {
-        margin-left: -4px !important;
-        margin-inline-start: -8px !important;
-        margin-inline-end: 12px !important;
+        margin-left: 0px !important;
+        margin-inline-start: 0px !important;
+        margin-inline-end: 10px !important;
     }
     
     & .mud-primary-text {
@@ -854,8 +1087,10 @@
         color: var(--tw-gray-400) !important;
     }
 
-    > .mud-icon-size-small {
-        font-size: 16px;
+    > .mud-input-adornment {
+        > .mud-icon-size-small {
+            font-size: 18px;
+        }
     }
 
     > .mud-icon-default {
@@ -906,6 +1141,24 @@
         margin-inline-start: -12px !important;
     } */
     
+    > .mud-input-adornment {
+        > .mud-icon-button {
+            color:var(--tw-gray-600);
+
+            > .mud-icon-button-label {
+                > .mud-icon-size-small {
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+
+    > .mud-input-adornment-end {
+        margin-left: 0px !important;
+        margin-inline-start: -2px !important;
+        margin-inline-end: 0px !important;
+    }
+
     background-color: transparent;
     > .mud-icon-button {
         > .mud-icon-button-label {
@@ -1564,7 +1817,8 @@
     padding:6px 12px; 
     padding-top: 6px !important;
     background: linear-gradient(90deg,rgba(225, 241, 253, 1) 0%, rgba(255, 255, 255, 0) 75%); 
-    margin: -8px; 
+    margin-left: -12px;
+    margin-right: -12px;
     border-bottom: 1px solid var(--ssv-pharma-blue-200);
 
     > .mud-typography-h1 {
@@ -1746,7 +2000,8 @@
 
 .moog-mudtab {
     background:transparent;
-    height: 100%;
+    min-height: 0;
+    height: stretch;
     overflow: hidden;
 }
 
@@ -1834,7 +2089,10 @@
 
 .moog-mudtabpanel-panel {
     background-color: transparent;
+    min-height: 0;
     height: 100%;
+    display: flex !important;
+    flex-direction: column;
 }
 
 

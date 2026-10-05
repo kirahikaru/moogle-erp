@@ -94,7 +94,7 @@
                                        ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                        AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
                                        Label="Type" T="int?"
-                                       Value="CurrentObject!.MedTestTypeId" For="@(() => CurrentObject!.MedTestTypeId)">
+                                       @bind-Value="CurrentObject!.MedTestTypeId" For="@(() => CurrentObject!.MedTestTypeId)">
                                 @foreach (var item in _medTestTypeList)
                                 {
                                     <MudSelectItem T="int?" Value="@item.Id">@item.Value</MudSelectItem>
@@ -174,12 +174,20 @@
     #region PAGE LIFECYCLE FUNCTIONS
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        UrlPrefix = "/hms/healthcare-facility";
+        UrlPrefix = "/hms/med-test";
         return base.SetParametersAsync(parameters);
     }
 
     protected override async Task OnInitializedAsync()
     {
+        if (InitCount == 0)
+            InitCount++;
+        else
+        {
+            InitCount++;
+            return;
+        }
+
         switch (CRUCMode)
         {
             case CRUDCModes.READ:

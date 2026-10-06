@@ -237,94 +237,114 @@
                                               @bind-Value="CurrentObject!.Remark" For="@(() => CurrentObject!.Remark)" />
                             </MudItem>
                             <MudItem xs="12" Class="moog-muditem-subsect-title mt-3">
-                                <MudText Typo="Typo.h1">Composition</MudText>
+                                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
+                                    <MudText Typo="Typo.h1">Composition</MudText>
+                                    <MudIconButton Icon="fad fa-solid fa-circle-plus" Color="Color.Primary" Size="Size.Small"
+                                                   OnClick="AddItem"
+                                                   Disabled=@(!_canEditMedComp || !_isEditingMedComp) />
+                                    <MudSwitchM3 ReadOnly=@IsViewMode Class="moog-mud-switch ml-2" Color="Color.Default"
+                                                 ThumbIcon="material-symbols-rounded/check" ThumbOffIcon="material-symbols-rounded/close" Size="Size.Small"
+                                                 Label=@(_isEditingMedComp ? "Edit ON" : "Edit OFF")
+                                                 @bind-Value="_isEditingMedComp" Style=@(_isEditingMedComp ? "color:#00C853; font-weight:600" : "color:#B0BEC5")
+                                                 Disabled=!_canEditMedComp />
+                                </MudStack>
                             </MudItem>
                             <MudItem xs="12">
                                 <MudStack Spacing="2" Justify=Justify.FlexStart >
-                                    @if (!IsViewMode)
+                                    @* @if (!IsViewMode)
                                     {
                                         <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify=Justify.FlexStart>
                                             <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" FullWidth="false" Class="moog-mudbutton"
                                                        StartIcon="fa-solid fa-plus" IconSize="Size.Small" IconColor="Color.Primary"
-                                                       OnClick="AddItem" Disabled=@(!_canEditMedComp || _isEditingMedComp)>
+                                                       OnClick="AddItem" Disabled=@(!_canEditMedComp || !_isEditingMedComp) >
                                                 Add Spec
                                             </MudButton>
-                                            <MudSwitchM3 ReadOnly=@IsViewMode Class="moog-mud-switch ml-2" Color="Color.Default"
-                                                         ThumbIcon="material-symbols-rounded/check" ThumbOffIcon="material-symbols-rounded/close" Size="Size.Small"
-                                                         Label=@(_canEditMedComp ? "Edit ON" : "Edit OFF")
-                                                         @bind-Value="_canEditMedComp" Style=@(_canEditMedComp ? "color:#00C853; font-weight:600" : "color:#B0BEC5") />
+                                            
                                         </MudStack>
-                                    }
+                                    } *@
                                     @* EditDialogOptions=@(new() { BackdropClick = false, MaxWidth = MaxWidth.Medium, FullWidth = true }) *@
-                                    <MudDataGrid Class="moog-mud-datagrid" Dense="true" Hover="true" FixedHeader="true" Striped="false" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None" 
-                                                 Items="@CurrentObject!.Compositions" T="MedicineComposition" Style="width:100%" @ref="_itemDataGrid"
-                                                 ReadOnly=@(IsViewMode || !_isEditingMedComp) EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
-                                                 StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
+                                    <MudDataGrid Class="moog-muddatagrid cruc-pg-pager" Dense="true" Hover="true" FixedHeader="true" Striped="false" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None"
+                                                 Items="@CurrentObject!.Compositions" T="MedicineComposition" Height="100%" @ref="_itemDataGrid"
+                                                 ReadOnly=@(IsViewMode || !_canEditMedComp || !_isEditingMedComp) EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
+                                                 StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges"
+                                                 @bind-SelectedItem="_selectedMedComp" SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-muddatagrid-row"
+                                                 Style="min-height:100px; width:100%">
                                         <Columns>
-                                            <PropertyColumn Title="No." Property="x => x.OrderNo" Sortable="false" Editable="false"
-                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " spacious" : " data-align-top inline-editing"))
-                                                            CellStyle="text-align:right" />
-                                            <PropertyColumn Title="Composition" Property="x => x.MedicalCompositionCode" Sortable="false"
-                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " spacious" : " data-align-top inline-editing"))
+                                            <PropertyColumn Title="No." Property="x => x.OrderNo" Sortable="false" Editable="false" 
+                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " moog-muddatagrid-cell-moog-muddatagrid-cell-spacious" : " data-align-top inline-editing"))
+                                                            CellStyle="align-content:center; text-align:right" />
+                                            <TemplateColumn Title="Composition" Sortable="false"
+                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " moog-muddatagrid-cell-moog-muddatagrid-cell-spacious" : " data-align-top inline-editing"))
                                                             HeaderStyle="min-width:350px" Context="item">
+                                                <CellTemplate>
+                                                    <MudText Typo="Typo.body1" Color="Color.Primary" >@(item.Item.DdlItemMedicalComp != null ? item.Item.DdlItemMedicalComp.Value : "???")</MudText>
+                                                </CellTemplate>
                                                 <EditTemplate>
-                                                    <MudComboBox ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-combo-box" Editable="true" Variant="Variant.Text" SearchBox="true" Strict="true" autocomplete="new-password"
-                                                                 PopoverClass="moog-ui-combo-box-popover" FullWidth="true"
-                                                                 Placeholder="Select Composition..."
-                                                                 T="int?" Value="@item.Item.MedicalCompositionId" Text=@_selectedMedCompName ValueChanged=@(args => OnMedCompSelectChanged(item.Item, args))
-                                                                 ToStringFunc="@(e => !e.HasValue ? "" : _medCompList.Single<DropdownSelectItem>(x => x.Id == e)?.Value)"
-                                                                 Style="min-width:250px">
-                                                        <ChildContent>
-                                                            @foreach (var medComp in _medCompList)
-                                                            {
-                                                                <MudComboBoxItem T="int?" Value="@medComp.Id" Text="@medComp.Value">@medComp.Value</MudComboBoxItem>
-                                                            }
-                                                        </ChildContent>
-                                                    </MudComboBox>
+                                                    <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                                     Class="moog-mudform-input-square" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
+                                                                     ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                                     AdornmentIcon="fa-solid fa-angle-down"
+                                                                     DebounceInterval="300" ToStringFunc=@(e => e != null ? e.Value : "")
+                                                                     Placeholder="Select composition..." T="DropdownSelectItem"
+                                                                     Value="@item.Item.DdlItemMedicalComp" ValueChanged="@(args => OnMedicalCompChanged(item.Item, args))"
+                                                                     SearchFunc="@SearchMedicalComposition" />
                                                 </EditTemplate>
-                                            </PropertyColumn>
+                                            </TemplateColumn>
                                             <PropertyColumn Title="Composition" Property="x => x.ObjectName" Sortable="false"
-                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " moog-muddatagrid-cell-spacious" : " data-align-top inline-editing"))
                                                             HeaderStyle="min-width:350px" Context="item">
                                                 <EditTemplate>
-                                                    <MudTextField Readonly="@(IsViewMode || !string.IsNullOrEmpty(item.Item.MedicalCompositionCode))" Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="true"
+                                                    <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                                                  Class="moog-mudform-input-square"
+                                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                   Placeholder="Composition Name"
                                                                   @bind-Value=item.Item.ObjectName For="@(() => item.Item.ObjectName)" OnlyValidateIfDirty="true" MaxLength="255" />
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Quantity Desc" Property="x => x.QtyDesc" Sortable="false"
-                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " spacious" : " data-align-top inline-editing"))
+                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " moog-muddatagrid-cell-spacious" : " data-align-top inline-editing"))
                                                             Context="item">
                                                 <EditTemplate>
-                                                    <MudTextField Readonly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered" Required="false"
+                                                    <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
+                                                                  Class="moog-mudform-input-square"
+                                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                   Placeholder="Quantiy Description"
-                                                                  @bind-Value=item.Item.QtyDesc For="@(() => item.Item.QtyDesc)" OnlyValidateIfDirty="true" MaxLength="150" />
+                                                                  @bind-Value=item.Item.QtyDesc For="@(() => item.Item.QtyDesc)" OnlyValidateIfDirty="true" MaxLength="255" />
                                                 </EditTemplate>
                                             </PropertyColumn>
                                             <PropertyColumn Title="Quantity" Property="x => x.Quantity" Sortable="false"
-                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " spacious" : " data-align-top inline-editing"))
-                                                            HeaderStyle="width:100px; max-width:80px" Context="item" >
+                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " moog-muddatagrid-cell-spacious" : " data-align-top inline-editing"))
+                                                            HeaderStyle="width:100px; max-width:80px" CellStyle=@(IsViewMode || !_isEditingMedComp ? "text-align:right" : "") 
+                                                            Context="item">
                                                 <EditTemplate>
-                                                    <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-mud-form-field bordered" Immediate="true" HideSpinButtons="true"
-                                                                     Placeholder="Qty" Format="#,##0.##" Step="0.1"
-                                                                     @bind-Value="item.Item.Quantity" T="double?" For="(() => item.Item.Quantity)"
-                                                                     Style="text-align:right" />
+                                                    <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                                     Class="moog-mudform-input-square"
+                                                                     ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                                     Placeholder="Quantity" Format="#,##0.##" Step="0.1"
+                                                                     T="double?" @bind-Value="item.Item.Quantity" For="(() => item.Item.Quantity)"
+                                                                     Style="min-width:100px; text-align:right" />
                                                 </EditTemplate>
                                             </PropertyColumn>
-                                            <PropertyColumn Title="Unit" Property="x => x.UnitCode" Sortable="false"
-                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " spacious" : " data-align-top inline-editing"))
+                                            <TemplateColumn Title="Unit" Sortable="false"
+                                                            HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + (IsViewMode || !_isEditingMedComp ? " moog-muddatagrid-cell-spacious" : " data-align-top inline-editing"))
                                                             HeaderStyle="min-width:200px" Context="item" >
+                                                <CellTemplate>
+                                                    <MudText Typo="Typo.body1" Color="Color.Primary">@(item.Item.Unit != null ? item.Item.Unit.UnitSymbol : "???")</MudText>
+                                                </CellTemplate>
                                                 <EditTemplate>
-                                                    <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-mud-form-field bordered moog-ui-select" PopoverClass="moog-ui-select-popover"
-                                                               Placeholder="Unit"
-                                                               T="string" @bind-Value="item.Item.UnitCode">
+                                                    <MudSelect Clearable="true" FitContent="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                               Class="moog-mudform-input-square" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
+                                                               ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                               AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
+                                                               Placeholder="Unit" T="string"
+                                                               @bind-Value="@item.Item.UnitCode" For="(() => item.Item.UnitCode)">
                                                         @foreach (var uom in _quantityUomList)
                                                         {
                                                             <MudSelectItem T="string" Value="@uom.Key">@uom.Value</MudSelectItem>
                                                         }
                                                     </MudSelect>
                                                 </EditTemplate>
-                                            </PropertyColumn>
+                                            </TemplateColumn>
                                             @* <PropertyColumn Property="x => x.ObjectName" Title="PO#" HeaderClass="mud-datagrid-hdr" HeaderStyle=@DataGridHdrStyle CellClass="mud-datagrid-cell" Context="qi">
                                                 <EditTemplate>
                                                     <MudTextField @bind-Value=qi.Item.PurchaseOrderCode Label="PO#" MaxLength="50" Readonly="@IsViewMode" Required="true" Clearable="true" Class="form-field-base required"
@@ -340,17 +360,18 @@
                                             </PropertyColumn> *@
                                             <TemplateColumn Title="Action" Hidden=@IsViewMode Sortable="false"
                                                             HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass="moog-muddatagrid-cell inline-editing"
-                                                            CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
+                                                            HeaderStyle="width:200px; max-width: 100px" CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
                                                             Context="item">
                                                 <CellTemplate>
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemUp(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemDown(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItem(item.Item))" />
+                                                    <i class="fa-duotone fa-regular fa-circle-caret-up"></i>
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fa-duotone fa-regular fa-circle-caret-up" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fad far fa-circle-caret-down" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fad far fa-circle-xmark" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItem(item.Item))" />
                                                 </CellTemplate>
                                                 <EditTemplate>
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleUp" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemUp(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.ArrowCircleDown" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemDown(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItem(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fa-regular fa-circle-caret-up" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemUp(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fad far fa-circle-caret-down" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemDown(item.Item))" />
+                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fad far fa-circle-xmark" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItem(item.Item))" />
                                                 </EditTemplate>
                                             </TemplateColumn>
                                         </Columns>
@@ -446,8 +467,11 @@
     MudTextField<string>? _mtfObjName;
     List<AttachedImage> _images = [];
     MudDataGrid<MedicineComposition> _itemDataGrid = new();
+    MedicineComposition? _selectedMedComp;
+    int _selectedMedCompRowNo = -1;
     IEnumerable<DropdownSelectItem> _medCompList = [];
     IEnumerable<DropdownSelectItem> _quantityUomList = [];
+    IEnumerable<UnitOfMeasure> _qtyUomList = [];
 
     MedicineComposition? _tempItemToAdd;
     bool _canEditMedComp = true;
@@ -639,6 +663,34 @@
             _selectedMedCompName = null;
         }
     }
+
+    async Task<IEnumerable<DropdownSelectItem>> SearchMedicalComposition(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return _medCompList;
+        }
+        else
+        {
+            return _medCompList.Where(x => !string.IsNullOrEmpty(x.Value) && x.Value.ToLower().Contains(value.ToLower()));
+        }
+    }
+
+    async Task OnMedicalCompChanged(MedicineComposition medComp, DropdownSelectItem? value)
+    {
+        medComp.DdlItemMedicalComp = value;
+
+        if (value != null)
+        {
+            medComp.MedicalCompositionId = value.Id;
+            medComp.MedicalCompositionCode = value.Key;
+        }
+        else
+        {
+            medComp.MedicalCompositionId = null;
+            medComp.MedicalCompositionCode = null;
+        }
+    }
     #endregion
 
     #region DB UPDATE FUNCTIONS
@@ -700,6 +752,36 @@
 
         return objId > 0;
     }
+
+    protected string SelectedRowClassFunc(MedicineComposition element, int rowNumber)
+    {
+        if (_selectedMedCompRowNo == rowNumber)
+        {
+            _selectedMedCompRowNo = -1;
+            return string.Empty;
+        }
+        else if (_selectedMedComp != null && _selectedMedComp.Equals(element))
+        {
+            _selectedMedCompRowNo = rowNumber;
+            return "moog-mud-datagrid-row moog-muddatagrid-row-selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
+    async Task<IEnumerable<UnitOfMeasure>> SerachUoM(string value, CancellationToken token)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            return _qtyUomList.Take(88);
+        }
+        else
+        {
+            return _qtyUomList.Where(x => (x.ObjectName != null && x.ObjectName.Contains(value, StringComparison.OrdinalIgnoreCase)) || (x.UnitSymbol != null && x.UnitSymbol.Contains(value, StringComparison.OrdinalIgnoreCase)));
+        }
+    }
     #endregion
 
     #region INTERNAL FUNCTIONS
@@ -709,11 +791,21 @@
         _consumableUnitList = await Uow.UoMs.GetByTypeAsync(UnitOfMeasureTypes.MEDICINE_CONSUMABLE);
         _medicineTypeList = await Uow.DropdownDataLists.GetForDropdownListAsync(DropdownDataSystems.PHARMACY_MANAGEMENT_SYSTEM, typeof(Medicine).Name, "MedicineTypeId");
         _currencyList = await Uow.Currencies.GetForDropdownSelect1Async(null);
-        
+
         _countryList = await Uow.Countries.GetForDropdownSelect1Async();
 
         _medCompList = await Uow.MedicalComps.GetForDropdownSelectAsync();
         _quantityUomList = await Uow.UoMs.GetForDropdownAsync(null, UomTextDisplayOption.NameAndSymbol);
+        _qtyUomList = await Uow.UoMs.GetAllAsync();
+
+        foreach (MedicineComposition medComp in CurrentObject!.Compositions)
+        {
+            if (medComp.MedicalCompositionId.HasValue)
+                medComp.DdlItemMedicalComp = _medCompList.SingleOrDefault<DropdownSelectItem>(x => x.Id == medComp.MedicalCompositionId);
+
+            if (!string.IsNullOrEmpty(medComp.UnitCode))
+                medComp.DdlItemUnit = _quantityUomList.SingleOrDefault<DropdownSelectItem>(x => x.Key == medComp.UnitCode);
+        }
     }
     #endregion
 }

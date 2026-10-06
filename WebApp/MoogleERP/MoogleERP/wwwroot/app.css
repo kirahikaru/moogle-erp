@@ -898,4 +898,15 @@ html, body {
     font-variation-settings:
     "MONO" 1;
 }
+
+/* Fix for Regular icons failing to pick up font weight */
+.fa-regular {
+    font-weight: 400 !important;
+}
+
+/* Fix for Duotone icons rendering as flat solids */
+.fa-duotone {
+    --fa-primary-opacity: 1.0;
+    --fa-secondary-opacity: 0.4; /* Enforces the classic 40% duotone split */
+}
 /*endregion*/

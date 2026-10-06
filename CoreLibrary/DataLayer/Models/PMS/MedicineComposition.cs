@@ -44,10 +44,16 @@ public class MedicineComposition : AuditObject
     public double? Quantity { get; set; }
 
     public string? QtyDesc { get; set; }
-    #endregion
+	#endregion
 
-    #region *** LINKED OBJECTS ***
-    [Computed, Write(false)]
+	#region *** LINKED OBJECTS ***
+	[Computed, Write(false)]
+	public DropdownSelectItem? DdlItemMedicalComp { get; set; }
+
+	[Computed, Write(false)]
+	public DropdownSelectItem? DdlItemUnit { get; set; }
+
+	[Computed, Write(false)]
     public MedicalComposition? MedicalComposition { get; set; }
 
 	[Computed, Write(false)]

@@ -52,6 +52,9 @@ public class ITAsset : AuditObject
 	/// </summary>
 	public string? FinAssetCode { get; set; }
 	public string? Manufacturer { get; set; }
+	public string? Brand { get; set; }
+	public string? SerieName { get; set; }
+	public string? ModelNo { get; set; }
 	/// <summary>
 	/// For Subscription Used as Subscription ID
 	/// </summary>
@@ -133,6 +136,9 @@ public class ITAsset : AuditObject
 
 	[Computed, Write(false), ReadOnly(true)]
 	public string LifeCycleStatusText => AssetLifeCycleStatuses.GetDisplayText(LifeCycleStatus);
+
+	[Computed, Write(false), ReadOnly(true)]
+	public string CurrentUserDisplayName => $"{CurrentUserName.NonNullValue("-")} ({CurrentUserID.NonNullValue("-")})";
 	#endregion
 
 	public ITAsset() : base()

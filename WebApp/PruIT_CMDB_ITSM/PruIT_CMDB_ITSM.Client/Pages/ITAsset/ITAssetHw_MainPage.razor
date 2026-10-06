@@ -4,7 +4,7 @@
 
 @inherits MainPageBase<ITAsset>
 <PageTitle>IT Asset | Hardware</PageTitle>
-<MudPaper Class="pru-ui-mudcard-hdr-banner px-5 py-4" Width="100%" Elevation="0" Outlined="true">
+<MudPaper Class="pru-ui-mudcard-hdr-banner" Width="100%" Elevation="0" Outlined="true">
     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
         <div style="color:var(--pru-red-default); font-size:28px;">
             <span style="font-weight:800">@HeaderTitle</span>
@@ -29,7 +29,7 @@
 				 ColumnResizeMode="ResizeMode.Column" SortMode="SortMode.Multiple" Loading=@IsSearching RowsPerPage="50" Elevation="0"
 				 Class="pru-ui-muddatagrid main-pg"
 				 SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row"
-				 ServerData="ServerDataFunc" @ref="MainDataGrid" @bind-SelectedItem=SelectedObject Height="100%"
+				 ServerData="ServerDataFunc" @ref="MainDataGrid" @bind-SelectedItem=SelectedObject Height="100%" Style="height:100%"
 				 T="ITAsset">
 		<Columns>
 			<TemplateColumn Title="LBU" StickyLeft="true" 
@@ -43,7 +43,7 @@
 			</TemplateColumn>
 			@* <PropertyColumn Property="x => x.ObjectName" Title="Asset Name" StickyLeft="true" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
 			<TemplateColumn Title="Asset Name" StickyLeft="true" 
-				HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData" HeaderStyle="min-width:250px" >
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData" HeaderStyle="min-width:250px" CellStyle="white-space:nowrap">
 				<CellTemplate>
 					<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
 						@if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.TERMINATED, AssetLifeCycleStatuses.WRITTEN_OFF))
@@ -70,7 +70,7 @@
 			@* <PropertyColumn Property="x => x.ObjectCode" Title="Asset ID" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
 			<TemplateColumn Title="Asset ID" Sortable="false" 
 				HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono" 
-				HeaderStyle="min-width:180px"
+				HeaderStyle="min-width:180px" CellStyle="white-space:nowrap"
 				Context="rowData">
 				<CellTemplate>
 					@if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.TERMINATED, AssetLifeCycleStatuses.WRITTEN_OFF, AssetLifeCycleStatuses.DISPOSED))
@@ -91,40 +91,47 @@
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Title="Product Name" Property="x => x.ProductName"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" HeaderStyle="min-width:250px" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" 
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
             <PropertyColumn Title="System Asset Name" Property="x => x.AssetName"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width:250px" />
-            <PropertyColumn Title="Manufacturer" Property="x => x.Manufacturer"
+                            HeaderStyle="min-width:250px"
+							CellStyle="white-space:nowrap" />
+            <PropertyColumn Title="Brand" Property="x => x.Brand"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+			<PropertyColumn Title="Model No" Property="x => x.ModelNo" Sortable="false"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Serial No." Property="x => x.SerialNo" Sortable="false"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
-                            HeaderStyle="min-width:100px" />
+                            HeaderStyle="min-width:100px" CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Category" Property="x => x.CategoryName"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Sub-Category" Property="x => x.SubCategory"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width:180px" />
-            <PropertyColumn Title="Current User" Property="x => x.CurrentUserName"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+			<PropertyColumn Title="Staff ID" Property="x => x.CurrentUserDisplayName" Sortable="false"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width:200px" />
-            <PropertyColumn Title="Staff ID" Property="x => x.CurrentUserID" Sortable="false"
-                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
-                            HeaderStyle="min-width:120px" />
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Function" Property="x => x.CurrentUserFunc"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width:250px" />
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
             <PropertyColumn Title="Department" Property="x => x.CurrentUserDept"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-                            HeaderStyle="min-width:280px" />
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+			<PropertyColumn Title="Ownership Tag" Property="x => x.OwnershipTag"
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
 			<PropertyColumn Title="Vendor" Property="x => x.VendorName"
 							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-							HeaderStyle="min-width:200px" />
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
 			<PropertyColumn Title="PO#" Property="x => x.PORefNo"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
-							HeaderStyle="min-width:120px"/>
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+							HeaderStyle="min-width:120px" CellStyle="white-space:nowrap" />
 			<PropertyColumn Title="Invoice#" Property="x => x.InvoiceRefNo"
-							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+							HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
 			<PropertyColumn Title="Purchased Date" Property="x => x.PurchaseDate" Format="dd-MMM-yyyy"
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
                             HeaderStyle="min-width: 170px" CellStyle="text-align:center" />

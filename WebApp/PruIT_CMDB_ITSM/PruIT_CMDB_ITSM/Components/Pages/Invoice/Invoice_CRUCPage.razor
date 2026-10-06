@@ -252,7 +252,7 @@
                                                     <MudItem xs="3">
                                                         <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" Required="true"
                                                                          Adornment="Adornment.Start" AdornmentIcon="material-symbols-rounded/attach_money" AdornmentColor=@Color.Primary
-                                                                         Label="Unit Price" Format="#,##0.##" Min="0" Step=".1M"
+                                                                         Label="Unit Price" Format="#,##0.##" Step=".1M"
                                                                          T="decimal?" @bind-Value=qi.Item.UnitPrice For="@(() => qi.Item.UnitPrice)" OnlyValidateIfDirty="true" />
                                                     </MudItem>
                                                     <MudItem xs="3">
@@ -379,8 +379,8 @@
                                                 
                                             </EditTemplate>
                                         </PropertyColumn>
-                                        <TemplateColumn Hidden=@IsViewMode Title="Action"
-                                                        HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell d-flex justify-end"
+                                        <TemplateColumn Hidden=@IsViewMode Title="Action" StickyRight="true"
+                                                        HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
                                                         HeaderStyle="width:20px" CellStyle="padding:6px 10px !important" Context="qi">
                                             <CellTemplate>
                                                 <MudStack Row="true" Spacing="0">
@@ -466,7 +466,8 @@
                                                         <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
                                                                          Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
                                                                          CoerceText="true" CoerceValue="true" SearchFunc="SearchProductType"
-                                                                         AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                                         ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                                                         AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" 
                                                                          Label="Product Type" T="string"
                                                                          @bind-Value=expItem.Item.ProductType For="@(() => expItem.Item.ProductType)" />
                                                     </MudItem>
@@ -486,7 +487,8 @@
                                                         <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
                                                                          Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
                                                                          CoerceText="true" CoerceValue="true" SearchFunc="SearchServiceType"
-                                                                         AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                                         ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                                                         AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" 
                                                                          Label="Service Type" T="string"
                                                                          @bind-Value=expItem.Item.ServiceType For="@(() => expItem.Item.ServiceType)" />
                                                     </MudItem>
@@ -515,6 +517,7 @@
                                                     <MudItem xs="3">
                                                         <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                                                    Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
+                                                                   ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                                    AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary"
                                                                    Label="Invoice Item" T="int?"
                                                                    @bind-Value=@expItem.Item.InvoiceItemId For="@(() => expItem.Item.InvoiceItemId)" OnlyValidateIfDirty="true">
@@ -531,7 +534,7 @@
                                                     <MudItem xs="3">
                                                         <MudComboBox Clearable="true" EnableFilter="true" Editable="true" FullWidth="true" Required="true" ReadOnly=@IsViewMode ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password"
                                                                      Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
-                                                                     Label="GL Acocunt #" T="string" SearchFunc="SeachGlAccountDropdown" SearchBoxClearable="true"
+                                                                             Label="GL Acocunt #" T="string" SearchFunc="SeachGlAccountDropdown" SearchBoxClearable="true" IconSize="Size.Small"
                                                                      Value=@expItem.Item.AccountCode For="@(() => expItem.Item.AccountCode)" ValueChanged=@(args => OnGlAccountSelectionChanged(expItem.Item, args)) OnlyValidateIfDirty="true">
                                                             @foreach (GLAccount gLAccount in _glAccountList)
                                                             {
@@ -560,6 +563,7 @@
                                                     </MudItem>
                                                     <MudItem xs="3">
                                                         <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input"
+                                                                      ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                                       Label="Act. Tracker Name"
                                                                       @bind-Value=@expItem.Item.FinActTrackerName For="@(() => expItem.Item.FinActTrackerName)" OnlyValidateIfDirty="true"
                                                                       MaxLength="255" />
@@ -580,6 +584,7 @@
                                                     </MudItem>
                                                     <MudItem xs="2">
                                                         <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" Required="true"
+                                                                         ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.AttachMoney" AdornmentColor=@Color.Primary
                                                                          Label="Amount" Format="#,##0.##"
                                                                          @bind-Value=expItem.Item.Amount For="@(() => expItem.Item.Amount)" OnlyValidateIfDirty="true"
@@ -587,6 +592,7 @@
                                                     </MudItem>
                                                     <MudItem xs="2">
                                                         <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")"
+                                                                         ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Rounded.AttachMoney" AdornmentColor=@Color.Primary
                                                                          Label="Tax Amount" Format="#,##0.##"
                                                                          @bind-Value=expItem.Item.TaxAmount For="@(() => expItem.Item.TaxAmount)" OnlyValidateIfDirty="true"
@@ -621,6 +627,7 @@
                                                     @* ============================================================================================================================ *@
                                                     <MudItem xs="12">
                                                         <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Lines=4
+                                                                      ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                                       Label="Remark"
                                                                       @bind-Value=expItem.Item.Remark For="@(() => expItem.Item.Remark)" OnlyValidateIfDirty="true"
                                                                       MaxLines="25" MaxLength="1000" />
@@ -630,7 +637,7 @@
                                         </PropertyColumn>
                                         <PropertyColumn Title="Item" Property="x => x.ObjectName" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        HeaderStyle="white-space:nowrap" Context="qi">
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" Context="qi">
                                             <EditTemplate>
                                                 
                                             </EditTemplate>
@@ -699,14 +706,14 @@
                                         </PropertyColumn>
                                         <PropertyColumn Title="Account Name" Property="x => x.AccountName" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        HeaderStyle="white-space:nowrap" Context="expItem">
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" Context="expItem">
                                             <EditTemplate>
 
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <PropertyColumn Title="Act Tracker" Property="x => x.FinActTrackerID" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono" Context="expItem"
-                                                        HeaderStyle="white-space:nowrap"
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap"
                                                         FooterStyle="padding-inline-start: 1px; padding-inline-end:8px; text-align:right">
                                             <EditTemplate>
                                                 
@@ -717,7 +724,7 @@
                                         </PropertyColumn>
                                         <PropertyColumn Title="Tracker Name" Property="x => x.FinActTrackerName" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        HeaderStyle="white-space:nowrap" Context="expItem">
+                                                        HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" Context="expItem">
                                             <EditTemplate>
 
                                             </EditTemplate>
@@ -774,7 +781,7 @@
 
                                             </EditTemplate>
                                         </PropertyColumn>
-                                        <TemplateColumn Hidden=@IsViewMode Title="Action" StickyRight="true" HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell d-flex justify-end"
+                                        <TemplateColumn Hidden=@IsViewMode Title="Action" StickyRight="true" HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
                                                         CellStyle="padding:6px 10px !important" Context="qi">
                                             <CellTemplate>
                                                 <MudStack Row="true" Spacing="0">

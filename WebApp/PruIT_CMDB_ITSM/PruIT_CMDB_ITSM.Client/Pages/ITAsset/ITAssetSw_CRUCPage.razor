@@ -9,7 +9,7 @@
 {
     <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column">
         <DataAnnotationsValidator />
-        <MudPaper Class="pru-ui-mudcard-hdr-banner px-5 py-4" Width="100%" Elevation="0" Outlined="true">
+        <MudPaper Class="pru-ui-mudcard-hdr-banner" Width="100%" Elevation="0" Outlined="true">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                 <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="0">
                     <MudText Typo="Typo.h3" Color="Color.Secondary">@HeaderTitle</MudText>
@@ -55,7 +55,7 @@
         <MudTabs Class="pru-mudtab mt-5" Elevation="0" ActiveTabClass="pru-mudtab-active" TabHeaderClass="pru-mudtab-hdr" TabButtonsClass="pru-mudtab-btn" TabPanelsClass="pru-mudtab-tabpanel">
             <MudTabPanel Text="Main" Icon="material-symbols-rounded/home"
                          Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" Style="min-width:120px">
-                <MudPaper Class="pru-ui-mudpaper-cruc-tab-content px-5 pt-3 pb-4 overflow-y-auto" Square="true" Height="calc(100% - var(--pru-cruc-pg-status-bar-height))" Width="100%" Elevation="0">
+                <MudPaper Class="pru-ui-mudpaper-cruc-tab-content" Square="true" Width="100%" Elevation="0">
                     <MudGrid Spacing="4" Justify="Justify.SpaceEvenly">
                         <MudItem xs="7">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
@@ -384,197 +384,277 @@
                 <MudPaper Class="pru-ui-mudpaper-cruc-tab-content px-4 pt-2 pb-5 overflow-y-auto" Height="100%" Width="100%" Elevation="0"
                           Style="border-bottom: 1px solid var(--tw-gray-300); border-bottom-left-radius:var(--pru-base-card-radius); border-bottom-right-radius:var(--pru-base-card-radius)">
                     <MudStack Spacing="2" Justify=Justify.FlexStart>
-                        <MudStack Row="true" Class="px-4 py-2" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Style="background-color:var(--pru-gray-tw-100)">
-                            <MudText Typo="Typo.h5" Color="Color.Primary">Asset Audit History</MudText>
+                        <MudStack Row="true" Class="py-2 px-2" AlignItems="AlignItems.Center" Justify="Justify.FlexStart"
+                                  Style="background: linear-gradient(90deg,rgba(243, 244, 246, 1) 0%, rgba(255, 255, 255, 0) 100%); margin-left:-16px; border-left:16px solid var(--pru-red-tw-100)">
+                            <MudText Typo="Typo.h6" Color="Color.Primary" Class="pru-ui-crud-section-title">ASSET MOVEMENT HISTORY</MudText>
                             @if (!IsViewMode)
                             {
-                                <MudButton Variant="@Variant.Filled" DropShadow="false" Class="pru-ui-mudbutton in-pg-action"
-                                           StartIcon="material-symbols-rounded/add_circle" Size="Size.Small" Color="Color.Info"
-                                           Disabled=_isEditingItem OnClick="AddItem" FullWidth="false">
-                                    Add Audit Trail
-                                </MudButton>
+                                <MudTooltip Text="Add movement history" Arrow="true" Placement="Placement.Top">
+                                    <MudIconButton Icon="fad far fa-circle-plus" Size="Size.Small" Color="Color.Info" DropShadow="false" Disabled=_isEditingItem OnClick="AddItem" aria-label="Add Movement History" />
+                                </MudTooltip>
                             }
+                            <MudSpacer />
+                            <MudSwitchM3 ReadOnly=@IsViewMode Class="pru-mud-switch" Color="@(_isInLineEditingTrailGrid ? Color.Success : Color.Secondary)"
+                                         ThumbIcon="@Icons.Material.Rounded.Check" ThumbOffIcon="@Icons.Material.Rounded.Close" Size="Size.Small"
+                                         Label="In-Line Editing?"
+                                         @bind-Value="_isInLineEditingTrailGrid" />
                         </MudStack>
 
                         <MudDataGrid Bordered="false" Dense="true" FixedHeader="true" Hover="true" Striped="true" ReadOnly=@IsViewMode Elevation="0"
                                      ColumnResizeMode="ResizeMode.Column" SortMode="SortMode.Multiple"
                                      Class="pru-ui-muddatagrid mt-2"
                                      StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges"
-                                     EditTrigger="DataGridEditTrigger.Manual" EditMode="DataGridEditMode.Form" EditDialogOptions=@(new (){ BackgroundClass="pru-ui-muddatagrid-edit-diag-bg", BackdropClick=false, MaxWidth=MaxWidth.Medium, FullWidth=true })
+                                     EditTrigger="DataGridEditTrigger.Manual" EditMode=@(_isInLineEditingTrailGrid ? DataGridEditMode.Cell : DataGridEditMode.Form)
+                                     EditDialogOptions=@(new (){ BackgroundClass="pru-ui-muddatagrid-edit-diag-bg", BackdropClick=false, MaxWidth=MaxWidth.Medium, FullWidth=true })
                                      @ref=@_auditTrailDataGrid T="ITAssetAuditTrail" Items="CurrentObject!.AuditTrails" QuickFilter="_quickAssetAuditTrailFilter">
                             <Columns>
+                                <PropertyColumn Title="No." Property="x => x.SeqNo" Sortable="false" Editable="false"
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
+                                                HeaderStyle="width:80px; max-width:50px" CellStyle="text-align:right" Context="i">
+                                    <EditTemplate></EditTemplate>
+                                </PropertyColumn>
                                 <PropertyColumn Title="Request Date" Property="x => x.RequestDate" Format="dd-MMM-yyyy"
-                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "padding: 4px !important" : "")
+                                                Context="i">
                                     <EditTemplate>
-                                        <MudGrid Spacing="4" Justify="Justify.SpaceEvenly">
-                                            <MudItem xs="2">
-                                                <MudDatePicker Clearable="true" Editable="true" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true" Variant="Variant.Text"
-                                                               Class="pru-ui-muddatepicker"
-                                                               AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
-                                                               Label="Request Date" DateFormat="dd-MMM-yyyy"
-                                                               @bind-Date=@i.Item.RequestDate For="@(() => i.Item.RequestDate)" />
-                                            </MudItem>
-                                            <MudItem xs="3">
-                                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="false"
-                                                              Label="Request Ticket #" MaxLength="255"
-                                                              @bind-Value=i.Item.RequestTicketRefNo For="@(() => i.Item.RequestTicketRefNo)" OnlyValidateIfDirty="true" />
-                                            </MudItem>
-                                            <MudItem xs="7">
-                                                <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
-                                                                 Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
-                                                                 CoerceText="true" CoerceValue="false" SearchFunc="SearchRequestSysBy"
-                                                                 IconSize="Size.Small"
-                                                                 Label="Request System" T="string"
-                                                                 @bind-Value=i.Item.RequestTicketSys For="@(() => i.Item.RequestTicketSys)" />
-                                            </MudItem>
-                                            <MudItem xs="4">
-                                                <MudTextField Clearable="true" Immediate="false" FullWidth="true" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true"
-                                                              Class="pru-ui-mudform-input"
-                                                              ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
-                                                              Label="Action"
-                                                              @bind-Value=i.Item.ActionDesc For="@(() => i.Item.ActionDesc)" OnlyValidateIfDirty="true" MaxLength="255" />
-                                            </MudItem>
-                                            <MudItem xs="8">
-                                                <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
-                                                                 Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
-                                                                 CoerceText="true" CoerceValue="true" SearchFunc="SearchActionBy"
-                                                                 ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
-                                                                 Label="Action By" T="string"
-                                                                 @bind-Value=i.Item.ActionUser For="@(() => i.Item.ActionUser)" />
-                                            </MudItem>
-                                            <MudItem xs="6">
-                                                <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
-                                                               Class="pru-ui-muddatepicker"
-                                                               AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
-                                                               Label="Effective Date" DateFormat="dd-MMM-yyyy"
-                                                               @bind-Date=@i.Item.StartDate For="@(() => i.Item.StartDate)" />
-                                            </MudItem>
-                                            <MudItem xs="6">
-                                                <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
-                                                               Class="pru-ui-muddatepicker"
-                                                               AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
-                                                               Label="Till Date" DateFormat="dd-MMM-yyyy"
-                                                               @bind-Date=@i.Item.EndDate For="@(() => i.Item.EndDate)" />
-                                            </MudItem>
-                                            <MudItem xs="6">
-                                                <MudComboBox Clearable="true" Editable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" ShrinkLabel="true" autocomplete="new-password"
-                                                             Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
-                                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
-                                                             Label="Current User" T="string"
-                                                             Value="@i.Item.CurrentUserID" For="@(() => i.Item.CurrentUserID)" ValueChanged=@(args => OnCurrentUserChanged(i.Item, args))
-                                                             ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _employeeList.Single<DropdownSelectItem>(x => x.Key == e)?.ValueKeyText)">
-                                                    <ChildContent>
-                                                        @foreach (var e in _employeeList)
-                                                        {
-                                                            <MudComboBoxItem T="string" Value="@e.Key" Text="@e.ValueKeyText">@e.ValueKeyText</MudComboBoxItem>
-                                                        }
-                                                    </ChildContent>
-                                                </MudComboBox>
-                                            </MudItem>
-                                            <MudItem xs="6">
-                                                <MudComboBox Clearable="true" Editable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" ShrinkLabel="true" autocomplete="new-password"
-                                                             Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
-                                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
-                                                             Label="To User" T="string"
-                                                             Value="@i.Item.TargetUserID" For="@(() => i.Item.TargetUserID)" ValueChanged="@(args => OnTargetUserChanged(i.Item, args))"
-                                                             ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _employeeList.Single<DropdownSelectItem>(x => x.Key == e)?.ValueKeyText)">
-                                                    <ChildContent>
-                                                        @foreach (var e in _employeeList)
-                                                        {
-                                                            <MudComboBoxItem T="string" Value="@e.Key" Text="@e.ValueKeyText">@e.ValueKeyText</MudComboBoxItem>
-                                                        }
-                                                    </ChildContent>
-                                                </MudComboBox>
-                                            </MudItem>
-                                            <MudItem xs="6">
-                                                <MudAutocomplete Clearable="true" FullWidth="true" Immediate="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
-                                                                 Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
-                                                                 AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
-                                                                 Label="Function" T="string"
-                                                                 @bind-Value=i.Item.CurrentUserFunc For="@(() => i.Item.CurrentUserFunc)" />
-                                            </MudItem>
-                                            <MudItem xs="6">
-                                                <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
-                                                                 Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
-                                                                 AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
-                                                                 CoerceText="true" CoerceValue="true" SearchFunc="SearchDept"
-                                                                 Label="Department" T="string"
-                                                                 @bind-Value=i.Item.CurrentUserDept For="@(() => i.Item.CurrentUserDept)" />
-                                            </MudItem>
-                                            <MudItem xs="12">
-                                                <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input"
-                                                              Label="Remark" MaxLines="25" Lines=4 MaxLength="1000"
-                                                              @bind-Value=i.Item.Remark For="@(() => i.Item.Remark)" OnlyValidateIfDirty="true" />
-                                            </MudItem>
-                                        </MudGrid>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudDatePicker Clearable="true" Editable="true" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                           Class="pru-ui-muddatepicker"
+                                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                                           Placeholder="Request Date" DateFormat="dd-MMM-yyyy"
+                                                           @bind-Date=@i.Item.RequestDate For="@(() => i.Item.RequestDate)"
+                                                           Style="width:150px" />
+
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
                                 <PropertyColumn Title="Request Via" Property="x => x.RequestTicketSys"
-                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "padding: 4px !important" : "")>
                                     <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                             CoerceText="true" CoerceValue="false" SearchFunc="SearchRequestSysBy"
+                                                             IconSize="Size.Small"
+                                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary"
+                                                             Placeholder="Request System" T="string"
+                                                             @bind-Value=i.Item.RequestTicketSys For="@(() => i.Item.RequestTicketSys)" Style="min-width:200px" />
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
                                 <PropertyColumn Title="Ticket #" Property="x => x.RequestTicketRefNo"
-                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "padding: 4px !important" : "")>
                                     <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="false"
+                                                          Placeholder="Request Ticket #" MaxLength="255"
+                                                          @bind-Value=i.Item.RequestTicketRefNo For="@(() => i.Item.RequestTicketRefNo)" OnlyValidateIfDirty="true"
+                                                          Style="min-width:180px" />
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
                                 <PropertyColumn Title="Effective Date" Property="x => x.StartDate" Format="dd-MMM-yyyy"
-                                    HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "padding: 4px !important" : "")>
                                     <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudDatePicker Clearable="true" Editable="true" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                           Class="pru-ui-muddatepicker"
+                                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                                           Placeholder="Effective Date" DateFormat="dd-MMM-yyyy"
+                                                           @bind-Date=@i.Item.StartDate For="@(() => i.Item.StartDate)" Style="width:150px" />
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
                                 <PropertyColumn Title="Till Date" Property="x => x.EndDate" Format="dd-MMM-yyyy"
-                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "padding: 4px !important" : "")>
                                     <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudDatePicker Clearable="true" Editable="true" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                           Class="pru-ui-muddatepicker"
+                                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
+                                                           Placeholder="Till Date" DateFormat="dd-MMM-yyyy"
+                                                           @bind-Date=@i.Item.EndDate For="@(() => i.Item.EndDate)" Style="width:150px" />
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
                                 <PropertyColumn Title="Action" Property="x => x.ActionDesc" Sortable="false"
-                                    HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
+                                                Context="i"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "white-space:nowrap; padding: 4px !important" : "white-space:nowrap")>
                                     <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input pru-ui-display-all-content"
+                                                             ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchAction"
+                                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                             Placeholder="Action" T="string" @bind-Value="i.Item.ActionDesc" Style="min-width:180px" />
+
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
                                 <PropertyColumn Title="Action By" Property="x => x.ActionUser" Sortable="false"
-                                    HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
+                                                Context="i"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "white-space:nowrap; padding: 4px !important" : "white-space:nowrap")>
                                     <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input pru-ui-display-all-content"
+                                                             ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchActionBy"
+                                                             ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary"
+                                                             Placeholder="Action By" T="string"
+                                                             @bind-Value=i.Item.ActionUser For="@(() => i.Item.ActionUser)" Style="min-width:200px" />
+
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
                                 <PropertyColumn Title="Current User" Property="x => x.CurrentUserNameAndID" Sortable="false"
-                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
+                                                HeaderStyle="white-space:nowrap"
+                                                Context="i"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "white-space:nowrap; padding: 4px !important" : "white-space:nowrap")>
                                     <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input pru-ui-display-all-content"
+                                                             ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                             CoerceText="true" CoerceValue="false" SearchFunc="SearchCurrentUserStr"
+                                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                             Placeholder="From User" T="string"
+                                                             Value="i.Item.CurrentUserNameAndID" ValueChanged=@(args => OnCurrentUserChanged(i.Item, args))
+                                                             Style="min-width:200px" />
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
                                 <PropertyColumn Title="Target User" Property="x => x.TargetUserNameAndID" Sortable="false"
-                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
+                                                Context="i"
+                                                HeaderStyle="white-space:nowrap"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "white-space:nowrap; padding: 4px !important" : "white-space:nowrap")>
                                     <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input pru-ui-display-all-content"
+                                                             ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                             CoerceText="true" CoerceValue="false" SearchFunc="SearchCurrentUserStr"
+                                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                             Placeholder="To User" T="string"
+                                                             Value="i.Item.TargetUserNameAndID" ValueChanged=@(args => OnTargetUserChanged(i.Item, args))
+                                                             Style="min-width:180px" />
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
                                 <PropertyColumn Property="x => x.CurrentUserFunc" Title="Function" Sortable="false"
-                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "white-space:nowrap; padding: 4px !important" : "white-space:nowrap")
+                                                Context="i">
                                     <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input pru-ui-display-all-content"
+                                                             ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchFunc"
+                                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                             Placeholder="Function" T="string"
+                                                             @bind-Value=i.Item.CurrentUserFunc For="@(() => i.Item.CurrentUserFunc)"
+                                                             Style="min-width:180px" />
+
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
                                 <PropertyColumn Title="Department" Property="x => x.CurrentUserDept" Sortable="false"
-                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "white-space:nowrap; padding: 4px !important" : "white-space:nowrap")
+                                                Context="i">
                                     <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input pru-ui-display-all-content"
+                                                             ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchDept"
+                                                             Placeholder="Department" T="string"
+                                                             @bind-Value=i.Item.CurrentUserDept For="@(() => i.Item.CurrentUserDept)"
+                                                             Style="min-width:200px" />
+
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
-                                <PropertyColumn Property="x => x.Remark" Title="Remark" Sortable="false"
-                                    HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i">
+                                <PropertyColumn Title="Approver" Property="x => x.Approver" Sortable="false"
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items"
+                                                CellClass="pru-ui-muddatagrid-cell"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "white-space:nowrap; padding: 4px !important" : "white-space:nowrap")
+                                                Context="i">
                                     <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="false"
+                                                          Placeholder="Approver" MaxLength="255"
+                                                          @bind-Value=i.Item.Approver For="@(() => i.Item.Approver)" OnlyValidateIfDirty="true"
+                                                          Style="min-width:180px" />
+                                        }
                                     </EditTemplate>
                                 </PropertyColumn>
-                                <TemplateColumn Title="Action" Filterable="false" Sortable="false" Hidden=@IsViewMode
+                                <PropertyColumn Title="Remark" Property="x => x.Remark" Sortable="false"
+                                                HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
+                                                CellStyle=@(_isInLineEditingTrailGrid ? "white-space:nowrap; padding: 4px !important" : "white-space:nowrap")
+                                                Context="i">
+                                    <EditTemplate>
+                                        @if (_isInLineEditingTrailGrid)
+                                        {
+                                            <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" Required="false"
+                                                          Placeholder="Remark" MaxLength="255"
+                                                          @bind-Value=i.Item.Remark For="@(() => i.Item.Remark)" OnlyValidateIfDirty="true"
+                                                          Style="min-width:250px" />
+                                        }
+                                    </EditTemplate>
+                                </PropertyColumn>
+                                <TemplateColumn Title="Action" Filterable="false" Sortable="false" StickyRight="true" Hidden=@IsViewMode
                                                 HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="i"
-                                                HeaderStyle="width:80px">
+                                                CellStyle="padding:4px !important">
                                     <CellTemplate>
                                         <MudStack Row="true" Spacing="0">
                                             <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
-                                                           Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/edit"
-                                                           OnClick="@i.Actions.StartEditingItemAsync" aria-label="edit" />
+                                                           Class="pru-ui-mudiconbtn-datagrid"
+                                                           Icon="material-symbols-rounded/arrow_circle_up"
+                                                           OnClick="@(() => MoveItemUp(i.Item))" />
+                                            <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
+                                                           Class="pru-ui-mudiconbtn-datagrid"
+                                                           Icon="material-symbols-rounded/arrow_circle_down"
+                                                           OnClick="@(() => MoveItemDown(i.Item))" />
+                                            @if (!_isInLineEditingTrailGrid)
+                                            {
+                                                <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
+                                                               Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/edit"
+                                                               OnClick="@i.Actions.StartEditingItemAsync" />
+                                                <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Success"
+                                                               Class="pru-ui-mudiconbtn-datagrid"
+                                                               Icon="material-symbols-rounded/file_copy"
+                                                               OnClick="@(() => CloneItem(i.Item))" />
+                                            }
                                             <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Error"
-                                                           Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/delete"
-                                                           OnClick="@(() => RemoveItem(i.Item))" aria-label="delete" />
+                                                           Class="pru-ui-mudiconbtn-datagrid"
+                                                           Icon="material-symbols-rounded/delete"
+                                                           OnClick="@(() => RemoveItem(i.Item))" />
                                         </MudStack>
                                     </CellTemplate>
                                 </TemplateColumn>
@@ -639,6 +719,7 @@
     bool _isEditingItem = false;
     ITAssetAuditTrail? _tempItemToAdd;
     MudDataGrid<ITAssetAuditTrail> _auditTrailDataGrid = new();
+    bool _isInLineEditingTrailGrid = true;
 
     DropdownSelectItem? _requestor;
     DropdownSelectItem? _currentUser;
@@ -647,7 +728,7 @@
     List<string> _deptList = PruDepartments.GetAll();
     List<string> _funcList = PruFunctions.GetAll();
     List<string> _ownershipTags = OwnershipTags.GetAll();
-
+    IEnumerable<string> _actionList = ["01-Acquire", "01-Purchase", "01-Provision", "02-Unbox Allocation", "03-Allocate", "04-Transfer", "05-Return", "88-Terminate", "88-Write-Off", "99-Dispose"];
     IEnumerable<string> _esuCwsLilst = [
         "Chanraksmey Soth",
         "Savorng Chhorm",
@@ -776,6 +857,17 @@
             return _employeeList.Take(50);
 
         return _employeeList.Where(x => x.Value.Contains(value, StringComparison.InvariantCultureIgnoreCase) || x.Key == value).Take(50);
+    }
+
+    public async Task<IEnumerable<string>> SearchCurrentUserStr(string value, CancellationToken token)
+    {
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _employeeList.Select(x => x.ValueKeyText).Take(50);
+        }
+
+        return _employeeList.Where(x => x.Value.Contains(value, StringComparison.InvariantCultureIgnoreCase) || x.Key == value).Select(x => x.ValueKeyText).Take(50);
     }
 
     void OnRequestorValueChanged(DropdownSelectItem? item)
@@ -919,6 +1011,46 @@
         _auditTrailDataGrid.SetEditingItemAsync(_tempItemToAdd);
     }
 
+    void CloneItem(ITAssetAuditTrail i)
+    {
+        _tempItemToAdd = i.DeepClone();
+        _tempItemToAdd.Id = 0;
+        _tempItemToAdd.SeqNo = CurrentObject!.AuditTrails.Count + 1;
+
+        CurrentObject!.AuditTrails.Add(_tempItemToAdd);
+        _auditTrailDataGrid.SetEditingItemAsync(_tempItemToAdd);
+    }
+
+    void MoveItemUp(ITAssetAuditTrail i)
+    {
+        if (i.SeqNo == 1)
+            return;
+        else
+        {
+            i.SeqNo--;
+            var tmpInvItem = CurrentObject!.AuditTrails.SingleOrDefault(x => x.SeqNo == i.SeqNo && x != i);
+            if (tmpInvItem != null)
+                tmpInvItem.SeqNo++;
+
+            CurrentObject!.AuditTrails = CurrentObject!.AuditTrails.OrderBy(x => x.SeqNo).ToList();
+        }
+    }
+
+    void MoveItemDown(ITAssetAuditTrail i)
+    {
+        if (i.SeqNo == CurrentObject!.AuditTrails.Count())
+            return;
+        else
+        {
+            i.SeqNo++;
+            var tmpInvItem = CurrentObject!.AuditTrails.SingleOrDefault(x => x.SeqNo == i.SeqNo && x != i);
+            if (tmpInvItem != null)
+                tmpInvItem.SeqNo--;
+
+            CurrentObject!.AuditTrails = CurrentObject!.AuditTrails.OrderBy(x => x.SeqNo).ToList();
+        }
+    }
+
     void RemoveItem(ITAssetAuditTrail i)
     {
         if (i.Id > 0)
@@ -962,6 +1094,17 @@
             return _itsmSysList;
 
         return _itsmSysList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchAction(string value, CancellationToken token)
+    {
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+        {
+            return _actionList;
+        }
+
+        return _actionList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
     private async Task<IEnumerable<string>> SearchActionBy(string value, CancellationToken token)
@@ -1029,6 +1172,15 @@
 
         if (CurrentObject.CategoryCode == "SUBSCRIPTION" && string.IsNullOrEmpty(CurrentObject.SerialNo))
             InvalidMsgList.Add("SerialNo_Required", "'Subscription ID' is required.");
+
+        if (CurrentObject!.OwnershipTag == OwnershipTags.FUNCTION && string.IsNullOrEmpty(CurrentObject!.CurrentUserFunc))
+        {
+            InvalidMsgList.Add("CurrentUserFunc_Required", "Function is required when Ownership Tag is 'Function'.");
+        }
+        else if (CurrentObject!.OwnershipTag == OwnershipTags.DEPARTMENT && string.IsNullOrEmpty(CurrentObject!.CurrentUserDept))
+        {
+            InvalidMsgList.Add("CurrentUserDept_Required", "Department is required when Ownership Tag is 'Department'.");
+        }
     }
 
     protected override async Task<bool> SaveAndCommitProcessing()

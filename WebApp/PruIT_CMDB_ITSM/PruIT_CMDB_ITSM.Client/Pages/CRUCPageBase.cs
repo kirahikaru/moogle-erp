@@ -76,6 +76,7 @@ public class CRUCPageBase<T> : ComponentBase, IAsyncDisposable
 	protected HotKeysContext? CurrentHotKeyContext { get; set; }
     public string? UrlPrefix { get; set; }
 	protected bool IsSaving { get; set; }
+	protected int InitCount { get; set; }
 	public Dictionary<string, string> InvalidMsgList { get; set; }
 
 	public string AuditTrailUser => LoggedInUser != null ? LoggedInUser.UserNameAndUserID : "Public";

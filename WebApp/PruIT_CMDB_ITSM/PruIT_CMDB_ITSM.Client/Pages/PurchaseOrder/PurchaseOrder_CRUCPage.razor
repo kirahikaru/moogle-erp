@@ -9,7 +9,7 @@
 {
     <EditForm EditContext="CurrentEditContext" OnValidSubmit="SaveDummy" OnInvalidSubmit="SaveDummy" style="height:100%; display:flex; flex-direction:column">
         <DataAnnotationsValidator />
-        <MudPaper Class="pru-ui-mudcard-hdr-banner px-5 py-4" Width="100%" Elevation="0" Outlined="true">
+        <MudPaper Class="pru-ui-mudcard-hdr-banner" Width="100%" Elevation="0" Outlined="true">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                 <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="0">
                     <MudText Typo="Typo.h3" Color="Color.Secondary">@HeaderTitle</MudText>
@@ -55,12 +55,13 @@
         <MudTabs Class="pru-mudtab mt-5" Elevation="0" ActiveTabClass="pru-mudtab-active" TabHeaderClass="pru-mudtab-hdr" TabButtonsClass="pru-mudtab-btn" TabPanelsClass="pru-mudtab-tabpanel">
             <MudTabPanel Text="Main" Icon="material-symbols-rounded/home"
                          Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" Style="min-width:120px">
-                <MudPaper Class="pru-ui-mudpaper-cruc-tab-content px-5 pt-3 pb-4 overflow-y-auto" Square="true" Height="calc(100% - var(--pru-cruc-pg-status-bar-height))" Width="100%" Elevation="0">
+                <MudPaper Class="pru-ui-mudpaper-cruc-tab-content" Square="true" Width="100%" Elevation="0">
                     <MudGrid Spacing="4" Justify="Justify.SpaceEvenly">
                         <MudItem xs="1">
                             <MudSelect ReadOnly="@IsViewMode" Clearable="true" ShrinkLabel="true" Required="true" Immediate="false"
                                        Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
-                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                       ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" 
                                        Label="LBU" T="string"
                                        Value=CurrentObject!.LBU For="@(() => CurrentObject.LBU)" ValueChanged="OnLBUChanged" OnlyValidateIfDirty="true">
                                 @foreach (string lbuID in _lbuIDList)
@@ -73,7 +74,8 @@
                             <MudAutocomplete Clearable="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
                                              Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
                                              CoerceText="true" CoerceValue="true" SearchFunc="@SearchQuotation" 
-                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" 
                                              Label="Sale Quotation" HelperText="Sale Quotation with Status='CONFIRMED'"
                                              Value="CurrentObject!.Quotation" T="Quotation" Disabled="@(string.IsNullOrEmpty(CurrentObject!.LBU))"
                                              ToStringFunc="@(e=> e==null?null : $"{e.EffectiveDate!.Value:dd-MMM-yyyy} | {e.ObjectCode!} | {e.ObjectName!} ({e.TotalAmountText}))")"
@@ -82,6 +84,7 @@
                         <MudItem xs="2">
                             <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
                                            Class="pru-ui-muddatepicker"
+                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                            AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
                                            Label="Date" DateFormat="dd-MMM-yyyy"
                                            @bind-Date=@CurrentObject.EffectiveDate For="@(() => CurrentObject.EffectiveDate)" />
@@ -102,6 +105,7 @@
                         </MudItem>
                         <MudItem xs="2">
                             <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-muddatepicker" Editable="true" DateFormat="dd-MMM-yyyy"
+                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                            AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
                                            Label="Expiry Date"
                                            @bind-Date=@CurrentObject.ExpiryDate For="@(() => CurrentObject.ExpiryDate)" />
@@ -152,7 +156,8 @@
                         <MudItem xs="1">
                             <MudSelect ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" FullWidth="true" Required="true" Immediate="false"
                                        Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
-                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                       ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" 
                                        Label="Currency"
                                        @bind-Value=CurrentObject!.CurrencyCode For="@(() => CurrentObject.CurrencyCode)" OnlyValidateIfDirty="true">
                                 @foreach (DropdownSelectItem curr in _currList)
@@ -164,6 +169,7 @@
                         <MudItem xs="2">
                             <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" Required="true"
                                              Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                             ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                              AdornmentIcon=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "material-symbols-rounded/attach_money" : "material-symbols-rounded/money")
                                              Label="Total Amount" 
                                              Format=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.##" : "#,##0")
@@ -173,6 +179,7 @@
                         <MudItem xs="2">
                             <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")"
                                              Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                             ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                              AdornmentIcon=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "material-symbols-rounded/attach_money" : "material-symbols-rounded/money")
                                              Label="Tax Amount" Step=".1M" Min="0"
                                              Format=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.##" : "#,##0")
@@ -192,8 +199,8 @@
                             <MudItem xs="2">
                                 <MudNumericField Clearable="true" ReadOnly=true Required="false" ShrinkLabel="true" HideSpinButtons="true"
                                                  Class="pru-ui-mudform-input" Culture="@CultureInfo.GetCultureInfo("en-US")"
-                                                 ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                  Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                                 ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
                                                  AdornmentIcon=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "material-symbols-rounded/attach_money" : "material-symbols-rounded/money")
                                                  Label="Paid Amount" 
                                                  Format=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.##" : "#,##0")
@@ -259,7 +266,15 @@
                                                             }
                                                             else
                                                             {
-                                                                <MudComboBox Clearable="true" ShrinkLabel="true" Editable="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true"
+                                                                <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                                                 Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                                                 CoerceText="true" CoerceValue="true" SearchFunc="SearchITAsset"
+                                                                                 ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                                                                 AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" 
+                                                                                 Label="IT Asset" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value}")"
+                                                                                 Value="_selectedITAsset" ValueChanged="@(args => OnITAssetSelectionChanged(qi.Item, args))" />
+
+                                                                @* <MudComboBox Clearable="true" ShrinkLabel="true" Editable="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true"
                                                                              Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
                                                                              AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
                                                                              Label="IT Asset" T="int?"
@@ -271,7 +286,7 @@
                                                                             <MudComboBoxItem T="int?" Value="@itAsset.Id" Text="@itAsset.Value">@itAsset.Value</MudComboBoxItem>
                                                                         }
                                                                     </ChildContent>
-                                                                </MudComboBox>
+                                                                </MudComboBox> *@
                                                             }
                                                             <MudSwitchM3 ReadOnly=@IsViewMode Class="pru-mud-switch" Color="@(_isManualITAssetInput ? Color.Info : Color.Success)"
                                                                          ThumbIcon="@Icons.Material.Rounded.Check" ThumbOffIcon="@Icons.Material.Rounded.Close" Size="Size.Small" 
@@ -301,7 +316,15 @@
                                                             }
                                                             else
                                                             {
-                                                                <MudComboBox Clearable="true" Editable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" ShrinkLabel="true" autocomplete="new-password"
+                                                                <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                                                 Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                                                 CoerceText="true" CoerceValue="true" SearchFunc="SearchEmployee"
+                                                                                 ClearIcon="material-symbols-rounded/close" 
+                                                                                 AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                                                 Label="User" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
+                                                                                 Value="_selectedEmployee" ValueChanged="@(args => OnEmployeeSelectionChanged(qi.Item, args))" />
+
+                                                                @* <MudComboBox Clearable="true" Editable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" ShrinkLabel="true" autocomplete="new-password"
                                                                                 Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
                                                                                 AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
                                                                                 Label="Employee" T="string"
@@ -313,7 +336,7 @@
                                                                             <MudComboBoxItem T="string" Value="@e.Key" Text="@e.ValueKeyText">@e.ValueKeyText</MudComboBoxItem>
                                                                         }
                                                                     </ChildContent>
-                                                                </MudComboBox>
+                                                                </MudComboBox> *@
                                                             }
                                                             <MudSwitchM3 ReadOnly=@IsViewMode Class="pru-mud-switch" Color="@(_isManualEmpInput ? Color.Info : Color.Dark)"
                                                                          ThumbIcon="@Icons.Material.Rounded.Check" ThumbOffIcon="@Icons.Material.Rounded.Close" Size="Size.Small" 
@@ -331,7 +354,8 @@
                                                         <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
                                                                          Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
                                                                          CoerceText="true" CoerceValue="true" SearchFunc="SearchPurchaseType"
-                                                                         AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                                                         ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                                                         AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" 
                                                                          Label="Purchase Type" T="string" @bind-Value="qi.Item.PurchaseType" />
                                                     </MudItem>
                                                     <MudItem xs="3">
@@ -461,8 +485,9 @@
                                                 
                                             </EditTemplate>
                                         </PropertyColumn>
-                                        <TemplateColumn Title="Action" Hidden=@IsViewMode
-                                                        HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" Context="qi">
+                                        <TemplateColumn Title="Action" Hidden=@IsViewMode StickyRight="true"
+                                                        HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" 
+                                                        HeaderStyle="width:200px; max-width:100px" Context="qi">
                                             <CellTemplate>
                                                 <MudStack Row="true" Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.FlexStart ">
                                                     <MudIconButton Variant="Variant.Text" Size="@Size.Small" Color="Color.Info"
@@ -563,7 +588,9 @@
     bool _isManualEmpInput;
 
     List<DropdownSelectItem> _itAssetList = [];
+    DropdownSelectItem? _selectedITAsset;
     List<DropdownSelectItem> _employeeList = [];
+    DropdownSelectItem? _selectedEmployee;
 
     AggregateDefinition<PurchaseOrderItem> _itemAggr = new AggregateDefinition<PurchaseOrderItem>
     {
@@ -714,11 +741,23 @@
     {
         _isEditingItem = true;
 
-        if (item.Id > 0 && item.ITAssetId.HasValue)
+        if (!item.ITAssetId.HasValue || item.ITAssetId.Value <= 0)
             _isManualITAssetInput = true;
+        else
+        {
+            _selectedITAsset = _itAssetList.SingleOrDefault<DropdownSelectItem>(x => x.Id == item.ITAssetId.Value);
+        }
 
-        if (!string.IsNullOrEmpty(item.UserID) && _employeeList.Count(x => x.Key == item.UserID) == 0)
-            _isManualEmpInput = true;
+        if (!string.IsNullOrEmpty(item.UserID))
+        {
+            if (_employeeList.Count(x => x.Key == item.UserID) == 0)
+                _isManualEmpInput = true;
+            else
+            {
+                _selectedEmployee = _employeeList.SingleOrDefault<DropdownSelectItem>(x => x.Key == item.UserID);
+            }
+        }
+
     }
 
     void CanceledEditingItem(PurchaseOrderItem item)
@@ -735,6 +774,7 @@
     Task<DataGridEditFormAction> CommittedItemChanges(PurchaseOrderItem item)
     {
         _tempItemToAdd = null;
+        _selectedITAsset = null;
         _isEditingItem = false;
         _isManualEmpInput = false;
         _isManualITAssetInput = false;
@@ -742,7 +782,7 @@
         StateHasChanged();
         return Task.FromResult(DataGridEditFormAction.Close);
     }
-
+    
     private async Task OnLBUChanged(string lbu)
     {
         if (!string.IsNullOrEmpty(lbu))
@@ -842,6 +882,58 @@
         }
 
         await Task.CompletedTask;
+    }
+
+    async Task<IEnumerable<DropdownSelectItem>> SearchITAsset(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return _itAssetList.Take(50);
+        }
+        else
+        {
+            return _itAssetList.Where(x => x.Value.ToLower().Contains(value.ToLower()));
+        }
+    }
+
+    void OnITAssetSelectionChanged(PurchaseOrderItem poItem, DropdownSelectItem? itAsset)
+    {
+        if (itAsset != null)
+        {
+            poItem.ITAssetId = itAsset.Id;
+            poItem.ITAssetCode = itAsset.Key;
+        }
+        else
+        {
+            poItem.ITAssetId = null;
+            poItem.ITAssetCode = null;
+        }
+    }
+
+    async Task<IEnumerable<DropdownSelectItem>> SearchEmployee(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return _employeeList.Take(50);
+        }
+        else
+        {
+            return _employeeList.Where(x => x.Value.ToLower().Contains(value.ToLower()) || x.Key.ToLower().Contains(value.ToLower()));
+        }
+    }
+
+    void OnEmployeeSelectionChanged(PurchaseOrderItem poItem, DropdownSelectItem? employee)
+    {
+        if (employee != null)
+        {
+            poItem.UserID = employee.Key;
+            poItem.UserName = employee.Value;
+        }
+        else
+        {
+            poItem.UserID = null;
+            poItem.UserName = null;
+        }
     }
 
     void OnITAssetChanged(PurchaseOrderItem poItem, int? itAssetId)

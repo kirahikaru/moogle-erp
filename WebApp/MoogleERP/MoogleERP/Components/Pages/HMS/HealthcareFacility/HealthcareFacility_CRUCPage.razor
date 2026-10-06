@@ -11,7 +11,7 @@
         <MudPaper Class="moog-pg-banner" Elevation="0">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                 <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2">
-                    <MudIcon Icon="fad fa-list-tree" Color="Color.Primary" Size="Size.Large"></MudIcon>
+                    <MudIcon Icon="fa-duotone fa-list-tree" Color="Color.Primary" Size="Size.Large"></MudIcon>
                     <MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
                     @if (CRUCMode == CRUDCModes.READ)
                     {
@@ -57,7 +57,7 @@
             </MudStack>
         </MudPaper>
         <MudTabs Color="Color.Primary" Class="moog-mudtab mt-4" ActiveTabClass="moog-mudtab-tab-active" TabButtonsClass="moog-mudtab-tab-btn" TabHeaderClass="moog-mudtab-tab-hdr" TabPanelsClass="moog-mudtab-tab-panel">
-            <MudTabPanel Icon="fad fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
+            <MudTabPanel Icon="fa-duotone fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
                 <MudPaper Elevation="0" Square="true" Height="calc(100% - var(--moog-cruc-pg-status-bar-height))" Style="overflow-y: auto; background-color: var(--tw-gray-50); scrollbar-width:auto; scrollbar-color:var(--tw-gray-300) var(--tw-gray-50)">
                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" StretchItems="StretchItems.All" Spacing="1">
                         <MudGrid Spacing="4" Class="py-4 px-4" Style="margin-left:-8px">
@@ -191,11 +191,11 @@
                                 <MudItem xs="12" Class="pt-4">
                                     @foreach (string msg in CurrentEditContext.GetValidationMessages())
                                     {
-                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fa-duotone fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
                                     }
                                     @foreach (string key in InvalidMsgList.Keys)
                                     {
-                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fa-duotone fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
                                     }
                                 </MudItem>
                             }

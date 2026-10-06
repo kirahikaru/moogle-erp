@@ -10,7 +10,7 @@
         <MudPaper Class="moog-pg-banner" Elevation="0">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                 <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
-                    <MudIcon Icon="fad fa-box-heart" Color="Color.Primary" Size="Size.Large"></MudIcon>
+                    <MudIcon Icon="fa-duotone fa-box-heart" Color="Color.Primary" Size="Size.Large"></MudIcon>
                     <MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
                     @if (CRUCMode == CRUDCModes.READ)
                     {
@@ -73,7 +73,7 @@
             </MudStack>
         </MudPaper>
         <MudTabs Color="Color.Primary" Class="moog-mudtab mt-4" ActiveTabClass="moog-mudtab-tab-active" TabButtonsClass="moog-mudtab-tab-btn" TabHeaderClass="moog-mudtab-tab-hdr" TabPanelsClass="moog-mudtab-tab-panel">
-            <MudTabPanel Icon="fad fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
+            <MudTabPanel Icon="fa-duotone fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
                 <MudPaper Class="moog-mudpaper-cruc-pg-tab-content" Elevation="0" Square="true" Height="stretch" Width="100%" Style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px">
                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" StretchItems="StretchItems.All" Spacing="1">
                         <MudGrid Spacing="4" Class="pa-4" Style="margin-left:-8px">
@@ -112,7 +112,7 @@
                                         <MudTooltip Text="Add new category"
                                                     Placement="Placement.Top" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="false" ShowOnHover="true" ShowOnFocus="false">
                                             <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-muddatagrid-icon-btn" OnClick="OnAddCategoryBtnClicked"
-                                                           Icon="fad fa-circle-plus" aria-label="Add New My Stuff Category" />
+                                                           Icon="fa-duotone fa-circle-plus" aria-label="Add New My Stuff Category" />
                                         </MudTooltip>
                                     </MudStack>
                                 </MudStack>
@@ -228,7 +228,7 @@
                                     <MudTooltip Text="Add new merchant"
                                                 Placement="Placement.Top" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="false" ShowOnHover="true" ShowOnFocus="false">
                                         <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-muddatagrid-icon-btn" OnClick="OnAddMerchantBtnClicked"
-                                                       Icon="fad fa-circle-plus" aria-label="Add New Merchant" />
+                                                       Icon="fa-duotone fa-circle-plus" aria-label="Add New Merchant" />
                                     </MudTooltip>
                                 </MudStack>
                             </MudItem>
@@ -250,7 +250,7 @@
                                 <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                  Class="moog-mudform-input"
                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                                 AdornmentIcon="fad fa-usd-circle" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                                 AdornmentIcon="fa-duotone fa-usd-circle" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                                  Label="Purhcased Price" Placeholder="Purchased Cost" T="double?" Step="0.1" Format="#,##0.##"
                                                  @bind-Value="CurrentObject!.PurchasedPrice" For="(() => CurrentObject.PurchasedPrice)" />
                             </MudItem>
@@ -258,7 +258,7 @@
                                 <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                  Class="moog-mudform-input"
                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                                 AdornmentIcon="fad fa-usd-circle" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                                 AdornmentIcon="fa-duotone fa-usd-circle" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                                  Label="Other Cost" Placeholder="Other Cost" T="double?" Step="0.1" Format="#,##0.##"
                                                  @bind-Value="CurrentObject!.OtherCost" For="(() => CurrentObject.OtherCost)" />
                             </MudItem>
@@ -281,11 +281,11 @@
                                 <MudItem xs="12" Class="pt-4">
                                     @foreach (string msg in CurrentEditContext.GetValidationMessages())
                                     {
-                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fa-duotone fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
                                     }
                                     @foreach (string key in InvalidMsgList.Keys)
                                     {
-                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fa-duotone fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
                                     }
                                 </MudItem>
                             }
@@ -341,7 +341,7 @@
                     </MudStack>
                 </MudPaper>
             </MudTabPanel>
-            <MudTabPanel Icon="fad fa-circle-info" Text="Other Info" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
+            <MudTabPanel Icon="fa-duotone fa-circle-info" Text="Other Info" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
                 <MudPaper Class="moog-mudpaper-cruc-pg-tab-content" Elevation="0" Height="100%" Square="true" >
                     <MudDataGrid Bordered="false" Dense="true" FixedHeader="true" Hover="true" MultiSelection="false" Square="true" Striped="true"
                                  ColumnResizeMode="ResizeMode.Container" Elevation="0" RowsPerPage="50" SortMode="SortMode.Multiple"

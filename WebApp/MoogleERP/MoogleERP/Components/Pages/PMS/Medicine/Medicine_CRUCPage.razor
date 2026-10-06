@@ -56,50 +56,50 @@
             </MudStack>
         </MudPaper>
         <MudTabs Color="Color.Primary" Class="moog-mudtab mt-4" ActiveTabClass="moog-mudtab-tab-active" TabButtonsClass="moog-mudtab-tab-btn" TabHeaderClass="moog-mudtab-tab-hdr" TabPanelsClass="moog-mudtab-tab-panel">
-            <MudTabPanel Icon="fad fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
+            <MudTabPanel Icon="fa-duotone fa-home-lg" Text="Main" Class="moog-mudtabpanel" PanelClass="moog-mudtabpanel-panel">
                 <MudPaper Class="moog-mudpaper-cruc-pg-tab-content" Elevation="0" Square="true" Height="stretch" Width="100%" Style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px">
                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" StretchItems="StretchItems.All" Spacing="1">
                         <MudGrid Spacing="4" Class="pa-4" Style="margin-left:-8px">
                             <MudItem xs="6">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Name" @ref=_mtfObjName
                                               @bind-Value="CurrentObject!.ObjectName" For="@(() => CurrentObject!.ObjectName)" />
                             </MudItem>
                             <MudItem xs="4">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Name (Kh)"
                                               @bind-Value="CurrentObject!.LocalCallName" For="@(() => CurrentObject!.LocalCallName)" />
                             </MudItem>
                             <MudItem xs="2">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="ID"
                                               @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" Style="text-transform:uppercase" />
                             </MudItem>
                             <MudItem xs="6">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Sub-Text" 
                                               @bind-Value="CurrentObject!.SubText" For="@(() => CurrentObject!.SubText)" />
                             </MudItem>
                             <MudItem xs="6">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                              AdornmentIcon="material-symbols-rounded/link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                              AdornmentIcon="fa-duotone fa-solid fa-link" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                               Label="Info Link" 
                                               @bind-Value="CurrentObject!.ReferenceLink" For="@(() => CurrentObject!.ReferenceLink)" />
                             </MudItem>
                             <MudItem xs="3">
                                 <MudSelect Clearable="true" FitContent="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                            Class="moog-mudform-input" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
-                                           ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                           ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                            AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
                                            Label="Type" T="int?" 
                                            Value="CurrentObject!.MedicineTypeId" ValueChanged="OnMedicineTypeChanged">
@@ -112,7 +112,7 @@
                             <MudItem xs="3">
                                 <MudSelect Clearable="true" FitContent="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                            Class="moog-mudform-input" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
-                                           ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                           ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                            AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
                                            Label="Package Unit"
                                            @bind-Value="CurrentObject!.PackageUnitCode">
@@ -125,7 +125,7 @@
                             <MudItem xs="3">
                                 <MudSelect Clearable="true" FitContent="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                            Class="moog-mudform-input" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
-                                           ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                           ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                            AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
                                            Label="Consumable Unit" T="string" 
                                            @bind-Value="CurrentObject!.ConsumableUnitCode">
@@ -138,7 +138,7 @@
                             <MudItem xs="3">
                                 <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                  Class="moog-mudform-input"
-                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                 ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                  Label="Height" Placeholder="Height"
                                                  T="double?" @bind-Value="CurrentObject!.ConsumableQuantity" For="(() => CurrentObject.ConsumableQuantity)"
                                                  Step="0.1" Format="#,##0.##" />
@@ -146,8 +146,8 @@
                             <MudItem xs="3">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                              AdornmentIcon="material-symbols-rounded/barcode" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                              AdornmentIcon="fa-duotone fa-light fa-rectangle-barcode" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                               Label="Barcode"
                                               @bind-Value="CurrentObject!.Barcode" For="@(() => CurrentObject!.Barcode)" />
                             </MudItem>
@@ -167,28 +167,28 @@
                             <MudItem xs="3">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Mfg. Company" 
                                               @bind-Value="CurrentObject!.MfgCompanyName" For="@(() => CurrentObject!.MfgCompanyName)" />
                             </MudItem>
                             <MudItem xs="3">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Laboratory Name" 
                                               @bind-Value="CurrentObject!.LaboratoryName" For="@(() => CurrentObject!.LaboratoryName)" />
                             </MudItem>
                             <MudItem xs="3">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Import Company" 
                                               @bind-Value="CurrentObject!.ImportCompany" For="@(() => CurrentObject!.ImportCompany)" />
                             </MudItem>
                             <MudItem xs="3">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Local Distributor" 
                                               @bind-Value="CurrentObject!.LocalDistributor" For="@(() => CurrentObject!.LocalDistributor)" />
                             </MudItem>
@@ -197,49 +197,49 @@
                             <MudItem xs="6">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Description" Placeholder="Description..."
                                               @bind-Value="CurrentObject!.Description" For="@(() => CurrentObject!.Description)" />
                             </MudItem>
                             <MudItem xs="6">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Usage Direction" Placeholder="Usage Direction..."
                                               @bind-Value="CurrentObject!.UsageDirectionDetail" />
                             </MudItem>
                             <MudItem xs="6">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Composition" Placeholder="Composition..."
                                               @bind-Value="CurrentObject!.CompositionSummary" />
                             </MudItem>
                             <MudItem xs="6">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Dosage" Placeholder="Dosage..."
                                               @bind-Value="CurrentObject!.DosageDetail" />
                             </MudItem>
                             <MudItem xs="6">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Ingredient Summary" Placeholder="Ingredient summary..."
                                               @bind-Value="CurrentObject!.IngredientSummary" For="@(() => CurrentObject!.IngredientSummary)" />
                             </MudItem>
                             <MudItem xs="6">
                                 <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text" Lines="8"
                                               Class="moog-mudform-input"
-                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                              ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                               Label="Remark" Placeholder="Remark..."
                                               @bind-Value="CurrentObject!.Remark" For="@(() => CurrentObject!.Remark)" />
                             </MudItem>
                             <MudItem xs="12" Class="moog-muditem-subsect-title mt-3">
                                 <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
                                     <MudText Typo="Typo.h1">Composition</MudText>
-                                    <MudIconButton Icon="fad fa-solid fa-circle-plus" Color="Color.Primary" Size="Size.Small"
+                                    <MudIconButton Class="moog-mudiconbtn" Icon="fa-duotone fa-regular fa-circle-plus" Color="Color.Primary" Size="Size.Small"
                                                    OnClick="AddItem"
                                                    Disabled=@(!_canEditMedComp || !_isEditingMedComp) />
                                     <MudSwitchM3 ReadOnly=@IsViewMode Class="moog-mud-switch ml-2" Color="Color.Default"
@@ -282,8 +282,8 @@
                                                 <EditTemplate>
                                                     <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
                                                                      Class="moog-mudform-input-square" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
-                                                                     ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
-                                                                     AdornmentIcon="fa-solid fa-angle-down"
+                                                                     ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                                                     AdornmentIcon="fa-solid fa-chevron-down" Adornment="Adornment.End"
                                                                      DebounceInterval="300" ToStringFunc=@(e => e != null ? e.Value : "")
                                                                      Placeholder="Select composition..." T="DropdownSelectItem"
                                                                      Value="@item.Item.DdlItemMedicalComp" ValueChanged="@(args => OnMedicalCompChanged(item.Item, args))"
@@ -296,7 +296,7 @@
                                                 <EditTemplate>
                                                     <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
                                                                   Class="moog-mudform-input-square"
-                                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                                  ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                   Placeholder="Composition Name"
                                                                   @bind-Value=item.Item.ObjectName For="@(() => item.Item.ObjectName)" OnlyValidateIfDirty="true" MaxLength="255" />
                                                 </EditTemplate>
@@ -307,7 +307,7 @@
                                                 <EditTemplate>
                                                     <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" Variant="Variant.Text"
                                                                   Class="moog-mudform-input-square"
-                                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                                  ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                   Placeholder="Quantiy Description"
                                                                   @bind-Value=item.Item.QtyDesc For="@(() => item.Item.QtyDesc)" OnlyValidateIfDirty="true" MaxLength="255" />
                                                 </EditTemplate>
@@ -319,7 +319,7 @@
                                                 <EditTemplate>
                                                     <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                                      Class="moog-mudform-input-square"
-                                                                     ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                                     ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                      Placeholder="Quantity" Format="#,##0.##" Step="0.1"
                                                                      T="double?" @bind-Value="item.Item.Quantity" For="(() => item.Item.Quantity)"
                                                                      Style="min-width:100px; text-align:right" />
@@ -334,7 +334,7 @@
                                                 <EditTemplate>
                                                     <MudSelect Clearable="true" FitContent="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                                Class="moog-mudform-input-square" PopoverClass="moog-mudselect-popover" InputClass="moog-mudselect-input" ListClass="moog-mudselect-list" OuterClass="moog-mudselect-outer"
-                                                               ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
+                                                               ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
                                                                Placeholder="Unit" T="string"
                                                                @bind-Value="@item.Item.UnitCode" For="(() => item.Item.UnitCode)">
@@ -363,15 +363,18 @@
                                                             HeaderStyle="width:200px; max-width: 100px" CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
                                                             Context="item">
                                                 <CellTemplate>
-                                                    <i class="fa-duotone fa-regular fa-circle-caret-up"></i>
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fa-duotone fa-regular fa-circle-caret-up" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemUp(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fad far fa-circle-caret-down" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemDown(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fad far fa-circle-xmark" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItem(item.Item))" />
+                                                    <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center">
+                                                        <MudIconButton Class="moog-mudiconbtn" Icon="fa-duotone fa-regular fa-circle-chevron-up" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemUp(item.Item))" />
+                                                        <MudIconButton Class="moog-mudiconbtn" Icon="fa-duotone fa-regular fa-circle-chevron-down" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemDown(item.Item))" />
+                                                        <MudIconButton Class="moog-mudiconbtn" Icon="fa-duotone fa-regular fa-circle-xmark" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItem(item.Item))" />
+                                                    </MudStack>
                                                 </CellTemplate>
                                                 <EditTemplate>
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fa-regular fa-circle-caret-up" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemUp(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fad far fa-circle-caret-down" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemDown(item.Item))" />
-                                                    <MudIconButton Class="moog-ico-btn-datagrid-action" Icon="fad far fa-circle-xmark" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItem(item.Item))" />
+                                                    <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center">
+                                                        <MudIconButton Class="moog-mudiconbtn" Icon="fa-duotone fa-regular fa-circle-chevron-up" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemUp(item.Item))" />
+                                                        <MudIconButton Class="moog-mudiconbtn" Icon="fa-duotone fa-regular fa-circle-chevron-down" Size="@Size.Small" Color="Color.Primary" OnClick="@(() => MoveItemDown(item.Item))" />
+                                                        <MudIconButton Class="moog-mudiconbtn" Icon="fa-duotone fa-regular fa-circle-xmark" Size="@Size.Small" Color="Color.Error" OnClick="@(() => RemoveItem(item.Item))" />
+                                                    </MudStack>
                                                 </EditTemplate>
                                             </TemplateColumn>
                                         </Columns>
@@ -383,11 +386,11 @@
                                 <MudItem xs="12" Class="pt-4">
                                     @foreach (string msg in CurrentEditContext.GetValidationMessages())
                                     {
-                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fa-duotone fa-exclamation-circle" Class="moog-alert-validation mt-2">@msg</MudAlert>
                                     }
                                     @foreach (string key in InvalidMsgList.Keys)
                                     {
-                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fad fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Icon="fa-duotone fa-exclamation-circle" Class="moog-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
                                     }
                                 </MudItem>
                             }
@@ -444,7 +447,7 @@
                     </MudStack>
                 </MudPaper>
             </MudTabPanel>
-            <MudTabPanel Icon="@Icons.Material.Rounded.Info" Text="Other Info">
+            <MudTabPanel Icon="fa-jelly-duo fa-regular fa-circle-info" Text="Other Info">
                     
             </MudTabPanel>
         </MudTabs>

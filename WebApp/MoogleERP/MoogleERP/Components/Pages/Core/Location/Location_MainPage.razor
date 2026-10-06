@@ -4,7 +4,7 @@
 <MudPaper Class="moog-pg-banner" Elevation="0">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
-			<MudIcon Icon="fad fa-map-marked-alt" Color="Color.Primary" Size="Size.Large"></MudIcon>
+			<MudIcon Icon="fa-duotone fa-map-marked-alt" Color="Color.Primary" Size="Size.Large"></MudIcon>
 			<MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
 		</MudStack>
 
@@ -44,16 +44,16 @@
 				<CellTemplate>
 					<MudStack Row="true" Spacing="0">
 						<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-edit"
+									   Icon="fa-duotone fa-light fa-edit"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
 						<MudIconButton Size="Size.Small" Color="Color.Primary" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-copy"
+									   Icon="fa-duotone fa-light fa-clone-plus"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
 						<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-eye"
+									   Icon="fa-duotone fa-light fa-eye"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
 						<MudIconButton Size="Size.Small" Color="Color.Error" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-trash-alt"
+									   Icon="fa-duotone fa-light fa-trash-xmark"
 									   OnClick="@(args => DeleteRecord(context.Item))" />
 					</MudStack>
 				</CellTemplate>

@@ -186,6 +186,11 @@
             opacity: 0.5;
             height: 18px;
             width: 18px;
+            font-size: 18px;
+
+            > .mud-icon-size-medium {
+                font-size: 12px;
+            }
         }
 
         > .mud-nav-link-expand-icon {
@@ -247,6 +252,7 @@
             opacity: 0.5;
             height: 18px;
             width: 18px;
+            font-size: 18px;
         }
 
         > .mud-nav-link-expand-icon {
@@ -312,6 +318,7 @@
             opacity: 0.5;
             height: 18px;
             width: 18px;
+            font-size: 18px;
         }
 
         &:hover {
@@ -369,6 +376,7 @@
             opacity: 0.5;
             height: 18px;
             width: 18px;
+            font-size: 18px;
         }
 
         &:hover {
@@ -433,6 +441,7 @@
             opacity: 0.5;
             height: 16px;
             width: 16px;
+            font-size: 18px;
         }
 
         &:hover {
@@ -519,6 +528,19 @@
                 }
             }
 
+            > .mud-input-clear-button  {
+                color: var(--tw-gray-300);
+                &.mud-icon-button-size-small {
+                    height:20px;
+                    width:20px;
+                }
+                > .mud-icon-button-label {
+                    > .mud-icon-size-small {
+                        font-size: 14px;
+                    }
+                }
+            }
+
             > .mud-input-adornment {
                 > .mud-icon-button {
                     padding: 4px;
@@ -576,14 +598,6 @@
                     color: var(--tw-gray-400);
                     font-size: 24px;
                     font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 100, 'opsz' 48;
-                }
-            }
-
-            > .mud-input-clear-button  {
-                > .mud-icon-button-label {
-                    > .mud-icon-size-small {
-                        font-size: 16px;
-                    }
                 }
             }
 
@@ -752,6 +766,19 @@
                 }
             }
 
+            > .mud-input-clear-button  {
+                color: var(--tw-gray-300);
+                &.mud-icon-button-size-small {
+                    height:20px;
+                    width:20px;
+                }
+                > .mud-icon-button-label {
+                    > .mud-icon-size-small {
+                        font-size: 14px;
+                    }
+                }
+            }
+
             > .mud-input-adornment {
                 > .mud-icon-button {
                     padding: 4px;
@@ -810,14 +837,6 @@
                     color: var(--tw-gray-400);
                     font-size: 24px;
                     font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 100, 'opsz' 48;
-                }
-            }
-
-            > .mud-input-clear-button  {
-                > .mud-icon-button-label {
-                    > .mud-icon-size-small {
-                        font-size: 16px;
-                    }
                 }
             }
 
@@ -1076,7 +1095,7 @@
     & div.mud-input-adornment-end {
         margin-left: 0px !important;
         margin-inline-start: 0px !important;
-        margin-inline-end: 8px !important;
+        margin-inline-end: 6px !important;
     }
 
     > .mud-icon-default {
@@ -1085,7 +1104,7 @@
 
     > .mud-input-adornment {
         > .mud-icon-size-small {
-            font-size: 18px;
+            font-size: 16px;
         }
 
         > .mud-primary-text {
@@ -1140,8 +1159,17 @@
     /* > .mud-input-adornment-end {
         margin-inline-start: -12px !important;
     } */
-    
+    > .mud-icon-button-size-small {
+        height: 22px;
+        width: 22px;
+    }
+
     > .mud-input-adornment {
+        > .mud-icon-button-size-small {
+            height: 22px;
+            width: 22px;
+        }
+
         > .mud-icon-button {
             color:var(--tw-gray-600);
 
@@ -1396,6 +1424,20 @@
     }
 }
 
+.moog-mudiconbtn {
+    > .mud-icon-button-label {
+        > .mud-icon-size-small {
+            font-size: 18px;
+        }
+    }
+
+    &.mud-icon-button-size-small {
+        height: 22px;
+        width: 22px;
+        padding: 2px;
+    }
+}
+
 /*#region MudComboBox */
 .moog-mudcombobox {
     > .mud-input-control-input-container {
@@ -1548,6 +1590,7 @@
                 overflow-y:auto;
 
                 > .mud-table-root {
+                    width:100% !important;
                     > .mud-table-body {
                         > .mud-table-row-stripe {
                             background-color: var(--tw-gray-50);

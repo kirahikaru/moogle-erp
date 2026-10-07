@@ -34,13 +34,13 @@
                     @if (!IsViewMode)
                     {
                         <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Secondary" Class="pru-ui-mudbutton"
-                                   StartIcon="material-symbols-rounded/save_as"
+                                   StartIcon="fa-light fa-floppy-disk-pen"
                                    OnClick="@(() => Save())">Save</MudButton>
                         <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Secondary" Class="pru-ui-mudbutton"
-                                   StartIcon="material-symbols-rounded/save"
+                                   StartIcon="fa-light fa-floppy-disk-circle-arrow-right"
                                    OnClick="@(() => Save(true))">Save & Close</MudButton>
                         <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Default" Class="pru-ui-mudbutton"
-                                   StartIcon="material-symbols-rounded/cancel"
+                                   StartIcon="fa-light fa-circle-xmark"
                                    OnClick="Cancel">Cancel</MudButton>
                     }
                     else
@@ -60,8 +60,8 @@
                         <MudItem xs="1">
                             <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
                                        Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
-                                       ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
-                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary"
+                                       ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                       AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
                                        Label="LBU" T="string"
                                        Value=CurrentObject!.LBU For="@(() => CurrentObject.LBU)" ValueChanged="OnLBUChanged" OnlyValidateIfDirty="false">
                                 @foreach (string lbuID in _lbuIDList)
@@ -73,8 +73,8 @@
                         <MudItem xs="2">
                             <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="true" ShrinkLabel="true" 
                                            Class="pru-ui-muddatepicker"
-                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
-                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary 
+                                           ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                           AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor=@Color.Primary 
                                            Label="Date" DateFormat="dd-MMM-yyyy"
                                            @bind-Date=@CurrentObject.EffectiveDate For="@(() => CurrentObject.EffectiveDate)" />
                         </MudItem>
@@ -101,7 +101,8 @@
                         <MudItem xs="2">
                             <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" 
                                            Class="pru-ui-muddatepicker"
-                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary IconSize="Size.Small"
+                                           ClearIcon="fa-regular fa-xmark"
+                                           AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor=@Color.Primary IconSize="Size.Small"
                                            Label="Expiry Date" DateFormat="dd-MMM-yyyy"
                                            @bind-Date=@CurrentObject.ExpiryDate For="@(() => CurrentObject.ExpiryDate)" />
                         </MudItem>
@@ -184,7 +185,7 @@
                                 <MudText Typo="Typo.body1" Color="Color.Secondary">File Name: </MudText>
                                 <MudText Typo="Typo.body1" Class="reddit-mono-400" Color="Color.Info" Style="font-weight:500;">@(CurrentObject.FileNameDisplay)</MudText>
                                 <MudTooltip Text="Copy Filename">
-                                    <MudIconButton Icon="material-symbols-rounded/content_copy" Size="Size.Small" Color="Color.Primary" Class="pru-mud-icon-btn" aria-label="copy" OnClick="CopyFileName" />
+                                    <MudIconButton Icon="fa-duotone fa-regular fa-copy" Size="Size.Small" Color="Color.Primary" Class="pru-mud-icon-btn" aria-label="copy" OnClick="CopyFileName" />
                                 </MudTooltip>
                             </MudStack>
                         </MudItem>
@@ -194,7 +195,7 @@
                                 {
                                     <MudStack Row=true Spacing="2" Justify="Justify.FlexStart" AlignItems="AlignItems.End" StretchItems="StretchItems.None">
                                         <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton mb-1"
-                                                   StartIcon="material-symbols-rounded/add"
+                                                   StartIcon="fa-light fa-circle-plus"
                                                    Disabled=_isEditingItemDataGrid OnClick="AddInvoiceItem" >
                                             Add Item
                                         </MudButton>
@@ -213,7 +214,7 @@
                                                          @bind-Value=@_expYr OnlyValidateIfDirty="true"
                                                          Step="1" Min="1900" Max="9999" MaxLength="4" Style="max-width: 100px" />
                                         <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton mb-1"
-                                                   StartIcon="material-symbols-rounded/update"
+                                                   StartIcon="fa-light fa-rotate"
                                                    Disabled=_isEditingItemDataGrid OnClick="UpdateExpensePeriod" >
                                             Apply Period
                                         </MudButton>
@@ -381,28 +382,28 @@
                                         </PropertyColumn>
                                         <TemplateColumn Hidden=@IsViewMode Title="Action" StickyRight="true"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        HeaderStyle="width:20px" CellStyle="padding:6px 10px !important" Context="qi">
+                                                        HeaderStyle="width:20px" CellStyle="padding:2px 8px !important" Context="qi">
                                             <CellTemplate>
                                                 <MudStack Row="true" Spacing="0">
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
                                                                    Class="pru-ui-mudiconbtn-datagrid"
-                                                                   Icon="material-symbols-rounded/arrow_circle_up" 
+                                                                   Icon="fa-duotone fa-light fa-circle-chevron-up" 
                                                                    OnClick="@(() => MoveInvoiceItemUp(qi.Item))" />
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
                                                                    Class="pru-ui-mudiconbtn-datagrid"
-                                                                   Icon="material-symbols-rounded/arrow_circle_down"
+                                                                   Icon="fa-duotone fa-light fa-circle-chevron-down"
                                                                    OnClick="@(() => MoveInvoiceItemDown(qi.Item))" />
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
                                                                    Class="pru-ui-mudiconbtn-datagrid"
-                                                                   Icon="material-symbols-rounded/edit"
+                                                                   Icon="fa-duotone fa-light fa-pen-to-square"
                                                                    OnClick="@qi.Actions.StartEditingItemAsync" />
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Success"
                                                                    Class="pru-ui-mudiconbtn-datagrid"
-                                                                   Icon="material-symbols-rounded/file_copy"
+                                                                   Icon="fa-duotone fa-light fa-clone-plus"
                                                                    OnClick="@(() => CloneInvoiceItem(qi.Item))" />
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Error"
                                                                    Class="pru-ui-mudiconbtn-datagrid"
-                                                                   Icon="material-symbols-rounded/delete" 
+                                                                   Icon="fa-duotone fa-light fa-trash-xmark" 
                                                                    OnClick="@(() => RemoveInvoiceItem(qi.Item))" />
                                                 </MudStack>
                                             </CellTemplate>
@@ -417,7 +418,7 @@
                                 {
                                     <MudStack Row=true Spacing="2" Justify="Justify.FlexStart" AlignItems="AlignItems.Start" StretchItems="StretchItems.None">
                                         <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="pru-ui-mudbutton"
-                                                   StartIcon="material-symbols-rounded/add"
+                                                   StartIcon="fa-light fa-circle-plus"
                                                    Disabled=_isEditingExpItemDataGrid OnClick="AddExpenseItem" >
                                             Add
                                         </MudButton>
@@ -782,27 +783,28 @@
                                             </EditTemplate>
                                         </PropertyColumn>
                                         <TemplateColumn Hidden=@IsViewMode Title="Action" StickyRight="true" HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
-                                                        CellStyle="padding:6px 10px !important" Context="qi">
+                                                        CellStyle="padding:2px 8px !important" Context="qi">
                                             <CellTemplate>
                                                 <MudStack Row="true" Spacing="0">
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
                                                                    Class="pru-ui-mudiconbtn-datagrid"
-                                                                   Icon="material-symbols-rounded/arrow_circle_up"
+                                                                   Icon="fa-duotone fa-light fa-circle-chevron-up"
                                                                    OnClick="@(() => MoveExpenseItemUp(qi.Item))" />
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
                                                                    Class="pru-ui-mudiconbtn-datagrid"
-                                                                   Icon="material-symbols-rounded/arrow_circle_down"
+                                                                   Icon="fa-duotone fa-light fa-circle-chevron-down"
                                                                    OnClick="@(() => MoveExpenseItemDown(qi.Item))" />
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
-                                                                   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/edit"
+                                                                   Class="pru-ui-mudiconbtn-datagrid" 
+                                                                   Icon="fa-duotone fa-light fa-pen-to-square"
                                                                    OnClick="@qi.Actions.StartEditingItemAsync" />
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Success"
                                                                    Class="pru-ui-mudiconbtn-datagrid"
-                                                                   Icon="material-symbols-rounded/file_copy"
+                                                                   Icon="fa-duotone fa-light fa-clone-plus"
                                                                    OnClick="@(() => CloneExpenseItem(qi.Item))" />
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Error"
                                                                    Class="pru-ui-mudiconbtn-datagrid"
-                                                                   Icon="material-symbols-rounded/delete"
+                                                                   Icon="fa-duotone fa-light fa-trash-xmark"
                                                                    OnClick="@(() => RemoveExpenseItem(qi.Item))" />
                                                 </MudStack>
                                             </CellTemplate>

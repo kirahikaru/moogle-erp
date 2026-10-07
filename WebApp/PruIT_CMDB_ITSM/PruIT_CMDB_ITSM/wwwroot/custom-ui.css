@@ -376,8 +376,18 @@
                     }
                 }
 
+                > .mud-button-root {
+                    &:hover {
+                        background-color: var(--pru-red-tw-50);
+
+                        > .mud-icon-button-label {
+                            color: var(--pru-red-default);
+                        }
+                    }   
+                }
+
                 > .mud-icon-button-size-small {
-                    padding: 0px;
+                    padding: 2px;
 
                     &.mud-icon-button-edge-end {
                         margin-inline-end: -2px;
@@ -387,6 +397,12 @@
 
                 > .mud-input-clear-button {
                     > .mud-icon-button-label {
+                        color:var(--tw-gray-400);
+
+                        > .mud-icon-size-small {
+                            font-size: 14px;
+                        }
+
                         > .material-symbols-rounded {
                             color: var(--tw-gray-400);
                             font-size: 18px;
@@ -398,10 +414,27 @@
                     
                 }
 
-                & .mud-input-adornment-end {
+                > .mud-input-adornment {
+                    > .mud-button-root {
+                        > .mud-icon-button-label {
+                            > .mud-icon-size-small {
+                                font-size: 18px;
+                            }
+                        }
+
+                        &:hover {
+                            background-color: var(--pru-red-tw-50) !important;
+                            > .mud-icon-button-label {
+                                color: var(--pru-red-default);
+                            }
+                        }
+                    }
+                }
+
+                > .mud-input-adornment-end {
                     > .mud-icon-button {
                         padding: 4px;
-                        margin-right: 2px;
+                        margin-right: 4px;
 
                         & .material-symbols-rounded {
                             color: var(--tw-gray-700);
@@ -640,6 +673,12 @@
 .pru-ui-mudiconbtn-datagrid {
     padding: 4px !important;
 
+    > .mud-icon-button-label {
+        > .mud-icon-size-small {
+            font-size: 16px;
+        }
+    }
+
     & .material-symbols-rounded {
         font-size: 18px;
         font-variation-settings:
@@ -651,15 +690,19 @@
 }
 
 .pru-ui-mudbutton {
-    border-radius: 8px !important;
+    border-radius: 6px !important;
     padding: 4px 12px !important;
 
-    & .mud-button-label {
+    > .mud-button-label {
         font-size: 12px;
 
-        & .mud-button-icon-start {
+        > .mud-button-icon-start {
             &.mud-button-icon-size-small {
-                margin-inline-end: 4px;
+                margin-inline-end: 6px;
+
+                > .mud-icon-size-small {
+                    font-size: 14px;
+                }
 
                 & .material-symbols-rounded {
                     font-variation-settings:

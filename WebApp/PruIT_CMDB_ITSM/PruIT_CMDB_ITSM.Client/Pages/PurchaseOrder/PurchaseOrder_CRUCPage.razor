@@ -85,7 +85,7 @@
                             <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true"
                                            Class="pru-ui-muddatepicker"
                                            ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
-                                           AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
+                                           AdornmentIcon="fa-duotone fa-regular fa-calendar-days" AdornmentColor="@Color.Primary"
                                            Label="Date" DateFormat="dd-MMM-yyyy"
                                            @bind-Date=@CurrentObject.EffectiveDate For="@(() => CurrentObject.EffectiveDate)" />
                         </MudItem>
@@ -150,7 +150,7 @@
                             <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Success"
                                        Class="pru-ui-mudbutton mt-5"
                                        Disabled="@(!(CurrentObject!.Id > 0 && CurrentObject!.WorkflowStatus == PurchaseOrderWFStatuses.COMPLETE))"
-                                       StartIcon="material-symbols-rounded/receipt"
+                                       StartIcon="fad fa-file-invoice-dollar"
                                        OnClick="GenerateInvoice">Generate Invoice</MudButton>
                         </MudItem>
                         <MudItem xs="1">
@@ -201,7 +201,7 @@
                                                  Class="pru-ui-mudform-input" Culture="@CultureInfo.GetCultureInfo("en-US")"
                                                  Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                                  ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
-                                                 AdornmentIcon=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "material-symbols-rounded/attach_money" : "material-symbols-rounded/money")
+                                                 AdornmentIcon=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "fa-duotone fa-regular fa-circle-dollar" : "fa-duotone fa-regular fa-circle-currency")
                                                  Label="Paid Amount" 
                                                  Format=@(CurrentObject!.CurrencyCode == PruGC.Currencies.USD ? "#,##0.##" : "#,##0")
                                                  @bind-Value=CurrentObject!.PaidAmount For="@(() => CurrentObject.PaidAmount)" OnlyValidateIfDirty="true"
@@ -223,8 +223,8 @@
                                 @if (!IsViewMode)
                                 {
                                     <MudStack Row=true Spacing="2" Justify="Justify.FlexStart" AlignItems="AlignItems.Start" StretchItems="StretchItems.None">
-                                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton in-pg-action" Color="Color.Info"
-                                                   StartIcon="material-symbols-rounded/add"
+                                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton" Color="Color.Info"
+                                                   StartIcon="fa-light fa-circle-plus"
                                                    Disabled=@_isEditingItem OnClick="AddItem">
                                             Add Item
                                         </MudButton>
@@ -391,7 +391,7 @@
                                                         <MudDatePicker Clearable="true" ShrinkLabel="true" Editable="true" DateFormat="dd-MMM-yyyy"
                                                                        Class="pru-ui-muddatepicker"
                                                                        ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
-                                                                       AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor="@Color.Primary"
+                                                                       AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor="@Color.Primary"
                                                                        Label="Start Date"
                                                                        @bind-Date=@qi.Item.StartDate For="@(() => qi.Item.StartDate)" />
                                                     </MudItem>
@@ -487,18 +487,26 @@
                                         </PropertyColumn>
                                         <TemplateColumn Title="Action" Hidden=@IsViewMode StickyRight="true"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell" 
-                                                        HeaderStyle="width:200px; max-width:100px" Context="qi">
+                                                        HeaderStyle="width:200px; max-width:100px" CellStyle="padding:2px 8px !important" Context="qi">
                                             <CellTemplate>
                                                 <MudStack Row="true" Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.FlexStart ">
+                                                    <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary"
+                                                                   Class="pru-ui-mudiconbtn-datagrid"
+                                                                   Icon="fad fa-circle-chevron-up" />
+                                                    <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary"
+                                                                   Class="pru-ui-mudiconbtn-datagrid"
+                                                                   Icon="fad fa-circle-chevron-down" />
                                                     <MudIconButton Variant="Variant.Text" Size="@Size.Small" Color="Color.Info"
-                                                                   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/edit"
+                                                                   Class="pru-ui-mudiconbtn-datagrid" 
+                                                                   Icon="fad fa-pen-to-square"
                                                                    OnClick="@qi.Actions.StartEditingItemAsync" aria-label="edit" />
                                                     <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Success"
                                                                    Class="pru-ui-mudiconbtn-datagrid"
-                                                                   Icon="material-symbols-rounded/file_copy"
+                                                                   Icon="fad fa-copy"
                                                                    OnClick="@(() => CloneItem(qi.Item))" />
                                                     <MudIconButton Variant="Variant.Text" Size="@Size.Small" Color="Color.Error"
-                                                                   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/delete"
+                                                                   Class="pru-ui-mudiconbtn-datagrid" 
+                                                                   Icon="fad fa-trash-xmark"
                                                                    OnClick="@(() => RemoveItem(qi.Item))" aria-label="delete" />
                                                 </MudStack>
                                             </CellTemplate>

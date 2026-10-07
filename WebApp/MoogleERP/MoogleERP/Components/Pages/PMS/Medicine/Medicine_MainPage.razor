@@ -3,11 +3,11 @@
 <MudPaper Class="moog-pg-banner" Elevation="0">
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="2">
-			<MudIcon Icon="fad fa-pills" Color="Color.Primary" Size="Size.Large"></MudIcon>
+			<MudIcon Icon="fa-duotone fa-pills" Color="Color.Primary" Size="Size.Large"></MudIcon>
 			<MudText Typo="Typo.h4" Color="@Color.Primary">@HeaderTitle</MudText>
 		</MudStack>
 		<MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="moog-mudbutton" Color="Color.Primary"
-				   StartIcon="far fa-plus-circle" OnClick="@(args => PerformCRUC(CRUDCModes.CREATE))">
+				   StartIcon="fa-regular fa-plus-circle" OnClick="@(args => PerformCRUC(CRUDCModes.CREATE))">
 			Add New
 		</MudButton>
 	</MudStack>
@@ -16,12 +16,12 @@
 	<MudStack Class="ma-4" Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
 		<MudTextField Clearable="true" Immediate="true" ReadOnly="false" Required="false" ShrinkLabel="true" Variant="Variant.Text"
 					  Class="moog-mudform-input"
-					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
+					  AdornmentIcon="fa-duotone fa-regular fa-magnifying-glass" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
 					  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
 					  Placeholder="Search text here..."
 					  @bind-Value="SearchText" OnKeyDown="OnSearchTextBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
 		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-mudbutton"
-				   StartIcon="material-symbols-rounded/search" OnClick="OnSearchClicked">Search</MudButton>
+				   StartIcon="fa-regular fa-magnifying-glass" OnClick="OnSearchClicked">Search</MudButton>
 	</MudStack>
 	<MudDataGrid Bordered="false" Dense="true" FixedHeader="true" Hover="true" Loading=@IsSearching MultiSelection="false" Square="true" Striped="true"
 				 ColumnResizeMode="ResizeMode.Container" Elevation="0" RowsPerPage="50" SortMode="SortMode.Multiple"
@@ -31,7 +31,7 @@
 				 T="Medicine" >
 		<Columns>
 			@* <PropertyColumn Property="x => x.ObjectName" Title="Name" HeaderClass="moog-muddatagrid-hdr moog-main-pg"  CellClass="moog-muddatagrid-cell" /> *@
-            <TemplateColumn Title="Name" Editable="false" Filterable="false" Sortable="false" Resizable="true"
+            <TemplateColumn Title="Name" Editable="false" Filterable="false" Sortable="false" StickyLeft="true" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" 
 							HeaderStyle="min-width:300px" CellStyle="vertical-align:top" Context="rowData">
                 <CellTemplate>
@@ -49,7 +49,8 @@
 			<PropertyColumn Title="Type" Property="x => x.TypeText" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
 			<PropertyColumn Title="Composition" Property="x => x.CompositionSummary" Editable="false" Filterable="false" Sortable="false" Resizable="true"
-                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
+                            HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
+							HeaderStyle="max-width: 500px" CellStyle="max-width: 500px" />
 			<TemplateColumn Title="Country" Editable="false" Filterable="false" Sortable="false" Resizable="true"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" 
 							HeaderStyle="min-width:180px"
@@ -86,16 +87,16 @@
 				<CellTemplate>
 					<MudStack Row="true" Spacing="0">
 						<MudIconButton Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-edit"
+									   Icon="fa-duotone fa-light fa-edit"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.UPDATE, context.Item.Id))" />
 						<MudIconButton Size="Size.Small" Color="Color.Success" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-copy"
+									   Icon="fa-duotone fa-light fa-clone-plus"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.CLONE, context.Item.Id))" />
 						<MudIconButton Size="Size.Small" Color="Color.Info" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-eye"
+									   Icon="fa-duotone fa-light fa-eye"
 									   OnClick="@(args => PerformCRUC(CRUDCModes.READ, context.Item.Id))" />
 						<MudIconButton Size="Size.Small" Color="Color.Error" Class="moog-muddatagrid-icon-btn"
-									   Icon="far fa-trash-alt"
+									   Icon="fa-duotone fa-light fa-trash-xmark"
 									   OnClick="@(args => DeleteRecord(context.Item))" />
 					</MudStack>
 				</CellTemplate>

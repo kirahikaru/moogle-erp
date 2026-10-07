@@ -958,19 +958,19 @@ public static class ObjectStateActions
     {
 		return new Dictionary<string, string>()
 		{
-			{ RETURN, "fad fa-undo-alt" },
-			{ LOSE, "fad fa-compass-slash" },
-			{ PURCHASE, "fad fa-money-bill-wave" },
-			{ BROKE, "fad fa-box-fragile" },
-			{ GIVEN_OTHER, "fad fa-gift" },
-			{ ADD_WISHLIST, "fad fa-heart-square" },
-			{ SAVE_DRAFT, "fad fa-save" },
-			{ SELL, "fad fa-comments-dollar"},
-			{ LEND_OUT, "fad fa-hand-holding-box" },
+			{ RETURN, "fa-duotone fa-undo-alt" },
+			{ LOSE, "fa-duotone fa-compass-slash" },
+			{ PURCHASE, "fa-duotone fa-money-bill-wave" },
+			{ BROKE, "fa-duotone fa-box-fragile" },
+			{ GIVEN_OTHER, "fa-duotone fa-gift" },
+			{ ADD_WISHLIST, "fa-duotone fa-heart-square" },
+			{ SAVE_DRAFT, "fa-duotone fa-save" },
+			{ SELL, "fa-duotone fa-comments-dollar"},
+			{ LEND_OUT, "fa-duotone fa-hand-holding-box" },
 			{ STASH, "fa fa-box" },
-			{ USE_RARELY, "fad fa-user-clock" },
-			{ START_USING, "fad fa-play-circle" },
-			{ WRITE_OFF, "fad fa-money-check-edit" }
+			{ USE_RARELY, "fa-duotone fa-user-clock" },
+			{ START_USING, "fa-duotone fa-play-circle" },
+			{ WRITE_OFF, "fa-duotone fa-money-check-edit" }
 		};
 	}
 

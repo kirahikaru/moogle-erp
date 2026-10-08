@@ -34,13 +34,13 @@
                     @if (!IsViewMode)
                     {
                         <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Secondary" Class="pru-ui-mudbutton"
-                                   StartIcon="material-symbols-rounded/save_as"
+                                   StartIcon="fa-light fa-floppy-disk-pen"
                                    OnClick="@(() => Save())">Save</MudButton>
                         <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Secondary" Class="pru-ui-mudbutton"
-                                   StartIcon="material-symbols-rounded/save"
+                                   StartIcon="fa-light fa-floppy-disk-circle-arrow-right"
                                    OnClick="@(() => Save(true))">Save & Close</MudButton>
                         <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Default" Class="pru-ui-mudbutton"
-                                   StartIcon="material-symbols-rounded/cancel"
+                                   StartIcon="fa-light fa-circle-xmark"
                                    OnClick="Cancel">Cancel</MudButton>
                     }
                     else
@@ -53,7 +53,7 @@
             </MudStack>
         </MudPaper>
         <MudTabs Class="pru-mudtab mt-5" Elevation="0" ActiveTabClass="pru-mudtab-active" TabHeaderClass="pru-mudtab-hdr" TabButtonsClass="pru-mudtab-btn" TabPanelsClass="pru-mudtab-tabpanel">
-            <MudTabPanel Text="Main" Icon="material-symbols-rounded/home"
+            <MudTabPanel Text="Main" Icon="fa-duotone fa-house-chimney" 
                          Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" Style="min-width:120px">
                 <MudPaper Class="pru-ui-mudpaper-cruc-tab-content" Square="true" Width="100%" Elevation="0">
                     <MudGrid Spacing="4" Justify="Justify.SpaceEvenly">
@@ -111,7 +111,7 @@
                             <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
                                              Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
                                              CoerceText="true" CoerceValue="true" SearchFunc="SearchEnv"
-                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary" IconSize="Size.Small"
                                              Label="Environment" T="string"
                                              @bind-Value=CurrentObject!.Env For="@(() => CurrentObject!.Env)" />
                         </MudItem>
@@ -119,14 +119,14 @@
                             <MudAutocomplete Clearable="true" Immediate="false" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
                                              Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
                                              CoerceText="true" CoerceValue="true" SearchFunc="SearchStage"
-                                             AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                             AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary" IconSize="Size.Small"
                                              Label="Stage" T="string"
                                              @bind-Value=CurrentObject!.Stage For="@(() => CurrentObject!.Stage)" />
                         </MudItem>
                         <MudItem xs="3">
                             <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
                                        Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
-                                       AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" IconSize="Size.Small"
+                                       AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary" IconSize="Size.Small"
                                        Label="Status"
                                        @bind-Value=CurrentObject!.Status For="@(() => CurrentObject.Status)" OnlyValidateIfDirty="true">
                                 @foreach (string status in _statusList)
@@ -138,7 +138,7 @@
                         <MudItem xs="12">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="false" ShrinkLabel="true"
                                           Class="pru-ui-mudform-input"
-                                          ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
+                                          ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                           Lines=4 MaxLength="1000" MaxLines="25"
                                           Label="Remark"
                                           @bind-Value=CurrentObject!.Remark For="@(() => CurrentObject!.Remark)" OnlyValidateIfDirty="true" />
@@ -148,11 +148,11 @@
                             <MudItem xs="12" Class="pt-10">
                                 @foreach (string msg in CurrentEditContext.GetValidationMessages())
                                 {
-                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@msg</MudAlert>
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="fa-slab-press-duo fa-regular fa-triangle-exclamation" Class="pru-alert-validation mt-2">@msg</MudAlert>
                                 }
                                 @foreach (string key in InvalidMsgList.Keys)
                                 {
-                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="fa-slab-press-duo fa-regular fa-triangle-exclamation" Class="pru-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
                                 }
                             </MudItem>
                         }
@@ -175,7 +175,7 @@
                 </MudPaper>
             </MudTabPanel>
             <MudTabPanel Text="History" Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel"
-                         Icon="material-symbols-rounded/history" Style="min-width:120px">
+                         Icon="fa-duotone fa-memo-circle-info"  Style="min-width:120px">
                 <MudPaper Class="pru-ui-mudpaper-cruc-tab-content px-4 pt-2 pb-5 overflow-y-auto" Height="100%" Width="100%" Elevation="0"
                           Style="border-bottom: 1px solid var(--tw-gray-300); border-bottom-left-radius:var(--pru-base-card-radius); border-bottom-right-radius:var(--pru-base-card-radius)">
                 </MudPaper>

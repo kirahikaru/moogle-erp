@@ -33,11 +33,11 @@
                 <MudStack Row="true" Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd">
                     @if (!IsViewMode)
                     {
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton" Color="Color.Primary" StartIcon="material-symbols-rounded/save_as"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton" Color="Color.Primary" StartIcon="fa-light fa-floppy-disk-pen"
                                    OnClick="@(() => Save())">Save</MudButton>
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton" Color="Color.Primary" StartIcon="material-symbols-rounded/save"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton" Color="Color.Primary" StartIcon="fa-light fa-floppy-disk-circle-arrow-right"
                                    OnClick="@(() => Save(true))">Save & Close</MudButton>
-                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton" Color="Color.Secondary" StartIcon="material-symbols-rounded/cancel"
+                        <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Class="pru-ui-mudbutton" Color="Color.Secondary" StartIcon="fa-light fa-circle-xmark"
                                    OnClick="Cancel">Cancel</MudButton>
                     }
                     else
@@ -49,7 +49,7 @@
             </MudStack>
         </MudPaper>
         <MudTabs Class="pru-mudtab mt-5" Elevation="0" ActiveTabClass="pru-mudtab-active" TabHeaderClass="pru-mudtab-hdr" TabButtonsClass="pru-mudtab-btn" TabPanelsClass="pru-mudtab-tabpanel">
-            <MudTabPanel Text="Main" Icon="material-symbols-rounded/home" Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" Style="min-width:120px">
+            <MudTabPanel Text="Main" Icon="fa-duotone fa-house-chimney"  Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" Style="min-width:120px">
                 <MudPaper Class="px-5 pt-3 pb-4 overflow-y-auto" Square="true" Height="calc(100vh - 250px)" Width="100%" Elevation="0"
                           Style="border-right: 1px solid var(--tw-gray-300); border-left: 1px solid var(--tw-gray-300);  border-left: 1px solid var(--tw-gray-300); scrollbar-color: var(--tw-gray-300) var(--tw-gray-50); scrollbar-width:auto">
                     <MudGrid Spacing="4" Justify="Justify.SpaceEvenly">
@@ -81,13 +81,13 @@
                         </MudItem>
                         <MudItem xs="1">
                             <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" Required="true"
-                                             AdornmentIcon="material-symbols-rounded/calendar_month" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                             AdornmentIcon="fa-duotone fa-light fa-calendar-days" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                              Label="Group Level" Disabled="!CurrentObject!.IsBudgetGroup"
                                              @bind-Value="CurrentObject!.GroupingLevel" For="@(() => CurrentObject!.GroupingLevel)" OnlyValidateIfDirty="true" />
                         </MudItem>
                         <MudItem xs="1">
                             <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-mud-form-field bordered" HideSpinButtons="true" Culture="@CultureInfo.GetCultureInfo("en-US")" Required="true"
-                                             AdornmentIcon="material-symbols-rounded/calendar_month" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
+                                             AdornmentIcon="fa-duotone fa-light fa-calendar-days" Adornment="Adornment.Start" AdornmentColor=@Color.Primary
                                              Label="Order No" 
                                              @bind-Value="CurrentObject!.OrderNo" For="@(() => CurrentObject!.OrderNo)" OnlyValidateIfDirty="true" />
                         </MudItem>
@@ -131,11 +131,11 @@
                             <MudItem xs="12" Class="pt-10">
                                 @* @foreach (string msg in CurrentEditContext.GetValidationMessages())
                                 {
-                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@msg</MudAlert>
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="fa-slab-press-duo fa-regular fa-triangle-exclamation" Class="pru-alert-validation mt-2">@msg</MudAlert>
                                 } *@
                                 @foreach (string key in InvalidMsgList.Keys)
                                 {
-                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                    <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="fa-slab-press-duo fa-regular fa-triangle-exclamation" Class="pru-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
                                 }
                             </MudItem>
                         }
@@ -170,7 +170,7 @@
                     }
                 </MudPaper>
             </MudTabPanel>
-            <MudTabPanel Text="History" Icon="material-symbols-rounded/history" Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" Style="min-width:120px">
+            <MudTabPanel Text="History" Icon="fa-duotone fa-memo-circle-info"  Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" Style="min-width:120px">
                 <MudPaper Class="px-4 pt-2 pb-5 overflow-y-auto" Height="calc(100vh - 210px)" Width="100%" Elevation="0" Style="position:relative">
 
                 </MudPaper>

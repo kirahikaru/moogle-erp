@@ -34,13 +34,13 @@
                     @if (!IsViewMode)
                     {
                         <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Secondary" Class="pru-ui-mudbutton"
-                                   StartIcon="material-symbols-rounded/save_as"
+                                   StartIcon="fa-light fa-floppy-disk-pen"
                                    OnClick="@(() => Save())">Save</MudButton>
                         <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Secondary" Class="pru-ui-mudbutton"
-                                   StartIcon="material-symbols-rounded/save"
+                                   StartIcon="fa-light fa-floppy-disk-circle-arrow-right"
                                    OnClick="@(() => Save(true))">Save & Close</MudButton>
                         <MudButton Variant="Variant.Filled" Size="Size.Small" DropShadow="false" Color="Color.Default" Class="pru-ui-mudbutton"
-                                   StartIcon="material-symbols-rounded/cancel"
+                                   StartIcon="fa-light fa-circle-xmark"
                                    OnClick="Cancel">Cancel</MudButton>
                     }
                     else
@@ -53,7 +53,7 @@
             </MudStack>
         </MudPaper>
         <MudTabs Class="pru-mudtab mt-5" Elevation="0" ActiveTabClass="pru-mudtab-active" TabHeaderClass="pru-mudtab-hdr" TabButtonsClass="pru-mudtab-btn" TabPanelsClass="pru-mudtab-tabpanel">
-            <MudTabPanel Text="Main" Icon="material-symbols-rounded/home"
+            <MudTabPanel Text="Main" Icon="fa-duotone fa-house-chimney" 
                          Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" Style="min-width:120px">
                 <MudPaper Class="pru-ui-mudpaper-cruc-tab-content" Square="true" Width="100%" Elevation="0">
                     <MudForm Model="@CurrentObject" @ref=@CrucForm @bind-IsValid=@IsValidationPassed @bind-Errors=@MudValidationErrors >
@@ -73,8 +73,8 @@
                             <MudItem xs="3">
                                 <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
                                            Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
-                                           ClearIcon="material-symbols-rounded/close" IconSize="Size.Small"
-                                           AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary"
+                                           ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                           AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
                                            Label="Asset Type" Placeholder="Select asset type"
                                            Value=CurrentObject!.AssetType For="@(() => CurrentObject.AssetType)" ValueChanged="OnAssetTypeChanged" InputId="AssetType" T="string" OnlyValidateIfDirty="true">
                                     @foreach (DropdownSelectItem assetType in _assetTypeList)
@@ -88,7 +88,7 @@
                                 <MudItem xs="12">
                                     <MudComboBox Clearable="true" Editable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" ShrinkLabel="true" autocomplete="new-password"
                                                  Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
-                                                 AdornmentIcon="material-symbols-rounded/keyboard_arrow_down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
+                                                 AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
                                                  Label="Parent" T="int?"
                                                  Value="@CurrentObject.ParentId" ValueChanged="OnParentChanged"
                                                  ToStringFunc="@(val => val is not null && val > 0 ? _validParentList.SingleOrDefault<DropDownListItem>(x => x.ObjectId == val)?.ObjectName : "-")">
@@ -111,11 +111,11 @@
                                 <MudItem xs="12" Class="pt-10">
                                     @foreach (string msg in CurrentEditContext.GetValidationMessages())
                                     {
-                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@msg</MudAlert>
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="fa-slab-press-duo fa-regular fa-triangle-exclamation" Class="pru-alert-validation mt-2">@msg</MudAlert>
                                     }
                                     @foreach (string key in InvalidMsgList.Keys)
                                     {
-                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="material-symbols-rounded/warning" Class="pru-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
+                                        <MudAlert Variant="Variant.Outlined" Severity="Severity.Warning" Dense="true" Icon="fa-slab-press-duo fa-regular fa-triangle-exclamation" Class="pru-alert-validation mt-2">@InvalidMsgList[key]</MudAlert>
                                     }
                                 </MudItem>
                             }
@@ -139,7 +139,7 @@
                 </MudPaper>
             </MudTabPanel>
             <MudTabPanel Text="History" Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" 
-                         Icon="material-symbols-rounded/history" Style="min-width:120px">
+                         Icon="fa-duotone fa-memo-circle-info"  Style="min-width:120px">
                 <MudPaper Class="pru-ui-mudpaper-cruc-tab-content px-4 pt-2 pb-5 overflow-y-auto" Height="100%" Width="100%" Elevation="0" 
                           Style="border-bottom: 1px solid var(--tw-gray-300); border-bottom-left-radius:var(--pru-base-card-radius); border-bottom-right-radius:var(--pru-base-card-radius)">
                 </MudPaper>

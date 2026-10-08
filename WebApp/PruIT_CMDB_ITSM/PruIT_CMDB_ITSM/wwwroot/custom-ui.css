@@ -3,7 +3,14 @@
  */
 
 :root {
-    --pru-cruc-pg-status-bar-height: 32px;   
+    --pru-cruc-pg-status-bar-height: 32px;
+    --fs-ui-txt-small: 0.75rem; /* 12px */
+    --fs-ui-icon-xsmall: 0.75rem; /* 12px */
+    --fs-ui-icon-small: 0.875rem; /* 14px */
+    --fs-ui-icon-medium: 1rem; /* 20px */
+    --fs-ui-icon-large: 1.5rem; /* 16px */
+    --fs-body-std: 1rem; /* 16px */
+    --fs-body-dense: 0.875rem;
 }
 
 /*#region  */
@@ -146,49 +153,62 @@
             border: 1px solid var(--tw-gray-300) !important;
             border-radius: 8px;
             > input.mud-input-root {
-                font-size: 12px;
+                font-size: var(--fs-body-dense);
                 line-height: 100%;
                 padding: 10px 0px 10px 10px;
             }
 
             > textarea.mud-input-root {
-                font-size: 12px;
+                font-size: var(--fs-body-dense);
                 /* height: 100%; */
                 padding: 8px 12px;
                 margin: 0px;
             }
 
             > div.mud-input-root {
-                font-size: 12px;
+                font-size: var(--fs-body-dense);
                 line-height: 100%;
                 padding: 10px 12px;
             }
 
+            > .mud-input-clear-button {
+                > .mud-icon-button-label {
+                    color: var(--tw-gray-400);
+                    > .mud-icon-size-small {
+                        font-size: var(--fs-ui-icon-small);
+                    }
+
+                    > .material-symbols-rounded {
+                        color: var(--tw-gray-400);
+                        font-size: 18px;
+                        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 150, 'opsz' 24;
+                    }
+                }
+            }
+
+            > .mud-icon-button-edge-margin-end {
+                margin-left: 2px;
+                margin-inline-end: 8px;
+            }
+
             > .mud-input-adornment {
+                > .mud-icon-size-small {
+                    font-size: var(--fs-ui-icon-medium);
+                }
                 > .material-symbols-rounded {
                     color: var(--tw-gray-500);
                     font-size: 22px;
                     font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 100, 'opsz' 24;
                 }
+            }
 
-                > .mud-icon-button-size-small {
-                    padding: 0px;
-
-                    > .mud-icon-button-label {
-                        > .material-symbols-rounded {
-                            font-size:22px;
-                        }
-                    }
-                }
+            > .mud-input-adornment-start {
+                margin-inline-end: -2px;
+                margin-inline-start: 10px;
             }
 
             > .mud-input-adornment-end {
                 margin-inline-end: 5px;
-            }
-
-            > .mud-input-adornment-start {
-                margin-inline-end: -8px;
-                margin-inline-start: 6px;
             }
 
             &.mud-input-text {
@@ -212,23 +232,8 @@
                 }
             }
 
-            > .mud-icon-button-edge-margin-end {
-                margin-left: 2px;
-                margin-inline-end: 4px;
-            }
-
-            > .mud-input-clear-button {
-                > .mud-icon-button-label {
-                    > .material-symbols-rounded {
-                        color: var(--tw-gray-400);
-                        font-size: 18px;
-                        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 150, 'opsz' 24;
-                    }
-                }
-            }
-
             > .mud-icon-button-size-small {
-                padding: 0px;
+                padding: 2px;
             }
 
             &:hover {
@@ -255,6 +260,12 @@
         &:focus-within {
             > .mud-input {
                 outline: 1.5px solid var(--tw-gray-500);
+
+                /* > .mud-input-adornment {
+                    > .mud-primary-text {
+                        color: var(--pru-red-default) !important;
+                    }
+                } */
             }
         }
     }
@@ -339,7 +350,7 @@
     > .mud-input-control {
         > .mud-input-control-input-container {
             > .mud-input {
-                font-size: 12px;
+                font-size: var(--fs-body-dense);
                 line-height: 100%;
                 border-radius: 8px;
                 border: 1px solid var(--tw-gray-300);
@@ -603,7 +614,7 @@
     > div {
         > .mud-input {
             > input.mud-input-root {
-                font-size: 12px;
+                font-size: var(--fs-body-dense);
                 padding: 9px 0px 9px 12px !important;
                 line-height: 100%;
                 height: auto;
@@ -675,7 +686,7 @@
 
     > .mud-icon-button-label {
         > .mud-icon-size-small {
-            font-size: 16px;
+            font-size: 1rem;
         }
     }
 
@@ -693,24 +704,26 @@
     border-radius: 6px !important;
     padding: 4px 12px !important;
 
-    > .mud-button-label {
-        font-size: 12px;
+    &.mud-button-filled-size-small {
+        font-size: var(--fs-ui-txt-small);
+    }
 
+    > .mud-button-label {
         > .mud-button-icon-start {
             &.mud-button-icon-size-small {
                 margin-inline-end: 6px;
+            }
+            > .mud-icon-size-small {
+                font-size: var(--fs-ui-icon-small);
+            }
 
-                > .mud-icon-size-small {
-                    font-size: 14px;
-                }
-
-                & .material-symbols-rounded {
-                    font-variation-settings:
-                        'FILL' 0,
-                        'wght' 300,
-                        'GRAD' 0,
-                        'opsz' 24;
-                }
+            > .material-symbols-rounded {
+                
+                font-variation-settings:
+                    'FILL' 0,
+                    'wght' 400,
+                    'GRAD' 150,
+                    'opsz' 36;
             }
         }
     }
@@ -742,6 +755,48 @@
 
         & .mud-checkbox-true>.mud-icon-root {
             color: var(--pru-gray-tw-300);
+        }
+    }
+}
+
+.pru-mudswitch {
+    > .mud-input-control-input-container {
+        > .mud-switch {
+            > .mud-switch-span-medium {
+                &.mud-switch-span {
+                    padding: 5px 6px 5px 4px;
+                    width:46px;
+                    height: 28px;
+                }
+                > .mud-button-root {
+                    > .mud-switch-button {
+                        > .mud-switch-thumb-medium {
+                            > .mud-icon-default {
+                                color: #FFFFFF;
+                            }
+
+                            > .mud-icon-size-medium {
+                                padding:0px !important;
+                                margin-right: 0px;
+                            }
+
+                            > .material-symbols-rounded {
+                                font-size: 20px;
+                            }
+                        }
+                    }
+                }
+                
+
+                > .mud-switch-base.mud-checked {
+                    transform: translateX(18px);
+                }
+                > .mud-switch-base-medium.mud-switch-base {
+                    margin-left: 0px;
+                    margin-top: 0px;
+                    padding: 4px;
+                }
+            }
         }
     }
 }
@@ -853,20 +908,30 @@
         field-sizing: content;
     }
 
-    > .mud-icon-button-size-small {
-        padding: 1px;
-        /* &.mud-icon-button-edge-end {
-            margin-right: 4px;
-            margin-inline-end: 4px;
-            margin-inline-start: -14px;
-        } */
+    > .mud-input-adornment-end {
+        margin-right: 0px;
+        margin-inline-start: 2px !important;
+        margin-inline-end: 8px !important;
 
-        > .mud-icon-button-label {
-            > .mud-icon-size-small {
-                
+        > .mud-icon-button-size-small {
+            padding: 2px;
+        }
+
+        > .mud-button-root {
+            > .mud-icon-button-label {
+                > .mud-icon-size-small {
+                    font-size: var(--fs-ui-icon-medium);
+                }
             }
         }
-        
+    }
+
+    > .mud-input-adornment {
+        > .material-symbols-rounded {
+            color: var(--tw-gray-500);
+            font-size: 24px !important;
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 150, 'opsz' 24 !important;
+        }
     }
 }
 
@@ -906,6 +971,7 @@
     > div.mud-input-root {
         padding: 10px 0px 10px 12px !important;
     }
+    
     > input.mud-input-root {
         padding: 10px 0px 10px 12px !important;
     }
@@ -931,8 +997,8 @@
 
     > .mud-input-adornment-end {
         margin-right: 0px;
-        margin-inline-start: -4px !important;
-        margin-inline-end: 2px !important;
+        margin-inline-start: 0px !important;
+        margin-inline-end: 8px !important;
     }
 
     > .mud-input-adornment {
@@ -1039,8 +1105,9 @@
 
         & .column-header {
             color: var(--tw-gray-600) !important;
-            font-size: 12px !important;
+            font-size: var(--fs-body-dense) !important;
             color: var(--pru-red-default);
+            line-height: 120% !important;
         }
     }
 
@@ -1050,7 +1117,7 @@
         color: var(--tw-gray-600) !important;
         border-top: 1px solid var(--tw-gray-200);
         border-bottom: 1px solid var(--tw-gray-200);
-        font-size: 12px !important;
+        font-size: var(--fs-body-dense) !important;
 
         > .column-header {
             > .column-options {
@@ -1116,7 +1183,7 @@
 
 .pru-ui-muddatagrid-cell {
     padding: 8px 12px !important;
-    font-size: 12px !important;
+    font-size: var(--fs-body-dense) !important;
     line-height: 120% !important;
     background-color: white !important;
     border-right: 1px dotted var(--tw-gray-200);
@@ -1458,9 +1525,13 @@
         font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 150, 'opsz' 36;
     }
 
+    > .mud-icon-size-medium {
+        font-size: var(--fs-ui-icon-medium);
+    }
+
     > .mud-tab-icon-text {
-        margin-right: 4px !important;
-        margin-inline-end: 4px !important;
+        margin-right: 6px !important;
+        margin-inline-end: 6px !important;
     }
 
     &:hover {

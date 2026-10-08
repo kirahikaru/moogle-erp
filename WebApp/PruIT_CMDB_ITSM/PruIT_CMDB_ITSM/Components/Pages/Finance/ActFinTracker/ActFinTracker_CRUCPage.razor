@@ -48,7 +48,7 @@
             </MudStack>
         </MudPaper>
         <MudTabs Class="pru-mud-tab cruc-pg mt-3" Elevation="0">
-            <MudTabPanel Text="Main" Icon="material-symbols-rounded/home" Class="pru-mud-tab-panel" Style="min-width:120px">
+            <MudTabPanel Text="Main" Icon="fa-duotone fa-house-chimney"  Class="pru-mud-tab-panel" Style="min-width:120px">
                 <MudPaper Class="px-4 pt-2 pb-5 overflow-y-auto" Height="calc(100vh - 210px)" Width="100%" Elevation="0" Style="position:relative">
                     <MudForm Model="@CurrentObject" @ref=@CrucForm @bind-IsValid=@IsValidationPassed @bind-Errors=@MudValidationErrors >
                         <MudGrid Spacing="2" Justify="Justify.SpaceEvenly">
@@ -126,7 +126,7 @@
                     }
                 </MudPaper>
             </MudTabPanel>
-            <MudTabPanel Text="History" Icon="material-symbols-rounded/history" Class="pru-mud-tab-panel" Style="min-width:120px">
+            <MudTabPanel Text="History" Icon="fa-duotone fa-memo-circle-info" Class="pru-mud-tab-panel" Style="min-width:120px">
                 <MudPaper Class="px-4 pt-2 pb-5 overflow-y-auto" Height="calc(100vh - 210px)" Width="100%" Elevation="0" Style="position:relative">
                     
                 </MudPaper>

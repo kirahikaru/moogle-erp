@@ -49,16 +49,16 @@
 				<CellTemplate>
 					<MudStack Row="true" Spacing="0">
 						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/edit"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="fa-duotone fa-light fa-edit"
 									   OnClick="@(args => CreateOrEditRecord(context.Item.Id))" aria-label="edit" />
 						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/file_copy"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="fa-duotone fa-light fa-clone-plus"
 									   OnClick="@(args => CloneAndEditRecord(context.Item.Id))" aria-label="clone" />
 						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Success"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/visibility"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="fa-duotone fa-light fa-eye"
 									   OnClick="@(args => ViewFullRecord(context.Item.Id))" aria-label="view" />
 						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Error"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/delete"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="fa-duotone fa-light fa-trash-xmark"
 									   OnClick="@(args => DeleteRecord(context.Item))" aria-label="delete" />
 					</MudStack>
 				</CellTemplate>

@@ -10,7 +10,7 @@
 	<MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
 		<MudText Typo="Typo.h3" Color="Color.Secondary">@HeaderTitle</MudText>
 		<MudButton Color="Color.Primary" DropShadow="false" Size="Size.Small" Variant="Variant.Filled"
-				   Class="pru-ui-mudbutton" StartIcon="material-symbols-rounded/add_circle"
+				   Class="pru-ui-mudbutton" StartIcon="fa-light fa-circle-plus"
 				   OnClick="@(args => CreateOrEditRecord(0))">Add New</MudButton>
 	</MudStack>
 </MudPaper>
@@ -18,11 +18,12 @@
 <MudPaper Class="pru-std-card-white mt-4" Outlined="true" Elevation="0" Height="100%" Width="100%" Style="overflow-y:hidden">
 	<MudStack Class="pa-6" Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
 		<MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="pru-ui-mudform-input"
-					  AdornmentIcon="material-symbols-rounded/search" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
+					  ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+					  AdornmentIcon="fa-duotone fa-light fa-magnifying-glass" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
 					  Placeholder="Search text here..."
 					  @bind-Value="SearchText" OnKeyDown="OnSearchBoxKeyDown" @ref=UITextBoxSearch Disabled=IsSearching />
 		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false"
-				   Class="pru-ui-mudbutton" StartIcon="material-symbols-rounded/search"
+				   Class="pru-ui-mudbutton" StartIcon="fa-light fa-magnifying-glass"
 				   OnClick="OnSearchClicked">Search</MudButton>
 	</MudStack>
 	<MudDataGrid Dense="true" Hover="true" Bordered="false" Square="true" FixedHeader="true" Striped="true"
@@ -74,16 +75,16 @@
                 <CellTemplate>
 					<MudStack Row="true" Spacing="0">
 						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/edit"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="fa-duotone fa-light fa-edit"
 									   OnClick="@(args => CreateOrEditRecord(context.Item.Id))" aria-label="edit" />
 						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/file_copy"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="fa-duotone fa-light fa-clone-plus"
 									   OnClick="@(args => CloneAndEditRecord(context.Item.Id))" aria-label="clone" />
 						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Success"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/visibility"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="fa-duotone fa-light fa-eye"
 									   OnClick="@(args => ViewFullRecord(context.Item.Id))" aria-label="view" />
 						<MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Error"
-									   Class="pru-ui-mudiconbtn-datagrid" Icon="material-symbols-rounded/delete"
+									   Class="pru-ui-mudiconbtn-datagrid" Icon="fa-duotone fa-light fa-trash-xmark"
 									   OnClick="@(args => DeleteRecord(context.Item))" aria-label="delete" />
 					</MudStack>
 				</CellTemplate>

@@ -111,33 +111,29 @@ public class Person : AuditObject
     #endregion
 
     #region *** LINKED OBJECTS ***
-    [Computed]
-    [Description("ignore")]
+    [Computed, Write(false)]
     public Country? Nationality { get; set; }
 
-    [Computed]
-    [Description("ignore")]
-    public KhAddress? WorkAddress { get; set; }
+	[Computed, Write(false)]
+	public KhAddress? WorkAddress { get; set; }
 
-    [Computed]
-    [Description("ignore")]
-    public KhAddress? BirthAddress { get; set; }
+	[Computed, Write(false)]
+	public KhAddress? BirthAddress { get; set; }
 
-    [Computed]
-    [Description("ignore")]
-    public KhAddress? ResidentialAddress { get; set; }
+	[Computed, Write(false)]
+	public KhAddress? ResidentialAddress { get; set; }
 
-    [Computed]
-    [Description("ignore")]
-    public KhAddress? PostalAddress { get; set; }
+	[Computed, Write(false)]
+	public KhAddress? PostalAddress { get; set; }
 
-    [Computed]
-    [Description("ignore"), ReadOnly(true)]
-    public List<Contact> Contacts { get; set; }
+	[Computed, Write(false)]
+	public List<Contact> Contacts { get; set; }
 
-    [Computed]
-    [Description("ignore"), ReadOnly(true)]
-    public List<ContactPhone> ContactPhones { get; set; }
+	[Computed, Write(false)]
+	public List<PersonInfoDoc> InfoDocs { get; set; }
+
+	[Computed, Write(false)]
+	public List<ContactPhone> ContactPhones { get; set; }
     #endregion
 
     #region *** DYNAMIC PROPERTIES ***

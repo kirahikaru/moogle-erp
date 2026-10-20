@@ -6,13 +6,20 @@ namespace DataLayer.Repos.Pru.IT;
 
 public interface IITAssetCategoryRepos : IBaseRepos<ITAssetCategory>
 {
-	//Task<KeyValuePair<int, IEnumerable<ITAssetCategory>>> SearchAsync(
-	//	int pgSize = 0,
-	//	int pgNo = 0,
-	//	string? searchText = null,
-	//	IEnumerable<SqlSortCond>? sortConds = null,
-	//	IEnumerable<SqlFilterCond>? filterConds = null,
-	//	List<int>? excludeIdList = null);
+	//Task<KeyValuepair<int, ienumerable<itassetcategory>>> searchasync(
+	//	int pgsize = 0,
+	//	int pgno = 0,
+	//	string? searchtext = null,
+	//	ienumerable<sqlsortcond>? sortconds = null,
+	//	ienumerable<sqlfiltercond>? filterconds = null,
+	//	list<int>? excludeidlist = null);
+
+	Task<KeyValuePair<int, IEnumerable<SearchItemITAssetCategory>>> SearchAsync(
+		int pgSize = 0, int pgNo = 0,
+		string? searchText = null,
+		IEnumerable<SqlSortCond>? sortConds = null,
+		IEnumerable<SqlFilterCond>? filterConds = null,
+		List<int>? excludeIdList = null);
 
 	Task<IEnumerable<DropdownSelectItem>> GetForDropdownAsync(string assetType, int parentId = 0);
 	Task<IEnumerable<DropdownSelectItem>> GetForDropdownAsync(string assetType, string parentCode);
@@ -22,7 +29,85 @@ public interface IITAssetCategoryRepos : IBaseRepos<ITAssetCategory>
 
 public class ITAssetCategoryRepos(IDbContext dbContext) : BaseRepos<ITAssetCategory>(dbContext, ITAssetCategory.DatabaseObject), IITAssetCategoryRepos
 {
-	public override async Task<KeyValuePair<int, IEnumerable<ITAssetCategory>>> SearchNewAsync(int pgSize = 0, int pgNo = 0, string? searchText = null, IEnumerable<SqlSortCond>? sortConds = null, IEnumerable<SqlFilterCond>? filterConds = null, List<int>? excludeIdList = null)
+	public async Task<KeyValuePair<int, IEnumerable<SearchItemITAssetCategory>>> SearchAsync(
+		int pgSize = 0, int pgNo = 0,
+		string? searchText = null,
+		IEnumerable<SqlSortCond>? sortConds = null,
+		IEnumerable<SqlFilterCond>? filterConds = null,
+		List<int>? excludeIdList = null)
+	{
+		if (pgNo < 0 && pgSize < 0)
+			throw new ArgumentOutOfRangeException(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
+
+		SqlBuilder sbSql = new();
+		DynamicParameters param = new();
+
+		//sbSql.Where("t.IsDeleted=0");
+		//sbSql.Where("UPPER(ISNULL(t.AssetType,''))=@AssetType");
+		//param.Add("@AssetType", "HARDWARE", DbType.AnsiString);
+
+		#region Form Search Conditions
+		if (!string.IsNullOrEmpty(searchText))
+		{
+			if (searchText.StartsWith("id:", StringComparison.OrdinalIgnoreCase))
+			{
+				sbSql.Where("UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
+				param.Add("@SearchText", searchText.Replace("id:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
+			}
+			else if (searchText.StartsWith("code:", StringComparison.OrdinalIgnoreCase))
+			{
+				sbSql.Where("UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
+				param.Add("@SearchText", searchText.Replace("code:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
+			}
+			else
+			{
+				sbSql.Where("UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
+				param.Add("@SearchText", searchText, DbType.AnsiString);
+			}
+		}
+
+		if (excludeIdList != null && excludeIdList.Count > 0)
+		{
+			sbSql.Where("t.Id NOT IN @ExcludeIdList");
+			param.Add("@ExcludeIdList", excludeIdList);
+		}
+		#endregion
+
+		foreach (string orderByClause in GetSearchOrderbBy())
+			sbSql.OrderBy(orderByClause);
+
+		string sql;
+
+		if (pgNo == 0 && pgSize == 0)
+		{
+			sql = sbSql.AddTemplate($"SELECT * FROM [dbo].[VW_ITAssetCategoryWithSummary] t /**where**/ /**orderby**/").RawSql;
+		}
+		else
+		{
+			param.Add("@PageSize", pgSize);
+			param.Add("@PageNo", pgNo);
+
+			sql = sbSql.AddTemplate(
+				$";WITH pg AS (SELECT t.Id FROM [dbo].[VW_ITAssetCategoryWithSummary] t /**where**/ /**orderby**/ OFFSET @PageSize * (@PageNo - 1) rows FETCH NEXT @PageSize ROW ONLY) " +
+				$"SELECT * FROM [dbo].[VW_ITAssetCategoryWithSummary] t /**leftjoin**/ WHERE t.Id IN (SELECT Id FROM pg) /**orderby**/").RawSql;
+		}
+
+		using var cn = DbContext.DbCxn;
+
+		var dataList = await cn.QueryAsync<SearchItemITAssetCategory>(sql, param);
+
+		string countSql = sbSql.AddTemplate($"SELECT COUNT(*) FROM [dbo].[VW_ITAssetCategoryWithSummary] t /**where**/").RawSql;
+		int count = await cn.ExecuteScalarAsync<int>(countSql, param);
+
+		return new KeyValuePair<int, IEnumerable<SearchItemITAssetCategory>>(count, dataList);
+	}
+
+	public override async Task<KeyValuePair<int, IEnumerable<ITAssetCategory>>> SearchNewAsync(
+		int pgSize = 0, int pgNo = 0, 
+		string? searchText = null, 
+		IEnumerable<SqlSortCond>? sortConds = null, 
+		IEnumerable<SqlFilterCond>? filterConds = null, 
+		List<int>? excludeIdList = null)
 	{
 		if (pgNo < 0 && pgSize < 0)
 			throw new ArgumentOutOfRangeException(_errMsgResxMngr.GetString("PageSize_PageNo_Negative", CultureInfo.CurrentUICulture));
@@ -47,14 +132,9 @@ public class ITAssetCategoryRepos(IDbContext dbContext) : BaseRepos<ITAssetCateg
 				sbSql.Where("UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
 				param.Add("@SearchText", searchText.Replace("code:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
 			}
-			else if (searchText.StartsWith("sr:"))
-			{
-				sbSql.Where("UPPER(t.SerialNo) LIKE '%'+UPPER(@SearchText)+'%'");
-				param.Add("@SearchText", searchText.Replace("sr:", "", StringComparison.OrdinalIgnoreCase), DbType.AnsiString);
-			}
 			else
 			{
-				sbSql.Where("UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.SerialNo) LIKE '%'+UPPER(@SearchText)+'%'");
+				sbSql.Where("UPPER(t.ObjectName) LIKE '%'+UPPER(@SearchText)+'%' OR UPPER(t.ObjectCode) LIKE '%'+UPPER(@SearchText)+'%'");
 				param.Add("@SearchText", searchText, DbType.AnsiString);
 			}
 		}

@@ -10,12 +10,13 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\CoreLibrary\DataLayer\DataLayer.csproj" />
     <ProjectReference Include="..\MoogleERP.Client\MoogleERP.Client.csproj" />
-    <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="9.1.0" />
+    <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="9.2.0" />
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.6.0" />
     <PackageReference Include="DeepCloner" Version="0.10.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.11" />
-    <PackageReference Include="MudBlazor" Version="9.9.0" />
-    <PackageReference Include="SharpCompress" Version="0.50.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.13" />
+    <PackageReference Include="MudBlazor" Version="9.11.0" />
+    <PackageReference Include="SharpCompress" Version="0.50.7" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
     <PackageReference Include="Toolbelt.Blazor.HotKeys2" Version="6.2.1" />
   </ItemGroup>
 

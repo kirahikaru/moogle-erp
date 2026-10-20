@@ -729,6 +729,10 @@
     }
 }
 
+.pru-ui-mud-iconbtn {
+    
+}
+
 .pru-mud-checkbox {
     & .mud-icon-button {
         padding: 4px;

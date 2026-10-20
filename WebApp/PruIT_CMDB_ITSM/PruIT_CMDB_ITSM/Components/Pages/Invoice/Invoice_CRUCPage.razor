@@ -75,7 +75,7 @@
                                            Class="pru-ui-muddatepicker"
                                            ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                            AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor=@Color.Primary 
-                                           Label="Date" DateFormat="dd-MMM-yyyy"
+                                           Label="Date" Placeholder="dd-mm-yyyy" DateFormat="dd-MM-yyyy"
                                            @bind-Date=@CurrentObject.EffectiveDate For="@(() => CurrentObject.EffectiveDate)" />
                         </MudItem>
                         <MudItem xs="2">
@@ -103,7 +103,7 @@
                                            Class="pru-ui-muddatepicker"
                                            ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                            AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor=@Color.Primary 
-                                           Label="Expiry Date" DateFormat="dd-MMM-yyyy"
+                                           Label="Expiry Date" DateFormat="dd-MM-yyyy"
                                            @bind-Date=@CurrentObject.ExpiryDate For="@(() => CurrentObject.ExpiryDate)" />
                         </MudItem>
                         <MudItem xs="3">
@@ -292,7 +292,7 @@
                                                                        Class="pru-ui-muddatepicker"
                                                                        ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                        AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor=@Color.Primary 
-                                                                       Label="Start Date" DateFormat="dd-MMM-yyyy"
+                                                                       Label="Start Date" DateFormat="dd-MM-yyyy"
                                                                        @bind-Date=@qi.Item.CoverageStartDate For="@(() => qi.Item.CoverageStartDate)" />
                                                     </MudItem>
                                                     <MudItem xs="6">
@@ -300,7 +300,7 @@
                                                                        Class="pru-ui-muddatepicker"
                                                                        ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                        AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor=@Color.Primary 
-                                                                       Label="End Date" DateFormat="dd-MMM-yyyy"
+                                                                       Label="End Date" DateFormat="dd-MM-yyyy"
                                                                        @bind-Date=@qi.Item.CoverageEndDate For="@(() => qi.Item.CoverageEndDate)" />
                                                     </MudItem>
                                                     <MudItem xs="12">
@@ -461,7 +461,7 @@
                                                                        Class="pru-ui-muddatepicker"
                                                                        ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                        AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor=@Color.Primary
-                                                                       Label="Posting Date" DateFormat="dd-MMM-yyyy"
+                                                                       Label="Posting Date" DateFormat="dd-MM-yyyy"
                                                                        @bind-Date=@expItem.Item.PostingDate For="@(() => expItem.Item.PostingDate)" />
                                                     </MudItem>
                                                     @* ============================================================================================================================ *@
@@ -619,7 +619,7 @@
                                                                        Class="pru-ui-muddatepicker"
                                                                        ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                        AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor=@Color.Primary
-                                                                       Label="From Date" DateFormat="dd-MMM-yyyy"
+                                                                       Label="From Date" DateFormat="dd-MM-yyyy"
                                                                        @bind-Date=@expItem.Item.FromDate For="@(() => expItem.Item.FromDate)" />
 
                                                     </MudItem>
@@ -628,7 +628,7 @@
                                                                        Class="pru-ui-muddatepicker"
                                                                        ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                        AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor=@Color.Primary
-                                                                       Label="To Date" DateFormat="dd-MMM-yyyy"
+                                                                       Label="To Date" DateFormat="dd-MM-yyyy"
                                                                        @bind-Date=@expItem.Item.ToDate For="@(() => expItem.Item.ToDate)" />
                                                     </MudItem>
                                                     <MudItem xs="2">
@@ -636,7 +636,7 @@
                                                                        Class="pru-ui-muddatepicker"
                                                                        ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                        AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor=@Color.Primary
-                                                                       Label="Effective Date" DateFormat="dd-MMM-yyyy"
+                                                                       Label="Effective Date" DateFormat="dd-MM-yyyy"
                                                                        @bind-Date=@expItem.Item.EffectiveDate For="@(() => expItem.Item.EffectiveDate)" />
                                                         
                                                     </MudItem>

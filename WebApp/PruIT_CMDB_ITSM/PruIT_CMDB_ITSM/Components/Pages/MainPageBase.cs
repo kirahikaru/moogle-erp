@@ -131,16 +131,17 @@ public class MainPageBase<T> : ComponentBase, IAsyncDisposable
 		if (SelectedRowNo == rowNumber)
 		{
 			SelectedRowNo = -1;
-			return string.Empty;
+			//return string.Empty;
+			return "pru-ui-muddatagrid-row selected";
 		}
-		else if (MainDataGrid.SelectedItem != null && MainDataGrid.SelectedItem.Equals(element))
+		else if (MainDataGrid.SelectedItem is not null && MainDataGrid!.SelectedItem.Equals(element))
 		{
 			SelectedRowNo = rowNumber;
 			return "pru-ui-muddatagrid-row selected";
 		}
 		else
 		{
-			return string.Empty;
+			return "pru-ui-muddatagrid-row";
 		}
 	}
 

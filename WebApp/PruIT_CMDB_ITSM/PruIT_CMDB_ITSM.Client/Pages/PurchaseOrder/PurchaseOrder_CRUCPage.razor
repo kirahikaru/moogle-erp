@@ -86,7 +86,7 @@
                                            Class="pru-ui-muddatepicker"
                                            ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                            AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor="@Color.Primary"
-                                           Label="Date" DateFormat="dd-MMM-yyyy"
+                                           Label="Date" Placeholder="dd-mm-yyyy" DateFormat="dd-MM-yyyy"
                                            @bind-Date=@CurrentObject.EffectiveDate For="@(() => CurrentObject.EffectiveDate)" />
                         </MudItem>
                         <MudItem xs="2">
@@ -107,11 +107,19 @@
                             <MudDatePicker Clearable="true" Editable="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Class="pru-ui-muddatepicker" 
                                            ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                            AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor="@Color.Primary"
-                                           Label="Expiry Date" DateFormat="dd-MMM-yyyy"
+                                           Label="Expiry Date" Placeholder="dd-mm-yyyy" DateFormat="dd-MM-yyyy"
                                            @bind-Date=@CurrentObject.ExpiryDate For="@(() => CurrentObject.ExpiryDate)" />
                         </MudItem>
                         <MudItem xs="4">
-                            <MudComboBox Clearable="true" ShrinkLabel="true" Editable="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" 
+                            <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchVendor"
+                                             ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                             AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
+                                             Label="Vendor / Supplier" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value}")"
+                                             Value="_selectedVendor" ValueChanged="OnVendorValueChanged" />
+
+                            @* <MudComboBox Clearable="true" ShrinkLabel="true" Editable="true" ReadOnly=@IsViewMode Required="false" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" 
                                          Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
                                          AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
                                          Label="Vendor/Supplier" T="string"
@@ -123,7 +131,7 @@
                                         <MudComboBoxItem T="string" Value="@vendor.Key" Text="@vendor.Value">@vendor.Value</MudComboBoxItem>
                                     }
                                 </ChildContent>
-                            </MudComboBox>
+                            </MudComboBox> *@
                         </MudItem>
                         <MudItem xs="8">
                             <MudTextField Clearable="true" FullWidth="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
@@ -382,19 +390,19 @@
                                                                          @bind-Value=qi.Item.TotalAmount For="@(() => qi.Item.TotalAmount)" OnlyValidateIfDirty="true" />
                                                     </MudItem>
                                                     <MudItem xs="2">
-                                                        <MudDatePicker Clearable="true" ShrinkLabel="true" Editable="true" DateFormat="dd-MMM-yyyy"
+                                                        <MudDatePicker Clearable="true" ShrinkLabel="true" Editable="true" DateFormat="dd-MM-yyyy"
                                                                        Class="pru-ui-muddatepicker"
                                                                        ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                        AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor="@Color.Primary"
-                                                                       Label="Start Date"
+                                                                       Label="Start Date" Placeholder="dd-mm-yyyy"
                                                                        @bind-Date=@qi.Item.StartDate For="@(() => qi.Item.StartDate)" />
                                                     </MudItem>
                                                     <MudItem xs="2">
-                                                        <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" DateFormat="dd-MMM-yyyy"
+                                                        <MudDatePicker ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Editable="true" DateFormat="dd-MM-yyyy"
                                                                        Class="pru-ui-muddatepicker"
                                                                        ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                        AdornmentIcon="fa-duotone fa-light fa-calendar-days" AdornmentColor="@Color.Primary"
-                                                                       Label="End Date"
+                                                                       Label="End Date" Placeholder="dd-mm-yyyy"
                                                                        @bind-Date=@qi.Item.EndDate For="@(() => qi.Item.EndDate)" />
                                                     </MudItem>
                                                     <MudItem xs="12">
@@ -556,6 +564,7 @@
 @code {
     #region UI PARAM
     IEnumerable<DropdownSelectItem> _vendorList = Enumerable.Empty<DropdownSelectItem>();
+    DropdownSelectItem? _selectedVendor;
     IEnumerable<DropdownSelectItem> _lbuList = Enumerable.Empty<DropdownSelectItem>();
     IEnumerable<DropdownSelectItem> _currList = Enumerable.Empty<DropdownSelectItem>();
     IEnumerable<DropdownSelectItem> _wfsList = Enumerable.Empty<DropdownSelectItem>();
@@ -787,7 +796,7 @@
         StateHasChanged();
         return Task.FromResult(DataGridEditFormAction.Close);
     }
-    
+
     private async Task OnLBUChanged(string lbu)
     {
         if (!string.IsNullOrEmpty(lbu))
@@ -983,9 +992,9 @@
     }
 
     public void GenerateInvoice()
-	{
-		NavManager.NavigateTo($"/fin/invoice/cruc/{CRUCModes.CREATE}/{CurrentObject!.ObjectCode!}");
-	}
+    {
+        NavManager.NavigateTo($"/fin/invoice/cruc/{CRUCModes.CREATE}/{CurrentObject!.ObjectCode!}");
+    }
 
     private async Task<IEnumerable<string>> SearchPurchaseType(string value, CancellationToken token)
     {
@@ -1000,6 +1009,34 @@
 
         return _purchaseTypeList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
+
+    async Task<IEnumerable<DropdownSelectItem>> SearchVendor(string? value, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return _vendorList.Take(88);
+        }
+        else
+        {
+            return _vendorList.Where(x => x.Value.Contains(value, StringComparison.CurrentCultureIgnoreCase)).Take(88);
+        }
+    }
+
+    void OnVendorValueChanged(DropdownSelectItem? item)
+    {
+        if (item is null)
+        {
+            _selectedVendor = null;
+            CurrentObject!.VendorID = null;
+        }
+        else
+        {
+            _selectedVendor = item;
+            CurrentObject!.VendorID = item.Key;
+        }
+    }
+
+
     #endregion
 
     #region UPDATE FUNCTIONS
@@ -1074,6 +1111,11 @@
         }
 
         _vendorList = await Uow.Vendors.GetForDropdownListAsync(CurrentObject!.LBU!, null, CurrentObject!.VendorID);
+
+        if (!string.IsNullOrEmpty(CurrentObject!.VendorID))
+        {
+            _selectedVendor = _vendorList.SingleOrDefault<DropdownSelectItem>(x => x.Key == CurrentObject!.VendorID);
+        }
 
         _itAssetList = await Uow.ITAssets.GetForDropdownAsync();
         _employeeList = (await Uow.Employees.GetForDropdownAsync()).ToList();

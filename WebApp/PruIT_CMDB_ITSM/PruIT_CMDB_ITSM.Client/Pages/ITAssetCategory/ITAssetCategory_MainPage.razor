@@ -27,7 +27,7 @@
 	<MudDataGrid Dense="true" Hover="true" Bordered="false" Square="true" FixedHeader="true" Striped="true"
 				 ColumnResizeMode="ResizeMode.Column" SortMode="SortMode.Multiple" Loading=@IsSearching RowsPerPage="50" Elevation="0"
 				 Class="pru-ui-muddatagrid main-pg"
-				 SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row"
+				 SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" 
 				 ServerData="ServerDataFunc" @ref="MainDataGrid" @bind-SelectedItem=SelectedObject Height="100%" T="SearchItemITAssetCategory">
 		<Columns>
 			<PropertyColumn Title="Name" Property="x => x.ObjectName"

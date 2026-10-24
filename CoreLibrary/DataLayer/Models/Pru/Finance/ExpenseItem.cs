@@ -89,6 +89,12 @@ public class ExpenseItem : AuditObject
 
 	[Computed, Write(false)]
 	public Vendor? Vendor { get; set; }
+
+	[Computed, Write(false)]
+	public GLAccount? GLAccount { get; set; }
+
+	[Computed, Write(false)]
+	public FinActivityTracker? FinActTracker { get; set; }
 	#endregion
 
 	#region *** DYNAMIC PROPERTIES ***

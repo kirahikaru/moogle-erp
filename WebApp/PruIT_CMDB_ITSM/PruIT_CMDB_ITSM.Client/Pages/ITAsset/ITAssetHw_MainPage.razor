@@ -25,11 +25,23 @@
 		<MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false"
 				   Class="pru-ui-mudbutton" StartIcon="fa-light fa-magnifying-glass"
 				   OnClick="OnSearchClicked">Search</MudButton>
+		<MudSelect Clearable="true" FullWidth="false" Immediate="false" Required="false" ShrinkLabel="true" MultiSelection="true" 
+				   Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudselect-popover" InputClass="pru-ui-mudselect-input" ListClass="pru-ui-mudselect-list" OuterClass="pru-ui-mudselect-outer"
+				   ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+				   AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
+				   Placeholder="Asset State" T="string" 
+				   @bind-Value="_selectedAssetState" @bind-SelectedValues="_selectedAssetStates" OnlyValidateIfDirty="false"
+				   Style="max-width:200px" >
+			@foreach (DropdownSelectItem assetState in _assetStateList)
+			{
+				<MudSelectItem Value=@assetState.Key>@assetState.Value</MudSelectItem>
+			}
+		</MudSelect>
 	</MudStack>
 	<MudDataGrid Dense="true" Hover="true" Bordered="false" Square="true" FixedHeader="true" Striped="true"
 				 ColumnResizeMode="ResizeMode.Column" SortMode="SortMode.Multiple" Loading=@IsSearching RowsPerPage="50" Elevation="0"
 				 Class="pru-ui-muddatagrid main-pg"
-				 SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row"
+				 SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" 
 				 ServerData="ServerDataFunc" @ref="MainDataGrid" @bind-SelectedItem=SelectedObject Height="100%" Style="height:100%"
 				 T="ITAsset">
 		<Columns>
@@ -223,6 +235,13 @@
 		{ AssetStates.BROKEN_UNREPAIRABLE, "status-chip-pending-light" },
 		{ AssetStates.NA, "status-chip-pending-light" }
 	};
+
+	IEnumerable<DropdownSelectItem> _assetStateList = AssetStates.GetForDropdownList();
+	string? _selectedAssetState;
+	IReadOnlyCollection<string> _selectedAssetStates = [];
+	IEnumerable<DropdownSelectItem> _assetLifeCycleStatusList = AssetLifeCycleStatuses.GetForDropdownList();
+	IReadOnlyCollection<DropdownSelectItem> _selectedAssestLifeCycleStatuses = [];
+	string? _selectedAssestLifeCycleStatus;
 	#endregion
 
 	#region PAGE LIFECYCLE EVENTS

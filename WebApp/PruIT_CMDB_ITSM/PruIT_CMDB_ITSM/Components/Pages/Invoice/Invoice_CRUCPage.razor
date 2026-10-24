@@ -107,19 +107,13 @@
                                            @bind-Date=@CurrentObject.ExpiryDate For="@(() => CurrentObject.ExpiryDate)" />
                         </MudItem>
                         <MudItem xs="3">
-                            <MudComboBox Clearable="true" Editable="true" FullWidth="true" ReadOnly=@IsViewMode Required="true" SearchBox="true" SearchBoxAutoFocus="true" SearchBoxClearable="true" ShrinkLabel="true" autocomplete="new-password"
-                                         Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
-                                         AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary" Adornment="Adornment.End" HasAdornmentEnd="true"
-                                         Label="Vendor/Supplier" Placeholder="Select a vendor/supplier..." T="string"
-                                         @bind-Value="@CurrentObject.VendorID" For="@(() => CurrentObject.VendorID)"
-                                         ToStringFunc="@(e => string.IsNullOrEmpty(e) ? "" : _vendorList.Single<DropdownSelectItem>(x => x.Key == e)?.Value)">
-                                <ChildContent>
-                                    @foreach (var vendor in _vendorList)
-                                    {
-                                        <MudComboBoxItem T="string" Value="@vendor.Key" Text="@vendor.Value">@vendor.Value</MudComboBoxItem>
-                                    }
-                                </ChildContent>
-                            </MudComboBox>
+                            <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                             Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                             CoerceText="true" CoerceValue="true" SearchFunc="SearchVendor"
+                                             ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                             AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
+                                             Label="Vendor / Supplier" T="DropdownSelectItem" ToStringFunc="@(e => e == null ? null : $"{e.Value} ({e.Key})")"
+                                             Value="_selectedVendor" ValueChanged="OnVendorValueChanged" />
                             
                             @* <MudSelect Label="Supplier/Vendor" @bind-Value=CurrentObject!.VendorID Clearable="true" ReadOnly="@IsViewMode" Dense="true" Required="true"
                             For="@(() => CurrentObject.VendorID)" OnlyValidateIfDirty="true">
@@ -442,7 +436,7 @@
                                              ColumnResizeMode="ResizeMode.Column" HorizontalScrollbar="true" 
                                              EditTrigger="DataGridEditTrigger.Manual" EditMode="DataGridEditMode.Form" EditDialogOptions=@(new (){ BackdropClick=false, MaxWidth=MaxWidth.ExtraLarge, FullWidth=true })
                                              StartedEditingItem="@StartedEditingExpItem" CanceledEditingItem="@CanceledEditingExpItem" CommittedItemChanges="@CommittedExpItemChanges" Style="width:100%"
-                                             @ref="_expItemDataGrid" T="ExpenseItem" Items="@CurrentObject!.ExpenseItems" QuickFilter="_quickExpenseItemFilter">
+                                             @ref="_expItemDataGrid" T="ExpenseItem" Items="@CurrentObject!.ExpenseItems" QuickFilter="_quickExpenseItemFilter" >
                                     <Columns>
                                         <PropertyColumn Title="No." Property="x => x.OrderNo" Editable="false" Sortable="false"
                                                         HeaderClass="pru-ui-muddatagrid-hdr cruc-pg-items" CellClass="pru-ui-muddatagrid-cell"
@@ -547,43 +541,38 @@
                                                         </MudSelect>
                                                     </MudItem>
                                                     @* ============================================================================================================================ *@
-                                                    <MudItem xs="3">
-                                                        <MudComboBox Clearable="true" EnableFilter="true" Editable="true" FullWidth="true" Required="true" ReadOnly=@IsViewMode ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password"
-                                                                     Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
-                                                                             Label="GL Acocunt #" T="string" SearchFunc="SeachGlAccountDropdown" SearchBoxClearable="true" IconSize="Size.Small"
-                                                                     Value=@expItem.Item.AccountCode For="@(() => expItem.Item.AccountCode)" ValueChanged=@(args => OnGlAccountSelectionChanged(expItem.Item, args)) OnlyValidateIfDirty="true">
-                                                            @foreach (GLAccount gLAccount in _glAccountList)
-                                                            {
-                                                                <MudComboBoxItem Value="@gLAccount.ObjectCode" Text="@($"{gLAccount.ObjectCode} - {gLAccount.ObjectName}")">@($"{gLAccount.ObjectCode} - {gLAccount.ObjectName}")</MudComboBoxItem>
-                                                            }
-                                                        </MudComboBox>
+                                                    <MudItem xs="6">
+                                                        <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                                         Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                                         CoerceText="true" CoerceValue="true" SearchFunc="SearchGlAccount"
+                                                                         ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                                                         AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
+                                                                         Label="GL Account" T="GLAccount" ToStringFunc="@(e => e == null ? null : $"{e.ObjectCode} - {e.ObjectName}")"
+                                                                         Value="expItem.Item.GLAccount" ValueChanged="@(args => OnGlAccountValueChanged(expItem.Item, args))" />
                                                     </MudItem>
-                                                    <MudItem xs="3">
+                                                    @* <MudItem xs="3">
                                                         <MudTextField Clearable="true" FullWidth="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Class="pru-ui-mudform-input"
                                                                       ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                       Label="Account Name"
                                                                       @bind-Value=@expItem.Item.AccountName For="@(() => expItem.Item.AccountName)" OnlyValidateIfDirty="true"
                                                                       MaxLength="255" />
-                                                    </MudItem>
-                                                    <MudItem xs="3">
-                                                        <MudComboBox Clearable="true" EnableFilter="true" Editable="true" FullWidth="true" Required="true" ReadOnly=@IsViewMode ShrinkLabel="true" SearchBox="true" Strict="true" Variant="Variant.Text" autocomplete="new-password"
-                                                                     Class="pru-ui-combobox" PopoverClass="pru-ui-combobox-popover" InputClass="pru-ui-combobox-input" HighlightClass="pru-ui-combobox-input" TemplateClass="pru-ui-combobox-input" ChipClass="pru-ui-combobox-chip"
-                                                                     Label="Act. Tracker #" SearchFunc="SeachGlAccountDropdown" SearchBoxClearable="true" T="string"
-                                                                     Value=@expItem.Item.FinActTrackerID ValueChanged="@(args => OnFinActTrackerSelectionChanged(expItem.Item, args))"
-                                                                     For="@(() => expItem.Item.FinActTrackerID)" OnlyValidateIfDirty="true">
-                                                            @foreach (FinActivityTracker actTracker in _finActTrackerList)
-                                                            {
-                                                                <MudComboBoxItem Value="@actTracker.ObjectCode" Text="@($"{actTracker.ObjectCode} - {actTracker.ObjectName}")">@($"{actTracker.ObjectCode} - {actTracker.ObjectName}")</MudComboBoxItem>
-                                                            }
-                                                        </MudComboBox>
-                                                    </MudItem>
-                                                    <MudItem xs="3">
+                                                    </MudItem> *@
+                                                    <MudItem xs="6">
+                                                        <MudAutocomplete Clearable="true" Immediate="true" FullWidth="true" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
+                                                                         Class="pru-ui-mudform-input" PopoverClass="pru-ui-mudautocomplete-popover" InputClass="pru-ui-mudautocomplete-input" ListClass="pru-ui-mudautocomplete-list" ListItemClass="pru-ui-mudautocomplete-listitem"
+                                                                         CoerceText="true" CoerceValue="true" SearchFunc="SearchFinActTracker"
+                                                                         ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                                                         AdornmentIcon="fa-solid fa-angle-down" AdornmentColor="Color.Primary"
+                                                                         Label="GL Account" T="FinActivityTracker" ToStringFunc="@(e => e == null ? null : $"{e.ObjectCode} - {e.ObjectName}")"
+                                                                         Value="expItem.Item.FinActTracker" ValueChanged="@(args => OnFinActTrackerValueChanged(expItem.Item, args))" />
+                                                        </MudItem>
+                                                    @* <MudItem xs="3">
                                                         <MudTextField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="pru-ui-mudform-input"
                                                                       ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
                                                                       Label="Act. Tracker Name"
                                                                       @bind-Value=@expItem.Item.FinActTrackerName For="@(() => expItem.Item.FinActTrackerName)" OnlyValidateIfDirty="true"
                                                                       MaxLength="255" />
-                                                    </MudItem>
+                                                    </MudItem> *@
                                                     @* ============================================================================================================================ *@
                                                     <MudItem xs="2">
                                                         <MudSelect Clearable="true" FullWidth="true" Immediate="false" ReadOnly="@IsViewMode" Required="true" ShrinkLabel="true"
@@ -876,11 +865,14 @@
 
     #region UI PARAM
     IEnumerable<DropdownSelectItem> _vendorList = Enumerable.Empty<DropdownSelectItem>();
+    DropdownSelectItem? _selectedVendor;
     IEnumerable<DropdownSelectItem> _lbuList = Enumerable.Empty<DropdownSelectItem>();
     IEnumerable<DropdownSelectItem> _currList = Enumerable.Empty<DropdownSelectItem>();
     IEnumerable<DropdownSelectItem> _wfsList = Enumerable.Empty<DropdownSelectItem>();
     IEnumerable<GLAccount> _glAccountList = Enumerable.Empty<GLAccount>();
+    GLAccount? _selectedGlAccount;
     IEnumerable<FinActivityTracker> _finActTrackerList = Enumerable.Empty<FinActivityTracker>();
+    FinActivityTracker? _selectedFinActTracker;
     MudDataGrid<InvoiceItem> _qItemDataGrid = new();
     bool _isEditingItemDataGrid = false;
     MudDataGrid<ExpenseItem> _expItemDataGrid = new();
@@ -1391,7 +1383,7 @@
         }
     }
 
-    bool SeachGlAccountDropdown(string? value, string? text, string? searchString)
+    bool SearchGlAccountDropdown(string? value, string? text, string? searchString)
     {
         if (string.IsNullOrEmpty(searchString)
             || (value?.Contains(searchString!, StringComparison.InvariantCultureIgnoreCase) ?? false)
@@ -1401,6 +1393,34 @@
         }
 
         return false;
+    }
+
+    async Task<IEnumerable<GLAccount>> SearchGlAccount(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return _glAccountList.Take(88);
+        }
+        else
+        {
+            return _glAccountList.Where(x => x.ObjectCode is not null && x.ObjectCode.Contains(value)).Take(88);
+        }
+    }
+
+    async Task OnGlAccountValueChanged(ExpenseItem expenseItem, GLAccount? glAccount)
+    {
+        if (glAccount is null)
+        {
+            expenseItem.AccountCode = null;
+            expenseItem.AccountName = null;
+            expenseItem.GLAccount = null;
+        }
+        else
+        {
+            expenseItem.AccountCode = glAccount.ObjectCode;
+            expenseItem.AccountName = glAccount.ObjectName;
+            expenseItem.GLAccount = glAccount;
+        }
     }
 
     void OnGlAccountSelectionChanged(ExpenseItem item, string? glAccountCode)
@@ -1420,6 +1440,35 @@
             }
         }
     }
+
+    async Task<IEnumerable<FinActivityTracker>> SearchFinActTracker(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return _finActTrackerList.Take(88);
+        }
+        else
+        {
+            return _finActTrackerList.Where(x => x.ObjectCode is not null && x.ObjectCode.Contains(value)).Take(88);
+        }
+    }
+
+    async Task OnFinActTrackerValueChanged(ExpenseItem expenseItem, FinActivityTracker? finActTracker)
+    {
+        if (finActTracker is null)
+        {
+            expenseItem.FinActTrackerID = null;
+            expenseItem.FinActTrackerName = null;
+            expenseItem.FinActTracker = null;
+        }
+        else
+        {
+            expenseItem.FinActTrackerID = finActTracker.ObjectCode;
+            expenseItem.FinActTrackerName = finActTracker.ObjectName;
+            expenseItem.FinActTracker = finActTracker;
+        }
+    }
+
 
     void OnFinActTrackerSelectionChanged(ExpenseItem item, string? finActTrackerId)
     {
@@ -1467,6 +1516,33 @@
 
         return _serviceTypeList.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
+
+    async Task<IEnumerable<DropdownSelectItem>> SearchVendor(string? value, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return _vendorList.Take(88);
+        }
+        else
+        {
+            return _vendorList.Where(x => x.Value.Contains(value, StringComparison.CurrentCultureIgnoreCase)).Take(88);
+        }
+    }
+
+    void OnVendorValueChanged(DropdownSelectItem? item)
+    {
+        if (item is null)
+        {
+            _selectedVendor = null;
+            CurrentObject!.VendorID = null;
+        }
+        else
+        {
+            _selectedVendor = item;
+            CurrentObject!.VendorID = item.Key;
+        }
+    }
+
     #endregion
 
     #region UPDATE FUNCTIONS
@@ -1523,12 +1599,20 @@
         _lbuList = PruLBUs.GetForDropdown();
 
         if (!string.IsNullOrEmpty(CurrentObject!.LBU))
+        {
             _vendorList = await Uow.Vendors.GetForDropdownListAsync(CurrentObject!.LBU, null, CurrentObject!.VendorID);
+
+            if (!string.IsNullOrEmpty(CurrentObject!.VendorID))
+            {
+                _selectedVendor = _vendorList.SingleOrDefault<DropdownSelectItem>(x => x.Key == CurrentObject!.VendorID);
+            }
+        }
 
         _wfsList = InvoiceWFStatuses.GetForDropdownList();
         _currList = PruGC.Currencies.GetForDropdownList();
         _glAccountList = await Uow.GLAccounts.GetAllAsync();
         _finActTrackerList = await Uow.FinActivityTrackers.GetAllAsync();
+
         // await Task.CompletedTask;
     }
     #endregion

@@ -36,7 +36,7 @@ public class ITAssetCategory : AuditObject, IParentChildHierarchyObject
     public string? AssetType  { get; set; }
     public int? ParentId { get; set; }
     public string? ParentCode { get; set; }
-    public string? HierarchyPath { get; set; }
+	public string? HierarchyPath { get; set; }
     #endregion
 
     #region *** LINKED OBJECTS ***
@@ -50,9 +50,9 @@ public class ITAssetCategory : AuditObject, IParentChildHierarchyObject
 	#region *** DYNAMIC PROPERTIES ***
 	[Computed, Write(false), ReadOnly(true)]
 	public string ObjectNameAndCode => $"{ObjectName.NonNullValue("-")} ({ObjectCode.NonNullValue("-")})";
-    #endregion
+	#endregion
 
-    public ITAssetCategory() : base()
+	public ITAssetCategory() : base()
     {
         
     }

@@ -11,7 +11,7 @@ public interface IBaseRepos<TEntity> where TEntity : AuditObject
 	// warning CA1716: Rename virtual/interface member IBaseRepos<TEntity>.Get(int) so that it no longer conflicts with the reserved language keyword 'Get'. Using a reserved keyword as the name of a virtual/interface member makes it harder for consumers in other languages to override/implement the member.
 
 	IDbContext DbContext { get; }
-
+	
 	TEntity? Get(int id);
 	TEntity? GetByCode(string objectCode);
 	List<TEntity> GetAll();
@@ -23,6 +23,7 @@ public interface IBaseRepos<TEntity> where TEntity : AuditObject
 	int GetExistingObjectIdByCode(int objectId, string objectCode);
 	//int GetPageCount(int pageSize);
 
+	Task<int> GetIdAsync(string objectCode);
 	Task<TEntity?> GetAsync(int Id);
 	Task<List<TEntity>> GetManyAsync(List<int> idList);
 	Task<TEntity?> GetByCodeAsync(string objectCode);
@@ -264,10 +265,24 @@ public class BaseRepos<TEntity>(IDbContext dbContext, DatabaseObj dbObj) : IBase
         int id = cn.ExecuteScalar<int>(sql, param);
         return id;
     }
-    #endregion
+	#endregion
 
-    #region ASYNCHRONOUS METHODS
-    public async Task<TEntity?> GetAsync(int id)
+	#region ASYNCHRONOUS METHODS
+	public async Task<int> GetIdAsync(string objectCode)
+	{
+		using var cn = DbContext.DbCxn;
+		DynamicParameters param = new();
+		SqlBuilder sbSql = new();
+		sbSql.Where("t.IsDeleted=0");
+		sbSql.Where("t.ObjectCode=@ObjectCode");
+		param.Add("@ObjectCode", objectCode, DbType.AnsiString);
+
+		string sql = sbSql.AddTemplate($"Select Id FROM {DbObject.MsSqlTable} t /**where**/").RawSql;
+
+		return await cn.ExecuteScalarAsync<int>(sql, param);
+	}
+
+	public async Task<TEntity?> GetAsync(int id)
     {
         using var cn = DbContext.DbCxn;
 

@@ -27,7 +27,7 @@
     <MudDataGrid Dense="true" Hover="true" Bordered="false" Square="true" FixedHeader="true" Striped="true" 
 				 ColumnResizeMode="ResizeMode.Column" SortMode="SortMode.Multiple" Loading=@IsSearching RowsPerPage="50" Elevation="0"
 				 Class="pru-ui-muddatagrid main-pg"
-				 SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" 
+				 SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" 
 				 ServerData="ServerDataFunc" @ref="MainDataGrid" @bind-SelectedItem=SelectedObject Height="100%" Style="height:100%"
 				 T="Invoice" >
         <Columns>
@@ -39,7 +39,7 @@
                     </MudStack>
                 </CellTemplate>
             </TemplateColumn>
-            <PropertyColumn Title="Date" Property="x => x.EffectiveDate" Format="dd-MMM-yyyy" StickyLeft="true"
+            <PropertyColumn Title="Date" Property="x => x.EffectiveDate" Format="dd-MMM-yyyy" StickyLeft="true" 
                             HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
 							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap; text-align:center" />
 			<PropertyColumn Title="Invoice No." Property="x => x.ObjectCode" StickyLeft="true" Sortable="false"

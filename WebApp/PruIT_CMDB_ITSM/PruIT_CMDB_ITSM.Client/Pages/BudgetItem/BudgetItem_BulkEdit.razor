@@ -30,7 +30,7 @@
 	</MudStack>
 	<MudDataGrid Class="mt-2 pru-ui-muddatagrid cruc-pg-items" @ref="_dataGrid" Items="_budgetItemList" Dense="true" Hover="true" FixedHeader="true" Striped="true" Loading=@_isSearching RowsPerPage=50
 				 ColumnResizeMode="ResizeMode.Container" HorizontalScrollbar="true" Elevation="0" SortMode="SortMode.Multiple" @bind-SelectedItem=SelectedObject SelectOnRowClick="true"
-				 RowClassFunc="SelectedRowClassFunc" RowClass="mud-datagrid-row" T="BudgetItem" QuickFilter="_quickFilter"
+				 RowClassFunc="SelectedRowClassFunc"  T="BudgetItem" QuickFilter="_quickFilter"
 				 EditTrigger="DataGridEditTrigger.OnRowClick" EditMode="DataGridEditMode.Cell"
 				 StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
 		<Columns>

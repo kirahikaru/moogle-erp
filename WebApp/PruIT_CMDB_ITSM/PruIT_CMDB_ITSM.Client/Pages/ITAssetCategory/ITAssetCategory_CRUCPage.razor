@@ -138,10 +138,148 @@
                     }
                 </MudPaper>
             </MudTabPanel>
-            <MudTabPanel Text="History" Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" 
+            <MudTabPanel Text="Other Info" Class="pru-mudtabpanel" PanelClass="pru-mudtabpanel-panel" 
                          Icon="fa-duotone fa-memo-circle-info"  Style="min-width:120px">
                 <MudPaper Class="pru-ui-mudpaper-cruc-tab-content px-4 pt-2 pb-5 overflow-y-auto" Height="100%" Width="100%" Elevation="0" 
                           Style="border-bottom: 1px solid var(--tw-gray-300); border-bottom-left-radius:var(--pru-base-card-radius); border-bottom-right-radius:var(--pru-base-card-radius)">
+                          <MudStack Class="pa-6" Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart" StretchItems="StretchItems.None">
+		                        <MudTextField Clearable="true" ShrinkLabel="true" Immediate="true" Variant="Variant.Text" Class="pru-ui-mudform-input"
+					                          ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+					                          AdornmentIcon="fa-duotone fa-light fa-magnifying-glass" Adornment="Adornment.Start" AdornmentColor="Color.Primary"
+					                          Placeholder="Search text here..."
+                                      @bind-Value="_searchText" OnKeyDown="OnSearchBoxKeyDown" @ref=_uiTextBoxSearch Disabled=_isSearching />
+		                        <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" DropShadow="false"
+				                           Class="pru-ui-mudbutton" StartIcon="fa-light fa-magnifying-glass"
+				                           OnClick="OnSearchClicked">Search</MudButton>
+	                        </MudStack>
+	                <MudDataGrid Dense="true" Hover="true" Bordered="false" Square="true" FixedHeader="true" Striped="true"
+				                 ColumnResizeMode="ResizeMode.Column" SortMode="SortMode.Multiple" Loading=@_isSearching RowsPerPage="50" Elevation="0"
+				                 Class="pru-ui-muddatagrid main-pg"
+				                 SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" 
+                                 ServerData="ServerDataFunc" @ref="_itAssetDataGrid" @bind-SelectedItem=_selectedObject Height="100%" T="ITAsset">
+		                <Columns>
+                            <TemplateColumn Title="LBU" StickyLeft="true"
+                                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData">
+                                <CellTemplate>
+                                    <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
+                                        <MudImage Src=@(_lbuFlagList[rowData.Item.LBU!]) Height="12" />
+                                        <MudText Typo="Typo.body1">@rowData.Item.LBU</MudText>
+                                    </MudStack>
+                                </CellTemplate>
+                            </TemplateColumn>
+                            @* <PropertyColumn Property="x => x.ObjectName" Title="Asset Name" StickyLeft="true" HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" /> *@
+                            <TemplateColumn Title="Asset Name" StickyLeft="true"
+                                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" Context="rowData" HeaderStyle="min-width:250px" CellStyle="white-space:nowrap">
+                                <CellTemplate>
+                                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="1">
+                                        @if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.TERMINATED, AssetLifeCycleStatuses.WRITTEN_OFF))
+                                        {
+                                            <span style="text-decoration:line-through; font-style:italic">@rowData.Item.ObjectName</span>
+                                        }
+                                        else if (rowData.Item.LifeCycleStatus.Is(AssetLifeCycleStatuses.PENDING_TERMINATION, AssetLifeCycleStatuses.PENDING_WRITE_OFF))
+                                        {
+                                            <MudIcon Icon="@Icons.Material.Rounded.WarningAmber" Style="color:var(--vic-orange-500);" />
+                                            <span style="font-style:italic; color:var(--vic-orange-500);">@rowData.Item.ObjectName</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@rowData.Item.ObjectName</span>
+                                        }
+
+                                        @if (rowData.Item.AssetState == AssetStates.BROKEN_UNREPAIRABLE)
+                                        {
+                                            <img src="svg/broken-phone-in-two-parts.svg" height="14" />
+                                        }
+                                    </MudStack>
+                                </CellTemplate>
+                            </TemplateColumn>
+			                @if (CurrentObject!.AssetType == AssetTypes.Hardware)
+                            {
+                                <PropertyColumn Title="Brand" Property="x => x.Brand"
+                                                HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell" />
+                                <PropertyColumn Title="Model No" Property="x => x.ModelNo" Sortable="false"
+                                                HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+                                                HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+                                <PropertyColumn Title="Serial No." Property="x => x.SerialNo" Sortable="false"
+                                                HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+                                                HeaderStyle="min-width:100px" CellStyle="white-space:nowrap" />
+                                                <PropertyColumn Title="Staff ID" Property="x => x.CurrentUserDisplayName" Sortable="false"
+                                                HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							                    HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+			                    <PropertyColumn Title="Vendor" Property="x => x.VendorName"
+							                    HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							                    HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+			                    <PropertyColumn Title="PO#" Property="x => x.PORefNo"
+							                    HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+							                    HeaderStyle="min-width:120px" CellStyle="white-space:nowrap" />
+			                    <PropertyColumn Title="Invoice#" Property="x => x.InvoiceRefNo"
+							                    HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+							                    HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+			                    <PropertyColumn Title="Purchased Date" Property="x => x.PurchaseDate" Format="dd-MMM-yyyy"
+                                                HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+                                                HeaderStyle="min-width: 170px" CellStyle="text-align:center" />
+                                <PropertyColumn Title="Purchase Cost" Property="x => x.PurchaseCost" Format="$ #,##0"
+                                                HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+                                                HeaderStyle="min-width: 170px" CellStyle="text-align:right" />
+			                    <PropertyColumn Title="Fin Asset Code" Property="x => x.FinAssetCode" Filterable="false" Sortable="false"
+							                    HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell pru-ui-font-mono"
+							                    HeaderStyle="min-width:115px"/>
+			                    <TemplateColumn Title="Asset State" Hidden="true" StickyRight="true"
+                                                HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+                                                CellStyle="text-align:center; padding-top: 2px !important; padding-bottom: 2px !important"
+                                                Context="itAsset">
+                                    <CellTemplate>
+                                        <MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(itAsset.Item.AssetState) ? _stateCssClassList[itAsset.Item.AssetState!] : "status-chip-default-dark")">@itAsset.Item.AssetStateText</MudChip>
+                                    </CellTemplate>
+                                </TemplateColumn>
+                                <TemplateColumn Title="Status" Hidden="true" StickyRight="true"
+                                                HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+                                                CellStyle="text-align:center; padding-top: 2px !important; padding-bottom: 2px !important"
+                                                Context="itAsset">
+                                    <CellTemplate>
+                                        <MudChip Size="Size.Small" Class="@(!string.IsNullOrEmpty(itAsset.Item.LifeCycleStatus) ? _statusCssClassList[itAsset.Item.LifeCycleStatus!] : "status-chip-default-light")" Style="padding:2px 8px; font-size:9pt">
+                                            @itAsset.Item.LifeCycleStatusText
+                                        </MudChip>
+                                    </CellTemplate>
+                                </TemplateColumn>
+                            }
+                            else
+                            {
+                                
+                            }
+                            <PropertyColumn Title="Current User" Property="x => x.CurrentUserName"
+                                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+                                            HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+                            <PropertyColumn Title="Function" Property="x => x.CurrentUserFunc"
+                                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+                                            HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+                            <PropertyColumn Title="Department" Property="x => x.CurrentUserDept"
+                                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+                                            HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+                            <PropertyColumn Title="Ownership Tag" Property="x => x.OwnershipTag"
+                                            HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+                                            HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+                            <TemplateColumn Title="Action" Sortable="false" Filterable="false" StickyRight="true"
+							                HeaderClass="pru-ui-muddatagrid-hdr main-pg" CellClass="pru-ui-muddatagrid-cell"
+							                HeaderStyle="justify-items:center; max-width:120px; width:500px"
+							                CellStyle="padding-inline-end:4px; padding-inline-start:4px; padding-top: 2px !important; padding-bottom: 2px !important"
+                                            Context="itAsset">
+				                <CellTemplate>
+					                <MudStack Row="true" Spacing="0">
+						                <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Info"
+									                   Class="pru-ui-mudiconbtn-datagrid" Icon="fa-duotone fa-light fa-edit"
+                                                       OnClick="@(args => CreateOrEditRecord(itAsset.Item.Id))" aria-label="edit" />
+						                <MudIconButton Variant="Variant.Text" Size="Size.Small" Color="Color.Success"
+									                   Class="pru-ui-mudiconbtn-datagrid" Icon="fa-duotone fa-light fa-eye"
+                                                       OnClick="@(args => ViewFullRecord(itAsset.Item.Id))" aria-label="view" />
+					                </MudStack>
+				                </CellTemplate>
+			                </TemplateColumn>
+		                </Columns>
+		                <PagerContent>
+                            <MudDataGridPager T="ITAsset" Class="pru-ui-muddatagrid-pager" PageSizeOptions="new[] { 10, 30, 50, 80, 100 }" />
+		                </PagerContent>
+	                </MudDataGrid>
                 </MudPaper>
             </MudTabPanel>
         </MudTabs>
@@ -151,10 +289,44 @@
 
 @code {
     #region UI PARAM
+    Dictionary<string, string> _lbuFlagList = PruLBUs.GetFlagIconPaths();
     IEnumerable<DropDownListItem> _validParentList = [];
     IEnumerable<DropdownSelectItem> _assetTypeList = AssetTypes.GetForDropdownList();
     MudTextField<string>? _uiControlObjectName;
     string _parentHierarchyPath = "";
+    string _searchText { get; set; }
+    MudTextField<string>? _uiTextBoxSearch { get; set; }
+    MudDataGrid<ITAsset>? _itAssetDataGrid { get; set; }
+    ITAsset? _selectedObject;
+    IEnumerable<ITAsset> _itAssetList = Enumerable.Empty<ITAsset>();
+    bool _isSearching;
+    int _selectedRowNo;
+    Dictionary<string, string> _statusCssClassList = new()
+        {
+            { "", "" },
+            { AssetLifeCycleStatuses.IN_STOCK, "status-chip-success-light" },
+            { AssetLifeCycleStatuses.IN_USE, "status-chip-success-light" },
+            { AssetLifeCycleStatuses.TERMINATED, "status-chip-obsolete-light" },
+            { AssetLifeCycleStatuses.WRITTEN_OFF, "status-chip-obsolete-light" },
+            { AssetLifeCycleStatuses.PENDING_REVIEW, "status-chip-pending-light" },
+            { AssetLifeCycleStatuses.PENDING_WRITE_OFF, "status-chip-pending-light" },
+            { AssetLifeCycleStatuses.PENDING_TERMINATION, "status-chip-pending-light" },
+            { AssetLifeCycleStatuses.ON_LOAN, "status-chip-pending-light" },
+            { AssetLifeCycleStatuses.DISPOSED, "status-chip-obsolete-light" },
+        };
+
+    Dictionary<string, string> _stateCssClassList = new()
+    {
+        { "", "" },
+        { AssetStates.BRAND_NEW, "status-chip-success-light" },
+        { AssetStates.USED_GOOD, "status-chip-success-light" },
+        { AssetStates.USED_POOR, "status-chip-obsolete-light" },
+        { AssetStates.USED_ESR, "status-chip-pending-light" },
+        { AssetStates.EOL, "status-chip-obsolete-light" },
+        { AssetStates.EOS, "status-chip-obsolete-light" },
+        { AssetStates.BROKEN_UNREPAIRABLE, "status-chip-pending-light" },
+        { AssetStates.NA, "status-chip-pending-light" }
+    };
     #endregion
 
     #region PAGE LIFECYCLE FUNCTIONS
@@ -253,6 +425,132 @@
                 CurrentObject!.ParentCode = item.ObjectCode;
                 _parentHierarchyPath = item.HierarchyPath ?? "";
             }
+        }
+    }
+
+    public async Task CreateOrEditRecord(int objId)
+    {
+        // Save quick search parameter before leaving to edit page
+        if (!string.IsNullOrEmpty(_searchText) || _itAssetDataGrid!.CurrentPage > 0)
+        {
+            //QuickSearchParam quickSearchParam = new(SearchText.NonNullValue(), MainDataGrid!.RowsPerPage, MainDataGrid!.CurrentPage);
+            //await SessionStorage!.SetAsync(SearchParamName!, JsonConvert.SerializeObject(quickSearchParam, Formatting.Indented));
+        }
+
+        if (objId > 0)
+            NavManager!.NavigateTo($"{UrlPrefix!}/cruc/update/{objId}");
+        else
+            NavManager!.NavigateTo($"{UrlPrefix!}/cruc/create/{objId}");
+        await Task.CompletedTask;
+    }
+
+    public async Task ViewFullRecord(int objId)
+    {
+        // Save quick search parameter before leaving to edit page
+        if (!string.IsNullOrEmpty(_searchText) || _itAssetDataGrid!.CurrentPage > 0)
+        {
+            //QuickSearchParam quickSearchParam = new(SearchText.NonNullValue(), MainDataGrid!.RowsPerPage, MainDataGrid.CurrentPage);
+            //await SessionStorage!.SetAsync(SearchParamName!, JsonConvert.SerializeObject(quickSearchParam, Formatting.Indented));
+        }
+
+        //NavManager!.NavigateTo($"{UrlPrefix!}/edit/{objId}/{true}");
+        NavManager!.NavigateTo($"{UrlPrefix!}/cruc/read/{objId}");
+        await Task.CompletedTask;
+    }
+
+    public async Task OnSearchClicked()
+    {
+        await _uiTextBoxSearch!.ClearAsync();
+        await _uiTextBoxSearch!.FocusAsync();
+        await _itAssetDataGrid!.ReloadServerData();
+    }
+
+    public async Task OnSearchBoxKeyDown(KeyboardEventArgs args)
+    {
+        if (_isSearching) return;
+
+        switch (args.Key)
+        {
+            case "Enter":
+                await _uiTextBoxSearch!.FocusAsync();
+                await _itAssetDataGrid!.ReloadServerData();
+                break;
+            case "Escape":
+                await _uiTextBoxSearch!.ClearAsync();
+                await _uiTextBoxSearch!.FocusAsync();
+                await _itAssetDataGrid!.ReloadServerData();
+                break;
+            default:
+                return;
+        }
+    }
+
+    protected string SelectedRowClassFunc(ITAsset element, int rowNumber)
+    {
+        if (_selectedRowNo == rowNumber)
+        {
+            _selectedRowNo = -1;
+            return string.Empty;
+        }
+        else if (_selectedObject != null && _selectedObject.Equals(element))
+        {
+            _selectedRowNo = rowNumber;
+            return "pru-ui-muddatagrid-row selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
+    protected async Task<GridData<ITAsset>> ServerDataFunc(GridState<ITAsset> gridState, CancellationToken token)
+    {
+        try
+        {
+            _isSearching = true;
+
+            //if (gridState.SortDefinitions.Count > 0)
+            //{
+            //	var firstSort = gridState.SortDefinitions.First();
+            //	result = firstSort.Descending
+            //		? result.OrderByDescending(firstSort.SortFunc).ToList()
+            //		: result.OrderBy(firstSort.SortFunc).ToList();
+            //}
+
+            if (gridState.FilterDefinitions.Any())
+            {
+                //var filterFunctions = gridState.FilterDefinitions.Select(x => x.GenerateFilterFunction());
+                //result = result
+                //	.Where(x => filterFunctions.All(f => f(x)))
+                //	.ToList();
+            }
+
+            DataPagination pagination = new();
+
+            //var totalNumberOfFilteredItems = result.Count;
+
+            //result = result
+            //	.Skip(gridState.StartIndex)
+            //	.Take(gridState.Count)
+            //	.ToList();
+            await Task.CompletedTask;
+            return new GridData<ITAsset>
+            {
+                Items = _itAssetList,
+                TotalItems = pagination.RecordCount
+            };
+        }
+        catch (TaskCanceledException)
+        {
+            return new GridData<ITAsset>
+            {
+                Items = [],
+                TotalItems = 0
+            };
+        }
+        finally
+        {
+            _isSearching = false;
         }
     }
     #endregion

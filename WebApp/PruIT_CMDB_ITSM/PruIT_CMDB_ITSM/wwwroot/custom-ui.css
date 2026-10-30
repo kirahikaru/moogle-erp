@@ -729,6 +729,10 @@
     }
 }
 
+.pru-ui-mud-iconbtn {
+    
+}
+
 .pru-mud-checkbox {
     & .mud-icon-button {
         padding: 4px;
@@ -1169,9 +1173,17 @@
 }
 
 .pru-ui-muddatagrid-row {
+    background-color: var(--tw-yellow-50) !important;
     &.selected {
         border-left: var(--pru-red-default) 3px solid;
+        color: var(--pru-red-default) !important;
         
+        font-weight: 500;
+
+        & > td {
+            color: var(--pru-red-default) !important;
+            background-color: var(--tw-yellow-50) !important;
+        }
 
         &>.mud-table-cell {
             color: var(--pru-red-default) !important;

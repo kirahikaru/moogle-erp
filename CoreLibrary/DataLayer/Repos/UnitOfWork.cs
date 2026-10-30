@@ -70,6 +70,7 @@ public interface IUnitOfWork : IDisposable
 	IOrgStructTypeRepos OrgStructTypes { get; }
 
 	IPersonRepos Persons { get; }
+	IPersonInfoDocRepos PersonInfoDocs { get; }
 	IRoleRepos Roles { get; }
 	IRolePermissionRepos RolePermissions { get; }
 	/// <summary>
@@ -233,6 +234,7 @@ public class UnitOfWork : IUnitOfWork
 		OrgStructTypes = new OrgStructTypeRepos(DbContext);
 		Permissions = new PermissionRepo(DbContext);
         Persons = new PersonRepos(DbContext);
+        PersonInfoDocs = new PersonInfoDocRepos(DbContext);
         ProductCategories = new ProductCategoryRepos(DbContext);
         RolePermissions = new RolePermissionRepos(DbContext);
         Roles = new RoleRepos(DbContext);
@@ -284,8 +286,8 @@ public class UnitOfWork : IUnitOfWork
     public ILoginHistoryRepos LoginHistories { get; }
     public IMasterSettingRepos MasterSettings { get; }
     public IOrgRepos Orgs { get; }
-    public IPersonRepos Persons { get; set; }
-    public IMessageLogRepos MessageLogs { get; }
+    
+	public IMessageLogRepos MessageLogs { get; }
     public IMsngrConvoHistoryRepos MsngrConvoHistories { get; }
     public INotificationRepos Notifications { get; }
 	public IObjStateConfigRepos ObjStateConfigs { get; }
@@ -297,6 +299,8 @@ public class UnitOfWork : IUnitOfWork
     public IOrgBranchRepos OrgBranches { get; }
 	public IOrgStructRepos OrgStructs { get; }
 	public IOrgStructTypeRepos OrgStructTypes { get; }
+	public IPersonRepos Persons { get; set; }
+	public IPersonInfoDocRepos PersonInfoDocs { get; }
 	public IProductCategoryRepos ProductCategories { get; set; }
     public IRoleRepos Roles { get; }
     public IRolePermissionRepos RolePermissions { get; }

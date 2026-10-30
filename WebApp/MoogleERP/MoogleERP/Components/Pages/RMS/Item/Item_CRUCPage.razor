@@ -278,21 +278,21 @@
                                             <MudSelectItem T="string" Value="@uom.ObjectCode">@uom.NameWithSymbol</MudSelectItem>
                                         }
                                     </MudSelect>
-                                    <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                    <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                      Class="moog-mudform-input"
                                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                      Adornment="Adornment.End" AdornmentText="@_dimensionUnitSymbol"
                                                      Label="Height" T="decimal?" Placeholder="Height"
                                                      @bind-Value="CurrentObject!.DimensionHeight" For="(() => CurrentObject.DimensionHeight)"
                                                      Step="0.1M" Format="#,##0.##" />
-                                    <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                    <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                      Class="moog-mudform-input"
                                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                      Adornment="Adornment.End" AdornmentText="@_dimensionUnitSymbol"
                                                      Label="Length" Placeholder="Length" T="decimal?"
                                                      @bind-Value="CurrentObject!.DimensionLength" For="(() => CurrentObject.DimensionLength)"
                                                      Step="0.1M" Format="#,##0.##" />
-                                    <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                    <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                      Class="moog-mudform-input"
                                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                      Adornment="Adornment.End" AdornmentText="@_dimensionUnitSymbol"
@@ -315,7 +315,7 @@
                                             <MudSelectItem T="string" Value="@wt.ObjectCode">@wt.NameWithSymbol</MudSelectItem>
                                         }
                                     </MudSelect>
-                                    <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                    <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                      Class="moog-mudform-input"
                                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                      AdornmentText="@_weightUnitSymbol" Adornment="Adornment.End"
@@ -557,7 +557,7 @@
                                                             </MudSelect>
                                                         </MudItem>
                                                         <MudItem xs="3">
-                                                            <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                            <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                                              Class="moog-mudform-input"
                                                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                              Label="Height" T="decimal?" Placeholder="Height"
@@ -565,7 +565,7 @@
                                                                              Step="0.1M" Format="#,##0.##" />
                                                         </MudItem>
                                                         <MudItem xs="3">
-                                                            <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                            <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                                              Class="moog-mudform-input"
                                                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                              Label="Length" Placeholder="Length" T="decimal?"
@@ -573,7 +573,7 @@
                                                                              Step="0.1M" Format="#,##0.##" />
                                                         </MudItem>
                                                         <MudItem xs="3">
-                                                            <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                            <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                                              Class="moog-mudform-input"
                                                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                              Label="Width" Placeholder="Width" T="decimal?"
@@ -594,7 +594,7 @@
                                                             </MudSelect>
                                                         </MudItem>
                                                         <MudItem xs="3">
-                                                            <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                            <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                                              Class="moog-mudform-input"
                                                                              ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                              Label="Weight" Placeholder="Weight" 
@@ -616,25 +616,25 @@
                                                                         <MudComboBoxItem T="string" Value="@curr.Key" Text="@curr.Value">@curr.Value</MudComboBoxItem>
                                                                     }
                                                                 </MudComboBox>
-                                                                <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                                <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                                                  Class="moog-mudform-input"
                                                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                                  AdornmentIcon="fa-duotone fa-usd-circle" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                                                                  Label="RMP" Step="0.1M" Format="#,##0.##"
                                                                                  @bind-Value="item.Item.RetailUnitPrice" For="(() => CurrentObject.RetailUnitPrice)" T="decimal?" />
-                                                                <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                                <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                                                  Class="moog-mudform-input"
                                                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                                  Adornment="Adornment.Start" AdornmentColor="@Color.Primary" AdornmentText="KHR"
                                                                                  Label="RMP (KHR)" Step="1" Format="#,##0"
                                                                                  @bind-Value="item.Item.RetailUnitPriceKhr" For="(() => CurrentObject.RetailUnitPriceKhr)" T="int?" />
-                                                                <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                                <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                                                  Class="moog-mudform-input"
                                                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                                  AdornmentIcon="fa-duotone fa-usd-circle" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                                                                  Label="WSP" Step="0.1M" Format="#,##0.##"
                                                                                  @bind-Value="item.Item.WholeSaleUnitPrice" For="(() => CurrentObject.WholeSaleUnitPrice)" T="decimal?" />
-                                                                <MudNumericField Clearable="false" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                                                <MudNumericField Clearable="true" HideSpinButtons="true" FullWidth="true" Immediate="true" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
                                                                                  Class="moog-mudform-input"
                                                                                  ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                                  Adornment="Adornment.Start" AdornmentColor="@Color.Primary" AdornmentText="KHR"
@@ -911,7 +911,8 @@
                                                         HeaderStyle="width:300px; max-width:140px" CellStyle=@((IsViewMode || !_canEditSuppliers) ? "text-align:right" : "")
                                                         Context="item">
                                             <EditTemplate>
-                                                <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
+                                                <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
+                                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                  AdornmentIcon="material-symbols-rounded/attach_money" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                                                  Step="0.1M" Format="#,##0.##"
                                                                  @bind-Value="item.Item.UnitPrice" For="(() => item.Item.UnitPrice)" T="decimal?" />
@@ -922,7 +923,8 @@
                                                         HeaderStyle="width:300px; max-width:140px" CellStyle=@((IsViewMode || !_canEditSuppliers) ? "text-align:right" : "")
                                                         Context="item">
                                             <EditTemplate>
-                                                <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
+                                                <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
+                                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                  AdornmentIcon="material-symbols-rounded/attach_money" Adornment="Adornment.Start" AdornmentColor="@Color.Primary"
                                                                  Step="0.1M" Format="#,##0.00"
                                                                  @bind-Value="item.Item.UnitPriceUsd" For="(() => item.Item.UnitPriceUsd)" T="decimal?"
@@ -933,7 +935,8 @@
                                                         HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass=@("moog-muddatagrid-cell" + ((IsViewMode || !_canEditSuppliers) ? " spacious" : " data-align-top inline-editing"))
                                                         HeaderStyle="width:300px; max-width:180px" Context="item" CellStyle=@((IsViewMode || !_canEditSuppliers) ? "text-align:right" : "")>
                                             <EditTemplate>
-                                                <MudNumericField ReadOnly=@IsViewMode Clearable="false" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
+                                                <MudNumericField ReadOnly=@IsViewMode Clearable="true" ShrinkLabel="true" Class="moog-form-field" Immediate="true" HideSpinButtons="true"
+                                                                 ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                                  Step="1" Format="#,##0"
                                                                  @bind-Value="item.Item.UnitPriceKhr" For="(() => item.Item.UnitPriceKhr)" T="int?" />
                                             </EditTemplate>

@@ -31,12 +31,22 @@
 				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-muddatagrid-row"
 				 @ref="MainDataGrid" ServerData="ServerDataFunc" T="HealthcareFacility" >
 		<Columns>
+			@if (_showLogo)
+			{
+				<TemplateColumn Title="Logo" HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
+								CellStyle="padding:2px !important; padding-inline-start:0px; padding-inline-end:0px"
+								Context="rowData">
+					<CellTemplate>
+						<MudImage Src=@(!string.IsNullOrEmpty(rowData.Item.LogoImagePath) ? rowData.Item.LogoImagePath : "image/img_not_found.png") Elevation="0" Height="88" Width="88" FallbackSrc="image/img_not_found.png" />
+					</CellTemplate>
+				</TemplateColumn>
+			}
 			<PropertyColumn Title="Name" Property="x => x.ObjectName" StickyLeft="true"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-							CellStyle="font-weight:600; color:var(--ssv-pharma-blue)"/>
+							CellStyle="white-space:nowrap; font-weight:600; color:var(--ssv-pharma-blue)"/>
 			<PropertyColumn Title="Name (kh)" Property="x => x.ObjectNameKh"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-kh"
-							CellStyle="font-size:1rem !important; line-height: 80% !important" />
+							CellStyle="white-space:nowrap;  font-weight:600 !important; color:var(--ssv-pharma-blue); font-size:1rem !important; line-height: 80% !important" />
 			<PropertyColumn Title="Type" Property="x => x.FacilityTypeText"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
 			<PropertyColumn Title="Email" Property="x => x.Email"
@@ -53,12 +63,12 @@
                         @if (!string.IsNullOrEmpty(rowData.Item.GoogleMapLink))
                         {
                             <MudLink Href="@rowData.Item.GoogleMapLink" >
-                                <MudIcon Icon="fas fa-map-marker-alt" Color="Color.Primary" Style="font-size:20px" />
+                                <MudIcon Icon="fa-duotone fa-light fa-location-dot" Color="Color.Primary" Style="font-size:20px" />
                             </MudLink>
                         }
                         else
                         {
-							<MudIcon Icon="fas fa-map-marker-alt" Color="Color.Default" Style="font-size:20px; color:var(--material-blue-gray-100)" />
+							<MudIcon Icon="fa-duotone fa-light fa-location-dot" Color="Color.Default" Style="font-size:20px; color:var(--material-blue-gray-100)" />
                         }
                         @if (!string.IsNullOrEmpty(rowData.Item.FacebookLink))
                         {
@@ -73,12 +83,12 @@
 						@if (!string.IsNullOrEmpty(rowData.Item.Website))
 						{
 							<MudLink Href="@rowData.Item.Website">
-								<MudIcon Icon="fas fa-globe" Color="Color.Primary" Style="font-size:20px" />
+								<MudIcon Icon="fa-duotone fa-light fa-globe-www" Color="Color.Primary" Style="font-size:20px" />
 							</MudLink>
 						}
 						else
 						{
-							<MudIcon Icon="fas fa-globe" Color="Color.Default" Style="font-size:20px; color:var(--material-blue-gray-100)" />
+							<MudIcon Icon="fa-duotone fa-light fa-globe-www" Color="Color.Default" Style="font-size:20px; color:var(--material-blue-gray-100)" />
 						}
 					</MudStack>
 				</CellTemplate>
@@ -114,7 +124,7 @@
 
 @code {
 	#region UI VARIABLES
-
+	bool _showLogo = true;
 	#endregion
 
 	#region PAGE LIFECYCLE FUNCTIONS

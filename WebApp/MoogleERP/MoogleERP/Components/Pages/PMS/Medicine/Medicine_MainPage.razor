@@ -24,12 +24,22 @@
 				   StartIcon="fa-regular fa-magnifying-glass" OnClick="OnSearchClicked">Search</MudButton>
 	</MudStack>
 	<MudDataGrid Bordered="false" Dense="true" FixedHeader="true" Hover="true" Loading=@IsSearching MultiSelection="false" Square="true" Striped="true"
-				 ColumnResizeMode="ResizeMode.Container" Elevation="0" RowsPerPage="50" SortMode="SortMode.Multiple"
+				 ColumnResizeMode="ResizeMode.Container" Elevation="0" RowsPerPage="@(_showThumbnail ? 30 : 50)" SortMode="SortMode.Multiple"
 				 Class="moog-muddatagrid moog-main-pg" Height="calc(100% - 38px)"
-				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" RowClass="moog-muddatagrid-row"
+				 @bind-SelectedItem=SelectedObject SelectOnRowClick="true" RowClassFunc="SelectedRowClassFunc" 
 				 @ref="MainDataGrid" ServerData="ServerDataFunc"
 				 T="Medicine" >
 		<Columns>
+			@if (_showThumbnail)
+			{
+				<TemplateColumn Title="Logo" HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
+								CellStyle="padding:2px !important; padding-inline-start:0px; padding-inline-end:0px"
+								Context="rowData">
+					<CellTemplate>
+						<MudImage Src=@(!string.IsNullOrEmpty(rowData.Item.PackageImagePath) ? rowData.Item.PackageImagePath : "image/img_not_found.png") Elevation="0" Height="100" Width="100" FallbackSrc="image/img_not_found.png" />
+					</CellTemplate>
+				</TemplateColumn>
+			}
 			@* <PropertyColumn Property="x => x.ObjectName" Title="Name" HeaderClass="moog-muddatagrid-hdr moog-main-pg"  CellClass="moog-muddatagrid-cell" /> *@
             <TemplateColumn Title="Name" Editable="false" Filterable="false" Sortable="false" StickyLeft="true" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" 
@@ -50,10 +60,10 @@
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" />
 			<PropertyColumn Title="Composition" Property="x => x.CompositionSummary" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-							HeaderStyle="max-width: 500px" CellStyle="max-width: 500px" />
-			<TemplateColumn Title="Country" Editable="false" Filterable="false" Sortable="false" Resizable="true"
+							HeaderStyle="min-width:488px; max-width: 500px" CellStyle="max-width: 500px" />
+			<TemplateColumn Title="Manufactured In" Editable="false" Filterable="false" Sortable="false" Resizable="true"
 							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" 
-							HeaderStyle="min-width:180px"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap"
 							Context="rowData">
                 <CellTemplate>
                     @if (rowData.Item.ManufacturingCountry != null && !string.IsNullOrEmpty(rowData.Item.ManufacturingCountry.FlagIconPath))
@@ -65,19 +75,31 @@
                     }
                 </CellTemplate>
             </TemplateColumn>
+			<PropertyColumn Title="Manufactured By" Property="x => x.MfgCompanyName" Editable="false" Filterable="false" Sortable="false" Resizable="true"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
 			<PropertyColumn Title="Package" Property="x => x.PackageContent" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-							HeaderStyle="min-width:200px" />
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+			<PropertyColumn Title="Pharmaceutical Company" Property="x => x.LaboratoryName" Editable="false" Filterable="false" Sortable="false" Resizable="true"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
 			<PropertyColumn Title="Imported By" Property="x => x.ImportCompany" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-							HeaderStyle="min-width:200px" />
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
 			<PropertyColumn Title="Local Distributor" Property="x => x.LocalDistributor" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell"
-							HeaderStyle="min-width:200px" />
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
+			<PropertyColumn Title="KH License No." Property="x => x.KhLicNo" Editable="false" Filterable="false" Sortable="false" Resizable="true"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
 			<PropertyColumn Title="RMP" Property="x => x.RetailMarketPriceText" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="text-align:right" />
 			<PropertyColumn Title="WSP" Property="x => x.WholeSalePriceText" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell" CellStyle="text-align:right" />
+			<PropertyColumn Title="Barcode" Property="x => x.Barcode" Editable="false" Filterable="false" Sortable="false" Resizable="true"
+							HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono"
+							HeaderStyle="white-space:nowrap" CellStyle="white-space:nowrap" />
 			<PropertyColumn Title="ID" Property="x => x.ObjectCode" Editable="false" Filterable="false" Sortable="false" Resizable="true"
                             HeaderClass="moog-muddatagrid-hdr moog-main-pg" CellClass="moog-muddatagrid-cell moog-font-mono" />
 			<TemplateColumn Title="Action" Editable="false" Filterable="false" Sortable="false" Resizable="true" StickyRight="true"
@@ -110,7 +132,7 @@
 
 @code {
 	#region UI VARIABLES
-
+	bool _showThumbnail = true;
 	#endregion
 
 	#region PAGE LIFECYCLE FUNCTIONS

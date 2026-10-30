@@ -102,6 +102,7 @@ public class Medicine : AuditObject
     public decimal? RetailMarketPriceKhr { get; set; }
     public decimal? WholesalePrice { get; set; }
     public decimal? WholesalePriceKhr { get; set; }
+	public string KhLicNo { get; set; }
 
 	#endregion
 

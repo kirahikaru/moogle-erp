@@ -493,7 +493,7 @@
             > input.mud-input-root {
                 font-size: var(--base-font-size);
                 color:var(--tw-gray-700);
-                padding: 8px 0px 8px 12px;
+                padding: 8px 0px 8px 10px;
                 height: 18px;
 
                 &::placeholder {
@@ -573,7 +573,7 @@
 
                 > button.mud-icon-button-edge-end {
                     margin-right: 0px;
-                    margin-inline-end: 8px;
+                    margin-inline-end: 6px;
                 }
             }
 
@@ -651,8 +651,8 @@
 
         > .mud-input-adorned-start {
             > .mud-input-adornment-start {
-                margin-inline-end: -10px;
-                margin-inline-start: 12px;
+                margin-inline-end: -4px;
+                margin-inline-start: 8px;
             }
         }
 
@@ -945,9 +945,27 @@
         > .mud-input-control-input-container {
             > .mud-input {
                 > input.mud-input-root, > textarea.mud-input-root, > div.mud-input-root {
-                    font-family: "Koh Santepheap", serif;
-                    font-size: 1rem;
-                    
+                    font-family: "Google Sans", sans-serif;
+                    font-optical-sizing: auto;
+                    font-weight: 600;
+                    font-style: normal;
+                    font-variation-settings:
+                        "GRAD" 0;
+                }
+            }
+        }
+    }
+
+    &.moog-input-mono {
+        > .mud-input-control-input-container {
+            > .mud-input {
+                > input.mud-input-root, > textarea.mud-input-root, > div.mud-input-root {
+                    font-family: "Google Sans Code", monospace;
+                    font-optical-sizing: auto;
+                    font-weight: 400;
+                    font-style: normal;
+                    font-variation-settings:
+                    "MONO" 0;
                 }
             }
         }
@@ -972,11 +990,18 @@
                     }
                 }
 
-                > .mud-icon-button {
+                > .mud-input-clear-button {
+                    color: var(--tw-gray-300);
+
                     > .mud-icon-button-label {
                         > .mud-icon-size-small {
-                            font-size: 16px;
+                            font-size: 14px;
                         }
+                    }
+
+                    &.mud-icon-button-size-small {
+                        height: 20px;
+                        width: 20px;
                     }
                 }
 
@@ -1120,6 +1145,41 @@
         color: var(--tw-gray-400) !important;
         font-size: 24px;
         font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 100, 'opsz' 48;
+    }
+}
+
+.moog-mudselect-input-square {
+    background-color: transparent;
+    padding-right: 0px !important;
+    
+    & div.mud-input-adornment-end {
+        margin-left: 0px !important;
+        margin-inline-start: -3px !important;
+        margin-inline-end: 6px !important;
+
+        > .mud-icon-size-small {
+            font-size: 16px;
+            width: 20px;
+        }
+    }
+
+    > .mud-input-clear-button {
+        margin-inline-start: 2px;
+    }
+
+    > .mud-icon-default {
+        color: var(--tw-gray-400) !important;
+    }
+
+    > .mud-input-adornment {
+
+        > .mud-primary-text {
+            color: var(--tw-gray-600) !important;
+        }
+    }
+
+    > .mud-icon-default {
+        color: var(--tw-gray-400) !important;
     }
 }
 
@@ -1699,11 +1759,18 @@
 .moog-muddatagrid-row {
     &.moog-muddatagrid-row-selected {
         border-left: var(--ssv-pharma-blue) 2px solid;
-        background-color: var(--tw-yellow-50);
+        background-color: var(--tw-yellow-50) !important;
 
-        &>.mud-table-cell {
+        >.mud-table-cell {
             color: var(--ssv-pharma-blue) !important;
             /* font-weight: 500; */
+            &.sticky-left {
+                background-color: var(--tw-yellow-50) !important;
+            }
+
+            &.sticky-right {
+                background-color: var(--tw-yellow-50) !important;
+            }
         }
     }
 }
@@ -1728,6 +1795,21 @@
 
     & .mud-icon-button {
         padding:4px;
+    }
+}
+
+.moog-mudiconbutton {
+    padding: 3px 1px;
+
+    > .mud-icon-button-label {
+        > .mud-icon-size-small {
+            font-size: 16px;
+        }
+
+        > .mud-icon-size-medium {
+            font-size: 24px;
+            line-height: 25px;
+        }
     }
 }
 

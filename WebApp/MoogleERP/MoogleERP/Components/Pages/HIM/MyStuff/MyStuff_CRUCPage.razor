@@ -99,7 +99,7 @@
                                               @bind-Value="CurrentObject!.ObjectCode" For="@(() => CurrentObject!.ObjectCode)" />
                             </MudItem>
                             <MudItem xs="5">
-                                <MudStack Row="true" Spacing="1">
+                                <MudStack Row="true" Spacing="0">
                                     <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
                                                      Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
                                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
@@ -111,7 +111,7 @@
                                     <MudStack Row="true" Spacing="1">
                                         <MudTooltip Text="Add new category"
                                                     Placement="Placement.Top" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="false" ShowOnHover="true" ShowOnFocus="false">
-                                            <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-muddatagrid-icon-btn" OnClick="OnAddCategoryBtnClicked"
+                                            <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-mudiconbutton" OnClick="OnAddCategoryBtnClicked"
                                                            Icon="fa-duotone fa-circle-plus" aria-label="Add New My Stuff Category" />
                                         </MudTooltip>
                                     </MudStack>
@@ -207,7 +207,7 @@
                                                Class="moog-muddatepicker" ActionsClass="moog-muddatepicker-action" ToolbarClass="moog-muddatepicker-toolbar"
                                                ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
                                                AdornmentIcon="material-symbols-rounded/calendar_month" AdornmentColor=@Color.Primary
-                                               Label="Purchased Date" Placeholder="Purchased Date" DateFormat="dd-MMM-yyyy"
+                                               Label="Purchased Date" Placeholder="dd-mm-yyyy" DateFormat="dd-MM-yyyy"
                                                @bind-Date="CurrentObject!.PurchasedDate" For="@(() => CurrentObject!.PurchasedDate)" />
                                 @* <PickerActions Context="purchaseDateContext">
                                         <MudButton Class="mr-auto align-self-start" OnClick="PurchasedDateTodayAsync">Today</MudButton>
@@ -215,7 +215,7 @@
                                 </MudDatePicker> *@
                             </MudItem>
                             <MudItem xs="4">
-                                <MudStack Row="true" Spacing="1">
+                                <MudStack Row="true" Spacing="0">
                                     <MudAutocomplete Clearable="true" CoerceText="true" CoerceValue="false" Readonly="@IsViewMode" Required="false" ShrinkLabel="true"
                                                      Class="moog-mudform-input" FullWidth="true" PopoverClass="moog-mudautocomplete-popover" InputClass="moog-mudautocomplete-input" ListClass="moog-mudautocomplete-list" ListItemClass="moog-mudautocomplete-listitem"
                                                      ClearIcon="fa-solid fa-xmark" IconSize="Size.Small"
@@ -227,7 +227,7 @@
 
                                     <MudTooltip Text="Add new merchant"
                                                 Placement="Placement.Top" Arrow="true" Style="width:200px; max-width:100px" ShowOnClick="false" ShowOnHover="true" ShowOnFocus="false">
-                                        <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-muddatagrid-icon-btn" OnClick="OnAddMerchantBtnClicked"
+                                        <MudIconButton Size="Size.Medium" Color="Color.Primary" Class="moog-mudiconbutton" OnClick="OnAddMerchantBtnClicked"
                                                        Icon="fa-duotone fa-circle-plus" aria-label="Add New Merchant" />
                                     </MudTooltip>
                                 </MudStack>
@@ -591,14 +591,14 @@
         if (value is null)
         {
             _selOwnedItemCtg = null;
-            CurrentObject!.MerchantId = null;
-            CurrentObject!.MerchantCode = null;
+            CurrentObject!.OwnedItemCategoryId = null;
+            CurrentObject!.OwnedItemCategoryCode = null;
         }
         else
         {
             _selOwnedItemCtg = value;
-            CurrentObject!.MerchantId = value.Id;
-            CurrentObject!.MerchantCode = value.Key;
+            CurrentObject!.OwnedItemCategoryId = value.Id;
+            CurrentObject!.OwnedItemCategoryCode = value.Key;
         }
     }
 

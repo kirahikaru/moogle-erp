@@ -1,55 +1,81 @@
 ﻿@using System.Net
-<MudDialog Class="moog-crud-muddiag" Style="width:50%; margin:0px; background-color:#F7F7F7;" >
+<MudDialog Class="moog-crud-muddiag" Style="width:80%; margin:0px; background-color:#F7F7F7;" >
     <TitleContent>
         <MudText Typo="Typo.h6" Class="lang-en">
             IMAGES
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudCard Outlined="true" Style="padding: 8px; border:0px; background-color: #F7F7F7;">
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.Add" Size="Size.Small" Color="Color.Primary" OnClick="OnItemAddClicked" Style="padding:2px 8px">
-                Add
-            </MudButton>
-            <MudDataGrid Class="main-pg-datagrid mt-2" T="AttachedImage" Items="@Images" Dense="true" Hover="true" FixedHeader="true" Striped="true" 
-                         ColumnResizeMode="ResizeMode.Container" Height="calc(100vh - 500px)" ReadOnly="false"
+        <MudCard Outlined="true" Style="padding: 0px; border:0px; background-color: #F7F7F7; display:flex; flex-direction:column">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
+                <MudButton Variant="Variant.Filled" StartIcon="fa-light fa-circle-plus" Size="Size.Small" Color="Color.Primary" Class="moog-mudbutton" OnClick="OnItemAddClicked"   >
+                    Add
+                </MudButton>
+            </MudStack>
+            <MudDataGrid Class="moog-muddatagrid cruc-pg-pager mt-3" Dense="true" Hover="true" FixedHeader="true" Striped="false" HorizontalScrollbar="true" Elevation="0" ColumnResizeMode="ResizeMode.None"
+                         Height="100%" ReadOnly="false"
                          StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges"
-                         EditTrigger="DataGridEditTrigger.Manual" EditMode="DataGridEditMode.Cell" >
+                         EditTrigger="DataGridEditTrigger.Manual" EditMode="DataGridEditMode.Cell"
+                         T="AttachedImage" Items="@Images">
                 <Columns>
-                    <TemplateColumn Title="Status" HeaderClass="mud-datagrid-hdr" HeaderStyle=@(DataGridHdrStyle) CellClass="mud-datagrid-cell" CellStyle="text-align:center" Editable="false" Context="rowData">
+                    <TemplateColumn Title="Status"
+                                    HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass="moog-muddatagrid-cell data-align-top inline-editing"
+                                    HeaderStyle="padding:8px !important; width:100px; max-width:70px" CellStyle="text-align:center" Editable="false" Context="rowData">
                         <CellTemplate>
-                            @if (rowData.Item.Id == 0)
-                            {
-                                <MudIcon Icon="@Icons.Material.Rounded.AddPhotoAlternate" Color="Color.Primary" />
-                            }
-                            else if (rowData.Item.IsDeleted)
-                            {
-                                <MudIcon Icon="@Icons.Material.Rounded.Delete" Color="Color.Error" />
-                            }
-                            else if(rowData.Item.Id > 0)
-                            {
-                                <MudIcon Icon="@Icons.Material.Rounded.CheckCircle" Color="Color.Success" />
-                            }
+                            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="0">
+                                @if (rowData.Item.Id == 0)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Rounded.AddPhotoAlternate" Color="Color.Primary" />
+                                }
+                                else if (rowData.Item.IsDeleted)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Rounded.Delete" Color="Color.Error" />
+                                }
+                                else if (rowData.Item.Id > 0)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Rounded.CheckCircle" Color="Color.Success" />
+                                }
+                            </MudStack>
                         </CellTemplate>
                     </TemplateColumn>
-                    <PropertyColumn Property="x => x.OrderNo" Title="No." HeaderClass="mud-datagrid-hdr" HeaderStyle=@(DataGridHdrStyle) CellClass="mud-datagrid-cell" CellStyle="text-align:right" Editable="false" Sortable="false" Filterable="false">
+                    <PropertyColumn Title="No." Property="x => x.OrderNo"
+                                    HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass="moog-muddatagrid-cell data-align-top inline-editing"
+                                    HeaderStyle="padding:8px !important; width:100px; max-width:44px" CellStyle="text-align:right"
+                                    Editable="false" Sortable="false" Filterable="false">
                     </PropertyColumn>
-                    <PropertyColumn Property="x => x.ObjectName" Title="Name" HeaderClass="mud-datagrid-hdr" HeaderStyle=@(DataGridHdrStyle+";min-width:350px") CellClass="mud-datagrid-cell" Context="rowData">
+                    <PropertyColumn Title="Name" Property="x => x.ObjectName"
+                                    HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass="moog-muddatagrid-cell data-align-top inline-editing"
+                                    Context="rowData">
                         <EditTemplate>
-                            <MudTextField @bind-Value="rowData.Item.ObjectName" Required="true" ReadOnly=@IsViewMode For="@(() => rowData.Item.ObjectName)"
-                                          Class="moog-mud-textfield" />
+                            <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                          Class="moog-mudform-input-square"
+                                          ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                          Placeholder="Name"
+                                          @bind-Value="rowData.Item.ObjectName" For="@(() => rowData.Item.ObjectName)" />
                         </EditTemplate>
                     </PropertyColumn>
-                    <PropertyColumn Property="x => x.ImageFilename" Title="Filename" HeaderClass="mud-datagrid-hdr" HeaderStyle=@(DataGridHdrStyle + ";min-width:350px") CellClass="mud-datagrid-cell" Context="rowData">
+                    <PropertyColumn Title="Filename" Property="x => x.ImageFilename"
+                                    HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass="moog-muddatagrid-cell data-align-top inline-editing"
+                                    HeaderStyle="padding:8px !important; white-space:nowrap"
+                                    Context="rowData">
                         <EditTemplate>
-                            <MudTextField @bind-Value="rowData.Item.ImageFilename" Required="true" ReadOnly=@IsViewMode For="@(() => rowData.Item.ImageFilename)"
-                                          Class="moog-mud-textfield" />
+                            <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                          Class="moog-mudform-input-square"
+                                          ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                          Placeholder="Filename"
+                                          @bind-Value="rowData.Item.ImageFilename" />
                         </EditTemplate>
                     </PropertyColumn>
-                    <PropertyColumn Property="x => x.ImageUrl" Title="Image URL" HeaderClass="mud-datagrid-hdr" HeaderStyle=@(DataGridHdrStyle+";min-width:500px") CellClass="mud-datagrid-cell" 
-                        Context="rowData">
+                    <PropertyColumn Title="Image URL" Property="x => x.ImageUrl"
+                                    HeaderClass="moog-muddatagrid-hdr moog-cruc-pg" CellClass="moog-muddatagrid-cell data-align-top inline-editing"
+                                    HeaderStyle="padding:8px !important; width:50%" Context="rowData">
                         <EditTemplate>
-                            <MudTextField @bind-Value="rowData.Item.ImageUrl" ReadOnly=@IsViewMode For="@(() => rowData.Item.ImageUrl)"
-                                          Class="moog-mud-textfield" AdornmentIcon="@Icons.Material.Rounded.Link" Adornment="Adornment.Start" />
+                            <MudTextField Clearable="true" Immediate="false" ReadOnly=@IsViewMode Required="false" ShrinkLabel="true" Variant="Variant.Text"
+                                          Class="moog-mudform-input-square"
+                                          AdornmentIcon="fa-duotone fa-solid fa-link" Adornment="Adornment.Start"
+                                          ClearIcon="fa-regular fa-xmark" IconSize="Size.Small"
+                                          Placeholder="Image URL"
+                                          @bind-Value="rowData.Item.ImageUrl" For="@(() => rowData.Item.ImageUrl)" />
                         </EditTemplate>
                     </PropertyColumn>
                 </Columns>
@@ -64,10 +90,10 @@
         </MudCard>
         <MudCardActions>
             <MudStack Row=true AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Style="width:100%;">
-                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.CheckCircle" Size="Size.Small" Color="Color.Primary" OnClick="Confirm">
+                <MudButton Variant="Variant.Filled" StartIcon="fa-light fa-circle-check" Size="Size.Small" Color="Color.Primary" DropShadow="false" Class="moog-mudbutton" OnClick="Confirm">
                     Confirm
                 </MudButton>
-                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Rounded.Cancel" Size="Size.Small" Color="Color.Dark" OnClick="Cancel">
+                <MudButton Variant="Variant.Filled" StartIcon="fa-light fa-ban" Size="Size.Small" Color="Color.Error" DropShadow="false" Class="moog-mudbutton" OnClick="Cancel">
                     Cancel
                 </MudButton>
             </MudStack>
@@ -94,7 +120,10 @@
     #region PAGE LIFECYCLE EVENTS
     protected override void OnInitialized()
     {
-
+        if (Images.Count == 0)
+        {
+            Images.Add(new AttachedImage());
+        }
     }
     #endregion
 
